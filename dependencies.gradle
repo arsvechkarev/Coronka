@@ -1,0 +1,54 @@
+ext {
+  kotlin_version = '1.3.70'
+
+  appCompat_version = '1.1.0'
+  lifecycle_version = '2.1.0'
+  legacySupport_version = '1.0.0'
+  constraintLayout_version = '1.1.3'
+
+  firebaseFirestore_version = '21.4.1'
+
+  circleImageView_version = '3.0.1'
+  threeTenAbp_version = "1.2.1"
+
+  rxJava_version = "2.2.16"
+  rxAndroid_version = "2.1.1"
+  rxFirebase_version = "1.5.7"
+
+  timerx_version = "1.0.0"
+
+  applicationDependencies = [
+      kotlin             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+      appCompat          : "androidx.appcompat:appcompat:$appCompat_version",
+      lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
+      legacySupport      : "androidx.legacy:legacy-support-v4:$legacySupport_version",
+      constraintLayout   : "androidx.constraintlayout:constraintlayout:$constraintLayout_version",
+      firebaseFirestore  : "com.google.firebase:firebase-firestore:$firebaseFirestore_version",
+      circleImageView    : "de.hdodenhof:circleimageview:$circleImageView_version",
+      threeTenAbp        : "com.jakewharton.threetenabp:threetenabp:$threeTenAbp_version",
+      rxJava             : "io.reactivex.rxjava2:rxjava:$rxJava_version",
+      rxAndroid          : "io.reactivex.rxjava2:rxandroid:$rxAndroid_version",
+      rxFirebase         : "com.github.FrangSierra:RxFirebase:$rxFirebase_version",
+  ]
+
+  junit_version = '4.12'
+  mockk_version = '1.9.3'
+  kotlinTest_version = '3.3.2'
+  kakao_version = '2.2.0'
+  espresso_version = '3.2.0'
+  androidTest_version = '1.1.0'
+
+  testDependencies = [
+      junit              : "junit:junit:$junit_version",
+      mockk              : "io.mockk:mockk:$mockk_version",
+      kotlinTestFramework: "io.kotlintest:kotlintest-runner-junit5:$kotlinTest_version",
+      kakao              : "com.agoda.kakao:kakao:$kakao_version",
+      espresso           : "androidx.test.espresso:espresso-core:$espresso_version",
+      espressoContrib    : "androidx.test.espresso:espresso-contrib:$espresso_version",
+      androidTestRunner  : "androidx.test:runner:$androidTest_version",
+      androidTestRules   : "androidx.test:rules:$androidTest_version",
+      androidTestCore    : "androidx.test:core:$androidTest_version",
+      androidTestExt     : "androidx.test.ext:junit-ktx:$androidTest_version"
+  ]
+
+}

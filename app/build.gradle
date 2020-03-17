@@ -1,0 +1,39 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+  def configs = rootProject.ext
+
+  compileSdkVersion configs.compileSdkVersion
+  defaultConfig {
+    applicationId configs.applicationId
+    minSdkVersion configs.minSdkVersion
+    targetSdkVersion configs.targetSdkVersion
+    versionCode configs.versionCode
+    versionName configs.versionName
+    testInstrumentationRunner configs.testInstrumentationRunner
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled configs.minifyEnabled
+      proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
+    }
+  }
+
+}
+
+dependencies {
+  def dependencies = rootProject.ext.applicationDependencies
+
+  implementation dependencies.kotlin
+  implementation dependencies.appCompat
+  implementation dependencies.firebaseFirestore
+
+  implementation dependencies.rxJava
+  implementation dependencies.rxAndroid
+  implementation dependencies.rxFirebase
+}
+
+apply plugin: 'com.google.gms.google-services'
