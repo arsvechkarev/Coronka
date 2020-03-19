@@ -1,3 +1,4 @@
+include ':database'
 include ':f-map'
 include ':core'
 include ':f-feed'
