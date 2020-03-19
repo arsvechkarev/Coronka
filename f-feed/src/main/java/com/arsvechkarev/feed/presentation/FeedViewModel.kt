@@ -1,8 +1,8 @@
 package com.arsvechkarev.feed.presentation
 
-import com.arsvechkarev.core.base.RxViewModel
+import androidx.lifecycle.ViewModel
 
-class FeedViewModel : RxViewModel() {
+class FeedViewModel : ViewModel() {
   
   
   fun getLatestNews() {

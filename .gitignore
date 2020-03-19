@@ -15,3 +15,5 @@
 .externalNativeBuild
 .cxx
 /app/google-services.json
+/f-map/src/debug/res/values
+/f-map/src/release/res/values

@@ -11,6 +11,8 @@ ext {
   circleImageView_version = '3.0.1'
   threeTenAbp_version = "1.2.1"
 
+  okHttp_version = "4.4.0"
+  googleMaps_version = "17.0.0"
   rxJava_version = "2.2.16"
   rxAndroid_version = "2.1.1"
   rxFirebase_version = "1.5.7"
@@ -23,12 +25,8 @@ ext {
       lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
       legacySupport      : "androidx.legacy:legacy-support-v4:$legacySupport_version",
       constraintLayout   : "androidx.constraintlayout:constraintlayout:$constraintLayout_version",
-      firebaseFirestore  : "com.google.firebase:firebase-firestore:$firebaseFirestore_version",
-      circleImageView    : "de.hdodenhof:circleimageview:$circleImageView_version",
-      threeTenAbp        : "com.jakewharton.threetenabp:threetenabp:$threeTenAbp_version",
-      rxJava             : "io.reactivex.rxjava2:rxjava:$rxJava_version",
-      rxAndroid          : "io.reactivex.rxjava2:rxandroid:$rxAndroid_version",
-      rxFirebase         : "com.github.FrangSierra:RxFirebase:$rxFirebase_version",
+//      okHttp             : "com.squareup.okhttp3:okhttp:$okHttp_version",
+      googleMaps         : "com.google.android.gms:play-services-maps:$googleMaps_version",
   ]
 
   junit_version = '4.12'
