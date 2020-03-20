@@ -10,7 +10,7 @@ class DatabaseHelper internal constructor(context: Context) :
   
   override fun onCreate(db: SQLiteDatabase) {
     println("qwerty: create database")
-    db.execSQL(SQL_CREATE_COUNTRIES_TABLE)
+    db.execSQL(Queries.SQL_CREATE_COUNTRIES_TABLE)
   }
   
   override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}

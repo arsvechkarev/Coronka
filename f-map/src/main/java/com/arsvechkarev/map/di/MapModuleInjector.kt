@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.arsvechkarev.database.DatabaseExecutor
+import com.arsvechkarev.database.DatabaseManager
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.map.presentation.MapViewModel
 import com.arsvechkarev.map.repository.MapRepository

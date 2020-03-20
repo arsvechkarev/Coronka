@@ -10,4 +10,6 @@ object CountriesTable : BaseColumns {
   const val COLUMN_CONFIRMED = "confirmed"
   const val COLUMN_DEATHS = "deaths"
   const val COLUMN_RECOVERED = "recovered"
+  const val COLUMN_LATITUDE = "latitude"
+  const val COLUMN_LONGITUDE = "longitude"
 }

@@ -1,10 +1,16 @@
 package com.arsvechkarev.database
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.database.SQLException
+import android.database.sqlite.SQLiteDatabase
+import core.async.BackgroundWorker
+import core.async.MainThreadWorker
+import core.async.Worker
 
 object DatabaseManager {
+  internal val backgroundWorker: Worker = BackgroundWorker.io()
+  internal val mainThreadWorker: Worker = MainThreadWorker()
   
   lateinit var instance: DatabaseHelper
     private set
@@ -13,13 +19,11 @@ object DatabaseManager {
     instance = DatabaseHelper(context)
   }
   
-  fun insert(tableName: String, values: ContentValues) {
-    instance.writableDatabase.use {
-      it.insert(tableName, null, values)
-    }
+  fun executeInBackground(block: () -> Unit) {
+    backgroundWorker.submit(block)
   }
   
-  fun getCursorSync(query: String, vararg selectionArgs: String): Cursor {
-    return instance.readableDatabase.rawQuery(query, selectionArgs)
+  fun getCursorSync(database: SQLiteDatabase, query: String): Cursor {
+    return database.rawQuery(query, null)
   }
 }

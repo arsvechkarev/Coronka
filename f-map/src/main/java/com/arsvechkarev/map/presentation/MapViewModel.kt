@@ -12,9 +12,13 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
     get() = _countriesData
   
   fun requestUpdateCountriesInfo() {
-    repository.updateCountriesInfo {
+    repository.updateCountriesInfo { list ->
       println("qwerty: set in viewmodel")
-      _countriesData.postValue(CountriesInfoState.Success(it))
+      list.forEach {
+        println("qw: ${it.countryName}: ${it.countryId}|${it.countryName}|${it.confirmed}" +
+            "|${it.deaths}|${it.recovered}|${it.latitude}|${it.longitude}")
+      }
+      _countriesData.postValue(CountriesInfoState.Success(list))
     }
   }
   

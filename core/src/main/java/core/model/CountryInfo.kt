@@ -5,5 +5,7 @@ data class CountryInfo(
   val countryName: String,
   val confirmed: String,
   val deaths: String,
-  val recovered: String
+  val recovered: String,
+  val latitude: String,
+  val longitude: String
 )
