@@ -28,6 +28,7 @@ dependencies {
   def dependencies = rootProject.ext.applicationDependencies
 
   implementation project(':core')
+  implementation project(':database')
   implementation project(':f-map')
   implementation project(':f-feed')
 

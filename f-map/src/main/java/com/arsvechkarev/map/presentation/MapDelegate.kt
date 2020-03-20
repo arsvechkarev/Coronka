@@ -1,9 +1,10 @@
-package com.arsvechkarev.map
+package com.arsvechkarev.map.presentation
 
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import androidx.fragment.app.FragmentManager
+import com.arsvechkarev.map.R
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
@@ -43,7 +44,9 @@ class MapDelegate {
   private fun initMap(map: GoogleMap) {
     with(map) {
       googleMap = this
-      setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style))
+      setMapStyle(MapStyleOptions.loadRawResourceStyle(context,
+        R.raw.map_style
+      ))
       setOnMapClickListener { latLng ->
         val addresses: List<Address> =
           geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)

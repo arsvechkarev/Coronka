@@ -1,4 +1,4 @@
-package com.arsvechkarev.core.model
+package core.model
 
 class LinkNews(
   val id: String,
