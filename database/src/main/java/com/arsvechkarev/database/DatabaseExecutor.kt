@@ -6,14 +6,11 @@ import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE
 
-
-class DatabaseExecutor {
+object DatabaseExecutor {
   
-  fun isTableNotEmpty(tableName: String): Boolean {
-    DatabaseManager.instance.readableDatabase.use {
-      val rowsCount = DatabaseUtils.queryNumEntries(it, tableName)
-      return rowsCount != 0L
-    }
+  fun isTableNotEmpty(database: SQLiteDatabase, tableName: String): Boolean {
+    val rowsCount = DatabaseUtils.queryNumEntries(database, tableName)
+    return rowsCount != 0L
   }
   
   fun insertOrUpdate(
@@ -23,11 +20,9 @@ class DatabaseExecutor {
     id: Int,
     values: ContentValues
   ) {
-    DatabaseManager.executeInBackground {
-      val insertId = database.insertWithOnConflict(tableName, null, values, CONFLICT_IGNORE)
-      if (insertId == -1L) {
-        database.update(tableName, values, "$idColumnName=?", arrayOf(id.toString()))
-      }
+    val insertId = database.insertWithOnConflict(tableName, null, values, CONFLICT_IGNORE)
+    if (insertId == -1L) {
+      database.update(tableName, values, "$idColumnName=?", arrayOf(id.toString()))
     }
   }
   
@@ -37,11 +32,8 @@ class DatabaseExecutor {
     transformer: (Cursor) -> V,
     callback: (V) -> Unit
   ) {
-    DatabaseManager.backgroundWorker.submit {
-      val cursor = DatabaseManager.getCursorSync(database, query)
-      val value = transformer(cursor)
-      DatabaseManager.mainThreadWorker.submit { callback(value) }
-    }
+    val cursor = database.rawQuery(query, null)
+    callback(transformer(cursor))
   }
   
 }

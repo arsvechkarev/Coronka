@@ -4,7 +4,7 @@ import core.model.CountryInfo
 
 sealed class CountriesInfoState {
   
-  class Success(val countriesInfo: List<CountryInfo>) : CountriesInfoState()
+  class Success(val countriesData: List<CountryInfo>) : CountriesInfoState()
   
   class Failure(val reason: FailureReason) : CountriesInfoState() {
     

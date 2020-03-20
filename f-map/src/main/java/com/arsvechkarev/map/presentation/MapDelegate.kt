@@ -1,13 +1,18 @@
 package com.arsvechkarev.map.presentation
 
 import android.content.Context
+import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import androidx.fragment.app.FragmentManager
 import com.arsvechkarev.map.R
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.Circle
+import com.google.android.gms.maps.model.CircleOptions
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import core.model.CountryInfo
 import java.util.Locale
 
 
@@ -55,6 +60,18 @@ class MapDelegate {
           onCountrySelected(currentCountry)
         }
       }
+    }
+  }
+  
+  fun drawCountriesMarks(countriesData: List<CountryInfo>) {
+    for (country in countriesData) {
+      googleMap.addCircle(
+        CircleOptions()
+          .center(LatLng(country.latitude.toDouble(), country.longitude.toDouble()))
+          .radius(100000.0)
+          .fillColor(Color.RED)
+          .strokeColor(Color.RED)
+      )
     }
   }
 }

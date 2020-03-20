@@ -9,3 +9,12 @@ data class CountryInfo(
   val latitude: String,
   val longitude: String
 )
+
+fun List<CountryInfo>.print(prefix: String = "countr") {
+  forEach {
+    println(
+      "${it.countryId}|${it.countryName}|${it.confirmed}" +
+          "|${it.deaths}|${it.recovered}|${it.latitude}|${it.longitude}"
+    )
+  }
+}
