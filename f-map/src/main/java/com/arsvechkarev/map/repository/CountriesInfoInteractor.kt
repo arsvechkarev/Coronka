@@ -18,7 +18,7 @@ class CountriesInfoInteractor(
     onError: (DatabaseError) -> Unit = {}
   ) {
     backgroundWorker.submit {
-      if (false) {
+      if (sqLiteExecutor.isTableNotEmpty()) {
         sqLiteExecutor.readFromDatabase(onSuccess)
       } else {
         firebaseExecutor.getDataAsync(onSuccess = {

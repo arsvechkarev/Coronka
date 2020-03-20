@@ -8,9 +8,9 @@ import com.arsvechkarev.map.presentation.CountriesInfoViewModel
 import com.arsvechkarev.map.repository.CountriesFirebaseExecutor
 import com.arsvechkarev.map.repository.CountriesInfoInteractor
 import com.arsvechkarev.map.repository.CountriesSQLiteExecutor
-import core.ApplicationConfig.backgroundWorker
-import core.ApplicationConfig.ioWorker
-import core.ApplicationConfig.mainThreadWorker
+import core.ApplicationConfig.Threader.backgroundWorker
+import core.ApplicationConfig.Threader.ioWorker
+import core.ApplicationConfig.Threader.mainThreadWorker
 
 object MapModuleInjector {
   

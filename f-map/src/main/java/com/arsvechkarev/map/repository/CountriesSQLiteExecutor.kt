@@ -41,6 +41,8 @@ class CountriesSQLiteExecutor(
         contentValues.put(CountriesTable.COLUMN_CONFIRMED, country.confirmed)
         contentValues.put(CountriesTable.COLUMN_DEATHS, country.deaths)
         contentValues.put(CountriesTable.COLUMN_RECOVERED, country.recovered)
+        contentValues.put(CountriesTable.COLUMN_LATITUDE, country.latitude)
+        contentValues.put(CountriesTable.COLUMN_LONGITUDE, country.longitude)
         DatabaseExecutor.insertOrUpdate(
           it, CountriesTable.TABLE_NAME, CountriesTable.COLUMN_COUNTRY_ID,
           country.countryId, contentValues

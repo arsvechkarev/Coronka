@@ -8,18 +8,19 @@ import androidx.fragment.app.FragmentManager
 import com.arsvechkarev.map.R
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import core.ApplicationConfig
 import core.model.CountryInfo
 import java.util.Locale
 
 
 class MapDelegate {
   
+  private val mapHolder = MapHolder(ApplicationConfig.Threader)
+  
   private lateinit var context: Context
-  private lateinit var googleMap: GoogleMap
   
   private lateinit var onMapClicked: () -> Unit
   private lateinit var onCountrySelected: (String) -> Unit
@@ -41,20 +42,20 @@ class MapDelegate {
     // TODO (3/19/2020): Add other countries support
     geocoder = Geocoder(context, Locale.US)
     fragmentManager.beginTransaction()
-      .replace(R.id.fragment_map_root, supportMapFragment)
-      .commit()
+        .replace(R.id.fragment_map_root, supportMapFragment)
+        .commit()
     supportMapFragment.getMapAsync(::initMap)
   }
   
   private fun initMap(map: GoogleMap) {
     with(map) {
-      googleMap = this
+      mapHolder.init(this)
       setMapStyle(MapStyleOptions.loadRawResourceStyle(context,
         R.raw.map_style
       ))
       setOnMapClickListener { latLng ->
         val addresses: List<Address> =
-          geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+            geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
         if (addresses.isNotEmpty() && currentCountry != addresses[0].countryName) {
           currentCountry = addresses[0].countryName ?: return@setOnMapClickListener
           onCountrySelected(currentCountry)
@@ -64,14 +65,16 @@ class MapDelegate {
   }
   
   fun drawCountriesMarks(countriesData: List<CountryInfo>) {
-    for (country in countriesData) {
-      googleMap.addCircle(
-        CircleOptions()
-          .center(LatLng(country.latitude.toDouble(), country.longitude.toDouble()))
-          .radius(100000.0)
-          .fillColor(Color.RED)
-          .strokeColor(Color.RED)
-      )
+    mapHolder.addAction { googleMap ->
+      for (country in countriesData) {
+        googleMap.addCircle(
+          CircleOptions()
+              .center(LatLng(country.latitude.toDouble(), country.longitude.toDouble()))
+              .radius(100000.0)
+              .fillColor(Color.RED)
+              .strokeColor(Color.RED)
+        )
+      }
     }
   }
 }
