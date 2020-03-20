@@ -1,5 +1,6 @@
 package com.arsvechkarev.database
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 
@@ -12,8 +13,10 @@ object DatabaseManager {
     instance = DatabaseHelper(context)
   }
   
-  fun executeQuerySync(query: String) {
-    instance.writableDatabase.execSQL(query)
+  fun insert(tableName: String, values: ContentValues) {
+    instance.writableDatabase.use {
+      it.insert(tableName, null, values)
+    }
   }
   
   fun getCursorSync(query: String, vararg selectionArgs: String): Cursor {

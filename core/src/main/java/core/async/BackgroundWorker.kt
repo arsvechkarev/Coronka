@@ -7,13 +7,17 @@ class BackgroundWorker(
   private val executor: ExecutorService
 ) : Worker {
   
-  override fun execute(block: () -> Unit) {
+  override fun submit(block: () -> Unit) {
     executor.submit(block)
   }
   
   companion object {
     fun default(): BackgroundWorker {
       return BackgroundWorker(Executors.newSingleThreadExecutor())
+    }
+    
+    fun io(): BackgroundWorker {
+      return BackgroundWorker(Executors.newFixedThreadPool(5))
     }
   }
 }

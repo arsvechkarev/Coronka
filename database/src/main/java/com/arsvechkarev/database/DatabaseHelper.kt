@@ -9,6 +9,7 @@ class DatabaseHelper internal constructor(context: Context) :
   SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
   
   override fun onCreate(db: SQLiteDatabase) {
+    println("qwerty: create database")
     db.execSQL(SQL_CREATE_COUNTRIES_TABLE)
   }
   

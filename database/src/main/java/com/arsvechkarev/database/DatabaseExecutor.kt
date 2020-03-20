@@ -2,23 +2,25 @@ package com.arsvechkarev.database
 
 import android.content.ContentValues
 import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE
 import core.async.BackgroundWorker
 import core.async.MainThreadWorker
 import core.async.Worker
 
 class DatabaseExecutor(
-  private val backgroundWorker: Worker = BackgroundWorker.default(),
+  private val backgroundWorker: Worker = BackgroundWorker.io(),
   private val mainThreadWorker: Worker = MainThreadWorker()
 ) {
   
-  fun insert(tableName: String, values: ContentValues) {
-    backgroundWorker.execute {
-      DatabaseManager.instance.writableDatabase.insert(tableName, null, values)
+  fun insertOrUpdate(tableName: String, idColumnName: String, id: Int, values: ContentValues) {
+    backgroundWorker.submit {
+      val database = DatabaseManager.instance.writableDatabase
+      val insertId = database.insertWithOnConflict(tableName, null, values, CONFLICT_IGNORE)
+      if (insertId == -1L) {
+        database.update(tableName, values, "$idColumnName=?", arrayOf(id.toString()))
+      }
+      database.close()
     }
-  }
-  
-  fun executeInBackground(block: () -> Unit) {
-    backgroundWorker.execute(block)
   }
   
   fun <V> executeQuery(
@@ -27,10 +29,10 @@ class DatabaseExecutor(
     transformer: (Cursor) -> V,
     callback: (V) -> Unit
   ) {
-    backgroundWorker.execute {
+    backgroundWorker.submit {
       val cursor = DatabaseManager.getCursorSync(query, *args)
       val value = transformer(cursor)
-      mainThreadWorker.execute { callback(value) }
+      mainThreadWorker.submit { callback(value) }
     }
   }
   

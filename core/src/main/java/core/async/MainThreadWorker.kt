@@ -14,7 +14,7 @@ class MainThreadWorker : Worker {
     }
   }
   
-  override fun execute(block: () -> Unit) {
+  override fun submit(block: () -> Unit) {
     mainThreadExecutor.execute(block)
   }
   
