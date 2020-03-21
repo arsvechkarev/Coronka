@@ -53,14 +53,17 @@ class MapDelegate {
       setMapStyle(MapStyleOptions.loadRawResourceStyle(context,
         R.raw.map_style
       ))
-      setOnMapClickListener { latLng ->
-        val addresses: List<Address> =
-            geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-        if (addresses.isNotEmpty() && currentCountry != addresses[0].countryName) {
-          currentCountry = addresses[0].countryName ?: return@setOnMapClickListener
-          onCountrySelected(currentCountry)
-        }
-      }
+      setOnMapClickListener(::onMapClicked)
+    }
+  }
+  
+  private fun onMapClicked(latLng: LatLng) {
+    val addresses: List<Address> =
+        geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+    addresses[0].countryCode
+    if (addresses.isNotEmpty() && currentCountry != addresses[0].countryName) {
+      currentCountry = addresses[0].countryName ?: return
+      onCountrySelected(currentCountry)
     }
   }
   

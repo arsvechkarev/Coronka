@@ -7,15 +7,13 @@ import com.arsvechkarev.database.CountriesTable
 import com.arsvechkarev.database.DatabaseExecutor
 import com.arsvechkarev.database.DatabaseHolder
 import com.arsvechkarev.database.Queries
-import core.async.BackgroundWorker
-import core.async.MainThreadWorker
-import core.async.Worker
+import core.ApplicationConfig
 import core.model.CountryInfo
 
-class CountriesSQLiteExecutor(
-  private val mainThreadWorker: Worker = MainThreadWorker(),
-  private val backgroundWorker: Worker = BackgroundWorker.io()
-) {
+class CountriesSQLiteExecutor(threader: ApplicationConfig.Threader) {
+  
+  private val mainThreadWorker = threader.mainThreadWorker
+  private val ioWorker = threader.ioWorker
   
   fun isTableNotEmpty(): Boolean {
     DatabaseHolder.instance.readableDatabase.use {
@@ -38,6 +36,7 @@ class CountriesSQLiteExecutor(
         val contentValues = ContentValues()
         contentValues.put(CountriesTable.COLUMN_COUNTRY_ID, country.countryId)
         contentValues.put(CountriesTable.COLUMN_COUNTRY_NAME, country.countryName)
+        contentValues.put(CountriesTable.COLUMN_COUNTRY_CODE, country.countryCode)
         contentValues.put(CountriesTable.COLUMN_CONFIRMED, country.confirmed)
         contentValues.put(CountriesTable.COLUMN_DEATHS, country.deaths)
         contentValues.put(CountriesTable.COLUMN_RECOVERED, country.recovered)
@@ -57,6 +56,7 @@ class CountriesSQLiteExecutor(
       val info = CountryInfo(
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_ID)),
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_NAME)),
+        cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_CODE)),
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_CONFIRMED)),
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_DEATHS)),
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_RECOVERED)),
@@ -70,11 +70,11 @@ class CountriesSQLiteExecutor(
   }
   
   private fun executeWithReadableDatabase(block: (SQLiteDatabase) -> Unit) {
-    backgroundWorker.submit { DatabaseHolder.instance.readableDatabase.use(block) }
+    ioWorker.submit { DatabaseHolder.instance.readableDatabase.use(block) }
   }
   
   private fun executeWithWriteableDatabase(block: (SQLiteDatabase) -> Unit) {
-    backgroundWorker.submit { DatabaseHolder.instance.readableDatabase.use(block) }
+    ioWorker.submit { DatabaseHolder.instance.readableDatabase.use(block) }
   }
   
 }

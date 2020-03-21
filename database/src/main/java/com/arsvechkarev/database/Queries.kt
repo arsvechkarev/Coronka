@@ -1,6 +1,7 @@
 package com.arsvechkarev.database
 
 import com.arsvechkarev.database.CountriesTable.COLUMN_CONFIRMED
+import com.arsvechkarev.database.CountriesTable.COLUMN_COUNTRY_CODE
 import com.arsvechkarev.database.CountriesTable.COLUMN_COUNTRY_ID
 import com.arsvechkarev.database.CountriesTable.COLUMN_COUNTRY_NAME
 import com.arsvechkarev.database.CountriesTable.COLUMN_DEATHS
@@ -16,6 +17,7 @@ object Queries {
 CREATE TABLE $TABLE_NAME
 |($COLUMN_COUNTRY_ID INTEGER PRIMARY KEY,
 |$COLUMN_COUNTRY_NAME TEXT,
+|$COLUMN_COUNTRY_CODE TEXT,
 |$COLUMN_CONFIRMED TEXT,
 |$COLUMN_DEATHS TEXT,
 |$COLUMN_RECOVERED TEXT,

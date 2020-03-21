@@ -9,6 +9,6 @@ interface ApplicationConfig {
   object Threader {
     val backgroundWorker: Worker = BackgroundWorker.default()
     val ioWorker: Worker = BackgroundWorker.io()
-    val mainThreadWorker = MainThreadWorker()
+    val mainThreadWorker: Worker = MainThreadWorker()
   }
 }

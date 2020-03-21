@@ -12,12 +12,12 @@ class CountriesInfoViewModel(private val interactor: CountriesInfoInteractor) : 
     get() = _countriesData
   
   fun requestUpdateCountriesInfo() {
+    if (_countriesData.value is CountriesInfoState.Success) {
+      _countriesData.value = _countriesData.value
+      return
+    }
     interactor.updateCountriesInfo({ list ->
-      list.forEach {
-        println("qw: ${it.countryName}: ${it.countryId}|${it.countryName}|${it.confirmed}" +
-            "|${it.deaths}|${it.recovered}|${it.latitude}|${it.longitude}")
-      }
-      _countriesData.setValue(CountriesInfoState.Success(list))
+      _countriesData.value = CountriesInfoState.Success(list)
     })
   }
   
