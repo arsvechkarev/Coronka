@@ -2,17 +2,15 @@ package com.arsvechkarev.map.repository
 
 import com.arsvechkarev.countriesrequestmanager.CountriesRequestManager
 import com.google.firebase.database.DatabaseError
-import core.async.Worker
 import core.log.Loggable
 import core.log.debug
 import core.model.CountryInfo
 
 class CountriesInfoInteractor(
-  private val backgroundWorker: Worker,
   private val firebaseExecutor: CountriesFirebaseExecutor,
   private val sqLiteExecutor: CountriesSQLiteExecutor,
   private val countriesRequestManager: CountriesRequestManager
-): Loggable {
+) : Loggable {
   
   override val tag = "CountriesInfoInteractor"
   
@@ -23,23 +21,21 @@ class CountriesInfoInteractor(
     onSuccess: (List<CountryInfo>) -> Unit,
     onError: (DatabaseError) -> Unit = {}
   ) {
-    backgroundWorker.submit {
-      val isRequestAllowed = countriesRequestManager.isRequestAllowed()
-      debug { "is request allowed = $isRequestAllowed" }
-      if (isRequestAllowed) {
-        countriesRequestManager.disallowRequest()
-        firebaseExecutor.getDataAsync(onSuccess = {
-          onSuccess(it)
-          sqLiteExecutor.saveCountriesInfo(it)
-        }, onError = {
-          onError(it)
-        })
+    val isRequestAllowed = countriesRequestManager.isRequestAllowed()
+    debug { "is request allowed = $isRequestAllowed" }
+    if (isRequestAllowed) {
+      countriesRequestManager.disallowRequest()
+      firebaseExecutor.getDataAsync(onSuccess = {
+        onSuccess(it)
+        sqLiteExecutor.saveCountriesInfo(it)
+      }, onError = {
+        onError(it)
+      })
+    } else {
+      if (sqLiteExecutor.isTableNotEmpty()) {
+        sqLiteExecutor.readFromDatabase(onSuccess)
       } else {
-        if (sqLiteExecutor.isTableNotEmpty()) {
-          sqLiteExecutor.readFromDatabase(onSuccess)
-        } else {
-          throw IllegalStateException("Request is not allowed, but table is empty")
-        }
+        throw IllegalStateException("Request is not allowed, but table is empty")
       }
     }
   }

@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.arsvechkarev.database.CountriesTable
 import com.arsvechkarev.database.DatabaseExecutor
-import com.arsvechkarev.database.DatabaseHolder
+import com.arsvechkarev.database.DatabaseManager
 import com.arsvechkarev.database.Queries
 import core.ApplicationConfig
 import core.model.CountryInfo
@@ -16,7 +16,7 @@ class CountriesSQLiteExecutor(threader: ApplicationConfig.Threader) {
   private val ioWorker = threader.ioWorker
   
   fun isTableNotEmpty(): Boolean {
-    DatabaseHolder.instance.readableDatabase.use {
+    DatabaseManager.instance.readableDatabase.use {
       return DatabaseExecutor.isTableNotEmpty(it, CountriesTable.TABLE_NAME)
     }
   }
@@ -70,11 +70,11 @@ class CountriesSQLiteExecutor(threader: ApplicationConfig.Threader) {
   }
   
   private fun executeWithReadableDatabase(block: (SQLiteDatabase) -> Unit) {
-    ioWorker.submit { DatabaseHolder.instance.readableDatabase.use(block) }
+    ioWorker.submit { DatabaseManager.instance.readableDatabase.use(block) }
   }
   
   private fun executeWithWriteableDatabase(block: (SQLiteDatabase) -> Unit) {
-    ioWorker.submit { DatabaseHolder.instance.readableDatabase.use(block) }
+    ioWorker.submit { DatabaseManager.instance.writableDatabase.use(block) }
   }
   
 }

@@ -4,8 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arsvechkarev.map.repository.CountriesInfoInteractor
+import core.ApplicationConfig
 
-class CountriesInfoViewModel(private val interactor: CountriesInfoInteractor) : ViewModel() {
+class CountriesInfoViewModel(
+  private val threader: ApplicationConfig.Threader,
+  private val interactor: CountriesInfoInteractor
+) : ViewModel() {
   
   private val _countriesData = MutableLiveData<CountriesInfoState>()
   val countriesData: LiveData<CountriesInfoState>
@@ -16,9 +20,11 @@ class CountriesInfoViewModel(private val interactor: CountriesInfoInteractor) : 
       _countriesData.value = _countriesData.value
       return
     }
-    interactor.updateCountriesInfo({ list ->
-      _countriesData.value = CountriesInfoState.Success(list)
-    })
+    threader.backgroundWorker.submit {
+      interactor.updateCountriesInfo({ list ->
+        _countriesData.value = CountriesInfoState.Success(list)
+      })
+    }
   }
   
 }

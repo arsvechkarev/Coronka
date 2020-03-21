@@ -10,25 +10,25 @@ import com.arsvechkarev.map.repository.CountriesFirebaseExecutor
 import com.arsvechkarev.map.repository.CountriesInfoInteractor
 import com.arsvechkarev.map.repository.CountriesSQLiteExecutor
 import core.ApplicationConfig.Threader
-import core.ApplicationConfig.Threader.backgroundWorker
 
 object MapModuleInjector {
   
-  
   fun provideViewModel(fragment: MapFragment): CountriesInfoViewModel {
-    val repository = CountriesInfoInteractor(backgroundWorker, CountriesFirebaseExecutor(Threader),
-      CountriesSQLiteExecutor(Threader), CountriesRequestManager)
-    return ViewModelProviders.of(fragment, mapViewModelFactory(repository))
+    val firebaseExecutor = CountriesFirebaseExecutor(Threader)
+    val sqLiteExecutor = CountriesSQLiteExecutor(Threader)
+    val interactor = CountriesInfoInteractor(firebaseExecutor, sqLiteExecutor, CountriesRequestManager)
+    return ViewModelProviders.of(fragment, mapViewModelFactory(Threader, interactor))
         .get(CountriesInfoViewModel::class.java)
   }
   
   @Suppress("UNCHECKED_CAST")
-  fun mapViewModelFactory(interactor: CountriesInfoInteractor): ViewModelProvider.Factory {
-    return object : ViewModelProvider.Factory {
-      override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        val viewModel = CountriesInfoViewModel(interactor)
-        return viewModel as T
-      }
+  fun mapViewModelFactory(
+    threader: Threader,
+    interactor: CountriesInfoInteractor
+  ) = object : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+      val viewModel = CountriesInfoViewModel(threader, interactor)
+      return viewModel as T
     }
   }
 }
