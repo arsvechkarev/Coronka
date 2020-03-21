@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -7,7 +7,6 @@ android {
 
   compileSdkVersion configs.compileSdkVersion
   defaultConfig {
-    applicationId configs.applicationId
     minSdkVersion configs.minSdkVersion
     targetSdkVersion configs.targetSdkVersion
     versionCode configs.versionCode
@@ -25,16 +24,10 @@ android {
 }
 
 dependencies {
-  def dependencies = rootProject.ext.applicationDependencies
+  implementation project(":core")
 
-  implementation project(':core')
-  implementation project(':database')
-  implementation project(':f-map')
-  implementation project(':f-feed')
-  implementation project(':countries-request-manager')
+  def dependencies = rootProject.ext.applicationDependencies
 
   implementation dependencies.kotlin
   implementation dependencies.appCompat
 }
-
-apply plugin: 'com.google.gms.google-services'

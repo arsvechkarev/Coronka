@@ -2,7 +2,6 @@ package core.log
 
 import android.util.Log
 import com.arsvechkarev.core.BuildConfig
-import java.lang.Exception
 
 interface Loggable {
   val tag: String
