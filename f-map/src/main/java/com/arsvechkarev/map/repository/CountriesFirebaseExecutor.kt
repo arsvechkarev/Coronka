@@ -5,7 +5,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import core.ApplicationConfig
-import core.model.CountryInfo
+import core.model.Country
 
 class CountriesFirebaseExecutor(
   threader: ApplicationConfig.Threader
@@ -16,7 +16,7 @@ class CountriesFirebaseExecutor(
   
   private val countriesInfoName = "countries_info"
   
-  fun getDataAsync(onSuccess: (List<CountryInfo>) -> Unit, onError: (DatabaseError) -> Unit = {}) {
+  fun getDataAsync(onSuccess: (List<Country>) -> Unit, onError: (DatabaseError) -> Unit = {}) {
     FirebaseDatabase.getInstance().getReference(countriesInfoName)
         .addListenerForSingleValueEvent(object : ValueEventListener {
           override fun onCancelled(error: DatabaseError) {
@@ -25,11 +25,11 @@ class CountriesFirebaseExecutor(
           
           override fun onDataChange(snapshot: DataSnapshot) {
             backgroundWorker.submit {
-              val infoData = ArrayList<CountryInfo>()
+              val infoData = ArrayList<Country>()
               snapshot.children.forEach {
                 val valueArr = it.value!!.toString().split("|")
                 infoData.add(
-                  CountryInfo(
+                  Country(
                     countryId = valueArr[0].toInt(),
                     countryName = it.key!!.toString(),
                     countryCode = valueArr[1],

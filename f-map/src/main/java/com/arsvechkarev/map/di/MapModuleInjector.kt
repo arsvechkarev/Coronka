@@ -16,7 +16,8 @@ object MapModuleInjector {
   fun provideViewModel(fragment: MapFragment): CountriesInfoViewModel {
     val firebaseExecutor = CountriesFirebaseExecutor(Threader)
     val sqLiteExecutor = CountriesSQLiteExecutor(Threader)
-    val interactor = CountriesInfoInteractor(firebaseExecutor, sqLiteExecutor, CountriesRequestManager)
+    val interactor = CountriesInfoInteractor(firebaseExecutor, sqLiteExecutor,
+      CountriesRequestManager)
     return ViewModelProviders.of(fragment, mapViewModelFactory(Threader, interactor))
         .get(CountriesInfoViewModel::class.java)
   }
@@ -25,7 +26,8 @@ object MapModuleInjector {
   fun mapViewModelFactory(
     threader: Threader,
     interactor: CountriesInfoInteractor
-  ) = object : ViewModelProvider.Factory {
+  ) = object :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
       val viewModel = CountriesInfoViewModel(threader, interactor)
       return viewModel as T

@@ -8,7 +8,7 @@ import com.arsvechkarev.database.DatabaseExecutor
 import com.arsvechkarev.database.DatabaseManager
 import com.arsvechkarev.database.Queries
 import core.ApplicationConfig
-import core.model.CountryInfo
+import core.model.Country
 
 class CountriesSQLiteExecutor(threader: ApplicationConfig.Threader) {
   
@@ -21,7 +21,7 @@ class CountriesSQLiteExecutor(threader: ApplicationConfig.Threader) {
     }
   }
   
-  fun readFromDatabase(onSuccess: (List<CountryInfo>) -> Unit) {
+  fun readFromDatabase(onSuccess: (List<Country>) -> Unit) {
     executeWithReadableDatabase { database ->
       val query = Queries.selectAll(CountriesTable.TABLE_NAME)
       DatabaseExecutor.executeQuery(database, query, ::transformCursorToList) { list ->
@@ -30,7 +30,7 @@ class CountriesSQLiteExecutor(threader: ApplicationConfig.Threader) {
     }
   }
   
-  fun saveCountriesInfo(list: List<CountryInfo>) {
+  fun saveCountriesInfo(list: List<Country>) {
     executeWithWriteableDatabase {
       for (country in list) {
         val contentValues = ContentValues()
@@ -50,10 +50,10 @@ class CountriesSQLiteExecutor(threader: ApplicationConfig.Threader) {
     }
   }
   
-  private fun transformCursorToList(cursor: Cursor): List<CountryInfo> {
-    val infoData = ArrayList<CountryInfo>()
+  private fun transformCursorToList(cursor: Cursor): List<Country> {
+    val infoData = ArrayList<Country>()
     while (cursor.moveToNext()) {
-      val info = CountryInfo(
+      val info = Country(
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_ID)),
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_NAME)),
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_CODE)),

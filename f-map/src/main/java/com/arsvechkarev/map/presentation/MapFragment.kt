@@ -7,25 +7,29 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
-import com.arsvechkarev.map.presentation.CountriesInfoState.Success
+import com.arsvechkarev.map.presentation.MapScreenState.CountriesLoaded
+import com.arsvechkarev.map.presentation.MapScreenState.Failure
 
 class MapFragment : Fragment(R.layout.fragment_map) {
   
   private val mapDelegate = MapDelegate()
-  private lateinit var countriesInfoViewModel: CountriesInfoViewModel
+  private lateinit var viewModel: CountriesInfoViewModel
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     mapDelegate.init(requireContext(), childFragmentManager, ::onMapClicked, ::onCountrySelected)
-    countriesInfoViewModel = MapModuleInjector.provideViewModel(this)
-    countriesInfoViewModel.requestUpdateCountriesInfo()
-    countriesInfoViewModel.countriesData.observe(this, Observer(this::handleState))
+    viewModel = MapModuleInjector.provideViewModel(this)
+    viewModel // Allow use cache if fragment was recreated
+        .requestUpdateCountriesInfo(allowUseCache = savedInstanceState != null)
+    viewModel.state.observe(this, Observer(this::handleState))
   }
   
-  private fun handleState(state: CountriesInfoState) {
+  private fun handleState(state: MapScreenState) {
     when (state) {
-      is Success -> {
-        println("qw: fragment")
-        mapDelegate.drawCountriesMarks(state.countriesData)
+      is CountriesLoaded -> {
+        mapDelegate.drawCountriesMarks(state.countriesList)
+      }
+      is Failure -> {
+        Toast.makeText(context, "Failure while loading", Toast.LENGTH_SHORT).show()
       }
     }
   }
@@ -34,7 +38,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
   
   }
   
-  private fun onCountrySelected(countryName: String) {
-    Toast.makeText(context, countryName, Toast.LENGTH_SHORT).show()
+  private fun onCountrySelected(countryCode: String) {
+    val country = viewModel.findCountryByCode(countryCode)
+    Toast.makeText(context, countryCode, Toast.LENGTH_SHORT).show()
   }
 }

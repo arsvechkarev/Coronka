@@ -1,6 +1,6 @@
 package core.model
 
-data class CountryInfo(
+data class Country(
   val countryId: Int,
   val countryName: String,
   val countryCode: String,
@@ -11,7 +11,7 @@ data class CountryInfo(
   val longitude: String
 )
 
-fun List<CountryInfo>.print(prefix: String = "country") {
+fun List<Country>.print(prefix: String = "country") {
   forEach {
     println(
       "${it.countryName}: ${it.countryId}|${it.countryCode}|${it.confirmed}" +

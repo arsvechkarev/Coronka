@@ -4,7 +4,7 @@ import com.arsvechkarev.countriesrequestmanager.CountriesRequestManager
 import com.google.firebase.database.DatabaseError
 import core.log.Loggable
 import core.log.debug
-import core.model.CountryInfo
+import core.model.Country
 
 class CountriesInfoInteractor(
   private val firebaseExecutor: CountriesFirebaseExecutor,
@@ -18,7 +18,7 @@ class CountriesInfoInteractor(
    * Downloading info by country and uploading it to the database
    */
   fun updateCountriesInfo(
-    onSuccess: (List<CountryInfo>) -> Unit,
+    onSuccess: (List<Country>) -> Unit,
     onError: (DatabaseError) -> Unit = {}
   ) {
     val isRequestAllowed = countriesRequestManager.isRequestAllowed()

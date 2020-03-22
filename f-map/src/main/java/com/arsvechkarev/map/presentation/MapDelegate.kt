@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import core.ApplicationConfig
-import core.model.CountryInfo
+import core.model.Country
 import java.util.Locale
 
 
@@ -27,7 +27,7 @@ class MapDelegate {
   
   private lateinit var geocoder: Geocoder
   
-  private var currentCountry = ""
+  private var currentCountryCode = ""
   
   fun init(
     context: Context,
@@ -60,14 +60,13 @@ class MapDelegate {
   private fun onMapClicked(latLng: LatLng) {
     val addresses: List<Address> =
         geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-    addresses[0].countryCode
-    if (addresses.isNotEmpty() && currentCountry != addresses[0].countryName) {
-      currentCountry = addresses[0].countryName ?: return
-      onCountrySelected(currentCountry)
+    if (addresses.isNotEmpty() && currentCountryCode != addresses[0].countryCode) {
+      currentCountryCode = addresses[0].countryCode ?: return
+      onCountrySelected(currentCountryCode)
     }
   }
   
-  fun drawCountriesMarks(countriesData: List<CountryInfo>) {
+  fun drawCountriesMarks(countriesData: List<Country>) {
     mapHolder.addAction { googleMap ->
       for (country in countriesData) {
         googleMap.addCircle(
