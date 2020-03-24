@@ -26,6 +26,7 @@ android {
 dependencies {
   implementation project(":core")
   implementation project(":database")
+  implementation project(":bottom-sheet")
   implementation project(":countries-request-manager")
 
   def dependencies = rootProject.ext.applicationDependencies

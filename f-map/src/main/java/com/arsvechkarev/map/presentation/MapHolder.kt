@@ -1,10 +1,10 @@
 package com.arsvechkarev.map.presentation
 
 import com.google.android.gms.maps.GoogleMap
-import core.ApplicationConfig
+import core.ApplicationConfig.Threader
 import java.util.concurrent.CountDownLatch
 
-class MapHolder(private val threader: ApplicationConfig.Threader) {
+class MapHolder(private val threader: Threader = Threader) {
   
   private var googleMap: GoogleMap? = null
   private val initLatch = CountDownLatch(1)

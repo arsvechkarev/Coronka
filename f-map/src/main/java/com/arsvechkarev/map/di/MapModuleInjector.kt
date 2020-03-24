@@ -26,8 +26,7 @@ object MapModuleInjector {
   fun mapViewModelFactory(
     threader: Threader,
     interactor: CountriesInfoInteractor
-  ) = object :
-    ViewModelProvider.Factory {
+  ) = object : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
       val viewModel = CountriesInfoViewModel(threader, interactor)
       return viewModel as T

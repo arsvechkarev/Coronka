@@ -1,3 +1,4 @@
+include ':bottom-sheet'
 include ':countries-request-manager'
 include ':database'
 include ':f-map'
