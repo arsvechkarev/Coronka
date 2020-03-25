@@ -59,6 +59,7 @@ class MapDelegate {
   
   private fun onMapClicked(latLng: LatLng) {
     try {
+      onMapClicked()
       threader.backgroundWorker.submit {
         val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
         if (addresses.isNotEmpty() && currentCountryCode != addresses[0].countryCode) {

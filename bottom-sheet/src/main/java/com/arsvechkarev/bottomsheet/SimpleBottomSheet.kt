@@ -4,6 +4,11 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Color.WHITE
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RoundRectShape
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -16,7 +21,7 @@ import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
-import android.widget.Toast
+import com.arsvechkarev.bottomsheet.R.styleable.SimpleBottomSheet
 import com.arsvechkarev.bottomsheet.SimpleBottomSheet.Direction.DOWN
 import com.arsvechkarev.bottomsheet.SimpleBottomSheet.Direction.UP
 import kotlin.math.abs
@@ -24,14 +29,18 @@ import kotlin.math.abs
 
 class SimpleBottomSheet @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : FrameLayout(context, attrs), View.OnTouchListener, OnGestureListener {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr), View.OnTouchListener, OnGestureListener {
   
   companion object {
     const val FLING_VELOCITY_THRESHOLD = 0.18f
     const val FLING_DURATION_COEFFICIENT = 20
     const val SLIDE_ANIMATION_DURATION = 250L
   }
+  
+  private val cornerRadius: Float
+  private val backgroundColor: Int
   
   private val maxVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
   private val gestureDetector: GestureDetector = GestureDetector(context, this)
@@ -43,6 +52,22 @@ class SimpleBottomSheet @JvmOverloads constructor(
   // for on touch listener
   private var initialY = -1f
   private var lastY = -1f
+  
+  init {
+    val typedArray = context.obtainStyledAttributes(attrs, SimpleBottomSheet, defStyleAttr, 0)
+    cornerRadius = typedArray.getDimension(R.styleable.SimpleBottomSheet_cornerRadius, dp(16))
+    backgroundColor = typedArray.getColor(R.styleable.SimpleBottomSheet_backgroundColor, WHITE)
+    val shapeDrawable = ShapeDrawable(
+      RoundRectShape(
+        floatArrayOf(cornerRadius, cornerRadius, cornerRadius, cornerRadius, 0f, 0f, 0f, 0f),
+        null,
+        null
+      )
+    )
+    shapeDrawable.colorFilter = PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
+    background = shapeDrawable
+    typedArray.recycle()
+  }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     bottomY = (parent as ViewGroup).height.toFloat()
@@ -126,4 +151,6 @@ class SimpleBottomSheet @JvmOverloads constructor(
   enum class Direction {
     UP, DOWN
   }
+  
+  private fun dp(value: Int) = resources.displayMetrics.density * value
 }

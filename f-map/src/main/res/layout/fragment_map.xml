@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/fragment_map_root"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@android:color/black">
+
+  <FrameLayout
+    android:id="@+id/fragment_map_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"/>
 
   <com.arsvechkarev.bottomsheet.SimpleBottomSheet
     android:id="@+id/bottomSheet"
@@ -23,16 +28,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Country"/>
+        android:gravity="center"
+        android:text="CountryName"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"/>
 
       <com.arsvechkarev.map.views.StatsView
-        android:id="@+id/statsConfirmed"
+        android:id="@+id/statsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        app:innerSidePadding="16dp"/>
+        android:padding="16dp"
+        app:innerSidePadding="18dp"/>
 
     </LinearLayout>
 
