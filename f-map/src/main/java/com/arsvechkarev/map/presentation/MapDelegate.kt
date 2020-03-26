@@ -70,7 +70,7 @@ class MapDelegate {
         }
       }
     } catch (e: IOException) {
-      // Happens if geocoder
+      // Happens if geocoder doesn't have a network connection
     }
   }
   

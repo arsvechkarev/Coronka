@@ -1,7 +1,7 @@
 package com.arsvechkarev.coronavirusinfo
 
 import com.arsvechkarev.countriesrequestmanager.CountriesRequestManager
-import com.arsvechkarev.database.DatabaseManager
+import com.arsvechkarev.storage.DatabaseManager
 import core.FontManager
 import android.app.Application as AndroidApp
 

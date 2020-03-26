@@ -2,14 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
+  android:id="@+id/frameLayoutRoot"
   android:layout_height="match_parent"
   android:background="@android:color/black">
 
   <FrameLayout
     android:id="@+id/fragment_map_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/black"/>
+    android:layout_height="match_parent"/>
 
   <com.arsvechkarev.bottomsheet.SimpleBottomSheet
     android:id="@+id/bottomSheet"
@@ -19,8 +19,11 @@
     android:background="@android:color/white">
 
     <LinearLayout
+      android:id="@+id/linearLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginBottom="16dp"
       android:orientation="vertical">
 
       <TextView
@@ -38,6 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        app:innerLinePadding="12dp"
         app:innerSidePadding="18dp"/>
 
     </LinearLayout>

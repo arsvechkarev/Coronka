@@ -16,11 +16,11 @@ class CountriesFirebaseExecutor(
   
   private val countriesInfoName = "countries_info"
   
-  fun getDataAsync(onSuccess: (List<Country>) -> Unit, onError: (DatabaseError) -> Unit = {}) {
+  fun getDataAsync(onSuccess: (List<Country>) -> Unit, onFailure: (DatabaseError) -> Unit = {}) {
     FirebaseDatabase.getInstance().getReference(countriesInfoName)
         .addListenerForSingleValueEvent(object : ValueEventListener {
           override fun onCancelled(error: DatabaseError) {
-            onError(error)
+            onFailure(error)
           }
           
           override fun onDataChange(snapshot: DataSnapshot) {

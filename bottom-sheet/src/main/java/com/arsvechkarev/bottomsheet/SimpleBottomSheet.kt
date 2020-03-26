@@ -1,37 +1,25 @@
 package com.arsvechkarev.bottomsheet
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.graphics.Color.WHITE
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import android.util.AttributeSet
-import android.view.GestureDetector
-import android.view.MotionEvent
-import android.view.MotionEvent.ACTION_CANCEL
-import android.view.MotionEvent.ACTION_DOWN
-import android.view.MotionEvent.ACTION_MOVE
-import android.view.MotionEvent.ACTION_UP
-import android.view.View
-import android.view.ViewConfiguration
-import android.view.ViewGroup
+import android.view.*
+import android.view.MotionEvent.*
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
-import com.arsvechkarev.bottomsheet.R.styleable.SimpleBottomSheet
 import com.arsvechkarev.bottomsheet.SimpleBottomSheet.Direction.DOWN
 import com.arsvechkarev.bottomsheet.SimpleBottomSheet.Direction.UP
 import kotlin.math.abs
 
-
 class SimpleBottomSheet @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null,
-  defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), View.OnTouchListener, OnGestureListener {
+  attrs: AttributeSet? = null
+) : FrameLayout(context, attrs), View.OnTouchListener, OnGestureListener {
   
   companion object {
     const val FLING_VELOCITY_THRESHOLD = 0.18f
@@ -39,8 +27,8 @@ class SimpleBottomSheet @JvmOverloads constructor(
     const val SLIDE_ANIMATION_DURATION = 250L
   }
   
-  private val cornerRadius: Float
   private val backgroundColor: Int
+  private val cornerRadius: Float
   
   private val maxVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
   private val gestureDetector: GestureDetector = GestureDetector(context, this)
@@ -54,9 +42,10 @@ class SimpleBottomSheet @JvmOverloads constructor(
   private var lastY = -1f
   
   init {
-    val typedArray = context.obtainStyledAttributes(attrs, SimpleBottomSheet, defStyleAttr, 0)
+    val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SimpleBottomSheet, 0, 0)
     cornerRadius = typedArray.getDimension(R.styleable.SimpleBottomSheet_cornerRadius, dp(16))
-    backgroundColor = typedArray.getColor(R.styleable.SimpleBottomSheet_backgroundColor, WHITE)
+    backgroundColor = typedArray.getColor(R.styleable.SimpleBottomSheet_backgroundColor,
+      Color.WHITE)
     val shapeDrawable = ShapeDrawable(
       RoundRectShape(
         floatArrayOf(cornerRadius, cornerRadius, cornerRadius, cornerRadius, 0f, 0f, 0f, 0f),
@@ -78,14 +67,19 @@ class SimpleBottomSheet @JvmOverloads constructor(
   }
   
   fun show() {
-    post { animate().y(topY).start() }
+    animate().y(topY).start()
   }
   
   fun hide() {
-    post { animate().y(bottomY).start() }
+    animate().y(bottomY).start()
   }
   
-  override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+  override fun onFling(
+    e1: MotionEvent,
+    e2: MotionEvent,
+    velocityX: Float,
+    velocityY: Float
+  ): Boolean {
     val normalizedVelocityY = abs(velocityY) / maxVelocity
     if (normalizedVelocityY > FLING_VELOCITY_THRESHOLD) {
       when {
@@ -124,7 +118,7 @@ class SimpleBottomSheet @JvmOverloads constructor(
           duration = SLIDE_ANIMATION_DURATION
           start()
         }
-        return performClick()
+        return true
       }
     }
     return false
@@ -136,15 +130,9 @@ class SimpleBottomSheet @JvmOverloads constructor(
     if (direction == DOWN) {
       time = abs(bottomY - y / velocityY) / FLING_DURATION_COEFFICIENT
       endY = bottomY
-      val animator = ObjectAnimator.ofFloat(this, View.Y, endY)
+      ObjectAnimator.ofFloat(this, View.Y, endY)
           .setDuration(time.toLong())
-      animator.addListener(object : AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator?) {
-          println("qwerty: bottomY = $bottomY")
-          println("qwerty: viewY = $y")
-        }
-      })
-      animator.start()
+          .start()
     }
   }
   
@@ -152,5 +140,5 @@ class SimpleBottomSheet @JvmOverloads constructor(
     UP, DOWN
   }
   
-  private fun dp(value: Int) = resources.displayMetrics.density * value
+  private fun dp(value: Int) = value * resources.displayMetrics.density
 }

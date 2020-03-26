@@ -25,7 +25,8 @@ android {
 
 dependencies {
   implementation project(":core")
-  implementation project(":database")
+  implementation project(':storage')
+  implementation project(":network")
   implementation project(":bottom-sheet")
   implementation project(":countries-request-manager")
 

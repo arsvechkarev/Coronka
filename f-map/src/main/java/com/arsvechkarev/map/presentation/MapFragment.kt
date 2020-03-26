@@ -17,17 +17,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
   private val mapDelegate = MapDelegate()
   private lateinit var viewModel: CountriesInfoViewModel
   
-  var flag = true
-  
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     mapDelegate.init(requireContext(), childFragmentManager,
       ::onMapClicked, ::onCountrySelected, ApplicationConfig.Threader)
     viewModel = MapModuleInjector.provideViewModel(this)
     viewModel // Allow use cache if fragment was recreated
-        .requestUpdateCountriesInfo(allowUseCache = savedInstanceState != null)
+        .requestUpdateCountriesInfo(allowUseSavedData = savedInstanceState != null)
     viewModel.state.observe(this, Observer(this::handleState))
     textViewCountryName.typeface = FontManager.rubik
-    statsView.setNumbers(100, 20, 6)
+    bottomSheet.setOnClickListener { bottomSheet.hide() }
   }
   
   private fun handleState(state: MapScreenState) {
@@ -36,8 +34,14 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         mapDelegate.drawCountriesMarksIfNeeded(state.countriesList)
       }
       is ShowingCountryInfo -> {
+        textViewCountryName.text = state.country.countryName
+        statsView.updateNumbers(
+          state.country.confirmed.toInt(),
+          state.country.recovered.toInt(),
+          state.country.deaths.toInt()
+        )
         mapDelegate.drawCountriesMarksIfNeeded(state.countriesList)
-        
+        bottomSheet.show()
       }
       is Failure -> {
         Toast.makeText(context, "Failure while loading", Toast.LENGTH_SHORT).show()
@@ -46,16 +50,10 @@ class MapFragment : Fragment(R.layout.fragment_map) {
   }
   
   private fun onMapClicked() {
-    if (flag) {
-      bottomSheet.show()
-    } else {
-      bottomSheet.hide()
-    }
-    flag = !flag
+    bottomSheet.show()
   }
   
   private fun onCountrySelected(countryCode: String) {
-    Toast.makeText(context, countryCode, Toast.LENGTH_SHORT).show()
     viewModel.findCountryByCode(countryCode)
   }
 }

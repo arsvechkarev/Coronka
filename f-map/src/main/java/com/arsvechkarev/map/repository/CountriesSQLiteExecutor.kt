@@ -3,10 +3,10 @@ package com.arsvechkarev.map.repository
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.arsvechkarev.database.CountriesTable
-import com.arsvechkarev.database.DatabaseExecutor
-import com.arsvechkarev.database.DatabaseManager
-import com.arsvechkarev.database.Queries
+import com.arsvechkarev.storage.CountriesTable
+import com.arsvechkarev.storage.DatabaseExecutor
+import com.arsvechkarev.storage.DatabaseManager
+import com.arsvechkarev.storage.Queries
 import core.ApplicationConfig
 import core.model.Country
 

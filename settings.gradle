@@ -1,6 +1,7 @@
+include ':network'
 include ':bottom-sheet'
 include ':countries-request-manager'
-include ':database'
+include ':storage'
 include ':f-map'
 include ':core'
 include ':f-feed'
