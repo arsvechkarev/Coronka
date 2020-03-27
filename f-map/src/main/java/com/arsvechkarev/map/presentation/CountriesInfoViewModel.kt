@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arsvechkarev.map.presentation.MapScreenState.CountriesLoaded
 import com.arsvechkarev.map.presentation.MapScreenState.ShowingCountryInfo
-import com.arsvechkarev.map.repository.CountriesInfoFacade
+import com.arsvechkarev.map.repository.CountriesInfoInteractor
 import core.ApplicationConfig
 import core.extenstions.updateSelf
 import core.model.Country
 
 class CountriesInfoViewModel(
   private val threader: ApplicationConfig.Threader,
-  private val facade: CountriesInfoFacade
+  private val interactor: CountriesInfoInteractor
 ) : ViewModel() {
   
   private val _state = MutableLiveData<MapScreenState>()
@@ -25,7 +25,7 @@ class CountriesInfoViewModel(
       return
     }
     threader.backgroundWorker.submit {
-      facade.updateCountriesInfo({ list ->
+      interactor.updateCountriesInfo(onSuccess = { list ->
         _state.value = CountriesLoaded(list)
       })
     }

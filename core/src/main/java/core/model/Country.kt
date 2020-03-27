@@ -14,7 +14,7 @@ data class Country(
 fun List<Country>.print(prefix: String = "country") {
   forEach {
     println(
-      "${it.countryName}: ${it.countryId}|${it.countryCode}|${it.confirmed}" +
+      "$prefix -- ${it.countryName}: ${it.countryId}|${it.countryCode}|${it.confirmed}" +
           "|${it.deaths}|${it.recovered}|${it.latitude}|${it.longitude}"
     )
   }

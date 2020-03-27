@@ -7,14 +7,14 @@ interface Loggable {
   val tag: String
 }
 
-fun Loggable.debug(message: () -> String) {
+fun Loggable.log(message: () -> String) {
   if (BuildConfig.DEBUG) {
     Log.d(tag, message())
   }
 }
 
-fun Loggable.debug(exception: Exception, message: () -> String) {
+fun Loggable.log(throwable: Throwable, message: () -> String = { tag }) {
   if (BuildConfig.DEBUG) {
-    Log.e(tag, message(), exception)
+    Log.e(tag, message(), throwable)
   }
 }

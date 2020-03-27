@@ -7,7 +7,7 @@ import core.ResultHandler
 import core.model.GeneralInfo
 import org.json.JSONObject
 
-class GeneralInfoRepository(
+class GeneralInfoExecutor(
   private val threader: ApplicationConfig.Threader,
   private val networker: Networker,
   private val saver: Saver
@@ -32,7 +32,7 @@ class GeneralInfoRepository(
   private fun performNetworkRequest(resultHandler: ResultHandler<GeneralInfo, Throwable>) {
     try {
       threader.ioWorker.submit {
-        val result = networker.syncRequest(URL)
+        val result = networker.performRequest(URL)
         val json = JSONObject(result)
         val generalInfo = GeneralInfo(
           json.get(CONFIRMED).toString().toInt(),

@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import core.log.Loggable
-import core.log.debug
+import core.log.log
 
 class DatabaseManager internal constructor(context: Context) :
   SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION), Loggable {
@@ -12,7 +12,7 @@ class DatabaseManager internal constructor(context: Context) :
   override val tag = "DatabaseManager"
   
   override fun onCreate(db: SQLiteDatabase) {
-    debug { "Database is created" }
+    log { "Database is created" }
     db.execSQL(Queries.SQL_CREATE_COUNTRIES_TABLE)
   }
   

@@ -10,7 +10,6 @@ ext {
       kotlin             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
       appCompat          : "androidx.appcompat:appcompat:$appCompat_version",
       lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
-      firebaseDatabase   : "com.google.firebase:firebase-database:$firebaseDatabase_version",
       googleMaps         : "com.google.android.gms:play-services-maps:$googleMaps_version",
   ]
 
