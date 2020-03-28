@@ -9,7 +9,6 @@ class MainActivity : AppCompatActivity() {
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    window.setFlags(FLAG_LAYOUT_NO_LIMITS, FLAG_LAYOUT_NO_LIMITS);
     setContentView(R.layout.activity_main)
     supportActionBar?.hide()
     savedInstanceState ?: supportFragmentManager.beginTransaction()

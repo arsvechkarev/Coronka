@@ -26,8 +26,11 @@ android {
 dependencies {
   implementation project(':core')
   implementation project(':storage')
+  implementation project(':views')
   implementation project(':f-map')
   implementation project(':f-feed')
+
+  implementation "androidx.cardview:cardview:1.0.0"
 
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
