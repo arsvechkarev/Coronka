@@ -3,13 +3,14 @@ package com.arsvechkarev.storage
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import core.log.Loggable
-import core.log.log
+import core.Loggable
+import core.log
 
 class DatabaseManager internal constructor(context: Context) :
-  SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION), Loggable {
+  SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
+  Loggable {
   
-  override val tag = "DatabaseManager"
+  override val logTag = "DatabaseManager"
   
   override fun onCreate(db: SQLiteDatabase) {
     log { "Database is created" }

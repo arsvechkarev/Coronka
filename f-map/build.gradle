@@ -20,7 +20,6 @@ android {
       proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
     }
   }
-
 }
 
 dependencies {
@@ -30,7 +29,6 @@ dependencies {
   implementation project(":bottom-sheet")
 
   def dependencies = rootProject.ext.applicationDependencies
-
   implementation dependencies.kotlin
   implementation dependencies.appCompat
   implementation dependencies.lifecycleExtensions

@@ -7,9 +7,18 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.AttributeSet
-import android.view.*
-import android.view.MotionEvent.*
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_CANCEL
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.MotionEvent.ACTION_MOVE
+import android.view.MotionEvent.ACTION_UP
+import android.view.View
+import android.view.ViewConfiguration
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import com.arsvechkarev.bottomsheet.SimpleBottomSheet.Direction.DOWN
@@ -37,15 +46,20 @@ class SimpleBottomSheet @JvmOverloads constructor(
   private var expandedHalfY = -1f
   private var bottomY = -1f
   
+  private var currentY = -1f
+  
   // for on touch listener
   private var initialY = -1f
   private var lastY = -1f
   
   init {
     val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SimpleBottomSheet, 0, 0)
-    cornerRadius = typedArray.getDimension(R.styleable.SimpleBottomSheet_cornerRadius, dp(16))
-    backgroundColor = typedArray.getColor(R.styleable.SimpleBottomSheet_backgroundColor,
-      Color.WHITE)
+    cornerRadius = typedArray.getDimension(R.styleable.SimpleBottomSheet_cornerRadius,
+      16 * resources.displayMetrics.density)
+    backgroundColor = typedArray.getColor(
+      R.styleable.SimpleBottomSheet_backgroundColor,
+      Color.WHITE
+    )
     val shapeDrawable = ShapeDrawable(
       RoundRectShape(
         floatArrayOf(cornerRadius, cornerRadius, cornerRadius, cornerRadius, 0f, 0f, 0f, 0f),
@@ -60,18 +74,21 @@ class SimpleBottomSheet @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     bottomY = (parent as ViewGroup).height.toFloat()
+    currentY = bottomY
     topY = y
-    y = bottomY
+    y = currentY
     expandedHalfY = bottomY - (bottomY - topY) / 2
     setOnTouchListener(this)
   }
   
   fun show() {
-    animate().y(topY).start()
+    currentY = topY
+    post { animate().y(topY).start() }
   }
   
   fun hide() {
-    animate().y(bottomY).start()
+    currentY = bottomY
+    post { animate().y(bottomY).start() }
   }
   
   override fun onFling(
@@ -112,8 +129,8 @@ class SimpleBottomSheet @JvmOverloads constructor(
         return true
       }
       ACTION_UP, ACTION_CANCEL -> {
-        val endValue = if (view.y > expandedHalfY) bottomY else topY
-        ObjectAnimator.ofFloat(this, View.Y, endValue).apply {
+        currentY = if (view.y > expandedHalfY) bottomY else topY
+        ObjectAnimator.ofFloat(this, View.Y, currentY).apply {
           interpolator = AccelerateDecelerateInterpolator()
           duration = SLIDE_ANIMATION_DURATION
           start()
@@ -130,15 +147,56 @@ class SimpleBottomSheet @JvmOverloads constructor(
     if (direction == DOWN) {
       time = abs(bottomY - y / velocityY) / FLING_DURATION_COEFFICIENT
       endY = bottomY
+      currentY = bottomY
       ObjectAnimator.ofFloat(this, View.Y, endY)
           .setDuration(time.toLong())
           .start()
     }
   }
   
+  override fun onSaveInstanceState(): Parcelable? {
+    val superState = super.onSaveInstanceState() ?: return null
+    val myState = SavedState(superState)
+    myState.currentY = this.currentY
+    return myState
+  }
+  
+  override fun onRestoreInstanceState(state: Parcelable) {
+    super.onRestoreInstanceState(state)
+    val savedState = state as SavedState
+    currentY = savedState.currentY
+    requestLayout()
+  }
+  
   enum class Direction {
     UP, DOWN
   }
   
-  private fun dp(value: Int) = value * resources.displayMetrics.density
+  class SavedState : BaseSavedState {
+    
+    var currentY = -1f
+    
+    constructor(parcelable: Parcelable) : super(parcelable)
+    
+    constructor(parcel: Parcel) : super(parcel) {
+      currentY = parcel.readFloat()
+    }
+    
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+      super.writeToParcel(parcel, flags)
+      parcel.writeFloat(currentY)
+    }
+    
+    companion object CREATOR : Parcelable.Creator<SavedState> {
+      
+      override fun createFromParcel(parcel: Parcel): SavedState {
+        return SavedState(parcel)
+      }
+      
+      override fun newArray(size: Int): Array<SavedState?> {
+        return arrayOfNulls(size)
+      }
+    }
+    
+  }
 }

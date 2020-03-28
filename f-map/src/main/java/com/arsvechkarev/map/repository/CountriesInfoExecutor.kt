@@ -2,8 +2,8 @@ package com.arsvechkarev.map.repository
 
 import com.arsvechkarev.network.Networker
 import core.ApplicationConfig
-import core.log.Loggable
-import core.log.log
+import core.Loggable
+import core.log
 import core.model.Country
 import core.model.print
 import org.json.JSONArray
@@ -14,7 +14,7 @@ class CountriesInfoExecutor(
   private val networker: Networker
 ) : Loggable {
   
-  override val tag = "Network_CountriesInfo"
+  override val logTag = "Network_CountriesInfo"
   
   fun getCountriesInfoAsync(onSuccess: (List<Country>) -> Unit, onFailure: (Throwable) -> Unit) {
     try {
@@ -43,10 +43,8 @@ class CountriesInfoExecutor(
             countriesList.add(country)
           }
         }
-        threader.mainThreadWorker.submit {
-          countriesList.print("element")
-          onSuccess(countriesList)
-        }
+        countriesList.print("element")
+        threader.mainThreadWorker.submit { onSuccess(countriesList) }
       }
     } catch (e: Throwable) {
       log(e)

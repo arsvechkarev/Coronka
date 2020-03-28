@@ -1,6 +1,6 @@
 package com.arsvechkarev.map.repository
 
-import core.log.Loggable
+import core.Loggable
 import core.model.Country
 
 class CountriesInfoInteractor(
@@ -9,7 +9,7 @@ class CountriesInfoInteractor(
   private val sqLiteExecutor: CountriesSQLiteExecutor
 ) : Loggable {
   
-  override val tag = "CountriesInfoInteractor"
+  override val logTag = "CountriesInfoInteractor"
   
   /**
    * Downloading info by country and uploading it to the database
@@ -27,5 +27,9 @@ class CountriesInfoInteractor(
       sqLiteExecutor.saveCountriesInfo(it)
       onSuccess(it)
     }, onFailure = onFailure)
+  }
+  
+  fun tryUpdateFromCache(onSuccess: (List<Country>) -> Unit) {
+  
   }
 }

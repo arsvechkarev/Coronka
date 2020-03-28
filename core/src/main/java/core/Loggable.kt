@@ -1,20 +1,20 @@
-package core.log
+package core
 
 import android.util.Log
 import com.arsvechkarev.core.BuildConfig
 
 interface Loggable {
-  val tag: String
+  val logTag: String
 }
 
 fun Loggable.log(message: () -> String) {
   if (BuildConfig.DEBUG) {
-    Log.d(tag, message())
+    Log.d(logTag, message())
   }
 }
 
-fun Loggable.log(throwable: Throwable, message: () -> String = { tag }) {
+fun Loggable.log(throwable: Throwable, message: () -> String = { logTag }) {
   if (BuildConfig.DEBUG) {
-    Log.e(tag, message(), throwable)
+    Log.e(logTag, message(), throwable)
   }
 }

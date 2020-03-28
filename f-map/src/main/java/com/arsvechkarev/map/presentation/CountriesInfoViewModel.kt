@@ -2,54 +2,56 @@ package com.arsvechkarev.map.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.arsvechkarev.map.presentation.MapScreenState.CountriesLoaded
-import com.arsvechkarev.map.presentation.MapScreenState.ShowingCountryInfo
+import com.arsvechkarev.map.presentation.MapScreenState.Failure
+import com.arsvechkarev.map.presentation.MapScreenState.Failure.FailureReason.NO_CONNECTION
+import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.repository.CountriesInfoInteractor
 import core.ApplicationConfig
-import core.extenstions.updateSelf
-import core.model.Country
+import core.Loggable
+import core.NetworkConnection
+import core.NetworkViewModel
+import core.StateHandle
+import core.addOrUpdate
+import core.doIfContains
+import core.log
+import core.updateAll
 
 class CountriesInfoViewModel(
+  connection: NetworkConnection,
   private val threader: ApplicationConfig.Threader,
   private val interactor: CountriesInfoInteractor
-) : ViewModel() {
+) : NetworkViewModel(connection), Loggable {
   
-  private val _state = MutableLiveData<MapScreenState>()
-  val state: LiveData<MapScreenState>
-    get() = _state
+  override val logTag = "Map_NetworkViewModel"
+  
+  private val _stateHandle = MutableLiveData<StateHandle<MapScreenState>>(StateHandle())
+  val state: LiveData<StateHandle<MapScreenState>>
+    get() = _stateHandle
   
   fun requestUpdateCountriesInfo(allowUseSavedData: Boolean) {
     if (allowUseSavedData) {
-      tryToUpdateWithSavedData()
+      _stateHandle.updateAll()
+      return
+    }
+    log { "isConnected = ${connection.isConnected}" }
+    if (connection.isNotConnected) {
+      _stateHandle.addOrUpdate(Failure(NO_CONNECTION))
       return
     }
     threader.backgroundWorker.submit {
       interactor.updateCountriesInfo(onSuccess = { list ->
-        _state.value = CountriesLoaded(list)
+        _stateHandle.addOrUpdate(CountriesLoaded(list))
       })
     }
   }
   
   fun findCountryByCode(countryCode: String) {
-    when (val state: MapScreenState? = _state.value) {
-      is CountriesLoaded -> notifyViewModelIfFound(state.countriesList, countryCode)
-      is ShowingCountryInfo -> notifyViewModelIfFound(state.countriesList, countryCode)
+    _stateHandle.doIfContains(CountriesLoaded::class) {
+      threader.backgroundWorker.submit {
+        val country = countriesList.find { it.countryCode == countryCode } ?: return@submit
+        threader.mainThreadWorker.submit { _stateHandle.addOrUpdate(FoundCountry(country)) }
+      }
     }
   }
-  
-  private fun tryToUpdateWithSavedData() {
-    when (_state.value) {
-      is CountriesLoaded -> _state.updateSelf()
-      is ShowingCountryInfo -> _state.updateSelf()
-    }
-  }
-  
-  private fun notifyViewModelIfFound(countriesList: List<Country>, countryCode: String) {
-    val country: Country? = countriesList.find { it.countryCode == countryCode }
-    if (country != null) {
-      _state.value = ShowingCountryInfo(country, countriesList)
-    }
-  }
-  
 }

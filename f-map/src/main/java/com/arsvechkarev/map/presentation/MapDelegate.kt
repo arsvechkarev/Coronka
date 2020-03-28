@@ -25,7 +25,6 @@ class MapDelegate {
   private lateinit var geocoder: Geocoder
   
   private var currentCountryCode = ""
-  private var circlesAreDrawn = false
   
   fun init(
     context: Context,
@@ -53,7 +52,7 @@ class MapDelegate {
       setOnMapClickListener(::onMapClicked)
       uiSettings.isRotateGesturesEnabled = false
       uiSettings.isMyLocationButtonEnabled = false
-      setMaxZoomPreference(6.0f)
+      setMaxZoomPreference(4.5f)
     }
   }
   
@@ -64,9 +63,7 @@ class MapDelegate {
         val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
         if (addresses.isNotEmpty() && currentCountryCode != addresses[0].countryCode) {
           currentCountryCode = addresses[0].countryCode ?: return@submit
-          threader.mainThreadWorker.submit {
-            onCountrySelected(currentCountryCode)
-          }
+          threader.mainThreadWorker.submit { onCountrySelected(currentCountryCode) }
         }
       }
     } catch (e: IOException) {
@@ -75,8 +72,6 @@ class MapDelegate {
   }
   
   fun drawCountriesMarksIfNeeded(countriesData: List<Country>) {
-    if (circlesAreDrawn) return
-    circlesAreDrawn = true
     mapHolder.addAction { googleMap ->
       for (country in countriesData) {
         googleMap.addCircle(

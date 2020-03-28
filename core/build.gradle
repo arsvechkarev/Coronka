@@ -19,12 +19,10 @@ android {
       proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
     }
   }
-
 }
 
 dependencies {
   def dependencies = rootProject.ext.applicationDependencies
-
   implementation dependencies.kotlin
   implementation dependencies.appCompat
 }
