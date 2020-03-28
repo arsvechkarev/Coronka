@@ -10,12 +10,18 @@ import com.arsvechkarev.map.di.MapModuleInjector
 import com.arsvechkarev.map.presentation.MapScreenState.CountriesLoaded
 import com.arsvechkarev.map.presentation.MapScreenState.Failure
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
+import com.arsvechkarev.map.presentation.MapScreenState.StartLoadingCountries
+import com.arsvechkarev.map.presentation.MapScreenState.StartLoadingCountryInfo
 import core.ApplicationConfig
 import core.FontManager
 import core.Loggable
 import core.StateHandle
+import core.extenstions.invisible
+import core.extenstions.visible
 import core.log
 import kotlinx.android.synthetic.main.fragment_map.bottomSheet
+import kotlinx.android.synthetic.main.fragment_map.countryInfoProgressBar
+import kotlinx.android.synthetic.main.fragment_map.layoutCountryInfo
 import kotlinx.android.synthetic.main.fragment_map.statsView
 import kotlinx.android.synthetic.main.fragment_map.textViewCountryName
 
@@ -40,24 +46,38 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   private fun handleState(stateHandle: StateHandle<MapScreenState>) {
     stateHandle.forAll { state ->
       when (state) {
-        is CountriesLoaded -> {
-          mapDelegate.drawCountriesMarksIfNeeded(state.countriesList)
-        }
-        is FoundCountry -> {
-          textViewCountryName.text = state.country.countryName
-          statsView.updateNumbers(
-            state.country.confirmed.toInt(),
-            state.country.recovered.toInt(),
-            state.country.deaths.toInt()
-          )
-          bottomSheet.show()
-        }
-        is Failure -> {
-          Toast.makeText(context, "Failure: ${state.reason}", Toast.LENGTH_SHORT).show()
-          log { "error, reason = ${state.reason}" }
-        }
+        is StartLoadingCountries -> handleStartLoadingCountries()
+        is CountriesLoaded -> handleCountriesLoaded(state)
+        is StartLoadingCountryInfo -> handleStartLoadingCountryInfo()
+        is FoundCountry -> handleFoundCountry(state)
+        is Failure -> handleFailure(state)
       }
     }
+  }
+  
+  private fun handleStartLoadingCountries() {
+  }
+  
+  private fun handleCountriesLoaded(state: CountriesLoaded) {
+    mapDelegate.drawCountriesMarksIfNeeded(state.countriesList)
+  }
+  
+  private fun handleStartLoadingCountryInfo() {
+  }
+  
+  private fun handleFoundCountry(state: FoundCountry) {
+    textViewCountryName.text = state.country.countryName
+    statsView.updateNumbers(
+      state.country.confirmed.toInt(),
+      state.country.recovered.toInt(),
+      state.country.deaths.toInt()
+    )
+    bottomSheet.show()
+  }
+  
+  private fun handleFailure(state: Failure) {
+    Toast.makeText(context, "Failure: ${state.reason}", Toast.LENGTH_SHORT).show()
+    log { "error, reason = ${state.reason}" }
   }
   
   private fun onMapClicked() {

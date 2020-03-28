@@ -44,6 +44,12 @@ class StateHandle<S : Any> {
     states.clear()
   }
   
+  /**
+   * Iterates over all states applying given action or applies action to a new state (if
+   * such state is not null)
+   *
+   * @see updateAll
+   */
   fun forAll(action: (S) -> Unit) {
     if (newState != null) {
       action(newState!!)
@@ -53,13 +59,24 @@ class StateHandle<S : Any> {
   }
 }
 
+/**
+ * Adds value to states map (or updates if the value already exists). Also can optionally remove state by
+ * specified [remove]
+ */
+fun <T : S, R : S, S : Any> MutableLiveData<StateHandle<S>>.addOrUpdate(state: T, remove: KClass<R>? = null) {
+  value!!.addOrUpdate(state)
+  if (remove != null) {
+    value!!.remove(remove)
+  }
+  updateSelf()
+}
+
 fun <T : S, S : Any> LiveData<StateHandle<S>>.contains(stateClass: KClass<T>): Boolean {
   return value!!.contains(stateClass)
 }
 
-fun <T : S, S : Any> MutableLiveData<StateHandle<S>>.addOrUpdate(state: T) {
-  value!!.addOrUpdate(state)
-  updateSelf()
+fun <T : S, S : Any> LiveData<StateHandle<S>>.remove(stateClass: KClass<T>) {
+  value!!.remove(stateClass)
 }
 
 fun <T : S, S : Any> MutableLiveData<StateHandle<S>>.doIfContains(

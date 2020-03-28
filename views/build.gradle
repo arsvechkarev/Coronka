@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
   def configs = rootProject.ext
@@ -24,14 +23,8 @@ android {
 
 dependencies {
   implementation project(":core")
-  implementation project(':storage')
-  implementation project(":network")
-  implementation project(":bottom-sheet")
-  implementation project(":views")
 
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
   implementation dependencies.appCompat
-  implementation dependencies.lifecycleExtensions
-  implementation dependencies.googleMaps
 }

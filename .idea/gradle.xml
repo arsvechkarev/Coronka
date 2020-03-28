@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/f-map" />
             <option value="$PROJECT_DIR$/network" />
             <option value="$PROJECT_DIR$/storage" />
+            <option value="$PROJECT_DIR$/views" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

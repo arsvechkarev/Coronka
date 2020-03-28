@@ -57,12 +57,12 @@ class StatsView @JvmOverloads constructor(
   private val chartLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
   
   init {
-    val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.StatsView, 0, 0)
-    innerSidePadding = typedArray.getDimension(R.styleable.StatsView_innerSidePadding, dp(8))
-    innerLinePadding = typedArray.getDimension(R.styleable.StatsView_innerLinePadding, dp(8))
-    chartLineHeight = typedArray.getDimension(R.styleable.StatsView_lineHeight, dp(6))
-    chartLineCornersRadius = typedArray.getDimension(R.styleable.StatsView_lineCornersRadius, dp(4))
-    textPaint.textSize = typedArray.getDimension(R.styleable.StatsView_android_textSize, sp(20))
+    val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.StatsView, 0, 0)
+    innerSidePadding = attributes.getDimension(R.styleable.StatsView_innerSidePadding, dp(8))
+    innerLinePadding = attributes.getDimension(R.styleable.StatsView_innerLinePadding, dp(8))
+    chartLineHeight = attributes.getDimension(R.styleable.StatsView_lineHeight, dp(6))
+    chartLineCornersRadius = attributes.getDimension(R.styleable.StatsView_lineCornersRadius, dp(4))
+    textPaint.textSize = attributes.getDimension(R.styleable.StatsView_android_textSize, sp(20))
     val labelConfirmed = resources.getString(R.string.text_confirmed)
     val labelRecovered = resources.getString(R.string.text_recovered)
     val labelDeaths = resources.getString(R.string.text_deaths)
@@ -74,7 +74,7 @@ class StatsView @JvmOverloads constructor(
     confirmedLabel = boringLayout(labelConfirmed, ALIGN_NORMAL, maxNumberTextWidth)
     recoveredLabel = boringLayout(labelRecovered, ALIGN_NORMAL, maxNumberTextWidth)
     deathsLabel = boringLayout(labelDeaths, ALIGN_NORMAL, maxNumberTextWidth)
-    typedArray.recycle()
+    attributes.recycle()
   }
   
   fun updateNumbers(confirmed: Int, recovered: Int, deaths: Int) {
