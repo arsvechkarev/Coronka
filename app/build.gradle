@@ -30,11 +30,7 @@ dependencies {
   implementation project(':f-map')
   implementation project(':f-feed')
 
-  implementation "androidx.cardview:cardview:1.0.0"
-
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
   implementation dependencies.appCompat
 }
-
-apply plugin: 'com.google.gms.google-services'
