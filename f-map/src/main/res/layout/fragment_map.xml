@@ -11,6 +11,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
+  <LinearLayout
+    android:id="@+id/layoutLoading"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:visibility="invisible">
+
+    <com.arsvechkarev.views.ProgressBar
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_margin="8dp"
+      app:color="@android:color/white"/>
+
+    <com.arsvechkarev.views.CustomTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:text="Loading map..."
+      android:textColor="@android:color/white"
+      android:textSize="20sp"/>
+
+  </LinearLayout>
+
   <com.arsvechkarev.views.bottomsheet.SimpleBottomSheet
     android:id="@+id/bottomSheet"
     android:layout_width="match_parent"

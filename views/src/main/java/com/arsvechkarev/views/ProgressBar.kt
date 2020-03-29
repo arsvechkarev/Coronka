@@ -22,6 +22,7 @@ class ProgressBar @JvmOverloads constructor(
   private val outerStartedAngle = 120f
   private val minSize = dp(32).toInt()
   private val sweepAngle = 260f
+  private val trackWidth: Float
   
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     color = Color.BLACK
@@ -38,12 +39,12 @@ class ProgressBar @JvmOverloads constructor(
   }
   
   private val innerAnimator = ValueAnimator().apply {
-    configure(900L) { innerRotationAngle = -(animatedValue as Float) }
+    configure(800L) { innerRotationAngle = -(animatedValue as Float) }
   }
   
   init {
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.ProgressBar, 0, 0)
-    paint.strokeWidth = attributes.getDimension(R.styleable.ProgressBar_trackWidth, dp(4))
+    trackWidth = attributes.getDimension(R.styleable.ProgressBar_trackWidth, -1f)
     paint.color = attributes.getColor(R.styleable.ProgressBar_color, Color.BLACK)
     attributes.recycle()
   }
@@ -61,6 +62,11 @@ class ProgressBar @JvmOverloads constructor(
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    if (trackWidth == -1f) {
+      paint.strokeWidth = w / 9f
+    } else {
+      paint.strokeWidth = trackWidth
+    }
     val outerInset = paint.strokeWidth / 2
     outerOval.set(paddingStart.f + outerInset, paddingTop.f + outerInset,
       w.f - paddingEnd - outerInset, h.f - paddingBottom - outerInset)

@@ -20,8 +20,7 @@ import core.extenstions.invisible
 import core.extenstions.visible
 import core.log
 import kotlinx.android.synthetic.main.fragment_map.bottomSheet
-import kotlinx.android.synthetic.main.fragment_map.countryInfoProgressBar
-import kotlinx.android.synthetic.main.fragment_map.layoutCountryInfo
+import kotlinx.android.synthetic.main.fragment_map.layoutLoading
 import kotlinx.android.synthetic.main.fragment_map.statsView
 import kotlinx.android.synthetic.main.fragment_map.textViewCountryName
 
@@ -56,9 +55,11 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleStartLoadingCountries() {
+    layoutLoading.visible()
   }
   
   private fun handleCountriesLoaded(state: CountriesLoaded) {
+    layoutLoading.invisible()
     mapDelegate.drawCountriesMarksIfNeeded(state.countriesList)
   }
   
