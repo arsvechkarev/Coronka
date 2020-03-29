@@ -1,11 +1,12 @@
 package com.arsvechkarev.map.repository
 
+import com.arsvechkarev.common.repositories.CountriesInfoExecutor
+import com.arsvechkarev.common.repositories.CountriesSQLiteExecutor
 import core.Loggable
 import core.model.Country
 
 class CountriesInfoInteractor(
   private val countriesInfoExecutor: CountriesInfoExecutor,
-  private val generalInfoExecutor: GeneralInfoExecutor,
   private val sqLiteExecutor: CountriesSQLiteExecutor
 ) : Loggable {
   

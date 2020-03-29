@@ -42,9 +42,9 @@ class BottomNavigationView @JvmOverloads constructor(
   )
   
   private val texts = arrayOf(
-    "Map",
-    "Stats",
-    "FAQ"
+    resources.getString(R.string.label_map),
+    resources.getString(R.string.label_stats),
+    resources.getString(R.string.label_faq)
   )
   
   private var itemClickListener: (Int) -> Unit = {}

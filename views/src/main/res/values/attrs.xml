@@ -16,4 +16,9 @@
     <attr name="labelTextSize" format="dimension"/>
   </declare-styleable>
 
+  <declare-styleable name="SimpleBottomSheet">
+    <attr name="cornerRadius" format="dimension"/>
+    <attr name="bottomSheet_backgroundColor" format="color"/>
+  </declare-styleable>
+
 </resources>

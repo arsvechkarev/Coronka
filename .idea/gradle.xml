@@ -12,10 +12,11 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/bottom-sheet" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/f-common" />
             <option value="$PROJECT_DIR$/f-feed" />
             <option value="$PROJECT_DIR$/f-map" />
+            <option value="$PROJECT_DIR$/f-stats" />
             <option value="$PROJECT_DIR$/network" />
             <option value="$PROJECT_DIR$/storage" />
             <option value="$PROJECT_DIR$/views" />

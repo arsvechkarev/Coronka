@@ -1,6 +1,7 @@
+include ':f-common'
+include ':f-stats'
 include ':views'
 include ':network'
-include ':bottom-sheet'
 include ':storage'
 include ':f-map'
 include ':core'

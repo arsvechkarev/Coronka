@@ -27,6 +27,7 @@ dependencies {
   implementation project(':core')
   implementation project(':storage')
   implementation project(':views')
+  implementation project(':f-common')
   implementation project(':f-map')
   implementation project(':f-feed')
 

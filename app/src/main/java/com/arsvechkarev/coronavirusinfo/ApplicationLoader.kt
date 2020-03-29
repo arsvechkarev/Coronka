@@ -1,5 +1,6 @@
 package com.arsvechkarev.coronavirusinfo
 
+import com.arsvechkarev.common.di.SingletonsInjector
 import com.arsvechkarev.storage.DatabaseManager
 import core.ApplicationConfig.Threader
 import core.FontManager
@@ -11,5 +12,6 @@ class ApplicationLoader : AndroidApp() {
     super.onCreate()
     DatabaseManager.init(applicationContext)
     FontManager.init(applicationContext, Threader)
+    SingletonsInjector.init(applicationContext)
   }
 }
