@@ -39,9 +39,7 @@ class GeneralInfoExecutor(
           json.get(RECOVERED).toString().toInt(),
           json.get(DEATHS).toString().toInt()
         )
-        threader.mainThreadWorker.submit {
-          resultHandler.onSuccess(generalInfo)
-        }
+        resultHandler.onSuccess(generalInfo)
       }
     } catch (throwable: Throwable) {
       resultHandler.onFailure(throwable)
@@ -49,6 +47,7 @@ class GeneralInfoExecutor(
   }
   
   companion object {
+  
     const val SAVER_FILENAME = "GeneralInfo"
     
     private const val CONFIRMED = "confirmed"

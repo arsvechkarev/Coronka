@@ -71,7 +71,7 @@ class MapDelegate {
     }
   }
   
-  fun drawCountriesMarksIfNeeded(countriesData: List<Country>) {
+  fun drawCountriesMarks(countriesData: List<Country>) {
     mapHolder.addAction { googleMap ->
       for (country in countriesData) {
         googleMap.addCircle(

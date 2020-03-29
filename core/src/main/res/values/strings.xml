@@ -3,4 +3,8 @@
   <string name="label_map">Map</string>
   <string name="label_stats">Stats</string>
   <string name="label_faq">FAQ</string>
+
+  <string name="text_confirmed">Confirmed</string>
+  <string name="text_recovered">Recovered</string>
+  <string name="text_deaths">Deaths</string>
 </resources>

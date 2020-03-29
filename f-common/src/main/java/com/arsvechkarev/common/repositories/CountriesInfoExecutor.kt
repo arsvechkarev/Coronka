@@ -5,9 +5,10 @@ import core.ApplicationConfig
 import core.Loggable
 import core.log
 import core.model.Country
-import core.model.print
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicBoolean
 
 class CountriesInfoExecutor(
   private val threader: ApplicationConfig.Threader,
@@ -16,44 +17,73 @@ class CountriesInfoExecutor(
   
   override val logTag = "Network_CountriesInfo"
   
-  fun getCountriesInfoAsync(onSuccess: (List<Country>) -> Unit, onFailure: (Throwable) -> Unit) {
+  private val isLoadingNow = AtomicBoolean(false)
+  
+  private val listeners = CopyOnWriteArrayList<CountriesInfoListener>()
+  
+  fun getCountriesInfoAsync(listener: CountriesInfoListener) {
+    listeners.add(listener)
+    if (isLoadingNow.get()) {
+      return
+    }
+    isLoadingNow.set(true)
     try {
       threader.ioWorker.submit {
-        val result = networker.performRequest(URL)
-        val countriesList = ArrayList<Country>()
-        val jsonArray = JSONArray(result)
-        for (i in 0 until jsonArray.length()) {
-          val json = jsonArray.get(i) as JSONObject
-          log { json.toString() }
-          if (json.has("confirmed")
-              && json.has("deaths")
-              && json.has("recovered")
-              && json.has("countrycode")
-              && json.has("location")) {
-            val country = Country(
-              countryId = i,
-              countryName = json.getString("countryregion"),
-              countryCode = (json.get("countrycode") as JSONObject).getString("iso2"),
-              confirmed = json.getString("confirmed"),
-              deaths = json.getString("deaths"),
-              recovered = json.getString("recovered"),
-              latitude = (json.get("location") as JSONObject).getString("lat"),
-              longitude = (json.get("location") as JSONObject).getString("lng")
-            )
-            countriesList.add(country)
-          }
+        val json = networker.performRequest(URL)
+        val countriesList = transformJson(json)
+        threader.mainThreadWorker.submit {
+          listeners.forEach { it.onSuccess(countriesList) }
+          isLoadingNow.set(false)
         }
-        countriesList.print("element")
-        threader.mainThreadWorker.submit { onSuccess(countriesList) }
       }
     } catch (e: Throwable) {
       log(e)
-      onFailure(e)
+      threader.mainThreadWorker.submit {
+        listeners.forEach { it.onFailure(e) }
+        isLoadingNow.set(false)
+      }
     }
+  }
+  
+  fun removeListener(listener: CountriesInfoListener) {
+    listeners.remove(listener)
+  }
+  
+  private fun transformJson(json: String): List<Country> {
+    val countriesList = ArrayList<Country>()
+    val jsonArray = JSONArray(json)
+    for (i in 0 until jsonArray.length()) {
+      val item = jsonArray.get(i) as JSONObject
+      log { item.toString() }
+      if (item.has("confirmed")
+          && item.has("deaths")
+          && item.has("recovered")
+          && item.has("countrycode")
+          && item.has("location")) {
+        val country = Country(
+          countryId = i,
+          countryName = item.getString("countryregion"),
+          countryCode = (item.get("countrycode") as JSONObject).getString("iso2"),
+          confirmed = item.getString("confirmed"),
+          deaths = item.getString("deaths"),
+          recovered = item.getString("recovered"),
+          latitude = (item.get("location") as JSONObject).getString("lat"),
+          longitude = (item.get("location") as JSONObject).getString("lng")
+        )
+        countriesList.add(country)
+      }
+    }
+    return countriesList
   }
   
   companion object {
     private const val URL = "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest?onlyCountries=true"
   }
   
+  interface CountriesInfoListener {
+    
+    fun onSuccess(countriesData: List<Country>)
+    
+    fun onFailure(throwable: Throwable)
+  }
 }

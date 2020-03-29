@@ -43,6 +43,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleState(stateHandle: StateHandle<MapScreenState>) {
+    log { "states = ${stateHandle.states.keys}" }
     stateHandle.forAll { state ->
       when (state) {
         is StartLoadingCountries -> handleStartLoadingCountries()
@@ -55,12 +56,16 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleStartLoadingCountries() {
+    log { "startLoadingCountries" }
     layoutLoading.visible()
   }
   
   private fun handleCountriesLoaded(state: CountriesLoaded) {
-    layoutLoading.invisible()
-    mapDelegate.drawCountriesMarksIfNeeded(state.countriesList)
+    log { "loaded countries" }
+    if (!state.isfromCache) {
+      layoutLoading.invisible()
+    }
+    mapDelegate.drawCountriesMarks(state.countriesList)
   }
   
   private fun handleStartLoadingCountryInfo() {

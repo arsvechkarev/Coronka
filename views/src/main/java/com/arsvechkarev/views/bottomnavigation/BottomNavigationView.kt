@@ -50,7 +50,7 @@ class BottomNavigationView @JvmOverloads constructor(
   private var itemClickListener: (Int) -> Unit = {}
   
   private val verticalInset = dp(8)
-  private val innerInset = dp(6)
+  private val innerInset = dp(4)
   private val iconSize: Float
   private val middlePointsXCoords = FloatArray(drawableIds.size)
   

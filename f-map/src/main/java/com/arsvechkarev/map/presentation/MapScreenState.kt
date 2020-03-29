@@ -8,7 +8,8 @@ sealed class MapScreenState {
   
   object StartLoadingCountryInfo : MapScreenState()
   
-  class CountriesLoaded(val countriesList: List<Country>) : MapScreenState()
+  class CountriesLoaded(val countriesList: List<Country>, val isfromCache: Boolean) :
+    MapScreenState()
   
   class FoundCountry(val country: Country) : MapScreenState()
   

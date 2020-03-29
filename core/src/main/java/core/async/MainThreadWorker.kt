@@ -3,6 +3,7 @@ package core.async
 import android.os.Handler
 import android.os.Looper
 import java.util.concurrent.Executor
+import java.util.concurrent.Future
 
 class MainThreadWorker : Worker {
   
@@ -14,8 +15,9 @@ class MainThreadWorker : Worker {
     }
   }
   
-  override fun submit(block: () -> Unit) {
+  override fun submit(block: () -> Unit): Future<*>? {
     mainThreadExecutor.execute(block)
+    return null
   }
   
 }

@@ -1,5 +1,3 @@
 <resources>
-  <string name="text_confirmed">Confirmed</string>
-  <string name="text_recovered">Recovered</string>
-  <string name="text_deaths">Deaths</string>
+
 </resources>

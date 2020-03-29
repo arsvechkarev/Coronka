@@ -12,7 +12,6 @@ import core.model.Country
 
 class CountriesSQLiteExecutor(threader: ApplicationConfig.Threader) {
   
-  private val mainThreadWorker = threader.mainThreadWorker
   private val ioWorker = threader.ioWorker
   
   fun isTableNotEmpty(): Boolean {
@@ -24,9 +23,7 @@ class CountriesSQLiteExecutor(threader: ApplicationConfig.Threader) {
   fun readFromDatabase(onSuccess: (List<Country>) -> Unit) {
     executeWithReadableDatabase { database ->
       val query = Queries.selectAll(CountriesTable.TABLE_NAME)
-      DatabaseExecutor.executeQuery(database, query, ::transformCursorToList) { list ->
-        mainThreadWorker.submit { onSuccess(list) }
-      }
+      DatabaseExecutor.executeQuery(database, query, ::transformCursorToList) { onSuccess(it) }
     }
   }
   

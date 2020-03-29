@@ -16,7 +16,7 @@ object MapModuleInjector {
     val connection = SingletonsInjector.connection
     val countriesInfoExecutor = SingletonsInjector.countriesInfoExecutor
     val sqLiteExecutor = SingletonsInjector.countriesSQLiteExecutor
-    val interactor = CountriesInfoInteractor(countriesInfoExecutor, sqLiteExecutor)
+    val interactor = CountriesInfoInteractor(Threader, countriesInfoExecutor, sqLiteExecutor)
     return ViewModelProviders.of(fragment, mapViewModelFactory(connection, Threader, interactor))
         .get(CountriesInfoViewModel::class.java)
   }

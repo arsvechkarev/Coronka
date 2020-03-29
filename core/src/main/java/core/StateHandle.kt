@@ -12,7 +12,7 @@ class StateHandle<S : Any> {
   
   internal var newState: S? = null
   
-  private val states = HashMap<KClass<out S>, S>()
+  val states = HashMap<KClass<out S>, S>()
   
   fun <T : S> addOrUpdate(state: T) {
     newState = state
@@ -56,6 +56,10 @@ class StateHandle<S : Any> {
     } else {
       states.values.forEach(action)
     }
+  }
+  
+  fun size(): Int {
+    return states.size
   }
 }
 

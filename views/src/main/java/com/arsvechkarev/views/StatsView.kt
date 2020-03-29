@@ -1,4 +1,4 @@
-package com.arsvechkarev.map.views
+package com.arsvechkarev.views
 
 import android.content.Context
 import android.graphics.Canvas
@@ -11,7 +11,6 @@ import android.text.Layout.Alignment.ALIGN_NORMAL
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import com.arsvechkarev.map.R
 import core.FontManager
 import core.extenstions.block
 import core.extenstions.dp
