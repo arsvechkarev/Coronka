@@ -49,8 +49,8 @@ class BottomNavigationView @JvmOverloads constructor(
   
   private var itemClickListener: (Int) -> Unit = {}
   
-  private val verticalInset = dp(8)
-  private val innerInset = dp(4)
+  private val verticalInset = 8.dp
+  private val innerInset = 4.dp
   private val iconSize: Float
   private val middlePointsXCoords = FloatArray(drawableIds.size)
   
@@ -95,7 +95,7 @@ class BottomNavigationView @JvmOverloads constructor(
     val labelColor = attributes.getColor(R.styleable.BottomNavigationView_labelColor, Color.BLACK)
     labelPaint.colorFilter = PorterDuffColorFilter(labelColor, PorterDuff.Mode.SRC_ATOP)
     labelPaint.textSize =
-        attributes.getDimension(R.styleable.BottomNavigationView_labelTextSize, dp(14))
+        attributes.getDimension(R.styleable.BottomNavigationView_labelTextSize, 14.dp)
     attributes.recycle()
     (parent as? ViewGroup)?.clipChildren = false
     initIcons()

@@ -52,12 +52,12 @@ class BigStatsView @JvmOverloads constructor(
   
   init {
     val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.BigStatsView, 0, 0)
-    innerSidePadding = attributes.getDimension(R.styleable.BigStatsView_innerSidePadding, dp(8))
-    innerLinePadding = attributes.getDimension(R.styleable.BigStatsView_innerLinePadding, dp(8))
-    chartLineHeight = attributes.getDimension(R.styleable.BigStatsView_lineHeight, dp(6))
+    innerSidePadding = attributes.getDimension(R.styleable.BigStatsView_innerSidePadding, 8.dp)
+    innerLinePadding = attributes.getDimension(R.styleable.BigStatsView_innerLinePadding, 8.dp)
+    chartLineHeight = attributes.getDimension(R.styleable.BigStatsView_lineHeight, 6.dp)
     chartLineCornersRadius = attributes
-        .getDimension(R.styleable.BigStatsView_lineCornersRadius, dp(4))
-    textPaint.textSize = attributes.getDimension(R.styleable.BigStatsView_android_textSize, sp(20))
+        .getDimension(R.styleable.BigStatsView_lineCornersRadius, 4.dp)
+    textPaint.textSize = attributes.getDimension(R.styleable.BigStatsView_android_textSize, 20.sp)
     val labelConfirmed = resources.getString(R.string.text_confirmed)
     val labelRecovered = resources.getString(R.string.text_recovered)
     val labelDeaths = resources.getString(R.string.text_deaths)

@@ -17,7 +17,6 @@ import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedAll
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingCountriesInfo
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingGeneralInfo
 import core.ApplicationConfig
-import core.Colors
 import core.NetworkConnection
 import core.StateHandle
 import core.addOrUpdate
@@ -59,7 +58,8 @@ class StatsViewModel(
       threader.backgroundWorker.submit {
         val generalInfo = it["generalInfo"] as GeneralInfo
         val countries = it["countries"] as List<Country>
-        val displayableCountries = countries.toDisplayableCountries(generalInfo, CONFIRMED)
+        val displayableCountries = countries.toDisplayableCountries(CONFIRMED)
+        displayableCountries.sortDescending()
         threader.mainThreadWorker.submit {
           _state.addOrUpdate(LoadedAll(CONFIRMED, generalInfo, displayableCountries))
         }
@@ -71,16 +71,11 @@ class StatsViewModel(
     countriesInfoInteractor.removeListener()
   }
   
-  private fun List<Country>.toDisplayableCountries(
-    generalInfo: GeneralInfo,
-    type: InfoType
-  ): List<DisplayableCountry> {
+  private fun List<Country>.toDisplayableCountries(type: InfoType): MutableList<DisplayableCountry> {
     val countries = ArrayList<DisplayableCountry>()
-    val color = determineColor(type)
     forEach {
       val number = determineNumber(type, it)
-      val percent = determinePercent(type, it, generalInfo)
-      countries.add(DisplayableCountry(it.countryName, number, percent, color))
+      countries.add(DisplayableCountry(it.countryName, number))
     }
     return countries
   }
@@ -89,20 +84,6 @@ class StatsViewModel(
     CONFIRMED -> country.confirmed.toInt()
     DEATHS -> country.deaths.toInt()
     RECOVERED -> country.recovered.toInt()
-  }
-  
-  private fun determinePercent(infoType: InfoType, country: Country, generalInfo: GeneralInfo): Float {
-    return when (infoType) {
-      CONFIRMED -> generalInfo.confirmed.toFloat() / country.confirmed.toFloat()
-      DEATHS -> generalInfo.deaths.toFloat() / country.deaths.toFloat()
-      RECOVERED -> generalInfo.recovered.toFloat() / country.recovered.toFloat()
-    }
-  }
-  
-  private fun determineColor(infoType: InfoType) = when (infoType) {
-    CONFIRMED -> Colors.confirmedColor
-    DEATHS -> Colors.deathsColor
-    RECOVERED -> Colors.recoveredColor
   }
   
 }

@@ -20,7 +20,7 @@ class ProgressBar @JvmOverloads constructor(
   
   private val innerStartedAngle = 50f
   private val outerStartedAngle = 120f
-  private val minSize = dp(32).toInt()
+  private val minSize = 32.dp.toInt()
   private val sweepAngle = 260f
   private val trackWidth: Float
   

@@ -5,6 +5,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.views.SmallStatsView
+import core.extenstions.dpInt
 import core.model.DisplayableCountry
 import core.recycler.AdapterDelegate
 import core.recycler.DisplayableItem
@@ -14,6 +15,7 @@ class CountryInfoAdapterDelegate : AdapterDelegate {
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
     val statsView = SmallStatsView(parent.context)
     statsView.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+    statsView.setPadding(16.dpInt, 8.dpInt, 8.dpInt, 16.dpInt)
     return CountryViewHolder(statsView)
   }
   
@@ -25,10 +27,7 @@ class CountryInfoAdapterDelegate : AdapterDelegate {
     
     fun bind(country: DisplayableCountry) {
       val statsView = itemView as SmallStatsView
-      statsView.updateData(
-        country.name, country.number,
-        country.percent, country.color
-      )
+      statsView.updateData(country.name, country.number)
     }
   }
 }
