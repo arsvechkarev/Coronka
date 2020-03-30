@@ -1,5 +1,7 @@
 package core.model
 
+import core.recycler.DisplayableItem
+
 data class Country(
   val countryId: Int,
   val countryName: String,
@@ -18,4 +20,14 @@ fun List<Country>.print(prefix: String = "country") {
           "|${it.deaths}|${it.recovered}|${it.latitude}|${it.longitude}"
     )
   }
+}
+
+data class DisplayableCountry(
+  val name: String,
+  val number: Int,
+  val percent: Float,
+  val color: Int
+) : DisplayableItem {
+  override val id = name
+  override val type = TYPE_COUNTRY_INFO
 }

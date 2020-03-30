@@ -44,8 +44,4 @@ class NetworkConnectionImpl(context: Context) : NetworkConnection, Loggable {
   init {
     connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
   }
-  
-  override fun release() {
-    connectivityManager.unregisterNetworkCallback(callback)
-  }
 }

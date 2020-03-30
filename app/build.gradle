@@ -30,6 +30,7 @@ dependencies {
   implementation project(':f-common')
   implementation project(':f-map')
   implementation project(':f-feed')
+  implementation project(':f-stats')
 
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin

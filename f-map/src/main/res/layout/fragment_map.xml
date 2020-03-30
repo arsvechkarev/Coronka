@@ -65,7 +65,7 @@
         android:textColor="@android:color/black"
         android:textSize="24sp"/>
 
-      <com.arsvechkarev.views.StatsView
+      <com.arsvechkarev.views.BigStatsView
         android:id="@+id/statsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

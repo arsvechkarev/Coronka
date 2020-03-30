@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.arsvechkarev.common.di.SingletonsInjector
+import com.arsvechkarev.common.repositories.CountriesInfoInteractor
 import com.arsvechkarev.map.presentation.CountriesInfoViewModel
 import com.arsvechkarev.map.presentation.MapFragment
-import com.arsvechkarev.map.repository.CountriesInfoInteractor
 import core.ApplicationConfig.Threader
 import core.NetworkConnection
 

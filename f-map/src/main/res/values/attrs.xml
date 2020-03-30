@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <declare-styleable name="StatsView">
+  <declare-styleable name="BigStatsView">
     <attr name="innerSidePadding" format="dimension"/>
     <attr name="innerLinePadding" format="dimension"/>
     <attr name="android:textSize" format="dimension"/>

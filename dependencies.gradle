@@ -5,12 +5,14 @@ ext {
   lifecycle_version = '2.1.0'
   firebaseDatabase_version = '19.2.1'
   googleMaps_version = "17.0.0"
+  recyclerView_version = "1.1.0"
 
   applicationDependencies = [
       kotlin             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
       appCompat          : "androidx.appcompat:appcompat:$appCompat_version",
       lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
       googleMaps         : "com.google.android.gms:play-services-maps:$googleMaps_version",
+      recyclerView       : "androidx.recyclerview:recyclerview:$recyclerView_version"
   ]
 
   junit_version = '4.12'

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <color name="icon_default">@android:color/black</color>
+
+  <color name="confirmed">#D9270F</color>
+  <color name="deaths">#000000</color>
+  <color name="recovered">#0FD916</color>
 </resources>

@@ -1,8 +1,6 @@
-package com.arsvechkarev.map.repository
+package com.arsvechkarev.common.repositories
 
-import com.arsvechkarev.common.repositories.CountriesInfoExecutor
 import com.arsvechkarev.common.repositories.CountriesInfoExecutor.CountriesInfoListener
-import com.arsvechkarev.common.repositories.CountriesSQLiteExecutor
 import core.ApplicationConfig
 import core.Loggable
 import core.log

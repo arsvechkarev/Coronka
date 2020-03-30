@@ -50,7 +50,7 @@ class StateHandle<S : Any> {
    *
    * @see updateAll
    */
-  fun forAll(action: (S) -> Unit) {
+  fun handleUpdate(action: (S) -> Unit) {
     if (newState != null) {
       action(newState!!)
     } else {

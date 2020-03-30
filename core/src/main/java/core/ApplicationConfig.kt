@@ -11,4 +11,9 @@ interface ApplicationConfig {
     val ioWorker: Worker = BackgroundWorker.io()
     val mainThreadWorker: Worker = MainThreadWorker()
   }
+  
+  object Densities {
+    var density: Float = -1f
+    var scaledDensity: Float = -1f
+  }
 }

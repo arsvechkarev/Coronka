@@ -21,7 +21,7 @@
     <attr name="bottomSheet_backgroundColor" format="color"/>
   </declare-styleable>
 
-  <declare-styleable name="StatsView">
+  <declare-styleable name="BigStatsView">
     <attr name="innerSidePadding" format="dimension"/>
     <attr name="innerLinePadding" format="dimension"/>
     <attr name="android:textSize" format="dimension"/>

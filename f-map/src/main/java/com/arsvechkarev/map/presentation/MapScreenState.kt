@@ -4,9 +4,9 @@ import core.model.Country
 
 sealed class MapScreenState {
   
-  object StartLoadingCountries : MapScreenState()
+  object LoadingCountries : MapScreenState()
   
-  object StartLoadingCountryInfo : MapScreenState()
+  object LoadingCountryInfo : MapScreenState()
   
   class CountriesLoaded(val countriesList: List<Country>, val isfromCache: Boolean) :
     MapScreenState()

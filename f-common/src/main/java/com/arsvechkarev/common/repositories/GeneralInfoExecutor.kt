@@ -3,7 +3,6 @@ package com.arsvechkarev.common.repositories
 import com.arsvechkarev.network.Networker
 import com.arsvechkarev.storage.Saver
 import core.ApplicationConfig
-import core.ResultHandler
 import core.model.GeneralInfo
 import org.json.JSONObject
 
@@ -13,12 +12,31 @@ class GeneralInfoExecutor(
   private val saver: Saver
 ) {
   
-  fun getGeneralInfo(allowCache: Boolean = false, resultHandler: ResultHandler<GeneralInfo, Throwable>) {
-    if (allowCache && saver.has(CONFIRMED)) {
-      resultHandler.onSuccess(constructGeneralInfo())
-      return
+  fun getGeneralInfo(
+    onSuccess: (GeneralInfo) -> Unit,
+    onFailure: (Throwable) -> Unit
+  ) {
+    threader.ioWorker.submit {
+      performNetworkRequest(onSuccess, onFailure)
     }
-    performNetworkRequest(resultHandler)
+  }
+  
+  private fun performNetworkRequest(
+    onSuccess: (GeneralInfo) -> Unit,
+    onFailure: (Throwable) -> Unit
+  ) {
+    try {
+      val result = networker.performRequest(URL)
+      val json = JSONObject(result)
+      val generalInfo = GeneralInfo(
+        json.get(CONFIRMED).toString().toInt(),
+        json.get(RECOVERED).toString().toInt(),
+        json.get(DEATHS).toString().toInt()
+      )
+      threader.mainThreadWorker.submit { onSuccess(generalInfo) }
+    } catch (throwable: Throwable) {
+      threader.mainThreadWorker.submit { onFailure(throwable) }
+    }
   }
   
   private fun constructGeneralInfo(): GeneralInfo {
@@ -29,25 +47,8 @@ class GeneralInfoExecutor(
     )
   }
   
-  private fun performNetworkRequest(resultHandler: ResultHandler<GeneralInfo, Throwable>) {
-    try {
-      threader.ioWorker.submit {
-        val result = networker.performRequest(URL)
-        val json = JSONObject(result)
-        val generalInfo = GeneralInfo(
-          json.get(CONFIRMED).toString().toInt(),
-          json.get(RECOVERED).toString().toInt(),
-          json.get(DEATHS).toString().toInt()
-        )
-        resultHandler.onSuccess(generalInfo)
-      }
-    } catch (throwable: Throwable) {
-      resultHandler.onFailure(throwable)
-    }
-  }
-  
   companion object {
-  
+    
     const val SAVER_FILENAME = "GeneralInfo"
     
     private const val CONFIRMED = "confirmed"

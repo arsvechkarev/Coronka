@@ -10,8 +10,8 @@ import com.arsvechkarev.map.di.MapModuleInjector
 import com.arsvechkarev.map.presentation.MapScreenState.CountriesLoaded
 import com.arsvechkarev.map.presentation.MapScreenState.Failure
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
-import com.arsvechkarev.map.presentation.MapScreenState.StartLoadingCountries
-import com.arsvechkarev.map.presentation.MapScreenState.StartLoadingCountryInfo
+import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountries
+import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountryInfo
 import core.ApplicationConfig
 import core.FontManager
 import core.Loggable
@@ -37,18 +37,18 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     viewModel = MapModuleInjector.provideViewModel(this)
     viewModel // Allow use cache if fragment was recreated
         .requestUpdateCountriesInfo(allowUseSavedData = savedInstanceState != null)
-    viewModel.state.observe(this, Observer(this::handleState))
+    viewModel.state.observe(this, Observer(this::handleStateChanged))
     textViewCountryName.typeface = FontManager.rubik
     bottomSheet.setOnClickListener { bottomSheet.hide() }
   }
   
-  private fun handleState(stateHandle: StateHandle<MapScreenState>) {
+  private fun handleStateChanged(stateHandle: StateHandle<MapScreenState>) {
     log { "states = ${stateHandle.states.keys}" }
-    stateHandle.forAll { state ->
+    stateHandle.handleUpdate { state ->
       when (state) {
-        is StartLoadingCountries -> handleStartLoadingCountries()
+        is LoadingCountries -> handleStartLoadingCountries()
         is CountriesLoaded -> handleCountriesLoaded(state)
-        is StartLoadingCountryInfo -> handleStartLoadingCountryInfo()
+        is LoadingCountryInfo -> handleStartLoadingCountryInfo()
         is FoundCountry -> handleFoundCountry(state)
         is Failure -> handleFailure(state)
       }
@@ -82,6 +82,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleFailure(state: Failure) {
+    layoutLoading.invisible()
     Toast.makeText(context, "Failure: ${state.reason}", Toast.LENGTH_SHORT).show()
     log { "error, reason = ${state.reason}" }
   }

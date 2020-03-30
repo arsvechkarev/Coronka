@@ -11,6 +11,7 @@ import android.text.Layout.Alignment.ALIGN_NORMAL
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import core.Colors
 import core.FontManager
 import core.extenstions.block
 import core.extenstions.dp
@@ -18,16 +19,10 @@ import core.extenstions.f
 import core.extenstions.i
 import core.extenstions.sp
 
-class StatsView @JvmOverloads constructor(
+class BigStatsView @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null
 ) : View(context, attrs) {
-  
-  companion object {
-    private const val COLOR_CONFIRMED = 0xffd9270f.toInt()
-    private const val COLOR_RECOVERED = 0xff0fd916.toInt()
-    private const val COLOR_DEATHS = 0xff000000.toInt()
-  }
   
   private val innerSidePadding: Float
   private val innerLinePadding: Float
@@ -56,12 +51,13 @@ class StatsView @JvmOverloads constructor(
   private val chartLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
   
   init {
-    val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.StatsView, 0, 0)
-    innerSidePadding = attributes.getDimension(R.styleable.StatsView_innerSidePadding, dp(8))
-    innerLinePadding = attributes.getDimension(R.styleable.StatsView_innerLinePadding, dp(8))
-    chartLineHeight = attributes.getDimension(R.styleable.StatsView_lineHeight, dp(6))
-    chartLineCornersRadius = attributes.getDimension(R.styleable.StatsView_lineCornersRadius, dp(4))
-    textPaint.textSize = attributes.getDimension(R.styleable.StatsView_android_textSize, sp(20))
+    val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.BigStatsView, 0, 0)
+    innerSidePadding = attributes.getDimension(R.styleable.BigStatsView_innerSidePadding, dp(8))
+    innerLinePadding = attributes.getDimension(R.styleable.BigStatsView_innerLinePadding, dp(8))
+    chartLineHeight = attributes.getDimension(R.styleable.BigStatsView_lineHeight, dp(6))
+    chartLineCornersRadius = attributes
+        .getDimension(R.styleable.BigStatsView_lineCornersRadius, dp(4))
+    textPaint.textSize = attributes.getDimension(R.styleable.BigStatsView_android_textSize, sp(20))
     val labelConfirmed = resources.getString(R.string.text_confirmed)
     val labelRecovered = resources.getString(R.string.text_recovered)
     val labelDeaths = resources.getString(R.string.text_deaths)
@@ -99,7 +95,9 @@ class StatsView @JvmOverloads constructor(
   }
   
   override fun onDraw(canvas: Canvas) {
-    if (numbersAreNotInitialized()) {
+    if (confirmedNumberLayout == null
+        || recoveredNumberLayout == null
+        || deathsNumberLayout == null) {
       return
     }
     if (chartLineMaxLength == -1f) {
@@ -119,11 +117,11 @@ class StatsView @JvmOverloads constructor(
         paddingStart.f + confirmedLabel.width + innerSidePadding,
         paddingTop.f + (lineHeight / 2 - chartLineHeight / 2)
       )
-      drawLine(COLOR_CONFIRMED, confirmedLinePercent)
+      drawLine(Colors.confirmedColor, confirmedLinePercent)
       translate(0f, lineHeight + innerLinePadding)
-      drawLine(COLOR_RECOVERED, recoveredLinePercent)
+      drawLine(Colors.recoveredColor, recoveredLinePercent)
       translate(0f, lineHeight + innerLinePadding)
-      drawLine(COLOR_DEATHS, deathsLinePercent)
+      drawLine(Colors.deathsColor, deathsLinePercent)
     }
     canvas.block {
       translate(width - paddingEnd.f - confirmedNumberLayout!!.width, paddingTop.f)
@@ -158,10 +156,6 @@ class StatsView @JvmOverloads constructor(
       return linePercent
     }
     return linePercent + minChartLinePercent
-  }
-  
-  private fun numbersAreNotInitialized(): Boolean {
-    return confirmedNumberLayout == null || recoveredNumberLayout == null || deathsNumberLayout == null
   }
   
   private fun Canvas.drawLine(color: Int, linePercent: Float) {
