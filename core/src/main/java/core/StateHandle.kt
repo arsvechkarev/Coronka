@@ -35,6 +35,11 @@ class StateHandle<S : Any> {
     if (states.containsKey(stateClass)) action(states[stateClass] as T)
   }
   
+  @Suppress("UNCHECKED_CAST")
+  fun <T : S> assertIfContains(stateClass: KClass<T>, action: T.() -> Unit) {
+    action(states[stateClass] as T)
+  }
+  
   fun <T : S> remove(stateClass: KClass<T>) = states.remove(stateClass)
   
   fun <T : S> contains(stateClass: KClass<T>) = states.containsKey(stateClass)
@@ -84,6 +89,14 @@ fun <T : S, S : Any> LiveData<StateHandle<S>>.remove(stateClass: KClass<T>) {
 }
 
 fun <T : S, S : Any> MutableLiveData<StateHandle<S>>.doIfContains(
+  stateClass: KClass<T>,
+  action: T.() -> Unit
+) {
+  value!!.doIfContains(stateClass, action)
+  updateSelf()
+}
+
+fun <T : S, S : Any> MutableLiveData<StateHandle<S>>.assertContains(
   stateClass: KClass<T>,
   action: T.() -> Unit
 ) {

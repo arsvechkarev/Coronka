@@ -6,26 +6,27 @@ import androidx.lifecycle.ViewModel
 import com.arsvechkarev.common.repositories.CountriesInfoInteractor
 import com.arsvechkarev.common.repositories.GeneralInfoExecutor
 import com.arsvechkarev.network.AsyncOperations
-import com.arsvechkarev.stats.list.InfoType
-import com.arsvechkarev.stats.list.InfoType.CONFIRMED
-import com.arsvechkarev.stats.list.InfoType.DEATHS
-import com.arsvechkarev.stats.list.InfoType.RECOVERED
 import com.arsvechkarev.stats.list.OptionType
+import com.arsvechkarev.stats.list.OptionType.CONFIRMED
+import com.arsvechkarev.stats.list.OptionType.DEATHS
+import com.arsvechkarev.stats.list.OptionType.RECOVERED
 import com.arsvechkarev.stats.presentation.StatsScreenState.CountriesLoaded
+import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.GeneralInfoLoaded
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedAll
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingCountriesInfo
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingGeneralInfo
 import core.ApplicationConfig
 import core.NetworkConnection
+import core.SavedData
 import core.StateHandle
-import core.doIfContains
+import core.assertContains
 import core.model.Country
 import core.model.DisplayableCountry
 import core.model.GeneralInfo
-import core.model.OptionsItem
 import core.recycler.DisplayableItem
 import core.update
+import core.updateAll
 import datetime.DateTime
 import datetime.PATTERN_STANDARD
 
@@ -36,28 +37,39 @@ class StatsViewModel(
   private val generalInfoExecutor: GeneralInfoExecutor
 ) : ViewModel() {
   
-  private val cacheOperations = AsyncOperations(2)
-  private val networkOperations = AsyncOperations(2)
+  private lateinit var cacheOperations: AsyncOperations
+  private lateinit var networkOperations: AsyncOperations
+  
+  private val savedData = SavedData()
   
   private val _state = MutableLiveData<StateHandle<StatsScreenState>>(StateHandle())
   val state: LiveData<StateHandle<StatsScreenState>>
     get() = _state
   
-  fun startInitialLoading() {
+  fun startInitialLoading(allowUsedSavedState: Boolean) {
+    if (allowUsedSavedState) {
+      _state.updateAll()
+      return
+    }
     _state.update(LoadingGeneralInfo)
     _state.update(LoadingCountriesInfo)
     tryUpdateFromCache()
-    updateFromNetwork()
+    updateFromNetwork(notifyLoading = false)
   }
   
-  fun updateFromNetwork() {
+  fun updateFromNetwork(notifyLoading: Boolean = true) {
+    if (notifyLoading) {
+      _state.update(LoadingGeneralInfo)
+      _state.update(LoadingCountriesInfo)
+    }
+    networkOperations = AsyncOperations(2)
     generalInfoExecutor.getGeneralInfo(onSuccess = {
       networkOperations.addValue(KEY_GENERAL_INFO, it)
-      _state.update(GeneralInfoLoaded(it))
+      _state.update(GeneralInfoLoaded(it), remove = LoadingGeneralInfo::class)
     }, onFailure = {})
     countriesInfoInteractor.loadCountriesInfo(onSuccess = { list, dateTime ->
       networkOperations.addValue(KEY_COUNTRIES_AND_TIME, CountriesAndTime(list, dateTime))
-      _state.update(CountriesLoaded(list))
+      _state.update(CountriesLoaded(list), remove = LoadingCountriesInfo::class)
     }, onFailure = {})
     networkOperations.onDoneAll {
       threader.backgroundWorker.submit { notifyAboutLoadedData(false, it) }
@@ -65,18 +77,21 @@ class StatsViewModel(
   }
   
   fun filterList(optionType: OptionType) {
-    _state.doIfContains(LoadedAll::class) {
+    _state.assertContains(LoadedAll::class) {
+      val list = savedData.get<List<Country>>().toDisplayableItems(optionType)
+      _state.update(FilteredCountries(list))
     }
   }
   
   private fun tryUpdateFromCache() {
+    cacheOperations = AsyncOperations(2)
     generalInfoExecutor.tryUpdateFromCache(onSuccess = {
       cacheOperations.addValue(KEY_GENERAL_INFO, it)
-      _state.update(GeneralInfoLoaded(it))
+      _state.update(GeneralInfoLoaded(it), remove = LoadingGeneralInfo::class)
     })
     countriesInfoInteractor.tryUpdateFromCache(onSuccess = { list, dateTime ->
       cacheOperations.addValue(KEY_COUNTRIES_AND_TIME, CountriesAndTime(list, dateTime))
-      _state.update(CountriesLoaded(list))
+      _state.update(CountriesLoaded(list), remove = LoadingCountriesInfo::class)
     })
     cacheOperations.onDoneAll {
       threader.backgroundWorker.submit { notifyAboutLoadedData(true, it) }
@@ -85,18 +100,14 @@ class StatsViewModel(
   
   private fun notifyAboutLoadedData(isFromCache: Boolean, map: Map<String, Any>) {
     val generalInfo = map[KEY_GENERAL_INFO] as GeneralInfo
-    val countries = map[KEY_COUNTRIES_AND_TIME] as CountriesAndTime
-    val displayableCountries = countries.first.toDisplayableItems(CONFIRMED)
-    displayableCountries.sortDescending()
-    for (i in displayableCountries.indices) {
-      displayableCountries[i].number = i + 1
-    }
+    val countriesAndTime = map[KEY_COUNTRIES_AND_TIME] as CountriesAndTime
+    savedData.add(countriesAndTime.first)
+    val displayableCountries = countriesAndTime.first.toDisplayableItems(CONFIRMED)
+    val lastUpdateTime = countriesAndTime.second.formatted(PATTERN_STANDARD)
     val list = ArrayList<DisplayableItem>()
     list.add(generalInfo)
-    list.add(OptionsItem)
     list.addAll(displayableCountries)
-    val lastUpdateTime = countries.second.formatted(PATTERN_STANDARD)
-    val state = LoadedAll(CONFIRMED, list, isFromCache, lastUpdateTime)
+    val state = LoadedAll(list, isFromCache, lastUpdateTime)
     threader.mainThreadWorker.submit { _state.update(state) }
   }
   
@@ -104,20 +115,25 @@ class StatsViewModel(
     countriesInfoInteractor.removeListener()
   }
   
-  private fun List<Country>.toDisplayableItems(type: InfoType): MutableList<DisplayableCountry> {
+  private fun List<Country>.toDisplayableItems(type: OptionType): MutableList<DisplayableCountry> {
     val countries = ArrayList<DisplayableCountry>()
     for (i in this.indices) {
       val it = this[i]
       val number = determineNumber(type, it)
       countries.add(DisplayableCountry(it.countryName, number))
     }
+    countries.sortDescending()
+    for (i in countries.indices) {
+      countries[i].number = i + 1
+    }
     return countries
   }
   
-  private fun determineNumber(infoType: InfoType, country: Country) = when (infoType) {
+  private fun determineNumber(optionType: OptionType, country: Country) = when (optionType) {
     CONFIRMED -> country.confirmed.toInt()
     DEATHS -> country.deaths.toInt()
     RECOVERED -> country.recovered.toInt()
+    else -> TODO()
   }
   
   companion object {

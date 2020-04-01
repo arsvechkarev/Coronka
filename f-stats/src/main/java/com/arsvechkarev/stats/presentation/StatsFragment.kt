@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.stats.di.StatsModuleInjector
 import com.arsvechkarev.stats.list.StatsAdapter
+import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedAll
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingCountriesInfo
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingGeneralInfo
@@ -20,14 +21,13 @@ import kotlinx.android.synthetic.main.fragment_stats.recyclerView
 class StatsFragment : Fragment(R.layout.fragment_stats) {
   
   private lateinit var viewModel: StatsViewModel
-  private val adapter = StatsAdapter {
-    viewModel.filterList(it)
-  }
+  private val adapter = StatsAdapter(onOptionClick = { viewModel.filterList(it) })
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel = StatsModuleInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
-    viewModel.startInitialLoading()
+    val allowedUserSavedState = false // false because recycler view can handle all by itself
+    viewModel.startInitialLoading(allowedUserSavedState)
     recyclerView.adapter = adapter
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
   }
@@ -37,6 +37,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
       when (state) {
         is LoadingCountriesInfo, LoadingGeneralInfo -> handleLoading()
         is LoadedAll -> handleLoadedAll(state)
+        is FilteredCountries -> handleFilteringCountries(state)
       }
     }
   }
@@ -48,5 +49,9 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   
   private fun handleLoading() {
     layoutLoading.visible()
+  }
+  
+  private fun handleFilteringCountries(state: FilteredCountries) {
+    adapter.updateFilteredCountries(state.countries)
   }
 }

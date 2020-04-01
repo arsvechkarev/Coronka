@@ -1,15 +1,20 @@
 package com.arsvechkarev.stats.list
 
+import core.model.DisplayableCountry
 import core.model.TYPE_COUNTRY_INFO
-import core.model.TYPE_GENERAL_INFO
-import core.model.TYPE_OPTIONS
-import core.recycler.BaseListAdapter
+import core.model.TYPE_HEADER
+import core.recycler.BaseAdapter
+import core.recycler.DisplayableItem
 
-class StatsAdapter(onOptionClick: (OptionType) -> Unit) : BaseListAdapter() {
+class StatsAdapter(onOptionClick: (OptionType) -> Unit) : BaseAdapter<DisplayableItem>() {
   
   init {
-    delegates.put(TYPE_GENERAL_INFO, GeneralInfoAdapterDelegate())
-    delegates.put(TYPE_OPTIONS, OptionsAdapterDelegate(onOptionClick))
+    delegates.put(TYPE_HEADER, HeaderAdapterDelegate(onOptionClick))
     delegates.put(TYPE_COUNTRY_INFO, CountryInfoAdapterDelegate())
+  }
+  
+  fun updateFilteredCountries(countries: List<DisplayableCountry>) {
+    data.addAll(1, countries)
+    notifyItemRangeChanged(1, countries.size)
   }
 }

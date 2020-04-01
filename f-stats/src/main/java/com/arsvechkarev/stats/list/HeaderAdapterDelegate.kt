@@ -11,23 +11,29 @@ import com.arsvechkarev.stats.list.OptionType.PERCENT_BY_COUNTRY
 import com.arsvechkarev.stats.list.OptionType.RECOVERED
 import com.arsvechkarev.views.Chip
 import core.extenstions.inflate
+import core.model.GeneralInfo
 import core.recycler.AdapterDelegate
 import core.recycler.DisplayableItem
-import kotlinx.android.synthetic.main.item_options.view.chipConfirmed
-import kotlinx.android.synthetic.main.item_options.view.chipDeathRate
-import kotlinx.android.synthetic.main.item_options.view.chipDeaths
-import kotlinx.android.synthetic.main.item_options.view.chipPercentByCountry
-import kotlinx.android.synthetic.main.item_options.view.chipRecovered
+import kotlinx.android.synthetic.main.item_header.view.chipConfirmed
+import kotlinx.android.synthetic.main.item_header.view.chipDeathRate
+import kotlinx.android.synthetic.main.item_header.view.chipDeaths
+import kotlinx.android.synthetic.main.item_header.view.chipPercentByCountry
+import kotlinx.android.synthetic.main.item_header.view.chipRecovered
+import kotlinx.android.synthetic.main.item_header.view.textConfirmed
+import kotlinx.android.synthetic.main.item_header.view.textDeaths
+import kotlinx.android.synthetic.main.item_header.view.textRecovered
 
-class OptionsAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : AdapterDelegate {
+class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : AdapterDelegate {
   
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-    return OptionsViewHolder(parent.inflate(R.layout.item_options))
+    return HeaderViewHolder(parent.inflate(R.layout.item_header))
   }
   
-  override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: DisplayableItem) {}
+  override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: DisplayableItem) {
+    (holder as HeaderViewHolder).bind(item as GeneralInfo)
+  }
   
-  inner class OptionsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+  inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     
     private var currentChip = itemView.chipConfirmed
     
@@ -38,6 +44,12 @@ class OptionsAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : 
       itemView.chipDeaths.setOnClickListener { notifyOnClick(it as Chip) }
       itemView.chipDeathRate.setOnClickListener { notifyOnClick(it as Chip) }
       itemView.chipPercentByCountry.setOnClickListener { notifyOnClick(it as Chip) }
+    }
+    
+    fun bind(generalInfo: GeneralInfo) {
+      itemView.textConfirmed.text = generalInfo.confirmed.toString()
+      itemView.textRecovered.text = generalInfo.recovered.toString()
+      itemView.textDeaths.text = generalInfo.deaths.toString()
     }
     
     private fun notifyOnClick(chip: Chip) {
