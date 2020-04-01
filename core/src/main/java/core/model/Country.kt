@@ -24,12 +24,16 @@ fun List<Country>.print(prefix: String = "country") {
 
 data class DisplayableCountry(
   val name: String,
-  val number: Int
+  val amount: Int
 ) : DisplayableItem, Comparable<DisplayableCountry> {
-  override val id = name
+  
+  var number: Int = 0
+  
+  override val id = number
+  
   override val type = TYPE_COUNTRY_INFO
   
   override fun compareTo(other: DisplayableCountry): Int {
-    return number.compareTo(other.number)
+    return amount.compareTo(other.amount)
   }
 }

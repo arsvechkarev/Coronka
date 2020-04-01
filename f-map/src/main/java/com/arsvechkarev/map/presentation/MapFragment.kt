@@ -29,21 +29,20 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   override val logTag = "Map_Fragment"
   
   private val mapDelegate = MapDelegate()
-  private lateinit var viewModel: CountriesInfoViewModel
+  private lateinit var viewModel: MapViewModel
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     mapDelegate.init(requireContext(), childFragmentManager,
       ::onMapClicked, ::onCountrySelected, ApplicationConfig.Threader)
     viewModel = MapModuleInjector.provideViewModel(this)
     viewModel // Allow use cache if fragment was recreated
-        .requestUpdateCountriesInfo(allowUseSavedData = savedInstanceState != null)
+        .startInitialLoading(allowUseSavedData = savedInstanceState != null)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
     textViewCountryName.typeface = FontManager.rubik
     bottomSheet.setOnClickListener { bottomSheet.hide() }
   }
   
   private fun handleStateChanged(stateHandle: StateHandle<MapScreenState>) {
-    log { "states = ${stateHandle.states.keys}" }
     stateHandle.handleUpdate { state ->
       when (state) {
         is LoadingCountries -> handleStartLoadingCountries()
@@ -62,7 +61,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
   private fun handleCountriesLoaded(state: CountriesLoaded) {
     log { "loaded countries" }
-    if (!state.isfromCache) {
+    if (!state.isFromCache) {
       layoutLoading.invisible()
     }
     mapDelegate.drawCountriesMarks(state.countriesList)

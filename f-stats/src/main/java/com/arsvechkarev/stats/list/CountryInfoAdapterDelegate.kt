@@ -27,7 +27,7 @@ class CountryInfoAdapterDelegate : AdapterDelegate {
     
     fun bind(country: DisplayableCountry) {
       val statsView = itemView as SmallStatsView
-      statsView.updateData(country.name, country.number)
+      statsView.updateData(country.number, country.name, country.amount)
     }
   }
 }

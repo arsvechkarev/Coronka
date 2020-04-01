@@ -16,7 +16,7 @@ interface DisplayableItem {
   /**
    * Id to distinguish two different elements
    */
-  val id: String
+  val id: Int
   
   /**
    * Every class inherits from [DisplayableItem] should override equals in order to compare elements

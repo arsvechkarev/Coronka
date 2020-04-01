@@ -12,12 +12,21 @@ class GeneralInfoExecutor(
   private val saver: Saver
 ) {
   
+  fun tryUpdateFromCache(onSuccess: (GeneralInfo) -> Unit) {
+    if (saver.has(CONFIRMED)) {
+      onSuccess(constructGeneralInfo())
+    }
+  }
+  
   fun getGeneralInfo(
     onSuccess: (GeneralInfo) -> Unit,
     onFailure: (Throwable) -> Unit
   ) {
     threader.ioWorker.submit {
-      performNetworkRequest(onSuccess, onFailure)
+      performNetworkRequest(onSuccess = {
+        saveInfo(it)
+        onSuccess(it)
+      }, onFailure = onFailure)
     }
   }
   
@@ -30,8 +39,8 @@ class GeneralInfoExecutor(
       val json = JSONObject(result)
       val generalInfo = GeneralInfo(
         json.get(CONFIRMED).toString().toInt(),
-        json.get(RECOVERED).toString().toInt(),
-        json.get(DEATHS).toString().toInt()
+        json.get(DEATHS).toString().toInt(),
+        json.get(RECOVERED).toString().toInt()
       )
       threader.mainThreadWorker.submit { onSuccess(generalInfo) }
     } catch (throwable: Throwable) {
@@ -41,15 +50,23 @@ class GeneralInfoExecutor(
   
   private fun constructGeneralInfo(): GeneralInfo {
     return GeneralInfo(
-      saver.get(CONFIRMED).toInt(),
-      saver.get(RECOVERED).toInt(),
-      saver.get(DEATHS).toInt()
+      saver.getInt(CONFIRMED),
+      saver.getInt(DEATHS),
+      saver.getInt(RECOVERED)
     )
+  }
+  
+  private fun saveInfo(generalInfo: GeneralInfo) {
+    saver.execute {
+      putInt(CONFIRMED, generalInfo.confirmed)
+      putInt(DEATHS, generalInfo.deaths)
+      putInt(RECOVERED, generalInfo.recovered)
+    }
   }
   
   companion object {
     
-    const val SAVER_FILENAME = "GeneralInfo"
+    const val SAVER_FILENAME = "GeneralInfoExecutor"
     
     private const val CONFIRMED = "confirmed"
     private const val RECOVERED = "recovered"

@@ -26,32 +26,40 @@ class SmallStatsView(
     typeface = FontManager.rubik
     this.textSize = this@SmallStatsView.textSize
   }
-  private var textLayout: Layout? = null
-  private var textLineHeight: Float = 0f
   private var numberLayout: Layout? = null
+  private var textLayout: Layout? = null
+  private var amountLayout: Layout? = null
   
-  fun updateData(text: String, number: Int) {
+  fun updateData(number: Int, text: String, amount: Int) {
+    numberLayout = boringLayout("$number.  ")
     textLayout = boringLayout(text)
-    numberLayout = boringLayout(number.toString())
-    requestLayout()
+    amountLayout = boringLayout(amount.toString())
+    invalidate()
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    textLineHeight = maxOf(textLayout?.height ?: 0, numberLayout?.height ?: 0).f
+    val textLineHeight = maxOf(textLayout?.height ?: 0, amountLayout?.height ?: 0).f
     val measuredHeight = paddingTop + textLineHeight + paddingBottom
     setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),
       resolveSize(measuredHeight.toInt(), heightMeasureSpec))
   }
   
   override fun onDraw(canvas: Canvas) {
-    if (textLayout == null || numberLayout == null) {
+    if (numberLayout == null || textLayout == null || amountLayout == null) {
       return
     }
+    val numberLayout = numberLayout!!
+    val textLayout = textLayout!!
+    val amountLayout = amountLayout!!
     canvas.block {
       translate(paddingStart.f, paddingTop.f)
-      textLayout!!.draw(canvas)
-      translate(width.f - numberLayout!!.width - paddingStart.f - paddingEnd.f, 0f)
-      numberLayout!!.draw(canvas)
+      numberLayout.draw(canvas)
+      translate(numberLayout.width.f, 0f)
+      textLayout.draw(canvas)
+      translate(
+        width.f - amountLayout.width - numberLayout.width - paddingStart.f - paddingEnd.f,
+        0f)
+      amountLayout.draw(canvas)
     }
   }
   

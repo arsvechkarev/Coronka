@@ -12,9 +12,9 @@ class StateHandle<S : Any> {
   
   internal var newState: S? = null
   
-  val states = HashMap<KClass<out S>, S>()
+  private val states = HashMap<KClass<out S>, S>()
   
-  fun <T : S> addOrUpdate(state: T) {
+  fun <T : S> update(state: T) {
     newState = state
     states[state::class] = state
   }
@@ -67,8 +67,8 @@ class StateHandle<S : Any> {
  * Adds value to states map (or updates if the value already exists). Also can optionally remove state by
  * specified [remove]
  */
-fun <T : S, R : S, S : Any> MutableLiveData<StateHandle<S>>.addOrUpdate(state: T, remove: KClass<R>? = null) {
-  value!!.addOrUpdate(state)
+fun <T : S, R : S, S : Any> MutableLiveData<StateHandle<S>>.update(state: T, remove: KClass<R>? = null) {
+  value!!.update(state)
   if (remove != null) {
     value!!.remove(remove)
   }

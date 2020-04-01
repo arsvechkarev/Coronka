@@ -9,10 +9,10 @@ import com.arsvechkarev.common.di.SingletonsInjector.countriesSQLiteExecutor
 import com.arsvechkarev.common.di.SingletonsInjector.networker
 import com.arsvechkarev.common.repositories.CountriesInfoInteractor
 import com.arsvechkarev.common.repositories.GeneralInfoExecutor
-import com.arsvechkarev.common.repositories.GeneralInfoExecutor.Companion.SAVER_FILENAME
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.stats.presentation.StatsViewModel
 import com.arsvechkarev.storage.Saver
+import core.ApplicationConfig.ContextHolder.applicationContext
 import core.ApplicationConfig.Threader
 import core.NetworkConnection
 
@@ -20,10 +20,11 @@ object StatsModuleInjector {
   
   
   fun provideViewModel(fragment: StatsFragment): StatsViewModel {
+    val countriesSaver = Saver(CountriesInfoInteractor.SAVER_FILENAME, applicationContext)
     val interactor = CountriesInfoInteractor(Threader, countriesInfoExecutor,
-      countriesSQLiteExecutor)
-    val saver = Saver(SAVER_FILENAME, fragment.requireContext())
-    val generalInfoExecutor = GeneralInfoExecutor(Threader, networker, saver)
+      countriesSQLiteExecutor, countriesSaver)
+    val generalSaver = Saver(GeneralInfoExecutor.SAVER_FILENAME, applicationContext)
+    val generalInfoExecutor = GeneralInfoExecutor(Threader, networker, generalSaver)
     val factory = mapViewModelFactory(connection, Threader, interactor, generalInfoExecutor)
     return ViewModelProviders.of(fragment, factory).get(StatsViewModel::class.java)
   }

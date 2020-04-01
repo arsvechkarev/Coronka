@@ -1,6 +1,7 @@
 package com.arsvechkarev.storage
 
 import android.content.Context
+import android.content.SharedPreferences
 
 class Saver(filename: String, context: Context) {
   
@@ -10,15 +11,21 @@ class Saver(filename: String, context: Context) {
     return sharedPrefs.contains(key)
   }
   
-  fun get(key: String): String {
+  fun getString(key: String): String {
     return sharedPrefs.getString(key, null)!!
+  }
+  
+  fun getInt(key: String): Int {
+    return sharedPrefs.getInt(key, Int.MAX_VALUE)
   }
   
   fun getOrDefault(key: String, defValue: String): String {
     return sharedPrefs.getString(key, defValue) ?: defValue
   }
   
-  fun save(key: String, value: String) {
-    sharedPrefs.edit().putString(key, value).apply()
+  fun execute(block: SharedPreferences.Editor.() -> Unit) {
+    val editor = sharedPrefs.edit()
+    block(editor)
+    editor.apply()
   }
 }

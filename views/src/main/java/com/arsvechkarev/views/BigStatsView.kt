@@ -51,7 +51,7 @@ class BigStatsView @JvmOverloads constructor(
   private val chartLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
   
   init {
-    val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.BigStatsView, 0, 0)
+    val attributes = context.obtainStyledAttributes(attrs, R.styleable.BigStatsView, 0, 0)
     innerSidePadding = attributes.getDimension(R.styleable.BigStatsView_innerSidePadding, 8.dp)
     innerLinePadding = attributes.getDimension(R.styleable.BigStatsView_innerLinePadding, 8.dp)
     chartLineHeight = attributes.getDimension(R.styleable.BigStatsView_lineHeight, 6.dp)

@@ -20,12 +20,14 @@ import kotlinx.android.synthetic.main.fragment_stats.recyclerView
 class StatsFragment : Fragment(R.layout.fragment_stats) {
   
   private lateinit var viewModel: StatsViewModel
-  private val adapter = StatsAdapter()
+  private val adapter = StatsAdapter {
+    viewModel.filterList(it)
+  }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel = StatsModuleInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
-    viewModel.loadData()
+    viewModel.startInitialLoading()
     recyclerView.adapter = adapter
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
   }
@@ -41,7 +43,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   
   private fun handleLoadedAll(state: LoadedAll) {
     layoutLoading.invisible()
-    adapter.submitList(state.displayableCountries)
+    adapter.submitList(state.items)
   }
   
   private fun handleLoading() {

@@ -26,6 +26,7 @@ dependencies {
   implementation project(":core")
   implementation project(':storage')
   implementation project(":network")
+  implementation project(":datetime")
 
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin

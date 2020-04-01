@@ -27,7 +27,11 @@ dependencies {
   implementation project(':storage')
   implementation project(":network")
   implementation project(":views")
+  implementation project(":datetime")
   implementation project(":f-common")
+
+  // TODO: Write custom flexbox layout
+  implementation 'com.google.android:flexbox:2.0.1'
 
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin

@@ -2,8 +2,8 @@ package core.extenstions
 
 import core.ApplicationConfig
 
-val Int.dp: Float get() = ApplicationConfig.Densities.density * this
-val Int.sp: Float get() = ApplicationConfig.Densities.scaledDensity * this
+val Int.dp: Float get() = ApplicationConfig.Values.density * this
+val Int.sp: Float get() = ApplicationConfig.Values.scaledDensity * this
 
-val Int.dpInt: Int get() = (ApplicationConfig.Densities.density * this).toInt()
-val Int.spInt: Int get() = (ApplicationConfig.Densities.scaledDensity * this).toInt()
+val Int.dpInt: Int get() = (ApplicationConfig.Values.density * this).toInt()
+val Int.spInt: Int get() = (ApplicationConfig.Values.scaledDensity * this).toInt()

@@ -2,19 +2,48 @@ package com.arsvechkarev.coronavirusinfo
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import core.ApplicationConfig
+import kotlinx.android.synthetic.main.activity_main.bottomNavigation
 
 class MainActivity : AppCompatActivity() {
   
+  private val mapFragment: Fragment = MapFragment()
+  private val statsFragment: Fragment = StatsFragment()
+  
+  private var currentFragment: Fragment = mapFragment
+  
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    ApplicationConfig.Densities.density = resources.displayMetrics.density
-    ApplicationConfig.Densities.scaledDensity = resources.displayMetrics.scaledDensity
+    ApplicationConfig.Values.density = resources.displayMetrics.density
+    ApplicationConfig.Values.scaledDensity = resources.displayMetrics.scaledDensity
     setContentView(R.layout.activity_main)
     supportActionBar?.hide()
     savedInstanceState ?: supportFragmentManager.beginTransaction()
-        .replace(R.id.fragment_container, StatsFragment())
+        .add(R.id.fragment_container, mapFragment)
+        .add(R.id.fragment_container, statsFragment)
+        .hide(statsFragment)
         .commit()
+    bottomNavigation.setOnItemClickListener(::handleOnItemClick)
+  }
+  
+  private fun handleOnItemClick(id: Int) {
+    when (id) {
+      0 -> switchToFragment(mapFragment)
+      1 -> switchToFragment(statsFragment)
+      2 -> TODO()
+    }
+  }
+  
+  private fun switchToFragment(fragment: Fragment) {
+    if (currentFragment != fragment) {
+      supportFragmentManager.beginTransaction()
+          .hide(currentFragment)
+          .show(fragment)
+          .commit()
+      currentFragment = fragment
+    }
   }
 }

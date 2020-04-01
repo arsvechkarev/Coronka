@@ -29,4 +29,13 @@
     <attr name="lineCornersRadius" format="dimension"/>
   </declare-styleable>
 
+  <declare-styleable name="Chip">
+    <attr name="colorFill" format="color"/>
+    <attr name="colorSecondary" format="color"/>
+    <attr name="text" format="string"/>
+    <attr name="textSize" format="dimension"/>
+    <attr name="strokeSize" format="dimension"/>
+    <attr name="chipCornerRadius" format="dimension"/>
+  </declare-styleable>
+
 </resources>
