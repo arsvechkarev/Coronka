@@ -7,7 +7,6 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.os.Parcel
 import android.os.Parcelable
-import android.text.BoringLayout
 import android.text.Layout
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -41,12 +40,12 @@ class Chip @JvmOverloads constructor(
   init {
     isSaveEnabled = true
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.Chip, 0, 0)
-    colorFill = attributes.getColor(R.styleable.Chip_colorFill, Color.WHITE)
+    colorFill = attributes.getColor(R.styleable.Chip_android_fillColor, Color.WHITE)
     colorSecondary = attributes.getColor(R.styleable.Chip_colorSecondary, Color.BLACK)
-    textPaint.textSize = attributes.getDimension(R.styleable.Chip_textSize, 16.sp)
+    textPaint.textSize = attributes.getDimension(R.styleable.Chip_android_textSize, 16.sp)
     textPaint.typeface = FontManager.rubik
-    rectPaint.strokeWidth = attributes.getDimension(R.styleable.Chip_strokeSize, 2.dp)
-    textLayout = boringLayout(attributes.getText(R.styleable.Chip_text) ?: "")
+    rectPaint.strokeWidth = attributes.getDimension(R.styleable.Chip_android_strokeWidth, 2.dp)
+    textLayout = boringLayoutOf(textPaint, attributes.getText(R.styleable.Chip_android_text) ?: "")
     cornerRadius = attributes.getDimension(R.styleable.Chip_chipCornerRadius, 10.dp)
     attributes.recycle()
     rectPaint.color = colorFill
@@ -81,12 +80,6 @@ class Chip @JvmOverloads constructor(
       translate(paddingStart.f + strokeOffset, paddingTop.f + strokeOffset)
       textLayout.draw(canvas)
     }
-  }
-  
-  private fun boringLayout(text: CharSequence): Layout {
-    val metrics = BoringLayout.isBoring(text, textPaint)
-    return BoringLayout.make(text, textPaint, metrics.width,
-      Layout.Alignment.ALIGN_NORMAL, 0f, 0f, metrics, false)
   }
   
   override fun onSaveInstanceState(): Parcelable? {

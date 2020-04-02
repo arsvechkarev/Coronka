@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
   <item>
     <shape android:shape="rectangle">
-      <solid android:color="@color/bg_foreground"/>
-      <stroke android:color="@android:color/black" android:width="0.5dp"/>
+      <solid android:color="?attr/colorSurface"/>
+      <stroke android:color="?colorBottomNavigationDivider" android:width="0.5dp"/>
     </shape>
   </item>
 </selector>

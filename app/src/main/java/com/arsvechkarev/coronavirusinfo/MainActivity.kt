@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
-import core.ApplicationConfig
+import core.Application
 import kotlinx.android.synthetic.main.activity_main.bottomNavigation
 
 class MainActivity : AppCompatActivity() {
@@ -17,8 +17,8 @@ class MainActivity : AppCompatActivity() {
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    ApplicationConfig.Values.density = resources.displayMetrics.density
-    ApplicationConfig.Values.scaledDensity = resources.displayMetrics.scaledDensity
+    Application.Values.density = resources.displayMetrics.density
+    Application.Values.scaledDensity = resources.displayMetrics.scaledDensity
     setContentView(R.layout.activity_main)
     supportActionBar?.hide()
     savedInstanceState ?: supportFragmentManager.beginTransaction()

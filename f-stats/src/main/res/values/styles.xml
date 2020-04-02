@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="TextNumber">
+    <item name="android:layout_marginTop">@dimen/text_number_m_top</item>
+    <item name="android:textSize">@dimen/text_h0</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="TextHeader">
+    <item name="android:layout_marginTop">@dimen/text_header_m_top</item>
+    <item name="android:textColor">?colorTextSecondary</item>
+    <item name="android:textSize">@dimen/text_h2</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="Chip">
+    <item name="colorSecondary">?attr/colorBackground</item>
+    <item name="chipCornerRadius">@dimen/chip_corner_radius</item>
+    <item name="android:layout_margin">@dimen/chip_margin</item>
+    <item name="android:paddingStart">@dimen/chip_padding_horizontal</item>
+    <item name="android:paddingTop">@dimen/chip_padding_vertical</item>
+    <item name="android:paddingEnd">@dimen/chip_padding_horizontal</item>
+    <item name="android:paddingBottom">@dimen/chip_padding_vertical</item>
+  </style>
+</resources>

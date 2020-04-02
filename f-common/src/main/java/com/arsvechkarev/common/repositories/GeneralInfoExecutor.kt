@@ -2,12 +2,12 @@ package com.arsvechkarev.common.repositories
 
 import com.arsvechkarev.network.Networker
 import com.arsvechkarev.storage.Saver
-import core.ApplicationConfig
+import core.Application
 import core.model.GeneralInfo
 import org.json.JSONObject
 
 class GeneralInfoExecutor(
-  private val threader: ApplicationConfig.Threader,
+  private val threader: Application.Threader,
   private val networker: Networker,
   private val saver: Saver
 ) {

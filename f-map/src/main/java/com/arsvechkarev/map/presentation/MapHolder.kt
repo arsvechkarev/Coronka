@@ -1,7 +1,7 @@
 package com.arsvechkarev.map.presentation
 
 import com.google.android.gms.maps.GoogleMap
-import core.ApplicationConfig.Threader
+import core.Application.Threader
 import java.util.concurrent.CountDownLatch
 
 class MapHolder(private val threader: Threader = Threader) {

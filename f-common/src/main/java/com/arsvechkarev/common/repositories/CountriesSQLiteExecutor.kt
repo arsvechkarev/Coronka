@@ -7,10 +7,10 @@ import com.arsvechkarev.storage.CountriesTable
 import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
 import com.arsvechkarev.storage.Queries
-import core.ApplicationConfig
+import core.Application
 import core.model.Country
 
-class CountriesSQLiteExecutor(threader: ApplicationConfig.Threader) {
+class CountriesSQLiteExecutor(threader: Application.Threader) {
   
   private val ioWorker = threader.ioWorker
   

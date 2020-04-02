@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-  <declare-styleable name="ProgressBar">
-    <attr name="trackWidth" format="dimension"/>
-    <attr name="color" format="color"/>
+  <declare-styleable name="BigStatsView">
+    <attr name="innerSidePadding" format="dimension"/>
+    <attr name="innerLinePadding" format="dimension"/>
+    <attr name="android:textSize" format="dimension"/>
+    <attr name="lineHeight" format="dimension"/>
+    <attr name="lineCornersRadius" format="dimension"/>
   </declare-styleable>
 
   <declare-styleable name="BottomNavigationView">
@@ -15,26 +17,30 @@
     <attr name="labelTextSize" format="dimension"/>
   </declare-styleable>
 
+  <declare-styleable name="Chip">
+    <attr name="android:fillColor" format="color"/>
+    <attr name="android:text" format="string"/>
+    <attr name="android:textSize" format="dimension"/>
+    <attr name="android:strokeWidth" format="dimension"/>
+    <attr name="colorSecondary" format="color"/>
+    <attr name="chipCornerRadius" format="dimension"/>
+  </declare-styleable>
+
+  <declare-styleable name="LoadingTextView">
+    <attr name="android:text" format="string"/>
+    <attr name="android:textSize" format="dimension"/>
+    <attr name="android:textColor" format="color"/>
+    <attr name="progressSize" format="dimension"/>
+    <attr name="progressColor" format="color"/>
+  </declare-styleable>
+
+  <declare-styleable name="ProgressBar">
+    <attr name="trackWidth" format="dimension"/>
+    <attr name="color" format="color"/>
+  </declare-styleable>
+
   <declare-styleable name="SimpleBottomSheet">
     <attr name="cornerRadius" format="dimension"/>
     <attr name="bottomSheet_backgroundColor" format="color"/>
   </declare-styleable>
-
-  <declare-styleable name="BigStatsView">
-    <attr name="innerSidePadding" format="dimension"/>
-    <attr name="innerLinePadding" format="dimension"/>
-    <attr name="android:textSize" format="dimension"/>
-    <attr name="lineHeight" format="dimension"/>
-    <attr name="lineCornersRadius" format="dimension"/>
-  </declare-styleable>
-
-  <declare-styleable name="Chip">
-    <attr name="colorFill" format="color"/>
-    <attr name="colorSecondary" format="color"/>
-    <attr name="text" format="string"/>
-    <attr name="textSize" format="dimension"/>
-    <attr name="strokeSize" format="dimension"/>
-    <attr name="chipCornerRadius" format="dimension"/>
-  </declare-styleable>
-
 </resources>

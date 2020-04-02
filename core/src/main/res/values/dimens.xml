@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+  <dimen name="text_h5">18sp</dimen>
+  <dimen name="text_h4">18sp</dimen>
+  <dimen name="text_h3">20sp</dimen>
+  <dimen name="text_h2">22sp</dimen>
+  <dimen name="text_h1">24sp</dimen>
+  <dimen name="text_h0">36sp</dimen>
+
   <dimen name="bottom_navigation_icon_size">26dp</dimen>
+  <dimen name="divider_height">1dp</dimen>
+
+  <dimen name="progress_bar_size">24dp</dimen>
 </resources>

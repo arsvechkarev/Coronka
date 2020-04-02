@@ -10,7 +10,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
-import core.ApplicationConfig
+import core.Application
 import core.model.Country
 import java.io.IOException
 import java.util.Locale
@@ -21,7 +21,7 @@ class MapDelegate {
   private lateinit var context: Context
   private lateinit var onMapClicked: () -> Unit
   private lateinit var onCountrySelected: (String) -> Unit
-  private lateinit var threader: ApplicationConfig.Threader
+  private lateinit var threader: Application.Threader
   private lateinit var geocoder: Geocoder
   
   private var currentCountryCode = ""
@@ -31,7 +31,7 @@ class MapDelegate {
     fragmentManager: FragmentManager,
     onMapClicked: () -> Unit,
     onCountrySelected: (String) -> Unit,
-    threader: ApplicationConfig.Threader
+    threader: Application.Threader
   ) {
     this.context = context
     this.onMapClicked = onMapClicked

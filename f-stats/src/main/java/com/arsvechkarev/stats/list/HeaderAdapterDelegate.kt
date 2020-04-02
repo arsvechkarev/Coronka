@@ -10,6 +10,7 @@ import com.arsvechkarev.stats.list.OptionType.DEATH_RATE
 import com.arsvechkarev.stats.list.OptionType.PERCENT_BY_COUNTRY
 import com.arsvechkarev.stats.list.OptionType.RECOVERED
 import com.arsvechkarev.views.Chip
+import core.Application.Singletons.numberFormatter
 import core.extenstions.inflate
 import core.model.GeneralInfo
 import core.recycler.AdapterDelegate
@@ -47,9 +48,9 @@ class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : A
     }
     
     fun bind(generalInfo: GeneralInfo) {
-      itemView.textConfirmed.text = generalInfo.confirmed.toString()
-      itemView.textRecovered.text = generalInfo.recovered.toString()
-      itemView.textDeaths.text = generalInfo.deaths.toString()
+      itemView.textConfirmed.text = numberFormatter.format(generalInfo.confirmed)
+      itemView.textRecovered.text = numberFormatter.format(generalInfo.recovered)
+      itemView.textDeaths.text = numberFormatter.format(generalInfo.deaths)
     }
     
     private fun notifyOnClick(chip: Chip) {

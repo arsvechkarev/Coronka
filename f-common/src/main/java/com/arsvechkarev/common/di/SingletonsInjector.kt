@@ -7,7 +7,7 @@ import com.arsvechkarev.common.repositories.GeneralInfoExecutor
 import com.arsvechkarev.network.NetworkConnectionImpl
 import com.arsvechkarev.network.Networker
 import com.arsvechkarev.storage.Saver
-import core.ApplicationConfig.Threader
+import core.Application.Threader
 import core.NetworkConnection
 
 object SingletonsInjector {

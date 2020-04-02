@@ -16,7 +16,7 @@ import com.arsvechkarev.stats.presentation.StatsScreenState.GeneralInfoLoaded
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedAll
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingCountriesInfo
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingGeneralInfo
-import core.ApplicationConfig
+import core.Application
 import core.NetworkConnection
 import core.SavedData
 import core.StateHandle
@@ -31,7 +31,7 @@ import datetime.PATTERN_STANDARD
 
 class StatsViewModel(
   private val connection: NetworkConnection,
-  private val threader: ApplicationConfig.Threader,
+  private val threader: Application.Threader,
   private val countriesInfoInteractor: CountriesInfoInteractor,
   private val generalInfoExecutor: GeneralInfoExecutor
 ) : ViewModel() {

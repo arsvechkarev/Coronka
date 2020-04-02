@@ -1,7 +1,7 @@
 package com.arsvechkarev.common.repositories
 
 import com.arsvechkarev.network.Networker
-import core.ApplicationConfig
+import core.Application
 import core.Loggable
 import core.log
 import core.model.Country
@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 
 class CountriesInfoExecutor(
-  private val threader: ApplicationConfig.Threader,
+  private val threader: Application.Threader,
   private val networker: Networker
 ) : Loggable {
   

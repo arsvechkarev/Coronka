@@ -4,8 +4,8 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
+import com.arsvechkarev.stats.R
 import com.arsvechkarev.views.SmallStatsView
-import core.extenstions.dpInt
 import core.model.DisplayableCountry
 import core.recycler.AdapterDelegate
 import core.recycler.DisplayableItem
@@ -13,9 +13,12 @@ import core.recycler.DisplayableItem
 class CountryInfoAdapterDelegate : AdapterDelegate {
   
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-    val statsView = SmallStatsView(parent.context)
+    val textSize = parent.resources.getDimensionPixelSize(R.dimen.text_h4)
+    val paddingHorizontal = parent.resources.getDimensionPixelSize(R.dimen.stats_view_p_horizontal)
+    val paddingVertical = parent.resources.getDimensionPixelSize(R.dimen.stats_view_p_vertical)
+    val statsView = SmallStatsView(parent.context, textSize.toFloat())
     statsView.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-    statsView.setPadding(16.dpInt, 8.dpInt, 8.dpInt, 16.dpInt)
+    statsView.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical)
     return CountryViewHolder(statsView)
   }
   

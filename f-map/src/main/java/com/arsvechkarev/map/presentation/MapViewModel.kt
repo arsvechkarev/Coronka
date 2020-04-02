@@ -12,7 +12,7 @@ import com.arsvechkarev.map.presentation.MapScreenState.Failure.FailureReason.UN
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountries
 import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountryInfo
-import core.ApplicationConfig
+import core.Application
 import core.Loggable
 import core.NetworkConnection
 import core.StateHandle
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeoutException
 
 class MapViewModel(
   private val connection: NetworkConnection,
-  private val threader: ApplicationConfig.Threader,
+  private val threader: Application.Threader,
   private val interactor: CountriesInfoInteractor
 ) : ViewModel(), Loggable {
   

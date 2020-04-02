@@ -2,7 +2,7 @@ package com.arsvechkarev.common.repositories
 
 import com.arsvechkarev.common.repositories.CountriesInfoExecutor.CountriesInfoListener
 import com.arsvechkarev.storage.Saver
-import core.ApplicationConfig
+import core.Application
 import core.Loggable
 import core.log
 import core.model.Country
@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 class CountriesInfoInteractor(
-  private val threader: ApplicationConfig.Threader,
+  private val threader: Application.Threader,
   private val countriesInfoExecutor: CountriesInfoExecutor,
   private val sqLiteExecutor: CountriesSQLiteExecutor,
   private val saver: Saver

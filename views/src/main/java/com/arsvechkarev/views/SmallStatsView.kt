@@ -5,10 +5,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.text.BoringLayout
 import android.text.Layout
 import android.text.TextPaint
 import android.view.View
+import core.Application.Singletons.numberFormatter
 import core.FontManager
 import core.extenstions.block
 import core.extenstions.f
@@ -26,14 +26,16 @@ class SmallStatsView(
     typeface = FontManager.rubik
     this.textSize = this@SmallStatsView.textSize
   }
-  private var numberLayout: Layout? = null
+  
+  private lateinit var text: String
   private var textLayout: Layout? = null
+  private var numberLayout: Layout? = null
   private var amountLayout: Layout? = null
   
   fun updateData(number: Int, text: String, amount: Int) {
-    numberLayout = boringLayout("$number.  ")
-    textLayout = boringLayout(text)
-    amountLayout = boringLayout(amount.toString())
+    this.text = text
+    numberLayout = boringLayoutOf(textPaint, "$number.  ")
+    amountLayout = boringLayoutOf(textPaint, numberFormatter.format(amount))
     invalidate()
   }
   
@@ -45,9 +47,11 @@ class SmallStatsView(
   }
   
   override fun onDraw(canvas: Canvas) {
-    if (numberLayout == null || textLayout == null || amountLayout == null) {
+    if (numberLayout == null || amountLayout == null) {
       return
     }
+    textLayout = boringLayoutOf(textPaint, text,
+      (width - numberLayout!!.width - amountLayout!!.width) * 0.8f)
     val numberLayout = numberLayout!!
     val textLayout = textLayout!!
     val amountLayout = amountLayout!!
@@ -61,11 +65,5 @@ class SmallStatsView(
         0f)
       amountLayout.draw(canvas)
     }
-  }
-  
-  private fun boringLayout(text: CharSequence): Layout {
-    val metrics = BoringLayout.isBoring(text, textPaint)
-    return BoringLayout.make(text, textPaint, metrics.width,
-      Layout.Alignment.ALIGN_NORMAL, 0f, 0f, metrics, false)
   }
 }

@@ -4,7 +4,7 @@
   android:id="@+id/frameLayoutRoot"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@android:color/black">
+  android:background="?attr/colorBackground">
 
   <FrameLayout
     android:id="@+id/fragment_map_root"
@@ -19,18 +19,18 @@
     android:visibility="invisible">
 
     <com.arsvechkarev.views.ProgressBar
-      android:layout_width="24dp"
-      android:layout_height="24dp"
-      android:layout_margin="8dp"
-      app:color="@android:color/white"/>
+      android:layout_width="@dimen/progress_bar_size"
+      android:layout_height="@dimen/progress_bar_size"
+      android:layout_margin="@dimen/loading_layout_margin"
+      app:color="?colorTextPrimary"/>
 
-    <com.arsvechkarev.views.CustomTextView
+    <com.arsvechkarev.views.FontTextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="8dp"
-      android:text="Loading map..."
-      android:textColor="@android:color/white"
-      android:textSize="20sp"/>
+      android:layout_margin="@dimen/loading_layout_margin"
+      android:text="@string/text_loading_map"
+      android:textColor="?colorTextPrimary"
+      android:textSize="@dimen/text_h3"/>
 
   </LinearLayout>
 
@@ -39,39 +39,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    app:bottomSheet_backgroundColor="@color/bg_foreground">
-
-    <com.arsvechkarev.views.ProgressBar
-      android:id="@+id/countryInfoProgressBar"
-      android:layout_width="50dp"
-      android:layout_height="50dp"
-      android:layout_gravity="center"
-      android:visibility="invisible"/>
+    app:bottomSheet_backgroundColor="?colorBackground">
 
     <LinearLayout
       android:id="@+id/layoutCountryInfo"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:layout_marginBottom="16dp"
+      android:layout_marginVertical="@dimen/layout_country_info_m_vertical"
       android:orientation="vertical">
 
       <TextView
         android:id="@+id/textViewCountryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/text_country_name_margin"
         android:gravity="center"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"/>
+        android:textColor="?colorTextPrimary"
+        android:textSize="@dimen/text_h1"/>
 
       <com.arsvechkarev.views.BigStatsView
         android:id="@+id/statsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        app:innerLinePadding="12dp"
-        app:innerSidePadding="18dp"/>
+        android:padding="@dimen/big_stats_view_padding"
+        android:textSize="@dimen/text_h3"
+        app:innerLinePadding="@dimen/big_stats_view_line_padding"
+        app:innerSidePadding="@dimen/big_stats_view_side_padding"/>
 
     </LinearLayout>
 

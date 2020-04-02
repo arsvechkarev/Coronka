@@ -12,7 +12,7 @@ import com.arsvechkarev.map.presentation.MapScreenState.Failure
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountries
 import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountryInfo
-import core.ApplicationConfig
+import core.Application
 import core.FontManager
 import core.Loggable
 import core.StateHandle
@@ -33,7 +33,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     mapDelegate.init(requireContext(), childFragmentManager,
-      ::onMapClicked, ::onCountrySelected, ApplicationConfig.Threader)
+      ::onMapClicked, ::onCountrySelected, Application.Threader)
     viewModel = MapModuleInjector.provideViewModel(this)
     viewModel // Allow use cache if fragment was recreated
         .startInitialLoading(allowUseSavedData = savedInstanceState != null)

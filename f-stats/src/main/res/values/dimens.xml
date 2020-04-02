@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="chip_margin">8dp</dimen>
+  <dimen name="chip_corner_radius">6dp</dimen>
+  <dimen name="chip_padding_vertical">6dp</dimen>
+  <dimen name="chip_padding_horizontal">6dp</dimen>
+
+  <dimen name="text_header_m_top">32dp</dimen>
+  <dimen name="text_top_header_m_top">12dp</dimen>
+
+  <dimen name="text_number_m_top">4dp</dimen>
+  <dimen name="text_number_m_bottom">24dp</dimen>
+
+  <dimen name="text_stats_margin">8dp</dimen>
+  <dimen name="line_text_padding">4dp</dimen>
+  <dimen name="header_m_bottom">24dp</dimen>
+  <dimen name="progress_bar_margin">24dp</dimen>
+
+  <dimen name="stats_view_p_horizontal">16dp</dimen>
+  <dimen name="stats_view_p_vertical">8dp</dimen>
+</resources>

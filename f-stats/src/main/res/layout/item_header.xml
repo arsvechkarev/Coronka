@@ -3,126 +3,130 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:layout_marginBottom="@dimen/header_m_bottom"
   android:gravity="center_horizontal"
-  android:orientation="vertical"
-  android:paddingVertical="16dp">
+  android:orientation="vertical">
 
   <TextView
+    style="@style/TextHeader"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:text="Total cases"
-    android:textColor="@android:color/darker_gray"
-    android:textSize="22sp"
-    android:textStyle="bold"/>
+    android:layout_marginTop="@dimen/text_top_header_m_top"
+    android:text="@string/text_total_cases"/>
 
-  <com.arsvechkarev.views.CustomTextView
+  <com.arsvechkarev.views.FontTextView
     android:id="@+id/textConfirmed"
+    style="@style/TextNumber"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:textColor="@color/confirmed"
-    android:textSize="36sp"
-    android:textStyle="bold"/>
+    android:textColor="?colorConfirmed"/>
 
   <TextView
+    style="@style/TextHeader"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="32dp"
-    android:text="Recovered"
-    android:textColor="@android:color/darker_gray"
-    android:textSize="22sp"
-    android:textStyle="bold"/>
+    android:text="@string/text_recovered"/>
 
-  <com.arsvechkarev.views.CustomTextView
+  <com.arsvechkarev.views.FontTextView
     android:id="@+id/textRecovered"
+    style="@style/TextNumber"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:textColor="@color/recovered"
-    android:textSize="36sp"
-    android:textStyle="bold"/>
+    android:textColor="?colorRecovered"/>
 
   <TextView
+    style="@style/TextHeader"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="32dp"
-    android:text="Deaths"
-    android:textColor="@android:color/darker_gray"
-    android:textSize="22sp"
-    android:textStyle="bold"/>
+    android:text="@string/text_recovered"/>
 
-  <com.arsvechkarev.views.CustomTextView
+  <com.arsvechkarev.views.FontTextView
     android:id="@+id/textDeaths"
+    style="@style/TextNumber"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:textColor="@color/deaths_opposite"
-    android:textSize="36sp"
-    android:textStyle="bold"/>
+    android:layout_marginBottom="@dimen/text_number_m_bottom"
+    android:textColor="?colorDeaths2"/>
 
-  <View
+  <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_marginHorizontal="6dp"
-    android:background="@android:color/darker_gray"/>
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/line_text_padding">
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/divider_height"
+      android:layout_centerVertical="true"
+      android:layout_toStartOf="@id/textByCountry"
+      android:background="?colorDivider"/>
+
+    <com.arsvechkarev.views.FontTextView
+      android:id="@+id/textByCountry"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:layout_margin="@dimen/text_stats_margin"
+      android:text="@string/text_statistics_by_country"
+      android:textColor="?colorTextSecondary"
+      android:textSize="@dimen/text_h4"/>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/divider_height"
+      android:layout_centerVertical="true"
+      android:layout_toEndOf="@id/textByCountry"
+      android:background="?colorDivider"/>
+
+  </RelativeLayout>
 
   <com.google.android.flexbox.FlexboxLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingVertical="8dp"
-    app:flexWrap="wrap">
+    app:flexWrap="wrap"
+    app:justifyContent="center">
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/chipConfirmed"
+      style="@style/Chip"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="8dp"
-      android:padding="6dp"
-      app:colorFill="@color/confirmed"
-      app:text="Confirmed"/>
+      android:layout_margin="@dimen/chip_margin"
+      android:fillColor="?colorConfirmed"
+      android:text="@string/text_confirmed"/>
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/chipRecovered"
+      style="@style/Chip"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="8dp"
-      android:padding="6dp"
-      app:colorFill="@color/recovered"
-      app:text="Recovered"/>
+      android:fillColor="?colorRecovered"
+      android:text="@string/text_recovered"/>
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/chipDeaths"
+      style="@style/Chip"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="8dp"
-      android:padding="6dp"
-      app:text="Deaths"/>
+      android:fillColor="?attr/colorDeaths2"
+      android:text="@string/text_deaths"/>
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/chipDeathRate"
+      style="@style/Chip"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="8dp"
-      app:colorFill="@color/death_rate"
-      android:padding="6dp"
-      app:text="Death rate"/>
+      android:fillColor="?colorDeathRate"
+      android:text="@string/text_death_rate"/>
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/chipPercentByCountry"
+      style="@style/Chip"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="8dp"
-      android:padding="6dp"
-      app:colorFill="@color/percent_by_country"
-      app:text="Percent by country"/>
+      android:fillColor="?colorPercentByCountry"
+      android:text="@string/text_percent_by_country"/>
 
   </com.google.android.flexbox.FlexboxLayout>
-
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_marginHorizontal="6dp"
-    android:background="@android:color/darker_gray"/>
 
 </LinearLayout>

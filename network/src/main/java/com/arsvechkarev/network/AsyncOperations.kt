@@ -1,6 +1,6 @@
 package com.arsvechkarev.network
 
-import core.ApplicationConfig.Threader
+import core.Application.Threader
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Future

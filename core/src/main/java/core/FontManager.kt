@@ -14,9 +14,9 @@ object FontManager {
       return field!!
     }
   
-  fun init(context: Context, threader: ApplicationConfig.Threader) {
+  fun init(context: Context, threader: Application.Threader) {
     threader.backgroundWorker.submit {
-      rubik = Typeface.createFromAsset(context.assets, "rubik_medium.ttf");
+      rubik = Typeface.createFromAsset(context.assets, "rubik_medium.ttf")
       initializationLatch.countDown()
     }
   }

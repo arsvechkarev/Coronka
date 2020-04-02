@@ -5,10 +5,11 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import core.FontManager
 
-class CustomTextView @JvmOverloads constructor(
+open class FontTextView @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : AppCompatTextView(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : AppCompatTextView(context, attrs, defStyleAttr) {
   
   init {
     typeface = FontManager.rubik

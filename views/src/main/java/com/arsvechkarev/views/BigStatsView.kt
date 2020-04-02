@@ -11,6 +11,7 @@ import android.text.Layout.Alignment.ALIGN_NORMAL
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import core.Application.Singletons.numberFormatter
 import core.Colors
 import core.FontManager
 import core.extenstions.block
@@ -74,14 +75,17 @@ class BigStatsView @JvmOverloads constructor(
   
   fun updateNumbers(confirmed: Int, recovered: Int, deaths: Int) {
     calculateLengths(confirmed.f, recovered.f, deaths.f)
+    val confirmedFormatted = numberFormatter.format(confirmed)
+    val recoveredFormatted = numberFormatter.format(recovered)
+    val deathsFormatted = numberFormatter.format(deaths)
     val maxNumberTextWidth = maxOf(
-      textPaint.measureText(confirmed.toString()),
-      textPaint.measureText(recovered.toString()),
-      textPaint.measureText(deaths.toString())
+      textPaint.measureText(confirmedFormatted),
+      textPaint.measureText(recoveredFormatted),
+      textPaint.measureText(deathsFormatted)
     ).toInt()
-    confirmedNumberLayout = boringLayout(confirmed.toString(), ALIGN_CENTER, maxNumberTextWidth)
-    recoveredNumberLayout = boringLayout(recovered.toString(), ALIGN_CENTER, maxNumberTextWidth)
-    deathsNumberLayout = boringLayout(deaths.toString(), ALIGN_CENTER, maxNumberTextWidth)
+    confirmedNumberLayout = boringLayout(confirmedFormatted, ALIGN_CENTER, maxNumberTextWidth)
+    recoveredNumberLayout = boringLayout(recoveredFormatted, ALIGN_CENTER, maxNumberTextWidth)
+    deathsNumberLayout = boringLayout(deathsFormatted, ALIGN_CENTER, maxNumberTextWidth)
     chartLineMaxLength = -1f
     requestLayout()
   }

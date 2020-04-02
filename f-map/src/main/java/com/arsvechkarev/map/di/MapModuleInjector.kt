@@ -8,8 +8,8 @@ import com.arsvechkarev.common.repositories.CountriesInfoInteractor
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.map.presentation.MapViewModel
 import com.arsvechkarev.storage.Saver
-import core.ApplicationConfig.ContextHolder.applicationContext
-import core.ApplicationConfig.Threader
+import core.Application.Singletons.applicationContext
+import core.Application.Threader
 import core.NetworkConnection
 
 object MapModuleInjector {

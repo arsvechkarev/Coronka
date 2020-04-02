@@ -2,8 +2,8 @@ package com.arsvechkarev.coronavirusinfo
 
 import com.arsvechkarev.common.di.SingletonsInjector
 import com.arsvechkarev.storage.DatabaseManager
-import core.ApplicationConfig
-import core.ApplicationConfig.Threader
+import core.Application
+import core.Application.Threader
 import core.Colors
 import core.FontManager
 import android.app.Application as AndroidApp
@@ -12,7 +12,7 @@ class ApplicationLoader : AndroidApp() {
   
   override fun onCreate() {
     super.onCreate()
-    ApplicationConfig.ContextHolder.init(applicationContext)
+    Application.Singletons.init(applicationContext)
     DatabaseManager.init(applicationContext)
     FontManager.init(applicationContext, Threader)
     SingletonsInjector.init(applicationContext)
