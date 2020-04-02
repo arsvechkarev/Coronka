@@ -13,9 +13,9 @@ class BackgroundWorker(
   }
   
   companion object {
-    fun default() = BackgroundWorker(
-      Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()))
-    
+  
+    fun default() = BackgroundWorker(Executors.newSingleThreadExecutor())
+  
     fun io() = BackgroundWorker(Executors.newFixedThreadPool(4))
   }
 }

@@ -14,6 +14,7 @@ class StatsAdapter(onOptionClick: (OptionType) -> Unit) : BaseAdapter<Displayabl
   }
   
   fun updateFilteredCountries(countries: List<DisplayableCountry>) {
+    data.subList(1, data.size).clear()
     data.addAll(1, countries)
     notifyItemRangeChanged(1, countries.size)
   }

@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity() {
     supportActionBar?.hide()
     savedInstanceState ?: supportFragmentManager.beginTransaction()
         .add(R.id.fragment_container, mapFragment)
-        .add(R.id.fragment_container, statsFragment)
-        .hide(statsFragment)
         .commit()
     bottomNavigation.setOnItemClickListener(::handleOnItemClick)
   }
@@ -39,10 +37,10 @@ class MainActivity : AppCompatActivity() {
   
   private fun switchToFragment(fragment: Fragment) {
     if (currentFragment != fragment) {
-      supportFragmentManager.beginTransaction()
-          .hide(currentFragment)
-          .show(fragment)
-          .commit()
+      val transaction = supportFragmentManager.beginTransaction()
+      transaction.hide(currentFragment)
+      if (!fragment.isAdded) transaction.add(R.id.fragment_container, fragment)
+      transaction.show(fragment).commit()
       currentFragment = fragment
     }
   }

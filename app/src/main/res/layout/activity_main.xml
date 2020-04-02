@@ -18,6 +18,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    app:bitmapIconSize="@dimen/bottom_navigation_icon_size"/>
+    app:bitmapIconSize="@dimen/bottom_navigation_icon_size"
+    app:labelColor="@android:color/white"/>
 
 </LinearLayout>

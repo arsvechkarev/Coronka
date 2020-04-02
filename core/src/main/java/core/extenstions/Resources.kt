@@ -2,6 +2,9 @@ package core.extenstions
 
 import core.ApplicationConfig
 
+val Double.dp: Float get() = (ApplicationConfig.Values.density * this).toFloat()
+val Double.sp: Float get() = (ApplicationConfig.Values.scaledDensity * this).toFloat()
+
 val Int.dp: Float get() = ApplicationConfig.Values.density * this
 val Int.sp: Float get() = ApplicationConfig.Values.scaledDensity * this
 

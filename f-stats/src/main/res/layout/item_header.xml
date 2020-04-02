@@ -16,7 +16,7 @@
     android:textSize="22sp"
     android:textStyle="bold"/>
 
-  <TextView
+  <com.arsvechkarev.views.CustomTextView
     android:id="@+id/textConfirmed"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
     android:textSize="22sp"
     android:textStyle="bold"/>
 
-  <TextView
+  <com.arsvechkarev.views.CustomTextView
     android:id="@+id/textRecovered"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -52,12 +52,12 @@
     android:textSize="22sp"
     android:textStyle="bold"/>
 
-  <TextView
+  <com.arsvechkarev.views.CustomTextView
     android:id="@+id/textDeaths"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
-    android:textColor="@color/deaths"
+    android:textColor="@color/deaths_opposite"
     android:textSize="36sp"
     android:textStyle="bold"/>
 
@@ -79,6 +79,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="8dp"
       android:padding="6dp"
+      app:colorFill="@color/confirmed"
       app:text="Confirmed"/>
 
     <com.arsvechkarev.views.Chip
@@ -87,6 +88,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="8dp"
       android:padding="6dp"
+      app:colorFill="@color/recovered"
       app:text="Recovered"/>
 
     <com.arsvechkarev.views.Chip
@@ -102,6 +104,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="8dp"
+      app:colorFill="@color/death_rate"
       android:padding="6dp"
       app:text="Death rate"/>
 
@@ -111,6 +114,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="8dp"
       android:padding="6dp"
+      app:colorFill="@color/percent_by_country"
       app:text="Percent by country"/>
 
   </com.google.android.flexbox.FlexboxLayout>

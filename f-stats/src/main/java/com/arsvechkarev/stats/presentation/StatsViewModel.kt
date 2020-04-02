@@ -26,7 +26,6 @@ import core.model.DisplayableCountry
 import core.model.GeneralInfo
 import core.recycler.DisplayableItem
 import core.update
-import core.updateAll
 import datetime.DateTime
 import datetime.PATTERN_STANDARD
 
@@ -37,8 +36,8 @@ class StatsViewModel(
   private val generalInfoExecutor: GeneralInfoExecutor
 ) : ViewModel() {
   
-  private lateinit var cacheOperations: AsyncOperations
-  private lateinit var networkOperations: AsyncOperations
+  private val cacheOperations = AsyncOperations(2)
+  private val networkOperations = AsyncOperations(2)
   
   private val savedData = SavedData()
   
@@ -46,11 +45,7 @@ class StatsViewModel(
   val state: LiveData<StateHandle<StatsScreenState>>
     get() = _state
   
-  fun startInitialLoading(allowUsedSavedState: Boolean) {
-    if (allowUsedSavedState) {
-      _state.updateAll()
-      return
-    }
+  fun startInitialLoading() {
     _state.update(LoadingGeneralInfo)
     _state.update(LoadingCountriesInfo)
     tryUpdateFromCache()
@@ -62,7 +57,6 @@ class StatsViewModel(
       _state.update(LoadingGeneralInfo)
       _state.update(LoadingCountriesInfo)
     }
-    networkOperations = AsyncOperations(2)
     generalInfoExecutor.getGeneralInfo(onSuccess = {
       networkOperations.addValue(KEY_GENERAL_INFO, it)
       _state.update(GeneralInfoLoaded(it), remove = LoadingGeneralInfo::class)
@@ -84,14 +78,13 @@ class StatsViewModel(
   }
   
   private fun tryUpdateFromCache() {
-    cacheOperations = AsyncOperations(2)
     generalInfoExecutor.tryUpdateFromCache(onSuccess = {
       cacheOperations.addValue(KEY_GENERAL_INFO, it)
-      _state.update(GeneralInfoLoaded(it), remove = LoadingGeneralInfo::class)
+      _state.update(GeneralInfoLoaded(it))
     })
     countriesInfoInteractor.tryUpdateFromCache(onSuccess = { list, dateTime ->
       cacheOperations.addValue(KEY_COUNTRIES_AND_TIME, CountriesAndTime(list, dateTime))
-      _state.update(CountriesLoaded(list), remove = LoadingCountriesInfo::class)
+      _state.update(CountriesLoaded(list))
     })
     cacheOperations.onDoneAll {
       threader.backgroundWorker.submit { notifyAboutLoadedData(true, it) }

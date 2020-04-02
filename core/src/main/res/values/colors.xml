@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="icon_default">@android:color/black</color>
+  <color name="icon_default">@android:color/white</color>
+
+  <color name="bg_far">#080d1c</color>
+  <color name="bg_middle">#182842</color>
+  <color name="bg_foreground">#1d3359</color>
 
   <color name="confirmed">#D9270F</color>
   <color name="deaths">#000000</color>
+  <color name="deaths_opposite">#FFFFFF</color>
   <color name="recovered">#0FD916</color>
+  <color name="death_rate">#2349ba</color>
+  <color name="percent_by_country">#dbbe18</color>
 </resources>

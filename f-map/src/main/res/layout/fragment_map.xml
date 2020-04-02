@@ -39,7 +39,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="@android:color/white">
+    app:bottomSheet_backgroundColor="@color/bg_foreground">
 
     <com.arsvechkarev.views.ProgressBar
       android:id="@+id/countryInfoProgressBar"
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:gravity="center"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="24sp"/>
 
       <com.arsvechkarev.views.BigStatsView

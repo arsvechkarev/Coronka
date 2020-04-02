@@ -12,13 +12,17 @@ import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedAll
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingCountriesInfo
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingGeneralInfo
+import core.Loggable
 import core.StateHandle
 import core.extenstions.invisible
 import core.extenstions.visible
+import core.log
 import kotlinx.android.synthetic.main.fragment_stats.layoutLoading
 import kotlinx.android.synthetic.main.fragment_stats.recyclerView
 
-class StatsFragment : Fragment(R.layout.fragment_stats) {
+class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
+  
+  override val logTag = "StatsFragment"
   
   private lateinit var viewModel: StatsViewModel
   private val adapter = StatsAdapter(onOptionClick = { viewModel.filterList(it) })
@@ -26,10 +30,13 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel = StatsModuleInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
-    val allowedUserSavedState = false // false because recycler view can handle all by itself
-    viewModel.startInitialLoading(allowedUserSavedState)
     recyclerView.adapter = adapter
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
+  }
+  
+  override fun onResume() {
+    super.onResume()
+    viewModel.startInitialLoading()
   }
   
   private fun handleStateChanged(stateHandle: StateHandle<StatsScreenState>) {
@@ -42,16 +49,21 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
     }
   }
   
-  private fun handleLoadedAll(state: LoadedAll) {
-    layoutLoading.invisible()
-    adapter.submitList(state.items)
-  }
-  
   private fun handleLoading() {
+    log { "loading" }
     layoutLoading.visible()
   }
   
+  private fun handleLoadedAll(state: LoadedAll) {
+    log { "loaded all, from cache = ${state.isFromCache}" }
+    adapter.submitList(state.items)
+    if (!state.isFromCache) {
+      layoutLoading.invisible()
+    }
+  }
+  
   private fun handleFilteringCountries(state: FilteredCountries) {
+    log { "filtering" }
     adapter.updateFilteredCountries(state.countries)
   }
 }

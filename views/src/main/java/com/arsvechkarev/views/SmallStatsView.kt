@@ -18,7 +18,7 @@ import core.extenstions.sp
 class SmallStatsView(
   context: Context,
   private val textSize: Float = 18.sp,
-  private val color: Int = Color.BLACK
+  private val color: Int = Color.WHITE
 ) : View(context) {
   
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {

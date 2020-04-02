@@ -3,10 +3,6 @@ package com.arsvechkarev.views.bottomsheet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Color.WHITE
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
@@ -54,6 +50,7 @@ class SimpleBottomSheet @JvmOverloads constructor(
   private var lastY = -1f
   
   init {
+    isSaveEnabled = true
     val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SimpleBottomSheet, 0, 0)
     cornerRadius = typedArray.getDimension(R.styleable.SimpleBottomSheet_cornerRadius,
       16 * resources.displayMetrics.density)
@@ -61,15 +58,7 @@ class SimpleBottomSheet @JvmOverloads constructor(
       R.styleable.SimpleBottomSheet_bottomSheet_backgroundColor,
       WHITE
     )
-    val shapeDrawable = ShapeDrawable(
-      RoundRectShape(
-        floatArrayOf(cornerRadius, cornerRadius, cornerRadius, cornerRadius, 0f, 0f, 0f, 0f),
-        null,
-        null
-      )
-    )
-    shapeDrawable.colorFilter = PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.SRC_ATOP)
-    background = shapeDrawable
+    setBackgroundResource(R.drawable.bg_simple_bottom_sheet)
     typedArray.recycle()
   }
   
@@ -198,6 +187,5 @@ class SimpleBottomSheet @JvmOverloads constructor(
         return arrayOfNulls(size)
       }
     }
-    
   }
 }

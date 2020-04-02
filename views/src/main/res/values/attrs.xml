@@ -9,7 +9,6 @@
   <declare-styleable name="BottomNavigationView">
     <attr name="selectedIconColor" format="color"/>
     <attr name="defaultItemId" format="integer"/>
-    <attr name="backgroundColor" format="color"/>
     <attr name="bitmapIconSize" format="dimension"/>
     <attr name="iconColor" format="color"/>
     <attr name="labelColor" format="color"/>

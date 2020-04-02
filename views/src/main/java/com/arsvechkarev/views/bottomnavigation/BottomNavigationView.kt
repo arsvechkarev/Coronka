@@ -101,6 +101,7 @@ class BottomNavigationView @JvmOverloads constructor(
     initIcons()
     initLayouts()
     startAnimation(currentItemId)
+    setBackgroundResource(R.drawable.bg_the_bottom_navigation)
   }
   
   fun setOnItemClickListener(action: (Int) -> Unit) {

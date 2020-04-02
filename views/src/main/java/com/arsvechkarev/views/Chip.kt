@@ -5,6 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.os.Parcel
+import android.os.Parcelable
 import android.text.BoringLayout
 import android.text.Layout
 import android.text.TextPaint
@@ -37,9 +39,10 @@ class Chip @JvmOverloads constructor(
     }
   
   init {
+    isSaveEnabled = true
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.Chip, 0, 0)
-    colorFill = attributes.getColor(R.styleable.Chip_colorFill, Color.BLACK)
-    colorSecondary = attributes.getColor(R.styleable.Chip_colorSecondary, Color.WHITE)
+    colorFill = attributes.getColor(R.styleable.Chip_colorFill, Color.WHITE)
+    colorSecondary = attributes.getColor(R.styleable.Chip_colorSecondary, Color.BLACK)
     textPaint.textSize = attributes.getDimension(R.styleable.Chip_textSize, 16.sp)
     textPaint.typeface = FontManager.rubik
     rectPaint.strokeWidth = attributes.getDimension(R.styleable.Chip_strokeSize, 2.dp)
@@ -84,5 +87,47 @@ class Chip @JvmOverloads constructor(
     val metrics = BoringLayout.isBoring(text, textPaint)
     return BoringLayout.make(text, textPaint, metrics.width,
       Layout.Alignment.ALIGN_NORMAL, 0f, 0f, metrics, false)
+  }
+  
+  override fun onSaveInstanceState(): Parcelable? {
+    val superState = super.onSaveInstanceState() ?: return null
+    val myState = ChipSavedState(superState)
+    myState.isActive = if (this.isActive) 1 else 0
+    return myState
+  }
+  
+  override fun onRestoreInstanceState(state: Parcelable) {
+    super.onRestoreInstanceState(state)
+    val savedState = state as ChipSavedState
+    isActive = savedState.isActive == 1
+    invalidate()
+  }
+  
+  class ChipSavedState : BaseSavedState {
+    
+    // 0 - false, 1 - true
+    var isActive: Int = 0
+    
+    constructor(parcelable: Parcelable) : super(parcelable)
+    
+    constructor(parcel: Parcel) : super(parcel) {
+      isActive = parcel.readInt()
+    }
+    
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+      super.writeToParcel(parcel, flags)
+      parcel.writeInt(isActive)
+    }
+    
+    companion object CREATOR : Parcelable.Creator<ChipSavedState> {
+      
+      override fun createFromParcel(parcel: Parcel): ChipSavedState {
+        return ChipSavedState(parcel)
+      }
+      
+      override fun newArray(size: Int): Array<ChipSavedState?> {
+        return arrayOfNulls(size)
+      }
+    }
   }
 }

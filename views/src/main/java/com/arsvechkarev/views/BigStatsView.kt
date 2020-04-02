@@ -29,7 +29,7 @@ class BigStatsView @JvmOverloads constructor(
   private val chartLineCornersRadius: Float
   private val minChartLinePercent = 0.04f
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = Color.BLACK
+    color = Color.WHITE
     typeface = FontManager.rubik
   }
   
