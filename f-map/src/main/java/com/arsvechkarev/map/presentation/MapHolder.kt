@@ -26,5 +26,4 @@ class MapHolder(private val threader: Threader = Threader) {
       }
     }
   }
-  
 }

@@ -5,8 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
-import android.os.Parcel
-import android.os.Parcelable
 import android.text.Layout
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -38,7 +36,6 @@ class Chip @JvmOverloads constructor(
     }
   
   init {
-    isSaveEnabled = true
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.Chip, 0, 0)
     colorFill = attributes.getColor(R.styleable.Chip_android_fillColor, Color.WHITE)
     colorSecondary = attributes.getColor(R.styleable.Chip_colorSecondary, Color.BLACK)
@@ -50,9 +47,6 @@ class Chip @JvmOverloads constructor(
     attributes.recycle()
     rectPaint.color = colorFill
     textPaint.color = colorFill
-  }
-  
-  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -81,48 +75,6 @@ class Chip @JvmOverloads constructor(
       val strokeOffset = rectPaint.strokeWidth / 2
       translate(paddingStart.f + strokeOffset, paddingTop.f + strokeOffset)
       textLayout.draw(canvas)
-    }
-  }
-  
-  override fun onSaveInstanceState(): Parcelable? {
-    val superState = super.onSaveInstanceState() ?: return null
-    val myState = ChipSavedState(superState)
-    myState.isActive = if (this.isActive) 1 else 0
-    return myState
-  }
-  
-  override fun onRestoreInstanceState(state: Parcelable) {
-    super.onRestoreInstanceState(state)
-    val savedState = state as ChipSavedState
-    isActive = savedState.isActive == 1
-    invalidate()
-  }
-  
-  class ChipSavedState : BaseSavedState {
-    
-    // 0 - false, 1 - true
-    var isActive: Int = 0
-    
-    constructor(parcelable: Parcelable) : super(parcelable)
-    
-    constructor(parcel: Parcel) : super(parcel) {
-      isActive = parcel.readInt()
-    }
-    
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-      super.writeToParcel(parcel, flags)
-      parcel.writeInt(isActive)
-    }
-    
-    companion object CREATOR : Parcelable.Creator<ChipSavedState> {
-      
-      override fun createFromParcel(parcel: Parcel): ChipSavedState {
-        return ChipSavedState(parcel)
-      }
-      
-      override fun newArray(size: Int): Array<ChipSavedState?> {
-        return arrayOfNulls(size)
-      }
     }
   }
 }

@@ -46,13 +46,24 @@ class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : A
       itemView.chipDeathRate.setOnClickListener { notifyOnClick(it as Chip) }
       itemView.chipPercentByCountry.setOnClickListener { notifyOnClick(it as Chip) }
     }
-    
+  
     fun bind(generalInfo: GeneralInfo) {
       itemView.textConfirmed.text = numberFormatter.format(generalInfo.confirmed)
       itemView.textRecovered.text = numberFormatter.format(generalInfo.recovered)
       itemView.textDeaths.text = numberFormatter.format(generalInfo.deaths)
     }
-    
+  
+    fun updateChip(optionType: OptionType) {
+      itemView.chipConfirmed.isActive = false
+      itemView.chipRecovered.isActive = false
+      itemView.chipDeaths.isActive = false
+      itemView.chipDeathRate.isActive = false
+      itemView.chipPercentByCountry.isActive = false
+      val chip = getChipByType(optionType)
+      chip.isActive = true
+      currentChip = chip
+    }
+  
     private fun notifyOnClick(chip: Chip) {
       if (currentChip == chip) return
       currentChip.isActive = false
@@ -60,11 +71,19 @@ class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : A
       currentChip = chip
       onOptionClick(getTypeByChip(currentChip))
     }
-    
+  
+    private fun getChipByType(optionType: OptionType): Chip = when (optionType) {
+      CONFIRMED -> itemView.chipConfirmed
+      RECOVERED -> itemView.chipRecovered
+      DEATHS -> itemView.chipDeaths
+      DEATH_RATE -> itemView.chipDeathRate
+      PERCENT_BY_COUNTRY -> itemView.chipPercentByCountry
+    }
+  
     private fun getTypeByChip(chip: Chip) = when (chip) {
       itemView.chipConfirmed -> CONFIRMED
-      itemView.chipDeaths -> DEATHS
       itemView.chipRecovered -> RECOVERED
+      itemView.chipDeaths -> DEATHS
       itemView.chipDeathRate -> DEATH_RATE
       itemView.chipPercentByCountry -> PERCENT_BY_COUNTRY
       else -> throw IllegalStateException("Wat?")

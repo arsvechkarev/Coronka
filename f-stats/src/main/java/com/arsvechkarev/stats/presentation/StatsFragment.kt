@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.stats.di.StatsModuleInjector
+import com.arsvechkarev.stats.list.HeaderAdapterDelegate.HeaderViewHolder
 import com.arsvechkarev.stats.list.StatsAdapter
 import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedAll
@@ -66,6 +67,8 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   private fun handleFilteringCountries(state: FilteredCountries) {
     log { "filtering" }
     recyclerView!!.post {
+      (recyclerView.findViewHolderForAdapterPosition(0) as HeaderViewHolder).updateChip(
+        state.optionType)
       adapter.updateFilteredCountries(state.countries)
     }
   }

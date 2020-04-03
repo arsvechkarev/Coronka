@@ -79,7 +79,7 @@ class StatsViewModel(
   fun filterList(optionType: OptionType) {
     _state.assertContains(LoadedAll::class) {
       val list = savedData.get<List<Country>>().toDisplayableItems(optionType)
-      _state.update(FilteredCountries(list))
+      _state.update(FilteredCountries(optionType, list))
     }
   }
   
