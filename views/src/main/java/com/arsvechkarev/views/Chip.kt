@@ -53,8 +53,6 @@ class Chip @JvmOverloads constructor(
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    val strokeOffset = rectPaint.strokeWidth / 2f
-    rect.set(strokeOffset, strokeOffset, w - strokeOffset, h - strokeOffset)
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -67,13 +65,17 @@ class Chip @JvmOverloads constructor(
   }
   
   override fun onDraw(canvas: Canvas) {
+    val strokeOffset: Float
     if (isActive) {
+      strokeOffset = rectPaint.strokeWidth / 2f
       rectPaint.style = Paint.Style.FILL
       textPaint.color = colorSecondary
     } else {
+      strokeOffset = rectPaint.strokeWidth
       rectPaint.style = Paint.Style.STROKE
       textPaint.color = colorFill
     }
+    rect.set(strokeOffset, strokeOffset, width - strokeOffset, height - strokeOffset)
     canvas.drawRoundRect(rect, cornerRadius, cornerRadius, rectPaint)
     canvas.block {
       val strokeOffset = rectPaint.strokeWidth / 2

@@ -3,48 +3,60 @@ package com.arsvechkarev.common.repositories
 import com.arsvechkarev.network.Networker
 import com.arsvechkarev.storage.Saver
 import core.Application
+import core.handlers.ResultAction
+import core.handlers.ResultHandler
+import core.handlers.SuccessAction
+import core.handlers.SuccessHandler
+import core.handlers.createResultHandler
+import core.handlers.createSuccessHandler
 import core.model.GeneralInfo
+import core.releasable.BaseReleasable
 import org.json.JSONObject
 
 class GeneralInfoExecutor(
   private val threader: Application.Threader,
   private val networker: Networker,
   private val saver: Saver
-) {
+) : BaseReleasable() {
   
-  fun tryUpdateFromCache(onSuccess: (GeneralInfo) -> Unit) {
-    if (saver.has(CONFIRMED)) {
-      onSuccess(constructGeneralInfo())
+  private var cacheHandler: SuccessHandler<GeneralInfo>? = null
+  private var networkHandler: ResultHandler<GeneralInfo, Throwable>? = null
+  
+  init {
+    addForRelease(cacheHandler, networkHandler)
+  }
+  
+  fun tryUpdateFromCache(action: SuccessAction<GeneralInfo>) {
+    if (cacheHandler == null) {
+      cacheHandler = createSuccessHandler(action)
+    }
+    cacheHandler!!.runIfNotAlready {
+      if (saver.has(CONFIRMED)) {
+        cacheHandler?.dispatchSuccess(constructGeneralInfo())
+      }
     }
   }
   
-  fun getGeneralInfo(
-    onSuccess: (GeneralInfo) -> Unit,
-    onFailure: (Throwable) -> Unit
-  ) {
-    threader.ioWorker.submit {
-      performNetworkRequest(onSuccess = {
-        saveInfo(it)
-        onSuccess(it)
-      }, onFailure = onFailure)
+  fun getGeneralInfo(action: ResultAction<GeneralInfo, Throwable>) {
+    if (networkHandler == null) {
+      networkHandler = createResultHandler(action)
     }
-  }
-  
-  private fun performNetworkRequest(
-    onSuccess: (GeneralInfo) -> Unit,
-    onFailure: (Throwable) -> Unit
-  ) {
-    try {
-      val result = networker.performRequest(URL)
-      val json = JSONObject(result)
-      val generalInfo = GeneralInfo(
-        json.get(CONFIRMED).toString().toInt(),
-        json.get(DEATHS).toString().toInt(),
-        json.get(RECOVERED).toString().toInt()
-      )
-      threader.mainThreadWorker.submit { onSuccess(generalInfo) }
-    } catch (throwable: Throwable) {
-      threader.mainThreadWorker.submit { onFailure(throwable) }
+    networkHandler?.runIfNotAlready {
+      threader.ioWorker.submit {
+        try {
+          val result = networker.performRequest(URL)
+          val json = JSONObject(result)
+          val generalInfo = GeneralInfo(
+            json.get(CONFIRMED).toString().toInt(),
+            json.get(DEATHS).toString().toInt(),
+            json.get(RECOVERED).toString().toInt()
+          )
+          saveInfo(generalInfo)
+          threader.mainThreadWorker.submit { networkHandler?.dispatchSuccess(generalInfo) }
+        } catch (throwable: Throwable) {
+          threader.mainThreadWorker.submit { networkHandler?.dispatchFailure(throwable) }
+        }
+      }
     }
   }
   

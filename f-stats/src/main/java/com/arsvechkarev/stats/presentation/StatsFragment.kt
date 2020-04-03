@@ -10,14 +10,13 @@ import com.arsvechkarev.stats.di.StatsModuleInjector
 import com.arsvechkarev.stats.list.StatsAdapter
 import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedAll
-import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingCountriesInfo
-import com.arsvechkarev.stats.presentation.StatsScreenState.LoadingGeneralInfo
+import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
 import core.Loggable
 import core.StateHandle
 import core.extenstions.invisible
 import core.extenstions.visible
 import core.log
-import kotlinx.android.synthetic.main.fragment_stats.layoutLoading
+import kotlinx.android.synthetic.main.fragment_stats.layoutLoadingStats
 import kotlinx.android.synthetic.main.fragment_stats.recyclerView
 
 class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
@@ -26,8 +25,10 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   
   private lateinit var viewModel: StatsViewModel
   private val adapter = StatsAdapter(onOptionClick = { viewModel.filterList(it) })
+  private var savedInstanceState: Bundle? = null
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    this.savedInstanceState = savedInstanceState
     viewModel = StatsModuleInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
     recyclerView.adapter = adapter
@@ -36,13 +37,13 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   
   override fun onResume() {
     super.onResume()
-    viewModel.startInitialLoading()
+    viewModel.startInitialLoading(savedInstanceState != null)
   }
   
   private fun handleStateChanged(stateHandle: StateHandle<StatsScreenState>) {
     stateHandle.handleUpdate { state ->
       when (state) {
-        is LoadingCountriesInfo, LoadingGeneralInfo -> handleLoading()
+        is Loading -> handleLoading()
         is LoadedAll -> handleLoadedAll(state)
         is FilteredCountries -> handleFilteringCountries(state)
       }
@@ -51,19 +52,21 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   
   private fun handleLoading() {
     log { "loading" }
-    layoutLoading.visible()
+    layoutLoadingStats.visible()
   }
   
   private fun handleLoadedAll(state: LoadedAll) {
     log { "loaded all, from cache = ${state.isFromCache}" }
     adapter.submitList(state.items)
     if (!state.isFromCache) {
-      layoutLoading.invisible()
+      layoutLoadingStats.invisible()
     }
   }
   
   private fun handleFilteringCountries(state: FilteredCountries) {
     log { "filtering" }
-    adapter.updateFilteredCountries(state.countries)
+    recyclerView!!.post {
+      adapter.updateFilteredCountries(state.countries)
+    }
   }
 }

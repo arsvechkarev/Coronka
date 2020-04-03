@@ -7,11 +7,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
-import com.arsvechkarev.map.presentation.MapScreenState.CountriesLoaded
 import com.arsvechkarev.map.presentation.MapScreenState.Failure
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
+import com.arsvechkarev.map.presentation.MapScreenState.LoadedAll
 import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountries
 import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountryInfo
+import com.arsvechkarev.map.utils.MapDelegate
 import core.Application
 import core.FontManager
 import core.Loggable
@@ -20,7 +21,7 @@ import core.extenstions.invisible
 import core.extenstions.visible
 import core.log
 import kotlinx.android.synthetic.main.fragment_map.bottomSheet
-import kotlinx.android.synthetic.main.fragment_map.layoutLoading
+import kotlinx.android.synthetic.main.fragment_map.layoutLoadingMap
 import kotlinx.android.synthetic.main.fragment_map.statsView
 import kotlinx.android.synthetic.main.fragment_map.textViewCountryName
 
@@ -31,22 +32,28 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   private val mapDelegate = MapDelegate()
   private lateinit var viewModel: MapViewModel
   
+  private var savedInstanceState: Bundle? = null
+  
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    this.savedInstanceState = savedInstanceState
     mapDelegate.init(requireContext(), childFragmentManager,
       ::onMapClicked, ::onCountrySelected, Application.Threader)
     viewModel = MapModuleInjector.provideViewModel(this)
-    viewModel // Allow use cache if fragment was recreated
-        .startInitialLoading(allowUseSavedData = savedInstanceState != null)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
     textViewCountryName.typeface = FontManager.rubik
     bottomSheet.setOnClickListener { bottomSheet.hide() }
+  }
+  
+  override fun onResume() {
+    super.onResume()
+    viewModel.startInitialLoading(savedInstanceState != null)
   }
   
   private fun handleStateChanged(stateHandle: StateHandle<MapScreenState>) {
     stateHandle.handleUpdate { state ->
       when (state) {
         is LoadingCountries -> handleStartLoadingCountries()
-        is CountriesLoaded -> handleCountriesLoaded(state)
+        is LoadedAll -> handleCountriesLoaded(state)
         is LoadingCountryInfo -> handleStartLoadingCountryInfo()
         is FoundCountry -> handleFoundCountry(state)
         is Failure -> handleFailure(state)
@@ -56,15 +63,15 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
   private fun handleStartLoadingCountries() {
     log { "startLoadingCountries" }
-    layoutLoading.visible()
+    layoutLoadingMap.visible()
   }
   
-  private fun handleCountriesLoaded(state: CountriesLoaded) {
+  private fun handleCountriesLoaded(state: LoadedAll) {
     log { "loaded countries" }
     if (!state.isFromCache) {
-      layoutLoading.invisible()
+      layoutLoadingMap.invisible()
     }
-    mapDelegate.drawCountriesMarks(state.countriesList)
+    mapDelegate.drawCountriesMarks(state.generalInfo, state.countriesList)
   }
   
   private fun handleStartLoadingCountryInfo() {
@@ -73,15 +80,15 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   private fun handleFoundCountry(state: FoundCountry) {
     textViewCountryName.text = state.country.countryName
     statsView.updateNumbers(
-      state.country.confirmed.toInt(),
-      state.country.recovered.toInt(),
-      state.country.deaths.toInt()
+      state.country.confirmed,
+      state.country.recovered,
+      state.country.deaths
     )
     bottomSheet.show()
   }
   
   private fun handleFailure(state: Failure) {
-    layoutLoading.invisible()
+    layoutLoadingMap.invisible()
     Toast.makeText(context, "Failure: ${state.reason}", Toast.LENGTH_SHORT).show()
     log { "error, reason = ${state.reason}" }
   }

@@ -2,7 +2,6 @@ package core
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import core.extenstions.updateSelf
 import kotlin.reflect.KClass
 
 /**
@@ -12,9 +11,12 @@ class StateHandle<S : Any> {
   
   internal var newState: S? = null
   
-  private val states = HashMap<KClass<out S>, S>()
+  internal var allowHandle: Boolean = false
+  
+  val states = LinkedHashMap<KClass<out S>, S>()
   
   fun <T : S> update(state: T) {
+    remove(state::class)
     newState = state
     states[state::class] = state
   }
@@ -56,6 +58,9 @@ class StateHandle<S : Any> {
    * @see updateAll
    */
   fun handleUpdate(action: (S) -> Unit) {
+    if (!allowHandle) {
+      return
+    }
     if (newState != null) {
       action(newState!!)
     } else {
@@ -67,6 +72,7 @@ class StateHandle<S : Any> {
     return states.size
   }
 }
+
 
 /**
  * Adds value to states map (or updates if the value already exists). Also can optionally remove state by
@@ -107,4 +113,10 @@ fun <T : S, S : Any> MutableLiveData<StateHandle<S>>.assertContains(
 fun <S : Any> MutableLiveData<StateHandle<S>>.updateAll() {
   value!!.newState = null
   updateSelf()
+}
+
+fun <T : Any> MutableLiveData<StateHandle<T>>.updateSelf() {
+  value!!.allowHandle = true
+  value = value
+  value!!.allowHandle = false
 }

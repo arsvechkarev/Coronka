@@ -8,11 +8,16 @@ import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
 import com.arsvechkarev.storage.Queries
 import core.Application
+import core.handlers.SuccessAction
+import core.handlers.SuccessHandler
+import core.handlers.createSuccessHandler
 import core.model.Country
+import core.releasable.Releasable
 
-class CountriesSQLiteExecutor(threader: Application.Threader) {
+class CountriesSQLiteExecutor(threader: Application.Threader) : Releasable {
   
   private val ioWorker = threader.ioWorker
+  private var successHandler: SuccessHandler<List<Country>>? = null
   
   fun isTableNotEmpty(): Boolean {
     DatabaseManager.instance.readableDatabase.use {
@@ -20,10 +25,15 @@ class CountriesSQLiteExecutor(threader: Application.Threader) {
     }
   }
   
-  fun readFromDatabase(onSuccess: (List<Country>) -> Unit) {
-    executeWithReadableDatabase { database ->
-      val query = Queries.selectAll(CountriesTable.TABLE_NAME)
-      DatabaseExecutor.executeQuery(database, query, ::transformCursorToList) { onSuccess(it) }
+  fun readFromDatabase(action: SuccessAction<List<Country>>) {
+    if (successHandler == null) successHandler = createSuccessHandler(action)
+    successHandler?.runIfNotAlready {
+      executeWithReadableDatabase { database ->
+        val query = Queries.selectAll(CountriesTable.TABLE_NAME)
+        DatabaseExecutor.executeQuery(database, query, ::transformCursorToList) {
+          successHandler?.dispatchSuccess(it)
+        }
+      }
     }
   }
   
@@ -54,11 +64,11 @@ class CountriesSQLiteExecutor(threader: Application.Threader) {
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_ID)),
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_NAME)),
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_CODE)),
-        cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_CONFIRMED)),
-        cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_DEATHS)),
-        cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_RECOVERED)),
-        cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_LATITUDE)),
-        cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_LONGITUDE))
+        cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_CONFIRMED)),
+        cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_DEATHS)),
+        cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_RECOVERED)),
+        cursor.getDouble(cursor.getColumnIndex(CountriesTable.COLUMN_LATITUDE)),
+        cursor.getDouble(cursor.getColumnIndex(CountriesTable.COLUMN_LONGITUDE))
       )
       infoData.add(info)
     }
@@ -72,6 +82,10 @@ class CountriesSQLiteExecutor(threader: Application.Threader) {
   
   private fun executeWithWriteableDatabase(block: (SQLiteDatabase) -> Unit) {
     ioWorker.submit { DatabaseManager.instance.writableDatabase.use(block) }
+  }
+  
+  override fun release() {
+    successHandler = null
   }
   
 }

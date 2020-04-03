@@ -1,26 +1,29 @@
-package com.arsvechkarev.map.presentation
+package com.arsvechkarev.map.utils
 
 import android.content.Context
-import android.graphics.Color
 import android.location.Geocoder
 import androidx.fragment.app.FragmentManager
 import com.arsvechkarev.map.R
+import com.arsvechkarev.map.presentation.MapHolder
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import core.Application
 import core.model.Country
+import core.model.GeneralInfo
 import java.io.IOException
 import java.util.Locale
 
 class MapDelegate {
   
   private val mapHolder = MapHolder()
+  private val creator = CountriesBitmapCreator()
   private lateinit var context: Context
+  
   private lateinit var onMapClicked: () -> Unit
   private lateinit var onCountrySelected: (String) -> Unit
+  
   private lateinit var threader: Application.Threader
   private lateinit var geocoder: Geocoder
   
@@ -71,17 +74,12 @@ class MapDelegate {
     }
   }
   
-  fun drawCountriesMarks(countriesData: List<Country>) {
+  fun drawCountriesMarks(generalInfo: GeneralInfo, countries: List<Country>) {
+    //    val options = creator.create(generalInfo, countries)
     mapHolder.addAction { googleMap ->
-      for (country in countriesData) {
-        googleMap.addCircle(
-          CircleOptions()
-              .center(LatLng(country.latitude.toDouble(), country.longitude.toDouble()))
-              .radius(100000.0)
-              .fillColor(Color.RED)
-              .strokeColor(Color.RED)
-        )
-      }
+      //      for (option in options) {
+      //        googleMap.addGroundOverlay(option)
+      //      }
     }
   }
 }

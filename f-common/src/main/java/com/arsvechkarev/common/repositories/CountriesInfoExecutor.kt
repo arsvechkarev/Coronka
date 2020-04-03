@@ -3,8 +3,10 @@ package com.arsvechkarev.common.repositories
 import com.arsvechkarev.network.Networker
 import core.Application
 import core.Loggable
+import core.handlers.ResultHandler
 import core.log
 import core.model.Country
+import core.releasable.Releasable
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.CopyOnWriteArrayList
@@ -13,16 +15,15 @@ import java.util.concurrent.atomic.AtomicBoolean
 class CountriesInfoExecutor(
   private val threader: Application.Threader,
   private val networker: Networker
-) : Loggable {
+) : Releasable, Loggable {
   
   override val logTag = "Network_CountriesInfo"
   
   private val isLoadingNow = AtomicBoolean(false)
+  private val listeners = CopyOnWriteArrayList<ResultHandler<List<Country>, Throwable>>()
   
-  private val listeners = CopyOnWriteArrayList<CountriesInfoListener>()
-  
-  fun getCountriesInfoAsync(listener: CountriesInfoListener) {
-    listeners.add(listener)
+  fun getCountriesInfoAsync(resultHandler: ResultHandler<List<Country>, Throwable>) {
+    listeners.add(resultHandler)
     if (isLoadingNow.get()) {
       return
     }
@@ -32,20 +33,20 @@ class CountriesInfoExecutor(
         val json = networker.performRequest(URL)
         val countriesList = transformJson(json)
         threader.mainThreadWorker.submit {
-          listeners.forEach { it.onSuccess(countriesList) }
+          listeners.forEach { it.dispatchSuccess(countriesList) }
           isLoadingNow.set(false)
         }
       }
     } catch (e: Throwable) {
       log(e)
       threader.mainThreadWorker.submit {
-        listeners.forEach { it.onFailure(e) }
+        listeners.forEach { it.dispatchFailure(e) }
         isLoadingNow.set(false)
       }
     }
   }
   
-  fun removeListener(listener: CountriesInfoListener) {
+  fun removeListener(listener: ResultHandler<List<Country>, Throwable>) {
     listeners.remove(listener)
   }
   
@@ -64,11 +65,11 @@ class CountriesInfoExecutor(
           countryId = i,
           countryName = item.getString("countryregion"),
           countryCode = (item.get("countrycode") as JSONObject).getString("iso2"),
-          confirmed = item.getString("confirmed"),
-          deaths = item.getString("deaths"),
-          recovered = item.getString("recovered"),
-          latitude = (item.get("location") as JSONObject).getString("lat"),
-          longitude = (item.get("location") as JSONObject).getString("lng")
+          confirmed = item.getString("confirmed").toInt(),
+          deaths = item.getString("deaths").toInt(),
+          recovered = item.getString("recovered").toInt(),
+          latitude = (item.get("location") as JSONObject).getString("lat").toDouble(),
+          longitude = (item.get("location") as JSONObject).getString("lng").toDouble()
         )
         countriesList.add(country)
       }
@@ -76,14 +77,11 @@ class CountriesInfoExecutor(
     return countriesList
   }
   
-  companion object {
-    private const val URL = "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest?onlyCountries=true"
+  override fun release() {
+    listeners.clear()
   }
   
-  interface CountriesInfoListener {
-    
-    fun onSuccess(countriesData: List<Country>)
-    
-    fun onFailure(throwable: Throwable)
+  companion object {
+    private const val URL = "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest?onlyCountries=true"
   }
 }

@@ -1,15 +1,16 @@
-package com.arsvechkarev.network
+package core.async
 
 import core.Application.Threader
+import core.releasable.Releasable
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Future
 
-class AsyncOperations(amount: Int, private val threader: Threader = Threader) {
+class AsyncOperations(amount: Int, private val threader: Threader = Threader) : Releasable {
   
   private var operation: Future<*>? = null
   
-  private var isDone: Boolean = false
+  private var isCancelled: Boolean = false
   private val operations = ConcurrentHashMap<String, Any>()
   
   private val latch = CountDownLatch(amount)
@@ -19,14 +20,23 @@ class AsyncOperations(amount: Int, private val threader: Threader = Threader) {
     operations[key] = value
   }
   
+  fun cancel() {
+    isCancelled = true
+    operation?.cancel(true)
+  }
+  
   fun onDoneAll(block: (Map<String, Any>) -> Unit) {
-    if (isDone) {
-      throwStateError()
-    }
+    if (isCancelled) return
     operation = threader.ioWorker.submit {
       latch.await()
-      threader.mainThreadWorker.submit { block(operations) }
+      if (!isCancelled) {
+        threader.mainThreadWorker.submit { block(operations) }
+      }
     }
+  }
+  
+  override fun release() {
+    cancel()
   }
   
   private fun throwStateError() {

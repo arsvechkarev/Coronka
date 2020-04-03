@@ -38,7 +38,7 @@
     style="@style/TextHeader"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/text_recovered"/>
+    android:text="@string/text_deaths"/>
 
   <com.arsvechkarev.views.FontTextView
     android:id="@+id/textDeaths"

@@ -50,7 +50,6 @@ class SimpleBottomSheet @JvmOverloads constructor(
   private var lastY = -1f
   
   init {
-    isSaveEnabled = true
     val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SimpleBottomSheet, 0, 0)
     cornerRadius = typedArray.getDimension(R.styleable.SimpleBottomSheet_cornerRadius,
       16 * resources.displayMetrics.density)
@@ -144,25 +143,25 @@ class SimpleBottomSheet @JvmOverloads constructor(
     }
   }
   
-  override fun onSaveInstanceState(): Parcelable? {
-    val superState = super.onSaveInstanceState() ?: return null
-    val myState = SavedState(superState)
-    myState.currentY = this.currentY
-    return myState
-  }
-  
-  override fun onRestoreInstanceState(state: Parcelable) {
-    super.onRestoreInstanceState(state)
-    val savedState = state as SavedState
-    currentY = savedState.currentY
-    requestLayout()
-  }
+  //  override fun onSaveInstanceState(): Parcelable? {
+  //    val superState = super.onSaveInstanceState() ?: return null
+  //    val myState = BottomSheetSavedState(superState)
+  //    myState.currentY = this.currentY
+  //    return myState
+  //  }
+  //
+  //  override fun onRestoreInstanceState(state: Parcelable) {
+  //    super.onRestoreInstanceState(state)
+  //    val savedState = state as BottomSheetSavedState
+  //    currentY = savedState.currentY
+  //    requestLayout()
+  //  }
   
   enum class Direction {
     UP, DOWN
   }
   
-  class SavedState : BaseSavedState {
+  class BottomSheetSavedState : BaseSavedState {
     
     var currentY = -1f
     
@@ -177,13 +176,13 @@ class SimpleBottomSheet @JvmOverloads constructor(
       parcel.writeFloat(currentY)
     }
     
-    companion object CREATOR : Parcelable.Creator<SavedState> {
+    companion object CREATOR : Parcelable.Creator<BottomSheetSavedState> {
       
-      override fun createFromParcel(parcel: Parcel): SavedState {
-        return SavedState(parcel)
+      override fun createFromParcel(parcel: Parcel): BottomSheetSavedState {
+        return BottomSheetSavedState(parcel)
       }
       
-      override fun newArray(size: Int): Array<SavedState?> {
+      override fun newArray(size: Int): Array<BottomSheetSavedState?> {
         return arrayOfNulls(size)
       }
     }

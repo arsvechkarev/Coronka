@@ -86,7 +86,7 @@ class ProgressBar @JvmOverloads constructor(
   
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    outerAnimator.end()
+    innerAnimator.end()
     outerAnimator.end()
   }
   

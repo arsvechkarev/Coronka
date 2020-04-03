@@ -11,7 +11,7 @@
     android:layout_height="match_parent"/>
 
   <com.arsvechkarev.views.ProgressBar
-    android:id="@+id/layoutLoading"
+    android:id="@+id/layoutLoadingStats"
     android:layout_width="@dimen/progress_bar_size"
     android:layout_height="@dimen/progress_bar_size"
     android:layout_gravity="start|top"

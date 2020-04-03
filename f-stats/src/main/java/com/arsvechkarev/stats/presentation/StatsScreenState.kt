@@ -1,19 +1,11 @@
 package com.arsvechkarev.stats.presentation
 
-import core.model.Country
 import core.model.DisplayableCountry
-import core.model.GeneralInfo
 import core.recycler.DisplayableItem
 
 sealed class StatsScreenState {
   
-  object LoadingGeneralInfo : StatsScreenState()
-  
-  object LoadingCountriesInfo : StatsScreenState()
-  
-  class GeneralInfoLoaded(val generalInfo: GeneralInfo) : StatsScreenState()
-  
-  class CountriesLoaded(val countries: List<Country>) : StatsScreenState()
+  object Loading : StatsScreenState()
   
   class LoadedAll(
     val items: List<DisplayableItem>,

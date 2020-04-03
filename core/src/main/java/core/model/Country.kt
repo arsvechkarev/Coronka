@@ -6,11 +6,11 @@ data class Country(
   val countryId: Int,
   val countryName: String,
   val countryCode: String,
-  val confirmed: String,
-  val deaths: String,
-  val recovered: String,
-  val latitude: String,
-  val longitude: String
+  val confirmed: Int,
+  val deaths: Int,
+  val recovered: Int,
+  val latitude: Double,
+  val longitude: Double
 )
 
 fun List<Country>.print(prefix: String = "country") {
