@@ -5,17 +5,19 @@ import core.model.GeneralInfo
 
 sealed class MapScreenState {
   
-  object LoadingCountries : MapScreenState()
+  object Loading : MapScreenState()
   
   object LoadingCountryInfo : MapScreenState()
   
-  object LoadingGeneralInfo : MapScreenState()
-  
-  class LoadedAll(
+  class LoadedFromCache(
     val countriesList: List<Country>,
     val generalInfo: GeneralInfo,
-    val isFromCache: Boolean,
     val lastUpdateTime: String
+  ) : MapScreenState()
+  
+  class LoadedFromNetwork(
+    val countriesList: List<Country>,
+    val generalInfo: GeneralInfo
   ) : MapScreenState()
   
   class FoundCountry(val country: Country) : MapScreenState()

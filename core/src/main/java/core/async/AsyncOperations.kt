@@ -20,6 +20,10 @@ class AsyncOperations(amount: Int, private val threader: Threader = Threader) : 
     operations[key] = value
   }
   
+  fun countDown() {
+    latch.countDown()
+  }
+  
   fun cancel() {
     isCancelled = true
     operation?.cancel(true)

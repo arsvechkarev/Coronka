@@ -9,8 +9,9 @@ import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
 import com.arsvechkarev.map.presentation.MapScreenState.Failure
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
-import com.arsvechkarev.map.presentation.MapScreenState.LoadedAll
-import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountries
+import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
+import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
+import com.arsvechkarev.map.presentation.MapScreenState.Loading
 import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountryInfo
 import com.arsvechkarev.map.utils.MapDelegate
 import core.Application
@@ -52,25 +53,26 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   private fun handleStateChanged(stateHandle: StateHandle<MapScreenState>) {
     stateHandle.handleUpdate { state ->
       when (state) {
-        is LoadingCountries -> handleStartLoadingCountries()
-        is LoadedAll -> handleCountriesLoaded(state)
+        is Loading -> handleStartLoading()
         is LoadingCountryInfo -> handleStartLoadingCountryInfo()
+        is LoadedFromCache -> handleCountriesLoadedFromCache(state)
+        is LoadedFromNetwork -> handleCountriesLoadedFromNetwork(state)
         is FoundCountry -> handleFoundCountry(state)
         is Failure -> handleFailure(state)
       }
     }
   }
   
-  private fun handleStartLoadingCountries() {
-    log { "startLoadingCountries" }
+  private fun handleStartLoading() {
     layoutLoadingMap.visible()
   }
   
-  private fun handleCountriesLoaded(state: LoadedAll) {
-    log { "loaded countries" }
-    if (!state.isFromCache) {
-      layoutLoadingMap.invisible()
-    }
+  private fun handleCountriesLoadedFromCache(state: LoadedFromCache) {
+    mapDelegate.drawCountriesMarks(state.generalInfo, state.countriesList)
+  }
+  
+  private fun handleCountriesLoadedFromNetwork(state: LoadedFromNetwork) {
+    layoutLoadingMap.invisible()
     mapDelegate.drawCountriesMarks(state.generalInfo, state.countriesList)
   }
   

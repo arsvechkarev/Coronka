@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.text.Layout
 import android.text.TextPaint
 import android.view.View
+import core.Application.Singletons.decimalFormatter
 import core.Application.Singletons.numberFormatter
 import core.FontManager
 import core.extenstions.block
@@ -32,10 +33,15 @@ class SmallStatsView(
   private var numberLayout: Layout? = null
   private var amountLayout: Layout? = null
   
-  fun updateData(number: Int, text: String, amount: Int) {
+  fun updateData(number: Int, text: String, amount: Number) {
     this.text = text
     numberLayout = boringLayoutOf(textPaint, "$number.  ")
-    amountLayout = boringLayoutOf(textPaint, numberFormatter.format(amount))
+    val amountString = when (amount) {
+      is Double -> decimalFormatter.format(amount)
+      is Float -> decimalFormatter.format(amount)
+      else -> numberFormatter.format(amount)
+    }
+    amountLayout = boringLayoutOf(textPaint, amountString)
     invalidate()
   }
   

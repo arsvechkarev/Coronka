@@ -26,7 +26,7 @@ object DatabaseExecutor {
     }
   }
   
-  fun <V> executeQuery(
+  fun <V> executeQueryAsync(
     database: SQLiteDatabase,
     query: String,
     transformer: (Cursor) -> V,
@@ -34,6 +34,15 @@ object DatabaseExecutor {
   ) {
     val cursor = database.rawQuery(query, null)
     callback(transformer(cursor))
+  }
+  
+  fun <V> executeQuery(
+    database: SQLiteDatabase,
+    query: String,
+    transformer: (Cursor) -> V
+  ): V {
+    val cursor = database.rawQuery(query, null)
+    return transformer(cursor)
   }
   
 }

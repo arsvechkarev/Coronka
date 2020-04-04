@@ -2,15 +2,15 @@ package com.arsvechkarev.stats.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.arsvechkarev.common.CountriesAndTime
-import com.arsvechkarev.common.repositories.CountriesInfoInteractor
-import com.arsvechkarev.common.repositories.GeneralInfoExecutor
+import com.arsvechkarev.common.Repository
+import com.arsvechkarev.common.TimedResult
 import com.arsvechkarev.stats.list.OptionType
 import com.arsvechkarev.stats.list.OptionType.CONFIRMED
 import com.arsvechkarev.stats.list.OptionType.DEATHS
+import com.arsvechkarev.stats.list.OptionType.DEATH_RATE
 import com.arsvechkarev.stats.list.OptionType.RECOVERED
 import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
-import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedAll
+import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromCache
 import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
 import core.Application
 import core.NetworkConnection
@@ -23,6 +23,7 @@ import core.model.DisplayableCountry
 import core.model.GeneralInfo
 import core.recycler.DisplayableItem
 import core.releasable.ReleasableViewModel
+import core.remove
 import core.update
 import core.updateAll
 import datetime.PATTERN_STANDARD
@@ -30,9 +31,8 @@ import datetime.PATTERN_STANDARD
 class StatsViewModel(
   private val connection: NetworkConnection,
   private val threader: Application.Threader,
-  private val countriesInfoInteractor: CountriesInfoInteractor,
-  private val generalInfoExecutor: GeneralInfoExecutor
-) : ReleasableViewModel(countriesInfoInteractor, generalInfoExecutor) {
+  private val repository: Repository
+) : ReleasableViewModel(repository) {
   
   private val cacheOperations = AsyncOperations(2)
   private val networkOperations = AsyncOperations(2)
@@ -57,57 +57,76 @@ class StatsViewModel(
     updateFromNetwork(notifyLoading = false)
   }
   
+  
   fun updateFromNetwork(notifyLoading: Boolean = true) {
     if (notifyLoading) {
       _state.update(Loading)
     }
-    generalInfoExecutor.getGeneralInfo {
+    repository.loadGeneralInfo {
       onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
       onFailure { }
     }
-    countriesInfoInteractor.loadCountriesInfo {
+    repository.loadCountriesInfo {
       onSuccess {
-        networkOperations.addValue(KEY_COUNTRIES_AND_TIME, CountriesAndTime(it.first, it.second))
+        networkOperations.addValue(KEY_COUNTRIES, it)
       }
       onFailure { }
     }
-    networkOperations.onDoneAll {
-      threader.backgroundWorker.submit { notifyAboutLoadedData(false, it) }
+    networkOperations.onDoneAll { map ->
+      threader.backgroundWorker.submit {
+        val generalInfo = map[KEY_GENERAL_INFO] as? GeneralInfo
+        val countries = map[KEY_COUNTRIES] as? List<Country>
+        if (generalInfo == null || countries == null) {
+          return@submit
+        }
+        savedData.add(countries)
+        val displayableCountries = countries.toDisplayableItems(CONFIRMED)
+        val list = ArrayList<DisplayableItem>()
+        list.add(generalInfo)
+        list.addAll(displayableCountries)
+        val state = StatsScreenState.LoadedFromNetwork(list)
+        threader.mainThreadWorker.submit {
+          _state.remove(LoadedFromCache::class)
+          _state.remove(Loading::class)
+          _state.update(state)
+        }
+      }
     }
   }
   
   fun filterList(optionType: OptionType) {
-    _state.assertContains(LoadedAll::class) {
+    _state.assertContains(LoadedFromCache::class) {
       val list = savedData.get<List<Country>>().toDisplayableItems(optionType)
       _state.update(FilteredCountries(optionType, list))
     }
   }
   
   private fun tryUpdateFromCache() {
-    generalInfoExecutor.tryUpdateFromCache {
+    repository.tryGetGeneralInfoFromCache {
       onSuccess { cacheOperations.addValue(KEY_GENERAL_INFO, it) }
+      onNothing { cacheOperations.countDown() }
     }
-    countriesInfoInteractor.tryUpdateFromCache {
-      onSuccess {
-        cacheOperations.addValue(KEY_COUNTRIES_AND_TIME, CountriesAndTime(it.first, it.second))
+    repository.tryGetCountriesInfoFromCache {
+      onSuccess { cacheOperations.addValue(KEY_COUNTRIES_AND_TIME, it) }
+      onNothing { cacheOperations.countDown() }
+    }
+    cacheOperations.onDoneAll { map ->
+      threader.backgroundWorker.submit {
+        val generalInfo = map[KEY_GENERAL_INFO] as? GeneralInfo
+        val countriesAndTime = map[KEY_COUNTRIES_AND_TIME] as? TimedResult<List<Country>>
+        if (generalInfo == null || countriesAndTime == null) {
+          return@submit
+        }
+        savedData.add(countriesAndTime.result)
+        val displayableCountries = countriesAndTime.result.toDisplayableItems(CONFIRMED)
+        val lastUpdateTime = countriesAndTime.lastUpdateTime.formatted(PATTERN_STANDARD)
+        val list = ArrayList<DisplayableItem>()
+        list.add(generalInfo)
+        list.addAll(displayableCountries)
+        val state = LoadedFromCache(list, lastUpdateTime)
+        threader.mainThreadWorker.submit { _state.update(state, remove = Loading::class) }
       }
     }
-    cacheOperations.onDoneAll {
-      threader.backgroundWorker.submit { notifyAboutLoadedData(true, it) }
-    }
-  }
-  
-  private fun notifyAboutLoadedData(isFromCache: Boolean, map: Map<String, Any>) {
-    val generalInfo = map[KEY_GENERAL_INFO] as GeneralInfo
-    val countriesAndTime = map[KEY_COUNTRIES_AND_TIME] as CountriesAndTime
-    savedData.add(countriesAndTime.first)
-    val displayableCountries = countriesAndTime.first.toDisplayableItems(CONFIRMED)
-    val lastUpdateTime = countriesAndTime.second.formatted(PATTERN_STANDARD)
-    val list = ArrayList<DisplayableItem>()
-    list.add(generalInfo)
-    list.addAll(displayableCountries)
-    val state = LoadedAll(list, isFromCache, lastUpdateTime)
-    threader.mainThreadWorker.submit { _state.update(state, remove = Loading::class) }
   }
   
   private fun List<Country>.toDisplayableItems(type: OptionType): MutableList<DisplayableCountry> {
@@ -124,19 +143,17 @@ class StatsViewModel(
     return countries
   }
   
-  private fun determineNumber(optionType: OptionType, country: Country) = when (optionType) {
+  private fun determineNumber(type: OptionType, country: Country): Number = when (type) {
     CONFIRMED -> country.confirmed
     DEATHS -> country.deaths
     RECOVERED -> country.recovered
+    DEATH_RATE -> country.deaths.toFloat() / country.confirmed.toFloat()
     else -> TODO()
-  }
-  
-  override fun onCleared() {
-    countriesInfoInteractor.removeListener()
   }
   
   companion object {
     private const val KEY_GENERAL_INFO = "generalInfo"
+    private const val KEY_COUNTRIES = "countries"
     private const val KEY_COUNTRIES_AND_TIME = "countriesAndTime"
   }
 }

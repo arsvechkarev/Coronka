@@ -4,6 +4,7 @@ import android.content.Context
 import core.async.BackgroundWorker
 import core.async.MainThreadWorker
 import core.async.Worker
+import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -23,6 +24,8 @@ interface Application {
   object Singletons {
     lateinit var applicationContext: Context
       private set
+    
+    val decimalFormatter: NumberFormat = DecimalFormat("#0.000")
     
     val numberFormatter: NumberFormat = NumberFormat.getInstance(Locale.US).apply {
       isGroupingUsed = true

@@ -8,16 +8,11 @@ import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
 import com.arsvechkarev.storage.Queries
 import core.Application
-import core.handlers.SuccessAction
-import core.handlers.SuccessHandler
-import core.handlers.createSuccessHandler
 import core.model.Country
-import core.releasable.Releasable
 
-class CountriesSQLiteExecutor(threader: Application.Threader) : Releasable {
+class CountriesSQLiteExecutor(threader: Application.Threader) {
   
   private val ioWorker = threader.ioWorker
-  private var successHandler: SuccessHandler<List<Country>>? = null
   
   fun isTableNotEmpty(): Boolean {
     DatabaseManager.instance.readableDatabase.use {
@@ -25,16 +20,17 @@ class CountriesSQLiteExecutor(threader: Application.Threader) : Releasable {
     }
   }
   
-  fun readFromDatabase(action: SuccessAction<List<Country>>) {
-    if (successHandler == null) successHandler = createSuccessHandler(action)
-    successHandler?.runIfNotAlready {
-      executeWithReadableDatabase { database ->
-        val query = Queries.selectAll(CountriesTable.TABLE_NAME)
-        DatabaseExecutor.executeQuery(database, query, ::transformCursorToList) {
-          successHandler?.dispatchSuccess(it)
-        }
-      }
+  fun readFromDatabaseAsync(onSuccess: (List<Country>) -> Unit) {
+    executeWithReadableDatabase { database ->
+      val query = Queries.selectAll(CountriesTable.TABLE_NAME)
+      DatabaseExecutor.executeQueryAsync(database, query, ::transformCursorToList, onSuccess)
     }
+  }
+  
+  fun readFromDatabase(): List<Country> {
+    val query = Queries.selectAll(CountriesTable.TABLE_NAME)
+    return DatabaseExecutor.executeQuery(DatabaseManager.instance.readableDatabase, query,
+      ::transformCursorToList)
   }
   
   fun saveCountriesInfo(list: List<Country>) {
@@ -82,10 +78,6 @@ class CountriesSQLiteExecutor(threader: Application.Threader) : Releasable {
   
   private fun executeWithWriteableDatabase(block: (SQLiteDatabase) -> Unit) {
     ioWorker.submit { DatabaseManager.instance.writableDatabase.use(block) }
-  }
-  
-  override fun release() {
-    successHandler = null
   }
   
 }

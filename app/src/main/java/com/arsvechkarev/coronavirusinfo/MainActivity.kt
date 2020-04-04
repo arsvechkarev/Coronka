@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
   private val mapFragment: Fragment = MapFragment()
   private val statsFragment: Fragment = StatsFragment()
   
-  private var currentFragment: Fragment = mapFragment
+  private lateinit var currentFragment: Fragment
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -21,10 +21,21 @@ class MainActivity : AppCompatActivity() {
     Application.Values.scaledDensity = resources.displayMetrics.scaledDensity
     setContentView(R.layout.activity_main)
     supportActionBar?.hide()
-    savedInstanceState ?: supportFragmentManager.beginTransaction()
-        .add(R.id.fragment_container, mapFragment)
-        .commit()
+    if (savedInstanceState == null) {
+      supportFragmentManager.beginTransaction()
+          .add(R.id.fragment_container, mapFragment, MapFragment::class.simpleName)
+          .commit()
+      currentFragment = mapFragment
+    } else {
+      val currentFragmentTag = savedInstanceState.getString(KEY_CURRENT_FRAGMENT)
+      currentFragment = supportFragmentManager.findFragmentByTag(currentFragmentTag)!!
+    }
     bottomNavigation.setOnItemClickListener(::handleOnItemClick)
+  }
+  
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    outState.putString(KEY_CURRENT_FRAGMENT, currentFragment::class.simpleName)
   }
   
   private fun handleOnItemClick(id: Int) {
@@ -39,9 +50,14 @@ class MainActivity : AppCompatActivity() {
     if (currentFragment != fragment) {
       val transaction = supportFragmentManager.beginTransaction()
       transaction.hide(currentFragment)
-      if (!fragment.isAdded) transaction.add(R.id.fragment_container, fragment)
+      if (!fragment.isAdded) transaction.add(R.id.fragment_container, fragment,
+        fragment::class.simpleName)
       transaction.show(fragment).commit()
       currentFragment = fragment
     }
+  }
+  
+  companion object {
+    const val KEY_CURRENT_FRAGMENT = "CurrentFragment"
   }
 }

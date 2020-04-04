@@ -1,7 +1,8 @@
 package core.handlers
 
 class SuccessHandler<S>(
-  private val onSuccess: (S) -> Unit
+  private val onSuccess: (S) -> Unit,
+  private val onNothing: () -> Unit
 ) {
   
   @Volatile
@@ -20,16 +21,26 @@ class SuccessHandler<S>(
     onSuccess(result)
     isRunning = false
   }
+  
+  fun dispatchNothing() {
+    onNothing()
+    isRunning = false
+  }
 }
 
 class SuccessHandlerBuilder<S> {
   private lateinit var onSuccess: (S) -> Unit
+  private var onNothing: () -> Unit = {}
   
   fun onSuccess(onSuccess: (S) -> Unit) {
     this.onSuccess = onSuccess
   }
   
-  fun build() = SuccessHandler(onSuccess)
+  fun onNothing(onNothing: () -> Unit) {
+    this.onNothing = onNothing
+  }
+  
+  fun build() = SuccessHandler(onSuccess, onNothing)
 }
 
 typealias SuccessAction<S> = SuccessHandlerBuilder<S>.() -> Unit

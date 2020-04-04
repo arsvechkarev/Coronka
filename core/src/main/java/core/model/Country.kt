@@ -24,7 +24,7 @@ fun List<Country>.print(prefix: String = "country") {
 
 data class DisplayableCountry(
   val name: String,
-  val amount: Int
+  val amount: Number
 ) : DisplayableItem, Comparable<DisplayableCountry> {
   
   var number: Int = 0
@@ -34,6 +34,6 @@ data class DisplayableCountry(
   override val type = TYPE_COUNTRY_INFO
   
   override fun compareTo(other: DisplayableCountry): Int {
-    return amount.compareTo(other.amount)
+    return amount.toFloat().compareTo(other.amount.toFloat())
   }
 }

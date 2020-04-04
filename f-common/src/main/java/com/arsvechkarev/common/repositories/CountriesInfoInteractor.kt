@@ -74,14 +74,6 @@ class CountriesInfoInteractor(
       threader.ioWorker.submit {
         val tableNotEmpty = sqLiteExecutor.isTableNotEmpty()
         log { "isTableNotEmpty = $tableNotEmpty" }
-        if (tableNotEmpty) sqLiteExecutor.readFromDatabase {
-          onSuccess {
-            val dateTimeStr = saver.getString(LAST_UPDATE_TIME)
-            threader.mainThreadWorker.submit {
-              cacheHandler?.dispatchSuccess(Pair(it, DateTime.ofString(dateTimeStr)))
-            }
-          }
-        }
       }
     }
   }

@@ -10,7 +10,8 @@ import com.arsvechkarev.stats.di.StatsModuleInjector
 import com.arsvechkarev.stats.list.HeaderAdapterDelegate.HeaderViewHolder
 import com.arsvechkarev.stats.list.StatsAdapter
 import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
-import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedAll
+import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromCache
+import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromNetwork
 import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
 import core.Loggable
 import core.StateHandle
@@ -45,7 +46,8 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
     stateHandle.handleUpdate { state ->
       when (state) {
         is Loading -> handleLoading()
-        is LoadedAll -> handleLoadedAll(state)
+        is LoadedFromCache -> handleLoadedFromCache(state)
+        is LoadedFromNetwork -> handleLoadedFromNetwork(state)
         is FilteredCountries -> handleFilteringCountries(state)
       }
     }
@@ -56,19 +58,19 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
     layoutLoadingStats.visible()
   }
   
-  private fun handleLoadedAll(state: LoadedAll) {
-    log { "loaded all, from cache = ${state.isFromCache}" }
+  private fun handleLoadedFromCache(state: LoadedFromCache) {
     adapter.submitList(state.items)
-    if (!state.isFromCache) {
-      layoutLoadingStats.invisible()
-    }
+  }
+  
+  private fun handleLoadedFromNetwork(state: LoadedFromNetwork) {
+    layoutLoadingStats.invisible()
+    adapter.submitList(state.items)
   }
   
   private fun handleFilteringCountries(state: FilteredCountries) {
-    log { "filtering" }
     recyclerView!!.post {
-      (recyclerView.findViewHolderForAdapterPosition(0) as HeaderViewHolder).updateChip(
-        state.optionType)
+      val viewHolder = recyclerView.findViewHolderForAdapterPosition(0)
+      (viewHolder as? HeaderViewHolder)?.updateChip(state.optionType)
       adapter.updateFilteredCountries(state.countries)
     }
   }

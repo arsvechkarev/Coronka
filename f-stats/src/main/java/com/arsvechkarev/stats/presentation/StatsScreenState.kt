@@ -8,10 +8,13 @@ sealed class StatsScreenState {
   
   object Loading : StatsScreenState()
   
-  class LoadedAll(
+  class LoadedFromCache(
     val items: List<DisplayableItem>,
-    val isFromCache: Boolean,
     val lastUpdateTime: String
+  ) : StatsScreenState()
+  
+  class LoadedFromNetwork(
+    val items: List<DisplayableItem>
   ) : StatsScreenState()
   
   class FilteredCountries(

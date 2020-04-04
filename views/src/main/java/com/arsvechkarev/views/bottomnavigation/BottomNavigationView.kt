@@ -5,13 +5,15 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.RectF
+import android.graphics.drawable.Drawable
+import android.os.Parcel
+import android.os.Parcelable
 import android.text.BoringLayout
 import android.text.Layout
 import android.text.TextPaint
@@ -26,7 +28,7 @@ import com.arsvechkarev.views.R
 import core.FontManager
 import core.Loggable
 import core.extenstions.dp
-import core.extenstions.toBitmap
+import core.extenstions.i
 
 class BottomNavigationView @JvmOverloads constructor(
   context: Context,
@@ -54,7 +56,7 @@ class BottomNavigationView @JvmOverloads constructor(
   private val iconSize: Float
   private val middlePointsXCoords = FloatArray(drawableIds.size)
   
-  private val icons = ArrayList<Bitmap>(drawableIds.size)
+  private val icons = ArrayList<Drawable>(drawableIds.size)
   
   private val tempRect = RectF()
   private val iconPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -91,7 +93,8 @@ class BottomNavigationView @JvmOverloads constructor(
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.BottomNavigationView)
     currentItemId = attributes.getInteger(R.styleable.BottomNavigationView_defaultItemId, 0)
     iconSize = attributes.getDimension(R.styleable.BottomNavigationView_bitmapIconSize, -1f)
-    iconPaint.color = attributes.getColor(R.styleable.BottomNavigationView_iconColor, Color.BLACK)
+    val color = attributes.getColor(R.styleable.BottomNavigationView_iconColor, Color.BLACK)
+    iconPaint.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     val labelColor = attributes.getColor(R.styleable.BottomNavigationView_labelColor, Color.BLACK)
     labelPaint.colorFilter = PorterDuffColorFilter(labelColor, PorterDuff.Mode.SRC_ATOP)
     labelPaint.textSize =
@@ -111,7 +114,7 @@ class BottomNavigationView @JvmOverloads constructor(
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     var maxIconHeight = -1
     if (iconSize == -1f) {
-      icons.forEach { if (it.height > maxIconHeight) maxIconHeight = it.height }
+      icons.forEach { if (it.intrinsicHeight > maxIconHeight) maxIconHeight = it.intrinsicHeight }
     } else {
       maxIconHeight = iconSize.toInt()
     }
@@ -141,27 +144,29 @@ class BottomNavigationView @JvmOverloads constructor(
       val iconHalfWidth: Int
       val iconHalfHeight: Int
       if (iconSize == -1f) {
-        iconHalfWidth = icon.width / 2
-        iconHalfHeight = icon.height / 2
+        iconHalfWidth = icon.intrinsicWidth / 2
+        iconHalfHeight = icon.intrinsicHeight / 2
       } else {
         iconHalfWidth = (iconSize / 2).toInt()
         iconHalfHeight = (iconSize / 2).toInt()
       }
-      val iconCenterY = paddingTop + verticalInset + icon.height / 2
+      val iconCenterY = paddingTop + verticalInset + iconHalfHeight
       tempRect.set(
         middlePoint - iconHalfWidth, iconCenterY - iconHalfHeight,
         middlePoint + iconHalfWidth, iconCenterY + iconHalfHeight
       )
+      icon.setBounds(tempRect.left.i, tempRect.top.i, tempRect.right.i, tempRect.bottom.i)
       canvas.withIconScaleIfNeeded(i, middlePoint) {
-        drawBitmap(icon, null, tempRect, iconPaint)
+        icon.draw(canvas)
       }
     }
     for (i in texts.indices) {
       canvas.save()
       val middlePoint = middlePointsXCoords[i]
       val layout = labels[i]
+      val iconHeight = if (iconSize == -1f) icons[i].intrinsicHeight else iconSize.toInt()
       canvas.translate(middlePoint - layout.width / 2,
-        paddingTop + verticalInset + icons[i].height + innerInset)
+        paddingTop + verticalInset + iconHeight + innerInset)
       canvas.withTextScaleIfNeeded(i) { layout.draw(canvas) }
       canvas.restore()
     }
@@ -181,6 +186,7 @@ class BottomNavigationView @JvmOverloads constructor(
           }
         }
         if (clickedIconId != currentItemId) {
+          
           startAnimation(clickedIconId)
           itemClickListener(clickedIconId)
         }
@@ -225,7 +231,7 @@ class BottomNavigationView @JvmOverloads constructor(
       formerItemId -> formerItemScale
       else -> 1f
     }
-    val iconHeight = if (iconSize != -1f) iconSize.toInt() else icons[idToCheck].height
+    val iconHeight = if (iconSize != -1f) iconSize.toInt() else icons[idToCheck].intrinsicHeight
     val distanceToTop = paddingTop + verticalInset + iconHeight + innerInset
     val py = height / 2f - distanceToTop
     scale(scale, scale, labels[idToCheck].width / 2f, py)
@@ -236,7 +242,7 @@ class BottomNavigationView @JvmOverloads constructor(
   
   private fun initIcons() {
     for (i in drawableIds.indices) {
-      icons.add(resources.getDrawable(drawableIds[i], context.theme).toBitmap())
+      icons.add(resources.getDrawable(drawableIds[i], context.theme))
     }
   }
   
@@ -247,6 +253,51 @@ class BottomNavigationView @JvmOverloads constructor(
       val layout = BoringLayout(text, labelPaint, labelPaint.measureText(text).toInt(),
         Layout.Alignment.ALIGN_NORMAL, 0f, 0f, metrics, false)
       labels.add(layout)
+    }
+  }
+  
+    override fun onSaveInstanceState(): Parcelable? {
+      val superState = super.onSaveInstanceState() ?: return null
+      val myState = BottomNavigationState(superState)
+      myState.currentItemId = this.currentItemId
+      myState.formerItemId = this.formerItemId
+      return myState
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable) {
+      super.onRestoreInstanceState(state)
+      val savedState = state as BottomNavigationState
+      currentItemId = savedState.currentItemId
+      formerItemId = savedState.formerItemId
+      startAnimation(currentItemId)
+    }
+  
+  class BottomNavigationState : BaseSavedState {
+    var currentItemId = -1
+    var formerItemId = -1
+    
+    constructor(parcelable: Parcelable) : super(parcelable)
+    
+    constructor(parcel: Parcel) : super(parcel) {
+      currentItemId = parcel.readInt()
+      formerItemId = parcel.readInt()
+    }
+    
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+      super.writeToParcel(parcel, flags)
+      parcel.writeInt(currentItemId)
+      parcel.writeInt(formerItemId)
+    }
+    
+    companion object CREATOR : Parcelable.Creator<BottomNavigationState> {
+      
+      override fun createFromParcel(parcel: Parcel): BottomNavigationState {
+        return BottomNavigationState(parcel)
+      }
+      
+      override fun newArray(size: Int): Array<BottomNavigationState?> {
+        return arrayOfNulls(size)
+      }
     }
   }
 }

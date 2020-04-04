@@ -9,6 +9,8 @@ import kotlin.reflect.KClass
  */
 class StateHandle<S : Any> {
   
+  private var value: Any? = null
+  
   internal var newState: S? = null
   
   internal var allowHandle: Boolean = false
@@ -16,6 +18,7 @@ class StateHandle<S : Any> {
   val states = LinkedHashMap<KClass<out S>, S>()
   
   fun <T : S> update(state: T) {
+    value = Any()
     remove(state::class)
     newState = state
     states[state::class] = state
