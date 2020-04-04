@@ -2,8 +2,8 @@ package com.arsvechkarev.map.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.arsvechkarev.common.Repository
-import com.arsvechkarev.common.TimedResult
+import com.arsvechkarev.common.CommonRepository
+import com.arsvechkarev.common.TimedData
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
@@ -15,6 +15,7 @@ import core.NetworkConnection
 import core.StateHandle
 import core.async.AsyncOperations
 import core.doIfContains
+import core.log
 import core.model.Country
 import core.model.GeneralInfo
 import core.releasable.ReleasableViewModel
@@ -25,10 +26,10 @@ import datetime.PATTERN_STANDARD
 class MapViewModel(
   private val threader: Threader,
   private val connection: NetworkConnection,
-  private val repository: Repository
+  private val repository: CommonRepository
 ) : ReleasableViewModel(repository), Loggable {
   
-  override val logTag = "Map_MapViewModel"
+  override val logTag = "Base_Map_ViewModel"
   
   private val cacheOperations = AsyncOperations(2)
   private val networkOperations = AsyncOperations(2)
@@ -54,17 +55,21 @@ class MapViewModel(
     }
     repository.loadGeneralInfo {
       onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
-      onFailure {}
+      onFailure {
+        log(it) { "fail map general" }
+      }
     }
     repository.loadCountriesInfo {
-      onSuccess { networkOperations.addValue(KEY_COUNTRIES, it) }
-      onFailure {}
+      onSuccess { networkOperations.addValue(KEY_COUNTRIES_AND_TIME, it) }
+      onFailure {
+        log(it) { "fail map countries" }
+      }
     }
     networkOperations.onDoneAll { map ->
       threader.backgroundWorker.submit {
-        val generalInfo = map[KEY_GENERAL_INFO] as GeneralInfo
-        val countries = map[KEY_COUNTRIES] as List<Country>
-        val state = LoadedFromNetwork(countries, generalInfo)
+        val generalInfo = map[KEY_GENERAL_INFO] as TimedData<GeneralInfo>
+        val countries = map[KEY_COUNTRIES_AND_TIME] as TimedData<List<Country>>
+        val state = LoadedFromNetwork(countries.data, generalInfo.data)
         threader.mainThreadWorker.submit { _state.update(state) }
       }
     }
@@ -81,13 +86,13 @@ class MapViewModel(
     }
     cacheOperations.onDoneAll {
       threader.backgroundWorker.submit {
-        val generalInfo = it[KEY_GENERAL_INFO] as? GeneralInfo
-        val countriesAndTime = it[KEY_COUNTRIES_AND_TIME] as? TimedResult<List<Country>>
+        val generalInfo = it[KEY_GENERAL_INFO] as? TimedData<GeneralInfo>
+        val countriesAndTime = it[KEY_COUNTRIES_AND_TIME] as? TimedData<List<Country>>
         if (countriesAndTime == null || generalInfo == null) {
           return@submit
         }
         val lastUpdateTime = countriesAndTime.lastUpdateTime.formatted(PATTERN_STANDARD)
-        val state = LoadedFromCache(countriesAndTime.result, generalInfo, lastUpdateTime)
+        val state = LoadedFromCache(countriesAndTime.data, generalInfo.data, lastUpdateTime)
         threader.mainThreadWorker.submit { _state.update(state) }
       }
     }
@@ -110,7 +115,6 @@ class MapViewModel(
   
   companion object {
     private const val KEY_GENERAL_INFO = "generalInfo"
-    private const val KEY_COUNTRIES = "countries"
     private const val KEY_COUNTRIES_AND_TIME = "countriesAndTime"
   }
 }

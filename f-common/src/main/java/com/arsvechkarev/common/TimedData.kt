@@ -2,7 +2,7 @@ package com.arsvechkarev.common
 
 import datetime.DateTime
 
-class TimedResult<T>(
-  val result: T,
+class TimedData<T>(
+  val data: T,
   val lastUpdateTime: DateTime
 )

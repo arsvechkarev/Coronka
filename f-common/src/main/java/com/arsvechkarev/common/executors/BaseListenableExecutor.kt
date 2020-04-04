@@ -1,4 +1,4 @@
-package com.arsvechkarev.common.repositories
+package com.arsvechkarev.common.executors
 
 import core.Application.Threader
 import java.util.concurrent.atomic.AtomicBoolean

@@ -1,27 +1,33 @@
-package com.arsvechkarev.common.repositories
+package com.arsvechkarev.common.executors
 
+import com.arsvechkarev.common.TimedData
 import com.arsvechkarev.network.Networker
+import com.arsvechkarev.storage.Saver
 import core.Loggable
 import core.log
 import core.model.Country
+import datetime.DateTime
 import org.json.JSONArray
 import org.json.JSONObject
 
 class CountriesInfoListenableExecutor(
   private val networker: Networker,
-  private val sqLiteExecutor: CountriesSQLiteExecutor
-) : BaseListenableExecutor<List<Country>>(), Loggable {
+  private val sqLiteExecutor: CountriesSQLiteExecutor,
+  private val saver: Saver
+) : BaseListenableExecutor<TimedData<List<Country>>>(), Loggable {
   
   override val logTag = "CountriesInfoListenableExecutor"
   
-  override fun performCacheRequest(): List<Country>? {
-    if (sqLiteExecutor.isTableNotEmpty()) {
-      return sqLiteExecutor.readFromDatabase()
+  override fun performCacheRequest(): TimedData<List<Country>>? {
+    if (sqLiteExecutor.isTableNotEmpty() && saver.has(COUNTRIES_INFO_LAST_UPDATE_TIME)) {
+      val lastUpdateTime = saver.getString(COUNTRIES_INFO_LAST_UPDATE_TIME)
+      val countries = sqLiteExecutor.readFromDatabase()
+      return TimedData(countries, DateTime.ofString(lastUpdateTime))
     }
     return null
   }
   
-  override fun performNetworkRequest(): List<Country> {
+  override fun performNetworkRequest(): TimedData<List<Country>> {
     val json = networker.performRequest(URL)
     val countriesList = ArrayList<Country>()
     val jsonArray = JSONArray(json)
@@ -46,14 +52,19 @@ class CountriesInfoListenableExecutor(
         countriesList.add(country)
       }
     }
-    return countriesList
+    return TimedData(countriesList, DateTime.current())
   }
   
-  override fun loadToCache(result: List<Country>) {
-    sqLiteExecutor.saveCountriesInfo(result)
+  override fun loadToCache(result: TimedData<List<Country>>) {
+    saver.execute(synchronosly = true) {
+      putString(COUNTRIES_INFO_LAST_UPDATE_TIME, DateTime.current().string())
+    }
+    sqLiteExecutor.saveCountriesInfo(result.data)
   }
   
   companion object {
+    const val SAVER_FILENAME = "CountriesInfoListenableExecutor"
+    private const val COUNTRIES_INFO_LAST_UPDATE_TIME = "countriesInfoLastUpdate"
     private const val URL = "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest?onlyCountries=true"
   }
 }

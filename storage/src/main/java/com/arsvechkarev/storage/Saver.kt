@@ -23,9 +23,13 @@ class Saver(filename: String, context: Context) {
     return sharedPrefs.getString(key, defValue) ?: defValue
   }
   
-  fun execute(block: SharedPreferences.Editor.() -> Unit) {
+  fun execute(synchronosly: Boolean = false, block: SharedPreferences.Editor.() -> Unit) {
     val editor = sharedPrefs.edit()
     block(editor)
-    editor.apply()
+    if (synchronosly) {
+      editor.commit()
+    } else {
+      editor.apply()
+    }
   }
 }

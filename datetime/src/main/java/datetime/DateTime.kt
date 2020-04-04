@@ -27,9 +27,11 @@ class DateTime(
     return SimpleDateFormat(pattern, Locale.US).format(mutableCalendar.time)
   }
   
-  override fun toString(): String {
+  fun string(): String {
     return "$year$DIVIDER$month$DIVIDER$day$DIVIDER$hour$DIVIDER$minute"
   }
+  
+  override fun toString() = string()
   
   companion object {
     

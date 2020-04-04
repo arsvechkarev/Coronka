@@ -1,4 +1,4 @@
-package com.arsvechkarev.common.repositories
+package com.arsvechkarev.common.executors
 
 import android.content.ContentValues
 import android.database.Cursor

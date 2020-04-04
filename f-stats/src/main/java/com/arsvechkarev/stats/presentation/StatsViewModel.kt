@@ -2,8 +2,8 @@ package com.arsvechkarev.stats.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.arsvechkarev.common.Repository
-import com.arsvechkarev.common.TimedResult
+import com.arsvechkarev.common.CommonRepository
+import com.arsvechkarev.common.TimedData
 import com.arsvechkarev.stats.list.OptionType
 import com.arsvechkarev.stats.list.OptionType.CONFIRMED
 import com.arsvechkarev.stats.list.OptionType.DEATHS
@@ -13,11 +13,13 @@ import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromCache
 import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
 import core.Application
+import core.Loggable
 import core.NetworkConnection
 import core.SavedData
 import core.StateHandle
 import core.assertContains
 import core.async.AsyncOperations
+import core.log
 import core.model.Country
 import core.model.DisplayableCountry
 import core.model.GeneralInfo
@@ -31,8 +33,10 @@ import datetime.PATTERN_STANDARD
 class StatsViewModel(
   private val connection: NetworkConnection,
   private val threader: Application.Threader,
-  private val repository: Repository
-) : ReleasableViewModel(repository) {
+  private val repository: CommonRepository
+) : ReleasableViewModel(repository), Loggable {
+  
+  override val logTag = "Base_Stats_ViewModel"
   
   private val cacheOperations = AsyncOperations(2)
   private val networkOperations = AsyncOperations(2)
@@ -64,25 +68,26 @@ class StatsViewModel(
     }
     repository.loadGeneralInfo {
       onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
-      onFailure { }
+      onFailure {
+        log(it) { "fail stats general" }
+      }
     }
     repository.loadCountriesInfo {
       onSuccess {
         networkOperations.addValue(KEY_COUNTRIES, it)
       }
-      onFailure { }
+      onFailure {
+        log(it) { "fail stats countries" }
+      }
     }
     networkOperations.onDoneAll { map ->
       threader.backgroundWorker.submit {
-        val generalInfo = map[KEY_GENERAL_INFO] as? GeneralInfo
-        val countries = map[KEY_COUNTRIES] as? List<Country>
-        if (generalInfo == null || countries == null) {
-          return@submit
-        }
+        val generalInfo = map[KEY_GENERAL_INFO] as TimedData<GeneralInfo>
+        val countries = map[KEY_COUNTRIES] as TimedData<List<Country>>
         savedData.add(countries)
-        val displayableCountries = countries.toDisplayableItems(CONFIRMED)
+        val displayableCountries = countries.data.toDisplayableItems(CONFIRMED)
         val list = ArrayList<DisplayableItem>()
-        list.add(generalInfo)
+        list.add(generalInfo.data)
         list.addAll(displayableCountries)
         val state = StatsScreenState.LoadedFromNetwork(list)
         threader.mainThreadWorker.submit {
@@ -112,16 +117,16 @@ class StatsViewModel(
     }
     cacheOperations.onDoneAll { map ->
       threader.backgroundWorker.submit {
-        val generalInfo = map[KEY_GENERAL_INFO] as? GeneralInfo
-        val countriesAndTime = map[KEY_COUNTRIES_AND_TIME] as? TimedResult<List<Country>>
+        val generalInfo = map[KEY_GENERAL_INFO] as? TimedData<GeneralInfo>
+        val countriesAndTime = map[KEY_COUNTRIES_AND_TIME] as? TimedData<List<Country>>
         if (generalInfo == null || countriesAndTime == null) {
           return@submit
         }
-        savedData.add(countriesAndTime.result)
-        val displayableCountries = countriesAndTime.result.toDisplayableItems(CONFIRMED)
+        savedData.add(countriesAndTime.data)
+        val displayableCountries = countriesAndTime.data.toDisplayableItems(CONFIRMED)
         val lastUpdateTime = countriesAndTime.lastUpdateTime.formatted(PATTERN_STANDARD)
         val list = ArrayList<DisplayableItem>()
-        list.add(generalInfo)
+        list.add(generalInfo.data)
         list.addAll(displayableCountries)
         val state = LoadedFromCache(list, lastUpdateTime)
         threader.mainThreadWorker.submit { _state.update(state, remove = Loading::class) }
