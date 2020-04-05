@@ -7,13 +7,13 @@ import com.arsvechkarev.common.executors.GeneralInfoListenableExecutor
 import com.arsvechkarev.network.NetworkConnectionImpl
 import com.arsvechkarev.network.Networker
 import com.arsvechkarev.storage.Saver
-import core.Application.Threader
+import com.arsvechkarev.storage.dao.CountriesDao
 import core.NetworkConnection
 
 object SingletonsInjector {
   
   private val networker = Networker()
-  private val sqLiteExecutor = CountriesSQLiteExecutor(Threader)
+  private val sqLiteExecutor = CountriesSQLiteExecutor(CountriesDao())
   
   lateinit var generalInfoListenableExecutor: GeneralInfoListenableExecutor
     private set

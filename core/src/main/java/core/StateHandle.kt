@@ -105,14 +105,6 @@ fun <T : S, S : Any> MutableLiveData<StateHandle<S>>.doIfContains(
   updateSelf()
 }
 
-fun <T : S, S : Any> MutableLiveData<StateHandle<S>>.assertContains(
-  stateClass: KClass<T>,
-  action: T.() -> Unit
-) {
-  value!!.doIfContains(stateClass, action)
-  updateSelf()
-}
-
 fun <S : Any> MutableLiveData<StateHandle<S>>.updateAll() {
   value!!.newState = null
   updateSelf()

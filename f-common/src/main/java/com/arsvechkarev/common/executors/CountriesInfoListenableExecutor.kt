@@ -21,7 +21,7 @@ class CountriesInfoListenableExecutor(
   override fun performCacheRequest(): TimedData<List<Country>>? {
     if (sqLiteExecutor.isTableNotEmpty() && saver.has(COUNTRIES_INFO_LAST_UPDATE_TIME)) {
       val lastUpdateTime = saver.getString(COUNTRIES_INFO_LAST_UPDATE_TIME)
-      val countries = sqLiteExecutor.readFromDatabase()
+      val countries = sqLiteExecutor.getCountries()
       return TimedData(countries, DateTime.ofString(lastUpdateTime))
     }
     return null
@@ -40,9 +40,9 @@ class CountriesInfoListenableExecutor(
           && item.has("countrycode")
           && item.has("location")) {
         val country = Country(
-          countryId = i,
-          countryName = item.getString("countryregion"),
-          countryCode = (item.get("countrycode") as JSONObject).getString("iso2"),
+          id = i,
+          name = item.getString("countryregion"),
+          iso2 = (item.get("countrycode") as JSONObject).getString("iso2"),
           confirmed = item.getString("confirmed").toInt(),
           deaths = item.getString("deaths").toInt(),
           recovered = item.getString("recovered").toInt(),
@@ -56,10 +56,14 @@ class CountriesInfoListenableExecutor(
   }
   
   override fun loadToCache(result: TimedData<List<Country>>) {
-    saver.execute(synchronosly = true) {
-      putString(COUNTRIES_INFO_LAST_UPDATE_TIME, DateTime.current().string())
+    threader.ioWorker.submit {
+      saver.execute(synchronosly = true) {
+        putString(COUNTRIES_INFO_LAST_UPDATE_TIME, DateTime.current().string())
+      }
     }
-    sqLiteExecutor.saveCountriesInfo(result.data)
+    threader.ioWorker.submit {
+      sqLiteExecutor.saveCountriesInfo(result.data)
+    }
   }
   
   companion object {

@@ -33,12 +33,14 @@ class GeneralInfoListenableExecutor(
   }
   
   override fun loadToCache(result: TimedData<GeneralInfo>) {
-    val generalInfo = result.data
-    saver.execute(synchronosly = true) {
-      putString(GENERAL_INFO_LAST_UPDATE_TIME, result.lastUpdateTime.string())
-      putInt(CONFIRMED, generalInfo.confirmed)
-      putInt(DEATHS, generalInfo.deaths)
-      putInt(RECOVERED, generalInfo.recovered)
+    threader.ioWorker.submit {
+      val generalInfo = result.data
+      saver.execute(synchronosly = true) {
+        putString(GENERAL_INFO_LAST_UPDATE_TIME, result.lastUpdateTime.string())
+        putInt(CONFIRMED, generalInfo.confirmed)
+        putInt(DEATHS, generalInfo.deaths)
+        putInt(RECOVERED, generalInfo.recovered)
+      }
     }
   }
   

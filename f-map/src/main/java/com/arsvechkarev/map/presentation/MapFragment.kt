@@ -80,7 +80,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleFoundCountry(state: FoundCountry) {
-    textViewCountryName.text = state.country.countryName
+    textViewCountryName.text = state.country.name
     statsView.updateNumbers(
       state.country.confirmed,
       state.country.recovered,

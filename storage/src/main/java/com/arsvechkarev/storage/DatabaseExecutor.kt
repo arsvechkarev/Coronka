@@ -26,23 +26,11 @@ object DatabaseExecutor {
     }
   }
   
-  fun <V> executeQueryAsync(
-    database: SQLiteDatabase,
-    query: String,
-    transformer: (Cursor) -> V,
-    callback: (V) -> Unit
-  ) {
-    val cursor = database.rawQuery(query, null)
-    callback(transformer(cursor))
+  fun executeQuery(database: SQLiteDatabase, query: String): Cursor {
+    return database.rawQuery(query, null)
   }
   
-  fun <V> executeQuery(
-    database: SQLiteDatabase,
-    query: String,
-    transformer: (Cursor) -> V
-  ): V {
-    val cursor = database.rawQuery(query, null)
-    return transformer(cursor)
+  fun readAll(database: SQLiteDatabase, tableName: String): Cursor {
+    return database.rawQuery("SELECT * FROM $tableName", null)
   }
-  
 }

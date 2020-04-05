@@ -8,6 +8,7 @@ import com.arsvechkarev.stats.list.OptionType
 import com.arsvechkarev.stats.list.OptionType.CONFIRMED
 import com.arsvechkarev.stats.list.OptionType.DEATHS
 import com.arsvechkarev.stats.list.OptionType.DEATH_RATE
+import com.arsvechkarev.stats.list.OptionType.PERCENT_BY_COUNTRY
 import com.arsvechkarev.stats.list.OptionType.RECOVERED
 import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromCache
@@ -17,7 +18,6 @@ import core.Loggable
 import core.NetworkConnection
 import core.SavedData
 import core.StateHandle
-import core.assertContains
 import core.async.AsyncOperations
 import core.log
 import core.model.Country
@@ -100,10 +100,8 @@ class StatsViewModel(
   }
   
   fun filterList(optionType: OptionType) {
-    _state.assertContains(LoadedFromCache::class) {
-      val list = savedData.get<List<Country>>().toDisplayableItems(optionType)
-      _state.update(FilteredCountries(optionType, list))
-    }
+    val list = savedData.get<List<Country>>().toDisplayableItems(optionType)
+    _state.update(FilteredCountries(optionType, list))
   }
   
   private fun tryUpdateFromCache() {
@@ -123,11 +121,11 @@ class StatsViewModel(
           return@submit
         }
         savedData.add(countriesAndTime.data)
-        val displayableCountries = countriesAndTime.data.toDisplayableItems(CONFIRMED)
+        val it = countriesAndTime.data.toDisplayableItems(CONFIRMED)
         val lastUpdateTime = countriesAndTime.lastUpdateTime.formatted(PATTERN_STANDARD)
         val list = ArrayList<DisplayableItem>()
         list.add(generalInfo.data)
-        list.addAll(displayableCountries)
+        list.addAll(it)
         val state = LoadedFromCache(list, lastUpdateTime)
         threader.mainThreadWorker.submit { _state.update(state, remove = Loading::class) }
       }
@@ -139,7 +137,7 @@ class StatsViewModel(
     for (i in this.indices) {
       val it = this[i]
       val number = determineNumber(type, it)
-      countries.add(DisplayableCountry(it.countryName, number))
+      countries.add(DisplayableCountry(it.name, number))
     }
     countries.sortDescending()
     for (i in countries.indices) {
@@ -153,7 +151,7 @@ class StatsViewModel(
     DEATHS -> country.deaths
     RECOVERED -> country.recovered
     DEATH_RATE -> country.deaths.toFloat() / country.confirmed.toFloat()
-    else -> TODO()
+    PERCENT_BY_COUNTRY -> 5
   }
   
   companion object {

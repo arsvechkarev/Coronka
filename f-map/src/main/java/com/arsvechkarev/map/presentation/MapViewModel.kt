@@ -102,7 +102,7 @@ class MapViewModel(
     _state.doIfContains(LoadedFromCache::class) {
       _state.update(LoadingCountryInfo)
       threader.backgroundWorker.submit {
-        val country = countriesList.find { it.countryCode == countryCode } ?: return@submit
+        val country = countriesList.find { it.iso2 == countryCode } ?: return@submit
         _state.remove(LoadingCountryInfo::class)
         threader.mainThreadWorker.submit {
           _state.remove(LoadedFromCache::class)

@@ -3,9 +3,9 @@ package core.model
 import core.recycler.DisplayableItem
 
 data class Country(
-  val countryId: Int,
-  val countryName: String,
-  val countryCode: String,
+  val id: Int,
+  val name: String,
+  val iso2: String,
   val confirmed: Int,
   val deaths: Int,
   val recovered: Int,
@@ -16,7 +16,7 @@ data class Country(
 fun List<Country>.print(prefix: String = "country") {
   forEach {
     println(
-      "$prefix -- ${it.countryName}: ${it.countryId}|${it.countryCode}|${it.confirmed}" +
+      "$prefix -- ${it.name}: ${it.id}|${it.iso2}|${it.confirmed}" +
           "|${it.deaths}|${it.recovered}|${it.latitude}|${it.longitude}"
     )
   }

@@ -3,7 +3,7 @@ package com.arsvechkarev.common.executors
 import core.Application.Threader
 import java.util.concurrent.atomic.AtomicBoolean
 
-abstract class BaseListenableExecutor<S>(private val threader: Threader = Threader) {
+abstract class BaseListenableExecutor<S>(val threader: Threader = Threader) {
   
   private val cacheLock = Any()
   private val cacheListeners = ArrayList<CacheListener<S>>()
