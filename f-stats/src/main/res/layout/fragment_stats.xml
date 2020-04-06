@@ -16,6 +16,7 @@
     android:layout_height="@dimen/progress_bar_size"
     android:layout_gravity="start|top"
     android:layout_margin="@dimen/progress_bar_margin"
+    android:visibility="invisible"
     app:color="?colorTextPrimary"/>
 
 </FrameLayout>

@@ -2,7 +2,7 @@ package core.model
 
 import core.recycler.DisplayableItem
 
-data class Country(
+class Country(
   val id: Int,
   val name: String,
   val iso2: String,

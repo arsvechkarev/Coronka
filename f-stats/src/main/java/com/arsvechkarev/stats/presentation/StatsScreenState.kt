@@ -1,7 +1,5 @@
 package com.arsvechkarev.stats.presentation
 
-import com.arsvechkarev.stats.list.OptionType
-import core.model.DisplayableCountry
 import core.recycler.DisplayableItem
 
 sealed class StatsScreenState {
@@ -18,8 +16,7 @@ sealed class StatsScreenState {
   ) : StatsScreenState()
   
   class FilteredCountries(
-    val optionType: OptionType,
-    val countries: List<DisplayableCountry>
+    val list: List<DisplayableItem>
   ) : StatsScreenState()
   
   class Failure(val reason: FailureReason) : StatsScreenState() {

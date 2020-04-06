@@ -4,15 +4,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.stats.R
-import com.arsvechkarev.stats.list.OptionType.CONFIRMED
-import com.arsvechkarev.stats.list.OptionType.DEATHS
-import com.arsvechkarev.stats.list.OptionType.DEATH_RATE
-import com.arsvechkarev.stats.list.OptionType.PERCENT_BY_COUNTRY
-import com.arsvechkarev.stats.list.OptionType.RECOVERED
 import com.arsvechkarev.views.Chip
 import core.Application.Singletons.numberFormatter
 import core.extenstions.inflate
-import core.model.GeneralInfo
+import core.model.DisplayableGeneralInfo
+import core.model.OptionType
+import core.model.OptionType.CONFIRMED
+import core.model.OptionType.DEATHS
+import core.model.OptionType.DEATH_RATE
+import core.model.OptionType.PERCENT_BY_COUNTRY
+import core.model.OptionType.RECOVERED
 import core.recycler.AdapterDelegate
 import core.recycler.DisplayableItem
 import kotlinx.android.synthetic.main.item_header.view.chipConfirmed
@@ -31,7 +32,7 @@ class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : A
   }
   
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: DisplayableItem) {
-    (holder as HeaderViewHolder).bind(item as GeneralInfo)
+    (holder as HeaderViewHolder).bind(item as DisplayableGeneralInfo)
   }
   
   inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,7 +40,6 @@ class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : A
     private var currentChip = itemView.chipConfirmed
     
     init {
-      currentChip.isActive = true
       itemView.chipConfirmed.setOnClickListener { notifyOnClick(it as Chip) }
       itemView.chipRecovered.setOnClickListener { notifyOnClick(it as Chip) }
       itemView.chipDeaths.setOnClickListener { notifyOnClick(it as Chip) }
@@ -47,13 +47,14 @@ class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : A
       itemView.chipPercentByCountry.setOnClickListener { notifyOnClick(it as Chip) }
     }
   
-    fun bind(generalInfo: GeneralInfo) {
+    fun bind(generalInfo: DisplayableGeneralInfo) {
+      updateChip(generalInfo.optionType)
       itemView.textConfirmed.text = numberFormatter.format(generalInfo.confirmed)
       itemView.textRecovered.text = numberFormatter.format(generalInfo.recovered)
       itemView.textDeaths.text = numberFormatter.format(generalInfo.deaths)
     }
   
-    fun updateChip(optionType: OptionType) {
+    private fun updateChip(optionType: OptionType) {
       itemView.chipConfirmed.isActive = false
       itemView.chipRecovered.isActive = false
       itemView.chipDeaths.isActive = false

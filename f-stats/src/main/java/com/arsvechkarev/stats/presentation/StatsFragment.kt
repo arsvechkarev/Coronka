@@ -7,14 +7,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.stats.di.StatsModuleInjector
-import com.arsvechkarev.stats.list.HeaderAdapterDelegate.HeaderViewHolder
 import com.arsvechkarev.stats.list.StatsAdapter
 import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromCache
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromNetwork
 import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
 import core.Loggable
-import core.StateHandle
 import core.extenstions.invisible
 import core.extenstions.visible
 import core.log
@@ -42,14 +40,12 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
     viewModel.startInitialLoading(savedInstanceState != null)
   }
   
-  private fun handleStateChanged(stateHandle: StateHandle<StatsScreenState>) {
-    stateHandle.handleUpdate { state ->
-      when (state) {
-        is Loading -> handleLoading()
-        is LoadedFromCache -> handleLoadedFromCache(state)
-        is LoadedFromNetwork -> handleLoadedFromNetwork(state)
-        is FilteredCountries -> handleFilteringCountries(state)
-      }
+  private fun handleStateChanged(state: StatsScreenState) {
+    when (state) {
+      is Loading -> handleLoading()
+      is LoadedFromCache -> handleLoadedFromCache(state)
+      is LoadedFromNetwork -> handleLoadedFromNetwork(state)
+      is FilteredCountries -> handleFilteringCountries(state)
     }
   }
   
@@ -68,10 +64,6 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   }
   
   private fun handleFilteringCountries(state: FilteredCountries) {
-    recyclerView!!.post {
-      val viewHolder = recyclerView.findViewHolderForAdapterPosition(0)
-      (viewHolder as? HeaderViewHolder)?.updateChip(state.optionType)
-      adapter.updateFilteredCountries(state.countries)
-    }
+    adapter.submitList(state.list)
   }
 }
