@@ -186,7 +186,7 @@ class BottomSheet @JvmOverloads constructor(
         val yVelocity = velocityTracker!!.yVelocity
         if (abs(yVelocity) / maxFlingVelocity > FLING_VELOCITY_THRESHOLD) {
           currentState = HIDDEN
-          val timeInSeconds = (height - slideView.top) / yVelocity
+          val timeInSeconds = abs((height - slideView.top) / yVelocity)
           slideViewAnimator.duration = (timeInSeconds * 1000).toLong()
           slideViewAnimator.setIntValues(slideView.top, height)
           slideViewAnimator.start()

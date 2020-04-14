@@ -19,6 +19,8 @@ import core.Loggable
 import core.extenstions.invisible
 import core.extenstions.visible
 import core.log
+import core.state.StateHandle
+import core.state.isFresh
 import kotlinx.android.synthetic.main.fragment_map.bottomSheet
 import kotlinx.android.synthetic.main.fragment_map.layoutLoadingMap
 import kotlinx.android.synthetic.main.fragment_map.statsView
@@ -48,13 +50,15 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     viewModel.startInitialLoading(savedInstanceState != null)
   }
   
-  private fun handleStateChanged(state: MapScreenState) {
-    when (state) {
-      is Loading -> handleStartLoading()
-      is LoadedFromCache -> handleCountriesLoadedFromCache(state)
-      is LoadedFromNetwork -> handleCountriesLoadedFromNetwork(state)
-      is FoundCountry -> handleFoundCountry(state)
-      is Failure -> handleFailure(state)
+  private fun handleStateChanged(stateHandle: StateHandle<MapScreenState>) {
+    stateHandle.handleUpdate { state ->
+      when (state) {
+        is Loading -> handleStartLoading()
+        is LoadedFromCache -> handleCountriesLoadedFromCache(state)
+        is LoadedFromNetwork -> handleCountriesLoadedFromNetwork(state)
+        is FoundCountry -> handleFoundCountry(state)
+        is Failure -> handleFailure(state)
+      }
     }
   }
   
@@ -67,18 +71,23 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
   private fun handleCountriesLoadedFromNetwork(state: LoadedFromNetwork) {
     layoutLoadingMap.invisible()
-    mapDelegate.drawCountriesMarksIfNeeded(state.countries, state.generalInfo)
+    val fresh = state.isFresh
+    println("qwerty:fresh = $fresh")
+    mapDelegate.drawCountries(state.countries, state.generalInfo)
   }
   
   private fun handleFoundCountry(state: FoundCountry) {
-    mapDelegate.drawCountriesMarksIfNeeded(state.countries, state.generalInfo)
+    if (state.isFresh) {
+      bottomSheet.show()
+    } else {
+      mapDelegate.drawCountries(state.countries, state.generalInfo)
+    }
     textViewCountryName.text = state.country.name
     statsView.updateNumbers(
       state.country.confirmed,
       state.country.recovered,
       state.country.deaths
     )
-    bottomSheet.show()
   }
   
   private fun handleFailure(state: Failure) {

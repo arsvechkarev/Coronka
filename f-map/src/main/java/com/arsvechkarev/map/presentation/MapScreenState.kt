@@ -2,8 +2,9 @@ package com.arsvechkarev.map.presentation
 
 import core.model.Country
 import core.model.GeneralInfo
+import core.state.BaseScreenState
 
-sealed class MapScreenState {
+sealed class MapScreenState : BaseScreenState() {
   
   object Loading : MapScreenState()
   

@@ -16,6 +16,10 @@ import core.log
 import core.model.Country
 import core.model.GeneralInfo
 import core.releasable.ReleasableViewModel
+import core.state.StateHandle
+import core.state.currentValue
+import core.state.update
+import core.state.updateSelf
 import datetime.PATTERN_STANDARD
 
 class MapViewModel(
@@ -29,8 +33,8 @@ class MapViewModel(
   private val cacheOperations = AsyncOperations(2)
   private val networkOperations = AsyncOperations(2)
   
-  private val _state = MutableLiveData<MapScreenState>()
-  val state: LiveData<MapScreenState>
+  private val _state = MutableLiveData<StateHandle<MapScreenState>>(StateHandle())
+  val state: LiveData<StateHandle<MapScreenState>>
     get() = _state
   
   init {
@@ -38,15 +42,18 @@ class MapViewModel(
   }
   
   fun startInitialLoading(isRecreated: Boolean) {
-    if (isRecreated) return
-    _state.value = Loading
+    if (isRecreated) {
+      _state.updateSelf(isRecreated = true)
+      return
+    }
+    _state.update(Loading)
     tryUpdateFromCache()
     updateFromNetwork(notifyLoading = false)
   }
   
   fun updateFromNetwork(notifyLoading: Boolean = true) {
     if (notifyLoading) {
-      _state.value = Loading
+      _state.update(Loading)
     }
     repository.loadGeneralInfo {
       onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
@@ -65,17 +72,17 @@ class MapViewModel(
         val generalInfo = map[KEY_GENERAL_INFO] as TimedData<GeneralInfo>
         val countries = map[KEY_COUNTRIES_AND_TIME] as TimedData<List<Country>>
         threader.mainThreadWorker.submit {
-          _state.value = LoadedFromNetwork(countries.data, generalInfo.data)
+          _state.update(LoadedFromNetwork(countries.data, generalInfo.data))
         }
       }
     }
   }
   
   fun findCountryByCode(countryCode: String) {
-    when (val currentState = _state.value) {
+    when (val currentState = _state.currentValue) {
       is LoadedFromCache -> performCountrySearch(currentState.countries,
         currentState.generalInfo, countryCode)
-       is LoadedFromNetwork -> performCountrySearch(currentState.countries,
+      is LoadedFromNetwork -> performCountrySearch(currentState.countries,
         currentState.generalInfo, countryCode)
       is FoundCountry -> performCountrySearch(currentState.countries,
         currentState.generalInfo, countryCode)
@@ -100,7 +107,7 @@ class MapViewModel(
         }
         val lastUpdateTime = countriesAndTime.lastUpdateTime.formatted(PATTERN_STANDARD)
         threader.mainThreadWorker.submit {
-          _state.value = LoadedFromCache(countriesAndTime.data, generalInfo.data, lastUpdateTime)
+          _state.update(LoadedFromCache(countriesAndTime.data, generalInfo.data, lastUpdateTime))
         }
       }
     }
@@ -113,7 +120,7 @@ class MapViewModel(
   ) {
     val country = countries.find { it.iso2 == countryCode } ?: return
     threader.mainThreadWorker.submit {
-      _state.value = FoundCountry(countries, generalInfo, country)
+      _state.update(FoundCountry(countries, generalInfo, country))
     }
   }
   

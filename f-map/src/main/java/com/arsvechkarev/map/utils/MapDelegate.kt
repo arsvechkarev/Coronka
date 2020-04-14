@@ -21,7 +21,6 @@ class MapDelegate {
   private lateinit var onCountrySelected: (String) -> Unit
   private lateinit var threader: Application.Threader
   
-  private var markersDrawn: Boolean = false
   private var countries: List<Country> = ArrayList()
   private val markers = ArrayList<Marker>()
   private var currentCountryCode = ""
@@ -58,9 +57,7 @@ class MapDelegate {
     }
   }
   
-  fun drawCountriesMarksIfNeeded(countries: List<Country>, generalInfo: GeneralInfo) {
-    if (markersDrawn) return
-    markersDrawn = true
+  fun drawCountries(countries: List<Country>, generalInfo: GeneralInfo) {
     threader.backgroundWorker.submit {
       this.countries = countries
       markers.clear()
