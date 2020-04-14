@@ -39,8 +39,11 @@
     <attr name="color" format="color"/>
   </declare-styleable>
 
-  <declare-styleable name="SimpleBottomSheet">
-    <attr name="cornerRadius" format="dimension"/>
-    <attr name="bottomSheet_backgroundColor" format="color"/>
+  <declare-styleable name="BottomSheet">
+    <attr name="defaultState">
+      <enum name="shown" value="0" />
+      <enum name="hidden" value="1" />
+    </attr>
   </declare-styleable>
+
 </resources>

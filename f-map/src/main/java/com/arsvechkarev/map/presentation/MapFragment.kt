@@ -12,12 +12,10 @@ import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
 import com.arsvechkarev.map.presentation.MapScreenState.Loading
-import com.arsvechkarev.map.presentation.MapScreenState.LoadingCountryInfo
 import com.arsvechkarev.map.utils.MapDelegate
-import core.Application
+import core.Application.Threader
 import core.FontManager
 import core.Loggable
-import core.StateHandle
 import core.extenstions.invisible
 import core.extenstions.visible
 import core.log
@@ -37,8 +35,8 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     this.savedInstanceState = savedInstanceState
-    mapDelegate.init(requireContext(), childFragmentManager,
-      ::onMapClicked, ::onCountrySelected, Application.Threader)
+    mapDelegate.init(requireContext(), childFragmentManager, ::onCountrySelected, Threader,
+      savedInstanceState)
     viewModel = MapModuleInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
     textViewCountryName.typeface = FontManager.rubik
@@ -50,16 +48,13 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     viewModel.startInitialLoading(savedInstanceState != null)
   }
   
-  private fun handleStateChanged(stateHandle: StateHandle<MapScreenState>) {
-    stateHandle.handleUpdate { state ->
-      when (state) {
-        is Loading -> handleStartLoading()
-        is LoadingCountryInfo -> handleStartLoadingCountryInfo()
-        is LoadedFromCache -> handleCountriesLoadedFromCache(state)
-        is LoadedFromNetwork -> handleCountriesLoadedFromNetwork(state)
-        is FoundCountry -> handleFoundCountry(state)
-        is Failure -> handleFailure(state)
-      }
+  private fun handleStateChanged(state: MapScreenState) {
+    when (state) {
+      is Loading -> handleStartLoading()
+      is LoadedFromCache -> handleCountriesLoadedFromCache(state)
+      is LoadedFromNetwork -> handleCountriesLoadedFromNetwork(state)
+      is FoundCountry -> handleFoundCountry(state)
+      is Failure -> handleFailure(state)
     }
   }
   
@@ -68,18 +63,15 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleCountriesLoadedFromCache(state: LoadedFromCache) {
-    mapDelegate.drawCountriesMarks(state.generalInfo, state.countriesList)
   }
   
   private fun handleCountriesLoadedFromNetwork(state: LoadedFromNetwork) {
     layoutLoadingMap.invisible()
-    mapDelegate.drawCountriesMarks(state.generalInfo, state.countriesList)
-  }
-  
-  private fun handleStartLoadingCountryInfo() {
+    mapDelegate.drawCountriesMarksIfNeeded(state.countries, state.generalInfo)
   }
   
   private fun handleFoundCountry(state: FoundCountry) {
+    mapDelegate.drawCountriesMarksIfNeeded(state.countries, state.generalInfo)
     textViewCountryName.text = state.country.name
     statsView.updateNumbers(
       state.country.confirmed,
@@ -93,10 +85,6 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     layoutLoadingMap.invisible()
     Toast.makeText(context, "Failure: ${state.reason}", Toast.LENGTH_SHORT).show()
     log { "error, reason = ${state.reason}" }
-  }
-  
-  private fun onMapClicked() {
-  
   }
   
   private fun onCountrySelected(countryCode: String) {

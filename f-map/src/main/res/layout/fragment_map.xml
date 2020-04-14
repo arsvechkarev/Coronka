@@ -1,73 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.arsvechkarev.views.BottomSheet xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/frameLayoutRoot"
+  android:id="@+id/bottomSheet"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="?attr/colorBackground">
+  android:background="?attr/colorBackground"
+  app:defaultState="hidden">
 
   <FrameLayout
-    android:id="@+id/fragment_map_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="wrap_content">
 
-  <LinearLayout
-    android:id="@+id/layoutLoadingMap"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:visibility="invisible">
-
-    <com.arsvechkarev.views.ProgressBar
-      android:layout_width="@dimen/progress_bar_size"
-      android:layout_height="@dimen/progress_bar_size"
-      android:layout_margin="@dimen/loading_layout_margin"
-      app:color="?colorTextPrimary"/>
-
-    <com.arsvechkarev.views.FontTextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/loading_layout_margin"
-      android:text="@string/text_loading_map"
-      android:textColor="?colorTextPrimary"
-      android:textSize="@dimen/text_h3"/>
-
-  </LinearLayout>
-
-  <com.arsvechkarev.views.bottomsheet.SimpleBottomSheet
-    android:id="@+id/bottomSheet"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    app:bottomSheet_backgroundColor="?colorBackground">
+    <FrameLayout
+      android:id="@+id/fragment_map_root"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 
     <LinearLayout
-      android:id="@+id/layoutCountryInfo"
+      android:id="@+id/layoutLoadingMap"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginVertical="@dimen/layout_country_info_m_vertical"
-      android:orientation="vertical">
+      android:gravity="center"
+      android:visibility="invisible">
 
-      <TextView
-        android:id="@+id/textViewCountryName"
-        android:layout_width="match_parent"
+      <com.arsvechkarev.views.ProgressBar
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"
+        android:layout_margin="@dimen/loading_layout_margin"
+        app:color="?colorTextPrimary"/>
+
+      <com.arsvechkarev.views.FontTextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_country_name_margin"
-        android:gravity="center"
+        android:layout_margin="@dimen/loading_layout_margin"
+        android:text="@string/text_loading_map"
         android:textColor="?colorTextPrimary"
-        android:textSize="@dimen/text_h1"/>
-
-      <com.arsvechkarev.views.BigStatsView
-        android:id="@+id/statsView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/big_stats_view_padding"
-        android:textSize="@dimen/text_h3"
-        app:innerLinePadding="@dimen/big_stats_view_line_padding"
-        app:innerSidePadding="@dimen/big_stats_view_side_padding"/>
+        android:textSize="@dimen/text_h3"/>
 
     </LinearLayout>
 
-  </com.arsvechkarev.views.bottomsheet.SimpleBottomSheet>
+  </FrameLayout>
 
-</FrameLayout>
+  <LinearLayout
+    android:id="@+id/layoutCountryInfo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_simple_bottom_sheet"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/textViewCountryName"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/text_country_name_margin"
+      android:gravity="center"
+      android:textColor="?colorTextPrimary"
+      android:textSize="@dimen/text_h1"/>
+
+    <com.arsvechkarev.views.BigStatsView
+      android:id="@+id/statsView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/big_stats_view_padding"
+      android:textSize="@dimen/text_h3"
+      app:innerLinePadding="@dimen/big_stats_view_line_padding"
+      app:innerSidePadding="@dimen/big_stats_view_side_padding"/>
+
+  </LinearLayout>
+
+</com.arsvechkarev.views.BottomSheet>

@@ -15,7 +15,7 @@ object Colors {
   
   fun setup(context: Context) {
     confirmedColor = ContextCompat.getColor(context, R.color.dark_confirmed)
-    deathsColor = ContextCompat.getColor(context, R.color.dark_deaths)
+    deathsColor = ContextCompat.getColor(context, R.color.dark_deaths_2)
     recoveredColor = ContextCompat.getColor(context, R.color.dark_recovered)
   }
 }

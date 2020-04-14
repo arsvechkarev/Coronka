@@ -5,6 +5,7 @@ ext {
   lifecycle_version = '2.1.0'
   firebaseDatabase_version = '19.2.1'
   googleMaps_version = "17.0.0"
+  googleMapsUtils_version = "1.0.2"
   recyclerView_version = "1.1.0"
 
   applicationDependencies = [
@@ -12,6 +13,7 @@ ext {
       appCompat          : "androidx.appcompat:appcompat:$appCompat_version",
       lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
       googleMaps         : "com.google.android.gms:play-services-maps:$googleMaps_version",
+      googleMapsUtils    : "com.google.maps.android:android-maps-utils:$googleMapsUtils_version",
       recyclerView       : "androidx.recyclerview:recyclerview:$recyclerView_version"
   ]
 

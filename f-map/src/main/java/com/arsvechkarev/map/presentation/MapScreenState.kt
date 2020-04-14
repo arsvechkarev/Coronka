@@ -7,20 +7,22 @@ sealed class MapScreenState {
   
   object Loading : MapScreenState()
   
-  object LoadingCountryInfo : MapScreenState()
-  
   class LoadedFromCache(
-    val countriesList: List<Country>,
+    val countries: List<Country>,
     val generalInfo: GeneralInfo,
     val lastUpdateTime: String
   ) : MapScreenState()
   
   class LoadedFromNetwork(
-    val countriesList: List<Country>,
+    val countries: List<Country>,
     val generalInfo: GeneralInfo
   ) : MapScreenState()
   
-  class FoundCountry(val country: Country) : MapScreenState()
+  class FoundCountry(
+    val countries: List<Country>,
+    val generalInfo: GeneralInfo,
+    val country: Country
+  ) : MapScreenState()
   
   class Failure(val reason: FailureReason) : MapScreenState() {
     enum class FailureReason { NO_CONNECTION, TIMEOUT, UNKNOWN }

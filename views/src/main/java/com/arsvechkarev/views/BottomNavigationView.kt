@@ -1,4 +1,4 @@
-package com.arsvechkarev.views.bottomnavigation
+package com.arsvechkarev.views
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -24,7 +24,6 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
-import com.arsvechkarev.views.R
 import core.FontManager
 import core.Loggable
 import core.extenstions.dp
@@ -258,7 +257,8 @@ class BottomNavigationView @JvmOverloads constructor(
   
     override fun onSaveInstanceState(): Parcelable? {
       val superState = super.onSaveInstanceState() ?: return null
-      val myState = BottomNavigationState(superState)
+      val myState = BottomNavigationState(
+        superState)
       myState.currentItemId = this.currentItemId
       myState.formerItemId = this.formerItemId
       return myState
@@ -292,7 +292,8 @@ class BottomNavigationView @JvmOverloads constructor(
     companion object CREATOR : Parcelable.Creator<BottomNavigationState> {
       
       override fun createFromParcel(parcel: Parcel): BottomNavigationState {
-        return BottomNavigationState(parcel)
+        return BottomNavigationState(
+          parcel)
       }
       
       override fun newArray(size: Int): Array<BottomNavigationState?> {
