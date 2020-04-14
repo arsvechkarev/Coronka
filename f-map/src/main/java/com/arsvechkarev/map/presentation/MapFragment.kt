@@ -13,7 +13,6 @@ import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
 import com.arsvechkarev.map.presentation.MapScreenState.Loading
 import com.arsvechkarev.map.utils.MapDelegate
-import core.Application.Threader
 import core.FontManager
 import core.Loggable
 import core.extenstions.invisible
@@ -37,8 +36,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     this.savedInstanceState = savedInstanceState
-    mapDelegate.init(requireContext(), childFragmentManager, ::onCountrySelected, Threader,
-      savedInstanceState)
+    mapDelegate.init(requireContext(), childFragmentManager, ::onCountrySelected)
     viewModel = MapModuleInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
     textViewCountryName.typeface = FontManager.rubik

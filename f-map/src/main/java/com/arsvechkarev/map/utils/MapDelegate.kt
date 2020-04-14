@@ -1,7 +1,6 @@
 package com.arsvechkarev.map.utils
 
 import android.content.Context
-import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.presentation.MapHolder
@@ -16,25 +15,23 @@ import core.model.GeneralInfo
 class MapDelegate {
   
   private val mapHolder = MapHolder()
+  private val threader = Application.Threader
   private val creator = CountriesBitmapCreator()
   private lateinit var context: Context
   private lateinit var onCountrySelected: (String) -> Unit
-  private lateinit var threader: Application.Threader
   
   private var countries: List<Country> = ArrayList()
+  private var currentCountry: Country? = null
+  private var currentMarker: Marker? = null
   private val markers = ArrayList<Marker>()
-  private var currentCountryCode = ""
   
   fun init(
     context: Context,
     fragmentManager: FragmentManager,
-    onCountrySelected: (String) -> Unit,
-    threader: Application.Threader,
-    savedInstanceState: Bundle?
+    onCountrySelected: (String) -> Unit
   ) {
     this.context = context
     this.onCountrySelected = onCountrySelected
-    this.threader = threader
     val supportMapFragment = SupportMapFragment()
     fragmentManager.beginTransaction()
         .add(R.id.fragment_map_root, supportMapFragment)
@@ -50,8 +47,12 @@ class MapDelegate {
       uiSettings.isRotateGesturesEnabled = false
       uiSettings.isMyLocationButtonEnabled = false
       setMaxZoomPreference(4.5f)
-      setOnMarkerClickListener {
-        onCountrySelected(countries[it.tag as Int].iso2)
+      setOnMarkerClickListener { newMarker ->
+        val newCountry = countries[newMarker.tag as Int]
+        creator.drawSelection(newMarker, currentMarker, newCountry, currentCountry)
+        currentMarker = newMarker
+        currentCountry = newCountry
+        onCountrySelected(newCountry.iso2)
         return@setOnMarkerClickListener false
       }
     }
@@ -61,7 +62,7 @@ class MapDelegate {
     threader.backgroundWorker.submit {
       this.countries = countries
       markers.clear()
-      val options = creator.create(generalInfo, countries)
+      val options = creator.createMarkers(generalInfo, countries)
       threader.mainThreadWorker.submit {
         mapHolder.addAction { googleMap ->
           for (i in options.indices) {
