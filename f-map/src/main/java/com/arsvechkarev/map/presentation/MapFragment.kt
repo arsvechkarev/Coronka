@@ -8,6 +8,9 @@ import androidx.lifecycle.Observer
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
 import com.arsvechkarev.map.presentation.MapScreenState.Failure
+import com.arsvechkarev.map.presentation.MapScreenState.Failure.FailureReason.NO_CONNECTION
+import com.arsvechkarev.map.presentation.MapScreenState.Failure.FailureReason.TIMEOUT
+import com.arsvechkarev.map.presentation.MapScreenState.Failure.FailureReason.UNKNOWN
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
@@ -21,8 +24,11 @@ import core.log
 import core.state.StateHandle
 import core.state.isFresh
 import kotlinx.android.synthetic.main.fragment_map.bottomSheet
+import kotlinx.android.synthetic.main.fragment_map.layoutFailure
 import kotlinx.android.synthetic.main.fragment_map.layoutLoadingMap
 import kotlinx.android.synthetic.main.fragment_map.statsView
+import kotlinx.android.synthetic.main.fragment_map.textFailureReason
+import kotlinx.android.synthetic.main.fragment_map.textRetry
 import kotlinx.android.synthetic.main.fragment_map.textViewCountryName
 
 class MapFragment : Fragment(R.layout.fragment_map), Loggable {
@@ -41,6 +47,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     viewModel.state.observe(this, Observer(this::handleStateChanged))
     textViewCountryName.typeface = FontManager.rubik
     bottomSheet.setOnClickListener { bottomSheet.hide() }
+    textRetry.setOnClickListener { viewModel.updateFromNetwork() }
   }
   
   override fun onResume() {
@@ -61,6 +68,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleStartLoading() {
+    layoutFailure.invisible()
     layoutLoadingMap.visible()
   }
   
@@ -89,6 +97,13 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleFailure(state: Failure) {
+    val message = when (state.reason) {
+      NO_CONNECTION -> "No connection"
+      TIMEOUT -> "Too slow connection"
+      UNKNOWN -> "Unknown error"
+    }
+    textFailureReason.text = message
+    layoutFailure.visible()
     layoutLoadingMap.invisible()
     Toast.makeText(context, "Failure: ${state.reason}", Toast.LENGTH_SHORT).show()
     log { "error, reason = ${state.reason}" }

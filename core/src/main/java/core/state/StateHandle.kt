@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 
 class StateHandle<T : BaseScreenState> {
   
-  internal var currentValue: T? = null
+  var currentValue: T? = null
+    internal set
+  
   internal var allowUpdate = false
   
   fun update(value: T) {

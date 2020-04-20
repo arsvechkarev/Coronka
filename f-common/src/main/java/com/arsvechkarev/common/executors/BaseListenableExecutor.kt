@@ -1,9 +1,13 @@
 package com.arsvechkarev.common.executors
 
 import core.Application.Threader
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
-abstract class BaseListenableExecutor<S>(val threader: Threader = Threader) {
+abstract class BaseListenableExecutor<S>(
+  val threader: Threader = Threader,
+  private val timeoutSeconds: Long = 5
+) {
   
   private val cacheLock = Any()
   private val cacheListeners = ArrayList<CacheListener<S>>()
@@ -59,8 +63,8 @@ abstract class BaseListenableExecutor<S>(val threader: Threader = Threader) {
       return
     }
     isLoadingFromNetwork.set(true)
-    try {
-      threader.ioWorker.submit {
+    threader.backgroundWorker.submit {
+      val future = threader.ioWorker.submit {
         val result = performNetworkRequest()
         loadToCache(result)
         synchronized(networkLock) {
@@ -70,13 +74,17 @@ abstract class BaseListenableExecutor<S>(val threader: Threader = Threader) {
             isLoadingFromNetwork.set(false)
           }
         }
-      }
-    } catch (e: Throwable) {
-      synchronized(networkLock) {
-        threader.mainThreadWorker.submit {
-          networkListeners.forEach { it.onFailure(e) }
-          networkListeners.clear()
-          isLoadingFromNetwork.set(false)
+      }!!
+      try {
+        future.get(timeoutSeconds, TimeUnit.SECONDS)
+      } catch (e: Throwable) {
+        future.cancel(true)
+        synchronized(networkLock) {
+          threader.mainThreadWorker.submit {
+            networkListeners.forEach { it.onFailure(e) }
+            networkListeners.clear()
+            isLoadingFromNetwork.set(false)
+          }
         }
       }
     }

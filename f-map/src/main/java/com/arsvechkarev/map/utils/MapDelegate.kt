@@ -16,7 +16,7 @@ class MapDelegate {
   
   private val mapHolder = MapHolder()
   private val threader = Application.Threader
-  private val creator = CountriesBitmapCreator()
+  private val creator = CountriesMarkersDrawer()
   private lateinit var context: Context
   private lateinit var onCountrySelected: (String) -> Unit
   

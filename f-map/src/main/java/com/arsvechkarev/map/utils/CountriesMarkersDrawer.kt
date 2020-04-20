@@ -10,9 +10,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import core.model.Country
 import core.model.GeneralInfo
 import kotlin.math.max
-import kotlin.random.Random
 
-class CountriesBitmapCreator {
+class CountriesMarkersDrawer {
   
   private val countriesToSizes = HashMap<Int, Int>()
   
@@ -26,11 +25,13 @@ class CountriesBitmapCreator {
   private val tempCanvas = Canvas()
   
   fun createMarkers(generalInfo: GeneralInfo, countries: List<Country>): List<MarkerOptions> {
+    val countryWithMaxCases = countries.maxBy { it.confirmed + it.deaths + it.recovered }!!
+    val mostCases = with(countryWithMaxCases) { confirmed + deaths + recovered }
     val generalInfoSum = generalInfo.confirmed + generalInfo.recovered + generalInfo.deaths
     val optionsList = ArrayList<MarkerOptions>(countries.size)
     for (i in countries.indices) {
       val country = countries[i]
-      val bitmap = createMarkerBitmap(country, generalInfoSum)
+      val bitmap = createMarkerBitmap(country, generalInfoSum, mostCases)
       val options = MarkerOptions()
           .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
           .position(LatLng(country.latitude, country.longitude))
@@ -48,13 +49,14 @@ class CountriesBitmapCreator {
   
   private fun createMarkerBitmap(
     country: Country,
-    totalSum: Int
+    totalSum: Int,
+    maxCasesOfCountry: Int
   ): Bitmap {
     val confirmed = country.confirmed
     val recovered = country.recovered
     val deaths = country.deaths
     val countryTotal = confirmed + recovered + deaths
-    val bitmapSize = 50 + Random.nextInt(200)
+    val bitmapSize = transformCasesToSize(countryTotal, maxCasesOfCountry)
     countriesToSizes[country.id] = bitmapSize
     val bitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888)
     tempCanvas.setBitmap(bitmap)
@@ -80,7 +82,12 @@ class CountriesBitmapCreator {
       strokePaint)
   }
   
+  private fun transformCasesToSize(countryCases: Int, mostCases: Int): Int {
+    return ((-MAX_BITMAP_SIZE * countryCases) / mostCases) + MAX_BITMAP_SIZE + 1
+  }
+  
   companion object {
+    private const val MAX_BITMAP_SIZE = 200
     private const val DEFAULT_CIRCLE_COLOR = 0xAAFF8CA1.toInt()
     private const val DEFAULT_STROKE_COLOR = 0x55FF0000
     private const val SELECTED_CIRCLE_COLOR = 0xAA0000FF.toInt()

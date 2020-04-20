@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.arsvechkarev.common.CommonRepository
 import com.arsvechkarev.common.TimedData
+import com.arsvechkarev.map.presentation.MapScreenState.Failure
+import com.arsvechkarev.map.presentation.MapScreenState.Failure.Companion.toReason
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
@@ -47,7 +49,7 @@ class MapViewModel(
       return
     }
     _state.update(Loading)
-    tryUpdateFromCache()
+    //    tryUpdateFromCache()
     updateFromNetwork(notifyLoading = false)
   }
   
@@ -59,12 +61,13 @@ class MapViewModel(
       onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
       onFailure {
         log(it) { "fail map general" }
+        notifyFailureIfNeeded(it)
       }
     }
     repository.loadCountriesInfo {
       onSuccess { networkOperations.addValue(KEY_COUNTRIES_AND_TIME, it) }
       onFailure {
-        log(it) { "fail map countries" }
+        log(it) { "fail map countries + ${it.message}" }
       }
     }
     networkOperations.onDoneAll { map ->
@@ -122,6 +125,17 @@ class MapViewModel(
     threader.mainThreadWorker.submit {
       _state.update(FoundCountry(countries, generalInfo, country))
     }
+  }
+  
+  private fun notifyFailureIfNeeded(error: Throwable) {
+    val currentValue = _state.value?.currentValue
+    val reason = error.toReason()
+    if (currentValue != null
+        && currentValue is Failure
+        && currentValue.reason == reason) {
+      return
+    }
+    _state.update(Failure(reason))
   }
   
   companion object {
