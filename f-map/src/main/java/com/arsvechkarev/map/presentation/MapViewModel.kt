@@ -3,7 +3,6 @@ package com.arsvechkarev.map.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.arsvechkarev.common.CommonRepository
-import com.arsvechkarev.common.TimedData
 import com.arsvechkarev.map.presentation.MapScreenState.Failure
 import com.arsvechkarev.map.presentation.MapScreenState.Failure.Companion.toReason
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
@@ -13,10 +12,8 @@ import com.arsvechkarev.map.presentation.MapScreenState.Loading
 import core.Application.Threader
 import core.Loggable
 import core.NetworkConnection
-import core.async.AsyncOperations
 import core.log
 import core.model.Country
-import core.model.GeneralInfo
 import core.releasable.ReleasableViewModel
 import core.state.StateHandle
 import core.state.currentValue
@@ -32,16 +29,9 @@ class MapViewModel(
   
   override val logTag = "Base_Map_ViewModel"
   
-  private val cacheOperations = AsyncOperations(2)
-  private val networkOperations = AsyncOperations(2)
-  
   private val _state = MutableLiveData<StateHandle<MapScreenState>>(StateHandle())
   val state: LiveData<StateHandle<MapScreenState>>
     get() = _state
-  
-  init {
-    addReleasable(cacheOperations, networkOperations)
-  }
   
   fun startInitialLoading(isRecreated: Boolean) {
     if (isRecreated) {
@@ -49,7 +39,7 @@ class MapViewModel(
       return
     }
     _state.update(Loading)
-    //    tryUpdateFromCache()
+    tryUpdateFromCache()
     updateFromNetwork(notifyLoading = false)
   }
   
@@ -57,73 +47,35 @@ class MapViewModel(
     if (notifyLoading) {
       _state.update(Loading)
     }
-    repository.loadGeneralInfo {
-      onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
-      onFailure {
-        log(it) { "fail map general" }
-        notifyFailureIfNeeded(it)
-      }
-    }
     repository.loadCountriesInfo {
-      onSuccess { networkOperations.addValue(KEY_COUNTRIES_AND_TIME, it) }
-      onFailure {
-        log(it) { "fail map countries + ${it.message}" }
-      }
-    }
-    networkOperations.onDoneAll { map ->
-      threader.backgroundWorker.submit {
-        val generalInfo = map[KEY_GENERAL_INFO] as TimedData<GeneralInfo>
-        val countries = map[KEY_COUNTRIES_AND_TIME] as TimedData<List<Country>>
-        threader.mainThreadWorker.submit {
-          _state.update(LoadedFromNetwork(countries.data, generalInfo.data))
-        }
-      }
+      onSuccess { _state.update(LoadedFromNetwork(it.data)) }
+      onFailure { log(it) { "Failing loading countries + ${it.message}" } }
     }
   }
   
   fun findCountryByCode(countryCode: String) {
     when (val currentState = _state.currentValue) {
-      is LoadedFromCache -> performCountrySearch(currentState.countries,
-        currentState.generalInfo, countryCode)
-      is LoadedFromNetwork -> performCountrySearch(currentState.countries,
-        currentState.generalInfo, countryCode)
-      is FoundCountry -> performCountrySearch(currentState.countries,
-        currentState.generalInfo, countryCode)
+      is LoadedFromCache -> performCountrySearch(currentState.countries, countryCode)
+      is LoadedFromNetwork -> performCountrySearch(currentState.countries, countryCode)
+      is FoundCountry -> performCountrySearch(currentState.countries, countryCode)
     }
   }
   
   private fun tryUpdateFromCache() {
-    repository.tryGetGeneralInfoFromCache {
-      onSuccess { cacheOperations.addValue(KEY_GENERAL_INFO, it) }
-      onNothing { cacheOperations.countDown() }
-    }
     repository.tryGetCountriesInfoFromCache {
-      onSuccess { cacheOperations.addValue(KEY_COUNTRIES_AND_TIME, it) }
-      onNothing { cacheOperations.countDown() }
-    }
-    cacheOperations.onDoneAll {
-      threader.backgroundWorker.submit {
-        val generalInfo = it[KEY_GENERAL_INFO] as? TimedData<GeneralInfo>
-        val countriesAndTime = it[KEY_COUNTRIES_AND_TIME] as? TimedData<List<Country>>
-        if (countriesAndTime == null || generalInfo == null) {
-          return@submit
-        }
-        val lastUpdateTime = countriesAndTime.lastUpdateTime.formatted(PATTERN_STANDARD)
-        threader.mainThreadWorker.submit {
-          _state.update(LoadedFromCache(countriesAndTime.data, generalInfo.data, lastUpdateTime))
-        }
+      onSuccess {
+        _state.update(LoadedFromCache(it.data, it.lastUpdateTime.formatted(PATTERN_STANDARD)))
       }
     }
   }
   
   private fun performCountrySearch(
     countries: List<Country>,
-    generalInfo: GeneralInfo,
     countryCode: String
   ) {
     val country = countries.find { it.iso2 == countryCode } ?: return
     threader.mainThreadWorker.submit {
-      _state.update(FoundCountry(countries, generalInfo, country))
+      _state.update(FoundCountry(countries, country))
     }
   }
   

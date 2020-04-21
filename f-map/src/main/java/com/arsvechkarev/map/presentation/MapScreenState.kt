@@ -1,7 +1,6 @@
 package com.arsvechkarev.map.presentation
 
 import core.model.Country
-import core.model.GeneralInfo
 import core.state.BaseScreenState
 import java.net.UnknownHostException
 import java.util.concurrent.ExecutionException
@@ -13,18 +12,15 @@ sealed class MapScreenState : BaseScreenState() {
   
   class LoadedFromCache(
     val countries: List<Country>,
-    val generalInfo: GeneralInfo,
     val lastUpdateTime: String
   ) : MapScreenState()
   
   class LoadedFromNetwork(
-    val countries: List<Country>,
-    val generalInfo: GeneralInfo
+    val countries: List<Country>
   ) : MapScreenState()
   
   class FoundCountry(
     val countries: List<Country>,
-    val generalInfo: GeneralInfo,
     val country: Country
   ) : MapScreenState()
   

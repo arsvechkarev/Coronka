@@ -10,7 +10,6 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import core.Application
 import core.model.Country
-import core.model.GeneralInfo
 
 class MapDelegate {
   
@@ -58,11 +57,11 @@ class MapDelegate {
     }
   }
   
-  fun drawCountries(countries: List<Country>, generalInfo: GeneralInfo) {
+  fun drawCountries(countries: List<Country>) {
     threader.backgroundWorker.submit {
       this.countries = countries
       markers.clear()
-      val options = creator.createMarkers(generalInfo, countries)
+      val options = creator.createMarkers(countries)
       threader.mainThreadWorker.submit {
         mapHolder.addAction { googleMap ->
           for (i in options.indices) {

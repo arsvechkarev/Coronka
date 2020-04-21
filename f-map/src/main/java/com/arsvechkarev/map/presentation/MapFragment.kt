@@ -79,14 +79,14 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     layoutLoadingMap.invisible()
     val fresh = state.isFresh
     println("qwerty:fresh = $fresh")
-    mapDelegate.drawCountries(state.countries, state.generalInfo)
+    mapDelegate.drawCountries(state.countries)
   }
   
   private fun handleFoundCountry(state: FoundCountry) {
     if (state.isFresh) {
       bottomSheet.show()
     } else {
-      mapDelegate.drawCountries(state.countries, state.generalInfo)
+      mapDelegate.drawCountries(state.countries)
     }
     textViewCountryName.text = state.country.name
     statsView.updateNumbers(
