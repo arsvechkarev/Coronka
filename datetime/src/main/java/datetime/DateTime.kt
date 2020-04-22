@@ -1,70 +1,32 @@
 package datetime
 
-import datetime.DateManager.calendar
-import datetime.DateManager.mutableCalendar
 import java.text.SimpleDateFormat
-import java.util.Calendar.DAY_OF_MONTH
-import java.util.Calendar.HOUR
-import java.util.Calendar.MINUTE
-import java.util.Calendar.MONTH
-import java.util.Calendar.YEAR
+import java.util.Date
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 class DateTime(
-  private val year: Int,
-  private val month: Int,
-  private val day: Int,
-  private val hour: Int,
-  private val minute: Int
+  private val millis: Long
 ) {
   
-  fun formatted(pattern: String): String {
-    mutableCalendar.set(YEAR, year)
-    mutableCalendar.set(MONTH, month)
-    mutableCalendar.set(DAY_OF_MONTH, day)
-    mutableCalendar.set(HOUR, hour)
-    mutableCalendar.set(MINUTE, minute)
-    return SimpleDateFormat(pattern, Locale.US).format(mutableCalendar.time)
+  fun differenceWith(other: DateTime, timeUnit: TimeUnit): Long {
+    return timeUnit.convert(abs(millis - other.millis), TimeUnit.MILLISECONDS)
   }
   
-  fun string(): String {
-    return "$year$DIVIDER$month$DIVIDER$day$DIVIDER$hour$DIVIDER$minute"
-  }
-  
-  override fun toString() = string()
-  
-  fun differenceWith(other: DateTime): Long {
-    val thisMillis = mutableCalendar.timeInMillis
-    mutableCalendar.set(YEAR, other.year)
-    mutableCalendar.set(MONTH, other.month)
-    mutableCalendar.set(DAY_OF_MONTH, other.day)
-    mutableCalendar.set(HOUR, other.hour)
-    mutableCalendar.set(MINUTE, other.minute)
-    val otherMillis = mutableCalendar.timeInMillis
-    return abs(thisMillis - otherMillis)
-  }
+  override fun toString() = millis.toString()
   
   companion object {
     
-    private const val DIVIDER = "-"
+    fun current(): DateTime {
+      return DateTime(Date().time)
+    }
     
-    fun current() = DateTime(
-      calendar[YEAR],
-      calendar[MONTH],
-      calendar[DAY_OF_MONTH],
-      calendar[HOUR],
-      calendar[MINUTE]
-    )
+    fun ofString(millis: String) = DateTime(millis.toLong())
     
-    fun ofString(string: String): DateTime {
-      val units = string.split(DIVIDER)
-      val year = units[0].toInt()
-      val month = units[1].toInt()
-      val day = units[2].toInt()
-      val hour = units[3].toInt()
-      val minute = units[4].toInt()
-      return DateTime(year, month, day, hour, minute)
+    fun ofPattern(pattern: String, value: String): DateTime {
+      val formatter = SimpleDateFormat(pattern, Locale.US)
+      return DateTime(formatter.parse(value)!!.time)
     }
   }
 }

@@ -24,4 +24,7 @@ android {
 dependencies {
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
+
+  def testDependencies = rootProject.ext.testDependencies
+  implementation testDependencies.junit
 }

@@ -85,7 +85,7 @@ class CountriesMarkersDrawer {
     private const val SIZE_COEFFICIENT = MAX_BITMAP_SIZE * 3
     private const val DEFAULT_CIRCLE_COLOR = 0xAAFF8CA1.toInt()
     private const val DEFAULT_STROKE_COLOR = 0x55FF0000
-    private const val SELECTED_CIRCLE_COLOR = 0xAA0000FF.toInt()
-    private const val SELECTED_STROKE_COLOR = 0xCC0000FF.toInt()
+    private const val SELECTED_CIRCLE_COLOR = 0xE2004182.toInt()
+    private const val SELECTED_STROKE_COLOR = 0xFF007FFF.toInt()
   }
 }

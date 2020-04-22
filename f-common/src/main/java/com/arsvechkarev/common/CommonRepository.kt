@@ -50,6 +50,7 @@ class CommonRepository(
             log { "sending general info value from cache" }
             generalInfoCacheHandler?.dispatchSuccess(result.data)
           } else {
+            log { "general info in cache is outdated, dispatch nothing" }
             generalInfoCacheHandler?.dispatchNothing()
           }
         }
@@ -90,9 +91,10 @@ class CommonRepository(
         
         override fun onSuccess(result: TimedData<List<Country>>) {
           if (result.lastUpdateTime.isValid()) {
-            log { "sending countries value from cache" }
+            log { "sending countries info from cache" }
             countriesInfoCacheHandler?.dispatchSuccess(result.data)
           } else {
+            log { "countries info in cache is outdated, dispatch nothing" }
             countriesInfoCacheHandler?.dispatchNothing()
           }
         }
@@ -127,8 +129,7 @@ class CommonRepository(
   }
   
   fun DateTime.isValid(): Boolean {
-    val millis = this.differenceWith(DateTime.current())
-    return TimeUnit.MILLISECONDS.toMinutes(millis) < CACHE_MAX_STORE_MINUTES
+    return this.differenceWith(DateTime.current(), TimeUnit.MINUTES) < CACHE_MAX_STORE_MINUTES
   }
   
   override fun release() {

@@ -36,7 +36,7 @@ class GeneralInfoListenableExecutor(
     threader.ioWorker.submit {
       val generalInfo = result.data
       saver.execute(synchronosly = true) {
-        putString(GENERAL_INFO_LAST_UPDATE_TIME, result.lastUpdateTime.string())
+        putString(GENERAL_INFO_LAST_UPDATE_TIME, result.lastUpdateTime.toString())
         putInt(CONFIRMED, generalInfo.confirmed)
         putInt(DEATHS, generalInfo.deaths)
         putInt(RECOVERED, generalInfo.recovered)
