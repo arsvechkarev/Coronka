@@ -3,7 +3,6 @@ package com.arsvechkarev.stats.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.arsvechkarev.common.CommonRepository
-import com.arsvechkarev.common.TimedData
 import com.arsvechkarev.stats.domain.ListFilterer
 import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromCache
@@ -20,7 +19,10 @@ import core.model.GeneralInfo
 import core.model.OptionType
 import core.model.OptionType.CONFIRMED
 import core.releasable.ReleasableViewModel
-import datetime.PATTERN_STANDARD
+import core.state.StateHandle
+import core.state.currentValue
+import core.state.update
+import core.state.updateSelf
 
 class StatsViewModel(
   private val connection: NetworkConnection,
@@ -36,8 +38,8 @@ class StatsViewModel(
   
   private val savedData = SavedData()
   
-  private val _state = MutableLiveData<StatsScreenState>()
-  val state: LiveData<StatsScreenState>
+  private val _state = MutableLiveData<StateHandle<StatsScreenState>>(StateHandle())
+  val state: LiveData<StateHandle<StatsScreenState>>
     get() = _state
   
   init {
@@ -46,21 +48,21 @@ class StatsViewModel(
   
   fun startInitialLoading(isRecreated: Boolean) {
     if (isRecreated) {
+      _state.updateSelf(isRecreated = true)
       return
     }
-    _state.value = Loading
+    _state.update(Loading)
     tryUpdateFromCache()
-    updateFromNetwork(notifyLoading = false)
   }
   
   fun updateFromNetwork(notifyLoading: Boolean = true) {
     if (notifyLoading) {
-      _state.value = Loading
+      _state.update(Loading)
     }
     repository.loadGeneralInfo {
       onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
       onFailure {
-        log(it) { "fail stats general" }
+        log(it) { "Failure loading general info: ${it.message}" }
       }
     }
     repository.loadCountriesInfo {
@@ -73,21 +75,20 @@ class StatsViewModel(
     }
     networkOperations.onDoneAll { map ->
       threader.backgroundWorker.submit {
-        val generalInfo = map[KEY_GENERAL_INFO] as TimedData<GeneralInfo>
-        val countriesAndTime = map[KEY_COUNTRIES] as TimedData<List<Country>>
-        savedData.add(countriesAndTime.data)
-        savedData.add(generalInfo.data)
-        filterer.filter(countriesAndTime.data, generalInfo.data, CONFIRMED) {
-          onSuccess {
-            _state.value = LoadedFromNetwork(it)
-          }
+        val generalInfo = map[KEY_GENERAL_INFO] as GeneralInfo
+        val countriesAndTime = map[KEY_COUNTRIES] as List<Country>
+        savedData.add(countriesAndTime)
+        savedData.add(generalInfo)
+        filterer.filter(countriesAndTime, generalInfo, CONFIRMED) {
+          onSuccess { _state.update(LoadedFromNetwork(it)) }
         }
       }
     }
   }
   
   fun filterList(optionType: OptionType) {
-    when (_state.value) {
+    when (_state.currentValue) {
+      is LoadedFromCache -> performFiltering(optionType)
       is LoadedFromNetwork -> performFiltering(optionType)
       is FilteredCountries -> performFiltering(optionType)
     }
@@ -96,7 +97,10 @@ class StatsViewModel(
   private fun tryUpdateFromCache() {
     repository.tryGetGeneralInfoFromCache {
       onSuccess { cacheOperations.addValue(KEY_GENERAL_INFO, it) }
-      onNothing { cacheOperations.countDown() }
+      onNothing {
+        cacheOperations.countDown()
+        updateFromNetwork(notifyLoading = false)
+      }
     }
     repository.tryGetCountriesInfoFromCache {
       onSuccess { cacheOperations.addValue(KEY_COUNTRIES_AND_TIME, it) }
@@ -104,17 +108,16 @@ class StatsViewModel(
     }
     cacheOperations.onDoneAll { map ->
       threader.backgroundWorker.submit {
-        val generalInfo = map[KEY_GENERAL_INFO] as? TimedData<GeneralInfo>
-        val countriesAndTime = map[KEY_COUNTRIES_AND_TIME] as? TimedData<List<Country>>
+        val generalInfo = map[KEY_GENERAL_INFO] as? GeneralInfo
+        val countriesAndTime = map[KEY_COUNTRIES_AND_TIME] as? List<Country>
         if (generalInfo == null || countriesAndTime == null) {
           return@submit
         }
-        savedData.add(countriesAndTime.data)
-        savedData.add(generalInfo.data)
-        filterer.filter(countriesAndTime.data, generalInfo.data, CONFIRMED) {
+        savedData.add(countriesAndTime)
+        savedData.add(generalInfo)
+        filterer.filter(countriesAndTime, generalInfo, CONFIRMED) {
           onSuccess {
-            _state.value = LoadedFromCache(it, countriesAndTime.lastUpdateTime.formatted(
-              PATTERN_STANDARD))
+            _state.update(LoadedFromCache(it))
           }
         }
       }
@@ -123,7 +126,7 @@ class StatsViewModel(
   
   private fun performFiltering(optionType: OptionType) {
     filterer.filter(savedData.get(), savedData.get(), optionType) {
-      onSuccess { _state.value = FilteredCountries(it) }
+      onSuccess { _state.update(FilteredCountries(it)) }
     }
   }
   

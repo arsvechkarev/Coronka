@@ -1,14 +1,14 @@
 package com.arsvechkarev.stats.presentation
 
 import core.recycler.DisplayableItem
+import core.state.BaseScreenState
 
-sealed class StatsScreenState {
+sealed class StatsScreenState : BaseScreenState() {
   
   object Loading : StatsScreenState()
   
   class LoadedFromCache(
-    val items: List<DisplayableItem>,
-    val lastUpdateTime: String
+    val items: List<DisplayableItem>
   ) : StatsScreenState()
   
   class LoadedFromNetwork(

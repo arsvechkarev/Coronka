@@ -11,8 +11,7 @@ sealed class MapScreenState : BaseScreenState() {
   object Loading : MapScreenState()
   
   class LoadedFromCache(
-    val countries: List<Country>,
-    val lastUpdateTime: String
+    val countries: List<Country>
   ) : MapScreenState()
   
   class LoadedFromNetwork(

@@ -21,6 +21,7 @@ import core.Loggable
 import core.extenstions.invisible
 import core.extenstions.visible
 import core.log
+import core.model.Country
 import core.state.StateHandle
 import core.state.isFresh
 import kotlinx.android.synthetic.main.fragment_map.bottomSheet
@@ -73,13 +74,11 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleCountriesLoadedFromCache(state: LoadedFromCache) {
+    displayLoadedResult(state.countries)
   }
   
   private fun handleCountriesLoadedFromNetwork(state: LoadedFromNetwork) {
-    layoutLoadingMap.invisible()
-    val fresh = state.isFresh
-    println("qwerty:fresh = $fresh")
-    mapDelegate.drawCountries(state.countries)
+    displayLoadedResult(state.countries)
   }
   
   private fun handleFoundCountry(state: FoundCountry) {
@@ -107,6 +106,11 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     layoutLoadingMap.invisible()
     Toast.makeText(context, "Failure: ${state.reason}", Toast.LENGTH_SHORT).show()
     log { "error, reason = ${state.reason}" }
+  }
+  
+  private fun displayLoadedResult(countries: List<Country>) {
+    layoutLoadingMap.invisible()
+    mapDelegate.drawCountries(countries)
   }
   
   private fun onCountrySelected(countryCode: String) {

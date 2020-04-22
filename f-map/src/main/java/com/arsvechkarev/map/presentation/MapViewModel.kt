@@ -19,7 +19,6 @@ import core.state.StateHandle
 import core.state.currentValue
 import core.state.update
 import core.state.updateSelf
-import datetime.PATTERN_STANDARD
 
 class MapViewModel(
   private val threader: Threader,
@@ -40,7 +39,6 @@ class MapViewModel(
     }
     _state.update(Loading)
     tryUpdateFromCache()
-    updateFromNetwork(notifyLoading = false)
   }
   
   fun updateFromNetwork(notifyLoading: Boolean = true) {
@@ -48,7 +46,7 @@ class MapViewModel(
       _state.update(Loading)
     }
     repository.loadCountriesInfo {
-      onSuccess { _state.update(LoadedFromNetwork(it.data)) }
+      onSuccess { _state.update(LoadedFromNetwork(it)) }
       onFailure { log(it) { "Failing loading countries + ${it.message}" } }
     }
   }
@@ -64,7 +62,10 @@ class MapViewModel(
   private fun tryUpdateFromCache() {
     repository.tryGetCountriesInfoFromCache {
       onSuccess {
-        _state.update(LoadedFromCache(it.data, it.lastUpdateTime.formatted(PATTERN_STANDARD)))
+        _state.update(LoadedFromCache(it))
+      }
+      onNothing {
+        updateFromNetwork(notifyLoading = false)
       }
     }
   }

@@ -16,6 +16,8 @@ import core.Loggable
 import core.extenstions.invisible
 import core.extenstions.visible
 import core.log
+import core.recycler.DisplayableItem
+import core.state.StateHandle
 import kotlinx.android.synthetic.main.fragment_stats.layoutLoadingStats
 import kotlinx.android.synthetic.main.fragment_stats.recyclerView
 
@@ -40,12 +42,14 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
     viewModel.startInitialLoading(savedInstanceState != null)
   }
   
-  private fun handleStateChanged(state: StatsScreenState) {
-    when (state) {
-      is Loading -> handleLoading()
-      is LoadedFromCache -> handleLoadedFromCache(state)
-      is LoadedFromNetwork -> handleLoadedFromNetwork(state)
-      is FilteredCountries -> handleFilteringCountries(state)
+  private fun handleStateChanged(stateHandle: StateHandle<StatsScreenState>) {
+    stateHandle.handleUpdate { state ->
+      when (state) {
+        is Loading -> handleLoading()
+        is LoadedFromCache -> handleLoadedFromCache(state)
+        is LoadedFromNetwork -> handleLoadedFromNetwork(state)
+        is FilteredCountries -> handleFilteringCountries(state)
+      }
     }
   }
   
@@ -55,15 +59,19 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   }
   
   private fun handleLoadedFromCache(state: LoadedFromCache) {
-    adapter.submitList(state.items)
+    displayLoadedResult(state.items)
   }
   
   private fun handleLoadedFromNetwork(state: LoadedFromNetwork) {
-    layoutLoadingStats.invisible()
-    adapter.submitList(state.items)
+    displayLoadedResult(state.items)
   }
   
   private fun handleFilteringCountries(state: FilteredCountries) {
     adapter.submitList(state.list)
+  }
+  
+  private fun displayLoadedResult(items: List<DisplayableItem>) {
+    layoutLoadingStats.invisible()
+    adapter.submitList(items)
   }
 }

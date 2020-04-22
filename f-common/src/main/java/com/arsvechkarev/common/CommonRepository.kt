@@ -4,28 +4,34 @@ import com.arsvechkarev.common.executors.BaseListenableExecutor.CacheListener
 import com.arsvechkarev.common.executors.BaseListenableExecutor.NetworkListener
 import com.arsvechkarev.common.executors.CountriesInfoListenableExecutor
 import com.arsvechkarev.common.executors.GeneralInfoListenableExecutor
+import core.Loggable
 import core.handlers.ResultAction
 import core.handlers.ResultHandler
 import core.handlers.SuccessAction
 import core.handlers.SuccessHandler
 import core.handlers.createResultHandler
 import core.handlers.createSuccessHandler
+import core.log
 import core.model.Country
 import core.model.GeneralInfo
 import core.releasable.BaseReleasable
+import datetime.DateTime
+import java.util.concurrent.TimeUnit
 
 class CommonRepository(
   private val generalInfoListenableExecutor: GeneralInfoListenableExecutor,
   private val countriesInfoListenableExecutor: CountriesInfoListenableExecutor
-) : BaseReleasable() {
+) : BaseReleasable(), Loggable {
   
-  private var generalInfoCacheHandler: SuccessHandler<TimedData<GeneralInfo>>? = null
-  private var generalInfoNetworkHandler: ResultHandler<TimedData<GeneralInfo>, Throwable>? = null
+  override val logTag = "CommonRepository"
+  
+  private var generalInfoCacheHandler: SuccessHandler<GeneralInfo>? = null
+  private var generalInfoNetworkHandler: ResultHandler<GeneralInfo, Throwable>? = null
   private var generalInfoCacheListener: CacheListener<TimedData<GeneralInfo>>? = null
   private var generalInfoNetworkListener: NetworkListener<TimedData<GeneralInfo>>? = null
   
-  private var countriesInfoCacheHandler: SuccessHandler<TimedData<List<Country>>>? = null
-  private var countriesInfoNetworkHandler: ResultHandler<TimedData<List<Country>>, Throwable>? = null
+  private var countriesInfoCacheHandler: SuccessHandler<List<Country>>? = null
+  private var countriesInfoNetworkHandler: ResultHandler<List<Country>, Throwable>? = null
   private var countriesInfoCacheListener: CacheListener<TimedData<List<Country>>>? = null
   private var countriesInfoNetworkListener: NetworkListener<TimedData<List<Country>>>? = null
   
@@ -34,13 +40,18 @@ class CommonRepository(
       countriesInfoNetworkHandler)
   }
   
-  fun tryGetGeneralInfoFromCache(action: SuccessAction<TimedData<GeneralInfo>>) {
+  fun tryGetGeneralInfoFromCache(action: SuccessAction<GeneralInfo>) {
     if (generalInfoCacheHandler == null && generalInfoCacheListener == null) {
       generalInfoCacheHandler = createSuccessHandler(action)
       generalInfoCacheListener = object : CacheListener<TimedData<GeneralInfo>> {
         
         override fun onSuccess(result: TimedData<GeneralInfo>) {
-          generalInfoCacheHandler?.dispatchSuccess(result)
+          if (result.lastUpdateTime.isValid()) {
+            log { "sending general info value from cache" }
+            generalInfoCacheHandler?.dispatchSuccess(result.data)
+          } else {
+            generalInfoCacheHandler?.dispatchNothing()
+          }
         }
         
         override fun onNothing() {
@@ -53,13 +64,13 @@ class CommonRepository(
     }
   }
   
-  fun loadGeneralInfo(action: ResultAction<TimedData<GeneralInfo>, Throwable>) {
+  fun loadGeneralInfo(action: ResultAction<GeneralInfo, Throwable>) {
     if (generalInfoNetworkHandler == null && generalInfoNetworkListener == null) {
       generalInfoNetworkHandler = createResultHandler(action)
       generalInfoNetworkListener = object : NetworkListener<TimedData<GeneralInfo>> {
         
         override fun onSuccess(result: TimedData<GeneralInfo>) {
-          generalInfoNetworkHandler?.dispatchSuccess(result)
+          generalInfoNetworkHandler?.dispatchSuccess(result.data)
         }
         
         override fun onFailure(failure: Throwable) {
@@ -72,13 +83,18 @@ class CommonRepository(
     }
   }
   
-  fun tryGetCountriesInfoFromCache(action: SuccessAction<TimedData<List<Country>>>) {
+  fun tryGetCountriesInfoFromCache(action: SuccessAction<List<Country>>) {
     if (countriesInfoCacheHandler == null && countriesInfoCacheListener == null) {
       countriesInfoCacheHandler = createSuccessHandler(action)
       countriesInfoCacheListener = object : CacheListener<TimedData<List<Country>>> {
         
         override fun onSuccess(result: TimedData<List<Country>>) {
-          countriesInfoCacheHandler?.dispatchSuccess(result)
+          if (result.lastUpdateTime.isValid()) {
+            log { "sending countries value from cache" }
+            countriesInfoCacheHandler?.dispatchSuccess(result.data)
+          } else {
+            countriesInfoCacheHandler?.dispatchNothing()
+          }
         }
         
         override fun onNothing() {
@@ -91,13 +107,13 @@ class CommonRepository(
     }
   }
   
-  fun loadCountriesInfo(action: ResultAction<TimedData<List<Country>>, Throwable>) {
+  fun loadCountriesInfo(action: ResultAction<List<Country>, Throwable>) {
     if (countriesInfoNetworkHandler == null && countriesInfoNetworkListener == null) {
       countriesInfoNetworkHandler = createResultHandler(action)
       countriesInfoNetworkListener = object : NetworkListener<TimedData<List<Country>>> {
         
         override fun onSuccess(result: TimedData<List<Country>>) {
-          countriesInfoNetworkHandler?.dispatchSuccess(result)
+          countriesInfoNetworkHandler?.dispatchSuccess(result.data)
         }
         
         override fun onFailure(failure: Throwable) {
@@ -110,11 +126,20 @@ class CommonRepository(
     }
   }
   
+  fun DateTime.isValid(): Boolean {
+    val millis = this.differenceWith(DateTime.current())
+    return TimeUnit.MILLISECONDS.toMinutes(millis) < CACHE_MAX_STORE_MINUTES
+  }
+  
   override fun release() {
     super.release()
     generalInfoListenableExecutor.release(generalInfoCacheListener)
     generalInfoListenableExecutor.release(generalInfoNetworkListener)
     countriesInfoListenableExecutor.release(countriesInfoCacheListener)
     countriesInfoListenableExecutor.release(countriesInfoNetworkListener)
+  }
+  
+  companion object {
+    private const val CACHE_MAX_STORE_MINUTES = 60
   }
 }

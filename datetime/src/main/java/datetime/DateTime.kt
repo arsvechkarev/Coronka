@@ -9,6 +9,7 @@ import java.util.Calendar.MINUTE
 import java.util.Calendar.MONTH
 import java.util.Calendar.YEAR
 import java.util.Locale
+import kotlin.math.abs
 
 class DateTime(
   private val year: Int,
@@ -32,6 +33,17 @@ class DateTime(
   }
   
   override fun toString() = string()
+  
+  fun differenceWith(other: DateTime): Long {
+    val thisMillis = mutableCalendar.timeInMillis
+    mutableCalendar.set(YEAR, other.year)
+    mutableCalendar.set(MONTH, other.month)
+    mutableCalendar.set(DAY_OF_MONTH, other.day)
+    mutableCalendar.set(HOUR, other.hour)
+    mutableCalendar.set(MINUTE, other.minute)
+    val otherMillis = mutableCalendar.timeInMillis
+    return abs(thisMillis - otherMillis)
+  }
   
   companion object {
     
