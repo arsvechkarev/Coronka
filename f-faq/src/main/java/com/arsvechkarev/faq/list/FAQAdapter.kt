@@ -9,8 +9,9 @@ import com.arsvechkarev.faq.list.FAQAdapter.FAQViewHolder
 import core.extenstions.inflate
 import core.extenstions.rotateTo
 import core.model.FAQItem
-import kotlinx.android.synthetic.main.item_faq.view.arrowExpanded
+import kotlinx.android.synthetic.main.item_faq.view.arrowExpand
 import kotlinx.android.synthetic.main.item_faq.view.expandableLayout
+import kotlinx.android.synthetic.main.item_faq.view.itemFAQRoot
 import kotlinx.android.synthetic.main.item_faq.view.layoutTitle
 import kotlinx.android.synthetic.main.item_faq.view.textDescription
 import kotlinx.android.synthetic.main.item_faq.view.textTitle
@@ -40,29 +41,32 @@ class FAQAdapter : RecyclerView.Adapter<FAQViewHolder>() {
   inner class FAQViewHolder(itemView: View) : ViewHolder(itemView) {
     
     init {
-      itemView.layoutTitle.setOnClickListener {
-        if (expandedItems.contains(adapterPosition)) {
-          expandedItems.remove(adapterPosition)
-          itemView.expandableLayout.gone()
-          itemView.arrowExpanded.rotateTo(0f)
-        } else {
-          expandedItems.add(adapterPosition)
-          itemView.expandableLayout.visible()
-          itemView.arrowExpanded.rotateTo(180f)
-        }
-      }
+      itemView.itemFAQRoot.setOnClickListener { handleClick() }
+      itemView.layoutTitle.setOnClickListener { handleClick() }
     }
     
     fun bind(item: FAQItem) {
       if (expandedItems.contains(adapterPosition)) {
         itemView.expandableLayout.visible(false)
-        itemView.arrowExpanded.rotation = 180f
+        itemView.arrowExpand.rotation = 180f
       } else {
         itemView.expandableLayout.gone(false)
-        itemView.arrowExpanded.rotation = 0f
+        itemView.arrowExpand.rotation = 0f
       }
       itemView.textTitle.text = item.title
       itemView.textDescription.text = item.description
+    }
+  
+    private fun handleClick() {
+      if (expandedItems.contains(adapterPosition)) {
+        expandedItems.remove(adapterPosition)
+        itemView.expandableLayout.gone()
+        itemView.arrowExpand.rotateTo(0f)
+      } else {
+        expandedItems.add(adapterPosition)
+        itemView.expandableLayout.visible()
+        itemView.arrowExpand.rotateTo(180f)
+      }
     }
   }
 }

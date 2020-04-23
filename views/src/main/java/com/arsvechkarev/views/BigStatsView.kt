@@ -104,10 +104,8 @@ class BigStatsView @JvmOverloads constructor(
         || deathsNumberLayout == null) {
       return
     }
-    if (chartLineMaxLength == -1f) {
-      chartLineMaxLength = width.f - confirmedLabel.width - confirmedNumberLayout!!.width -
-          paddingStart - paddingEnd - innerSidePadding * 2
-    }
+    chartLineMaxLength = width.f - confirmedLabel.width - confirmedNumberLayout!!.width -
+        paddingStart - paddingEnd - innerSidePadding * 2
     canvas.block {
       translate(paddingStart.f, paddingTop.f)
       confirmedLabel.draw(canvas)

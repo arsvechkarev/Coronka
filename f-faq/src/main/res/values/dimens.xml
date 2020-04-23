@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="layout_title_padding">12dp</dimen>
+  <dimen name="text_title_m_end">20dp</dimen>
+  <dimen name="arrow_expand_size">32dp</dimen>
+  <dimen name="text_description_margin">16dp</dimen>
+</resources>

@@ -48,4 +48,9 @@ class ExpandableLayout @JvmOverloads constructor(
     val measuredHeight = (expansionFraction * measuredHeight).toInt()
     setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), measuredHeight)
   }
+  
+  override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    animator.cancel()
+  }
 }
