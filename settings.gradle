@@ -6,6 +6,6 @@ include ':network'
 include ':storage'
 include ':f-map'
 include ':core'
-include ':f-feed'
+include ':f-faq'
 include ':app'
 rootProject.name = "CoronavirusInfo"

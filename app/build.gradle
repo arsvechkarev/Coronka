@@ -29,7 +29,7 @@ dependencies {
   implementation project(':views')
   implementation project(':f-common')
   implementation project(':f-map')
-  implementation project(':f-feed')
+  implementation project(':f-faq')
   implementation project(':f-stats')
 
   debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'

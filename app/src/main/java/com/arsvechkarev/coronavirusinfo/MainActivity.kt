@@ -3,6 +3,7 @@ package com.arsvechkarev.coronavirusinfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.arsvechkarev.faq.presentation.FAQFragment
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import core.Application
@@ -12,6 +13,7 @@ class MainActivity : AppCompatActivity() {
   
   private val mapFragment: Fragment = MapFragment()
   private val statsFragment: Fragment = StatsFragment()
+  private val faqFragment: Fragment = FAQFragment()
   
   private lateinit var currentFragment: Fragment
   
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     when (id) {
       0 -> switchToFragment(mapFragment)
       1 -> switchToFragment(statsFragment)
-      2 -> TODO()
+      2 -> switchToFragment(faqFragment)
     }
   }
   

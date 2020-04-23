@@ -13,15 +13,6 @@ class Country(
   val longitude: Double
 )
 
-fun List<Country>.print(prefix: String = "country") {
-  forEach {
-    println(
-      "$prefix -- ${it.name}: ${it.id}|${it.iso2}|${it.confirmed}" +
-          "|${it.deaths}|${it.recovered}|${it.latitude}|${it.longitude}"
-    )
-  }
-}
-
 data class DisplayableCountry(
   val name: String,
   val amount: Number
