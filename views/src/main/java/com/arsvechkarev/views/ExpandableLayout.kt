@@ -3,54 +3,49 @@ package com.arsvechkarev.views
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
+import core.extenstions.DURATION_DEFAULT
 
 class ExpandableLayout @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
   
-  private var defaultHeight = -1
-  private var currentHeight = -1
+  private var expansionFraction = 0f
   
   private val animator = ValueAnimator().apply {
-    duration = 500
+    duration = DURATION_DEFAULT
     interpolator = AccelerateDecelerateInterpolator()
     addUpdateListener {
-      currentHeight = it.animatedValue as Int
+      expansionFraction = it.animatedValue as Float
       requestLayout()
     }
   }
   
   fun visible(animate: Boolean = true) {
-    visibility = View.VISIBLE
     if (animate) {
-      animator.setIntValues(0, defaultHeight)
+      animator.setFloatValues(expansionFraction, 1f)
       animator.start()
     } else {
-      currentHeight = defaultHeight
+      expansionFraction = 1f
       requestLayout()
     }
   }
   
   fun gone(animate: Boolean = true) {
     if (animate) {
-      animator.setIntValues(defaultHeight, 0)
+      animator.setFloatValues(expansionFraction, 0f)
       animator.start()
     } else {
-      currentHeight = 0
+      expansionFraction = 0f
       requestLayout()
     }
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    if (defaultHeight == -1) {
-      defaultHeight = measuredHeight
-      currentHeight = 0
-    }
-    setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), currentHeight)
+    val measuredHeight = (expansionFraction * measuredHeight).toInt()
+    setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), measuredHeight)
   }
 }

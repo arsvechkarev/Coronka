@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.arsvechkarev.faq.R
 import com.arsvechkarev.faq.list.FAQAdapter.FAQViewHolder
 import core.extenstions.inflate
+import core.extenstions.rotateTo
 import core.model.FAQItem
+import kotlinx.android.synthetic.main.item_faq.view.arrowExpanded
 import kotlinx.android.synthetic.main.item_faq.view.expandableLayout
 import kotlinx.android.synthetic.main.item_faq.view.layoutTitle
 import kotlinx.android.synthetic.main.item_faq.view.textDescription
@@ -42,9 +44,11 @@ class FAQAdapter : RecyclerView.Adapter<FAQViewHolder>() {
         if (expandedItems.contains(adapterPosition)) {
           expandedItems.remove(adapterPosition)
           itemView.expandableLayout.gone()
+          itemView.arrowExpanded.rotateTo(0f)
         } else {
           expandedItems.add(adapterPosition)
           itemView.expandableLayout.visible()
+          itemView.arrowExpanded.rotateTo(180f)
         }
       }
     }
@@ -52,8 +56,10 @@ class FAQAdapter : RecyclerView.Adapter<FAQViewHolder>() {
     fun bind(item: FAQItem) {
       if (expandedItems.contains(adapterPosition)) {
         itemView.expandableLayout.visible(false)
+        itemView.arrowExpanded.rotation = 180f
       } else {
         itemView.expandableLayout.gone(false)
+        itemView.arrowExpanded.rotation = 0f
       }
       itemView.textTitle.text = item.title
       itemView.textDescription.text = item.description

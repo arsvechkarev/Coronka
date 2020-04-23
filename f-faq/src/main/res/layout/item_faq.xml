@@ -8,21 +8,26 @@
     android:id="@+id/layoutTitle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:padding="8dp">
 
     <com.arsvechkarev.views.FontTextView
       android:id="@+id/textTitle"
-      android:layout_width="match_parent"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentStart="true"
-      android:layout_margin="8dp"/>
+      android:layout_centerInParent="true"
+      android:layout_marginEnd="8dp"
+      android:layout_toStartOf="@id/arrowExpanded"
+      android:textColor="?colorTextPrimary"
+      android:textSize="@dimen/text_h4"/>
 
     <ImageView
       android:id="@+id/arrowExpanded"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentEnd="true"
-      android:layout_margin="8dp"/>
+      android:layout_centerInParent="true"
+      android:src="@drawable/ic_expand"/>
 
   </RelativeLayout>
 
@@ -31,11 +36,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.arsvechkarev.views.FontTextView
+    <TextView
       android:id="@+id/textDescription"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_margin="16dp"/>
+      android:layout_margin="16dp"
+      android:textColor="?colorTextSecondary"
+      android:textSize="@dimen/text_h4"/>
 
   </com.arsvechkarev.views.ExpandableLayout>
 
