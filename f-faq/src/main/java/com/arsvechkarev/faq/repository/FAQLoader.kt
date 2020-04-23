@@ -48,11 +48,11 @@ import com.arsvechkarev.faq.R.string.q7
 import com.arsvechkarev.faq.R.string.q8
 import com.arsvechkarev.faq.R.string.q9
 import core.model.FAQItem
+import core.recycler.DisplayableItem
 
-class FAQRepository(private val resources: Resources) {
+class FAQLoader(private val resources: Resources) {
   
-  fun loadFAQList(): List<FAQItem> {
-    val list = ArrayList<FAQItem>()
+  fun populateList(list: ArrayList<DisplayableItem>) {
     list.add(FAQItem(resources.getString(q1), resources.getString(a1)))
     list.add(FAQItem(resources.getString(q2), resources.getString(a2)))
     list.add(FAQItem(resources.getString(q3), resources.getString(a3)))
@@ -76,6 +76,5 @@ class FAQRepository(private val resources: Resources) {
     list.add(FAQItem(resources.getString(q24), resources.getString(a24)))
     list.add(FAQItem(resources.getString(q25), resources.getString(a25)))
     list.add(FAQItem(resources.getString(q26), resources.getString(a26)))
-    return list
   }
 }

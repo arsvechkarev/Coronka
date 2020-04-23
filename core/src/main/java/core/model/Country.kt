@@ -22,8 +22,6 @@ data class DisplayableCountry(
   
   override val id = number
   
-  override val type = TYPE_COUNTRY_INFO
-  
   override fun compareTo(other: DisplayableCountry): Int {
     return amount.toFloat().compareTo(other.amount.toFloat())
   }

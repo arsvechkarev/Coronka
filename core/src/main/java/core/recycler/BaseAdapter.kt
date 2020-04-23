@@ -5,35 +5,36 @@ import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-abstract class BaseAdapter<T : DisplayableItem>(block: BaseAdapter<T>.() -> Unit = {}) :
-  RecyclerView.Adapter<ViewHolder>() {
+abstract class BaseAdapter : RecyclerView.Adapter<ViewHolder>() {
   
-  protected var data = ArrayList<T>()
-  protected val delegates = SparseArrayCompat<AdapterDelegate>()
+  protected var data: List<DisplayableItem> = ArrayList()
+  private val delegates = SparseArrayCompat<AdapterDelegate>()
   
-  init {
-    this.apply(block)
+  protected fun addDelegate(delegate: AdapterDelegate) {
+    delegates.put(delegate.modelClass.hashCode(), delegate)
   }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    return delegates[viewType]!!.onCreateViewHolder(parent)
+    return delegates[viewType]?.onCreateViewHolder(parent)
+        ?: error("Can't find delegate for type $viewType")
   }
   
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    delegates[getItemViewType(position)]!!.onBindViewHolder(holder, data[position])
+    val adapterDelegate = delegates[getItemViewType(position)]
+        ?: error("Can't find delegate for position: $position")
+    adapterDelegate.onBindViewHolder(holder, data[position])
   }
   
   override fun getItemViewType(position: Int): Int {
-    return data[position].type
+    return data[position]::class.hashCode()
   }
   
   override fun getItemCount(): Int {
     return data.size
   }
   
-  fun submitList(list: List<T>?) {
-    data = list as? ArrayList<T> ?: ArrayList()
+  fun submitList(list: List<DisplayableItem>?) {
+    data = list ?: ArrayList()
     notifyDataSetChanged()
   }
-  
 }

@@ -25,7 +25,9 @@ import kotlinx.android.synthetic.main.item_header.view.textConfirmed
 import kotlinx.android.synthetic.main.item_header.view.textDeaths
 import kotlinx.android.synthetic.main.item_header.view.textRecovered
 
-class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : AdapterDelegate {
+class HeaderAdapterDelegate(
+  private val onOptionClick: (OptionType) -> Unit
+) : AdapterDelegate(DisplayableGeneralInfo::class) {
   
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
     return HeaderViewHolder(parent.inflate(R.layout.item_header))
@@ -46,14 +48,14 @@ class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : A
       itemView.chipDeathRate.setOnClickListener { notifyOnClick(it as Chip) }
       itemView.chipPercentByCountry.setOnClickListener { notifyOnClick(it as Chip) }
     }
-  
+    
     fun bind(generalInfo: DisplayableGeneralInfo) {
       updateChip(generalInfo.optionType)
       itemView.textConfirmed.text = numberFormatter.format(generalInfo.confirmed)
       itemView.textRecovered.text = numberFormatter.format(generalInfo.recovered)
       itemView.textDeaths.text = numberFormatter.format(generalInfo.deaths)
     }
-  
+    
     private fun updateChip(optionType: OptionType) {
       itemView.chipConfirmed.isActive = false
       itemView.chipRecovered.isActive = false
@@ -64,7 +66,7 @@ class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : A
       chip.isActive = true
       currentChip = chip
     }
-  
+    
     private fun notifyOnClick(chip: Chip) {
       if (currentChip == chip) return
       currentChip.isActive = false
@@ -72,7 +74,7 @@ class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : A
       currentChip = chip
       onOptionClick(getTypeByChip(currentChip))
     }
-  
+    
     private fun getChipByType(optionType: OptionType): Chip = when (optionType) {
       CONFIRMED -> itemView.chipConfirmed
       RECOVERED -> itemView.chipRecovered
@@ -80,7 +82,7 @@ class HeaderAdapterDelegate(private val onOptionClick: (OptionType) -> Unit) : A
       DEATH_RATE -> itemView.chipDeathRate
       PERCENT_BY_COUNTRY -> itemView.chipPercentByCountry
     }
-  
+    
     private fun getTypeByChip(chip: Chip) = when (chip) {
       itemView.chipConfirmed -> CONFIRMED
       itemView.chipRecovered -> RECOVERED

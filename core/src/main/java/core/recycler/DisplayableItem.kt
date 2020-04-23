@@ -9,11 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 interface DisplayableItem {
   
   /**
-   * Type to bind recycler adapter
-   */
-  val type: Int
-  
-  /**
    * Id to distinguish two different elements
    */
   val id: Int

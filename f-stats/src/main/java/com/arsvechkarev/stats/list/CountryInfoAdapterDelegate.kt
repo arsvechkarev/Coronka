@@ -10,7 +10,7 @@ import core.model.DisplayableCountry
 import core.recycler.AdapterDelegate
 import core.recycler.DisplayableItem
 
-class CountryInfoAdapterDelegate : AdapterDelegate {
+class CountryInfoAdapterDelegate : AdapterDelegate(DisplayableCountry::class) {
   
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
     val textSize = parent.resources.getDimensionPixelSize(R.dimen.text_h4)

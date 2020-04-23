@@ -2,10 +2,11 @@ package core.recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.reflect.KClass
 
-interface AdapterDelegate {
+abstract class AdapterDelegate(val modelClass: KClass<out DisplayableItem>) {
   
-  fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
+  abstract fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
   
-  fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: DisplayableItem)
+  abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: DisplayableItem)
 }
