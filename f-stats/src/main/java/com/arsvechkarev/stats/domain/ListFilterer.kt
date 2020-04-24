@@ -5,6 +5,7 @@ import com.arsvechkarev.storage.DatabaseManager
 import com.arsvechkarev.storage.PopulationsTable
 import com.arsvechkarev.storage.dao.PopulationsDao
 import core.Application
+import core.extenstions.assertThat
 import core.handlers.SuccessAction
 import core.handlers.SuccessHandler
 import core.handlers.createSuccessHandler
@@ -45,9 +46,7 @@ class ListFilterer(
             }
             future!!.get()
           }
-          if (populations.isEmpty()) {
-            error("Fail")
-          }
+          assertThat(populations.isNotEmpty())
           transformPopulations(populations, list, generalInfo, optionType)
         } else {
           transformOther(list, generalInfo, optionType)

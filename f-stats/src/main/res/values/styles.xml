@@ -17,9 +17,7 @@
     <item name="colorSecondary">?attr/colorBackground</item>
     <item name="chipCornerRadius">@dimen/chip_corner_radius</item>
     <item name="android:layout_margin">@dimen/chip_margin</item>
-    <item name="android:paddingStart">@dimen/chip_padding_horizontal</item>
-    <item name="android:paddingTop">@dimen/chip_padding_vertical</item>
-    <item name="android:paddingEnd">@dimen/chip_padding_horizontal</item>
-    <item name="android:paddingBottom">@dimen/chip_padding_vertical</item>
+    <item name="android:paddingHorizontal">@dimen/chip_padding_horizontal</item>
+    <item name="android:paddingVertical">@dimen/chip_padding_vertical</item>
   </style>
 </resources>

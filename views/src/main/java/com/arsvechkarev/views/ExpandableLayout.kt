@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import core.extenstions.DURATION_DEFAULT
+import core.extenstions.cancelIfRunning
 
 class ExpandableLayout @JvmOverloads constructor(
   context: Context,
@@ -51,6 +52,6 @@ class ExpandableLayout @JvmOverloads constructor(
   
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    animator.cancel()
+    animator.cancelIfRunning()
   }
 }

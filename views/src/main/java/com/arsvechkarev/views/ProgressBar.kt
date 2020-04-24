@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
 import core.extenstions.block
+import core.extenstions.cancelIfRunning
 import core.extenstions.dp
 import core.extenstions.f
 
@@ -86,8 +87,8 @@ class ProgressBar @JvmOverloads constructor(
   
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    innerAnimator.end()
-    outerAnimator.end()
+    innerAnimator.cancelIfRunning()
+    outerAnimator.cancelIfRunning()
   }
   
   private fun ValueAnimator.configure(duration: Long, onUpdate: ValueAnimator.() -> Unit) {

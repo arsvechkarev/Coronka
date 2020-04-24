@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import com.arsvechkarev.views.BottomSheet.State.HIDDEN
 import com.arsvechkarev.views.BottomSheet.State.SHOWN
+import core.extenstions.contains
 import kotlin.math.abs
 
 class BottomSheet @JvmOverloads constructor(
@@ -252,12 +253,6 @@ class BottomSheet @JvmOverloads constructor(
       velocityTracker!!.recycle()
       velocityTracker = null
     }
-  }
-  
-  private operator fun View.contains(ev: MotionEvent): Boolean {
-    val x = ev.x
-    val y = ev.y
-    return x >= left && y >= top && x <= right && y <= bottom
   }
   
   override fun onSaveInstanceState(): Parcelable? {

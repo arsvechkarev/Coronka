@@ -96,6 +96,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleFailure(state: Failure) {
+    Toast.makeText(requireContext(), "Failure", Toast.LENGTH_SHORT).show()
     val message = when (state.reason) {
       NO_CONNECTION -> "No connection"
       TIMEOUT -> "Too slow connection"

@@ -64,6 +64,7 @@ class MapDelegate {
       val options = creator.createMarkers(countries)
       threader.mainThreadWorker.submit {
         mapHolder.addAction { googleMap ->
+          googleMap.clear()
           for (i in options.indices) {
             val marker = googleMap.addMarker(options[i])
             marker.tag = i

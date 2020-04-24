@@ -1,5 +1,6 @@
 package com.arsvechkarev.views
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -11,10 +12,13 @@ import android.text.Layout.Alignment.ALIGN_NORMAL
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import core.Application.Singletons.numberFormatter
 import core.Colors
 import core.FontManager
+import core.extenstions.DURATION_MEDIUM
 import core.extenstions.block
+import core.extenstions.cancelIfRunning
 import core.extenstions.dp
 import core.extenstions.f
 import core.extenstions.i
@@ -33,23 +37,33 @@ class BigStatsView @JvmOverloads constructor(
     color = Color.WHITE
     typeface = FontManager.rubik
   }
-  
   private val confirmedLabel: Layout
+  
   private val recoveredLabel: Layout
   private val deathsLabel: Layout
   private var confirmedNumberLayout: Layout? = null
   private var recoveredNumberLayout: Layout? = null
   private var deathsNumberLayout: Layout? = null
-  
   private var total = -1f
+  
   private var confirmedLinePercent = -1f
   private var recoveredLinePercent = -1f
   private var deathsLinePercent = -1f
-  
   private var lineHeight: Float = 0f
+  
   private var chartLineMaxLength = -1f
   private val chartLineHeight: Float
   private val chartLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+  
+  private var animationLinePercent = 0f
+  private val animator = ValueAnimator().apply {
+    duration = DURATION_MEDIUM
+    interpolator = AccelerateDecelerateInterpolator()
+    addUpdateListener {
+      animationLinePercent = it.animatedFraction
+      invalidate()
+    }
+  }
   
   init {
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.BigStatsView, 0, 0)
@@ -88,6 +102,8 @@ class BigStatsView @JvmOverloads constructor(
     deathsNumberLayout = boringLayout(deathsFormatted, ALIGN_CENTER, maxNumberTextWidth)
     chartLineMaxLength = -1f
     requestLayout()
+    animator.setFloatValues(0f, 1f)
+    animator.start()
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -135,6 +151,11 @@ class BigStatsView @JvmOverloads constructor(
     }
   }
   
+  override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    animator.cancelIfRunning()
+  }
+  
   private fun boringLayout(text: CharSequence, alignment: Layout.Alignment, maxWidth: Int = -1): Layout {
     val metrics = BoringLayout.isBoring(text, textPaint)
     val maxWidthInternal = if (maxWidth == -1) metrics.width else maxWidth
@@ -162,7 +183,7 @@ class BigStatsView @JvmOverloads constructor(
   
   private fun Canvas.drawLine(color: Int, linePercent: Float) {
     chartLinePaint.color = color
-    val lineLength = linePercent * chartLineMaxLength
+    val lineLength = linePercent * chartLineMaxLength * animationLinePercent
     drawRoundRect(0f, 0f, lineLength, chartLineHeight,
       chartLineCornersRadius, chartLineCornersRadius, chartLinePaint)
   }

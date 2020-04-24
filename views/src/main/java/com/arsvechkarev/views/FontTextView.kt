@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import core.FontManager
 
-open class FontTextView @JvmOverloads constructor(
+class FontTextView @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
@@ -14,5 +14,4 @@ open class FontTextView @JvmOverloads constructor(
   init {
     typeface = FontManager.rubik
   }
-  
 }

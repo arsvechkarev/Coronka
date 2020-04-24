@@ -2,6 +2,7 @@ package com.arsvechkarev.stats.presentation
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromCache
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromNetwork
 import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
 import core.Loggable
+import core.extenstions.addBackPressedCallback
 import core.extenstions.invisible
 import core.extenstions.visible
 import core.log
@@ -20,13 +22,28 @@ import core.recycler.DisplayableItem
 import core.state.StateHandle
 import kotlinx.android.synthetic.main.fragment_stats.layoutLoadingStats
 import kotlinx.android.synthetic.main.fragment_stats.recyclerView
+import kotlinx.android.synthetic.main.fragment_stats.simpleDialog
+import kotlinx.android.synthetic.main.fragment_stats.textExplanation
+import kotlinx.android.synthetic.main.fragment_stats.textGotIt
 
 class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   
   override val logTag = "StatsFragment"
   
   private lateinit var viewModel: StatsViewModel
-  private val adapter = StatsAdapter(onOptionClick = { viewModel.filterList(it) })
+  private val adapter = StatsAdapter(
+    onOptionClick = { viewModel.filterList(it) },
+    onOptionExplanationClick = { showOptionExplanationDialog(it) }
+  )
+  
+  private val onBackPressedCallback = object : OnBackPressedCallback(false) {
+    
+    override fun handleOnBackPressed() {
+      simpleDialog.dismiss()
+      isEnabled = false
+    }
+  }
+  
   private var savedInstanceState: Bundle? = null
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,6 +52,8 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
     viewModel.state.observe(this, Observer(this::handleStateChanged))
     recyclerView.adapter = adapter
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    textGotIt.setOnClickListener { simpleDialog.dismiss() }
+    addBackPressedCallback(onBackPressedCallback)
   }
   
   override fun onResume() {
@@ -73,5 +92,11 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   private fun displayLoadedResult(items: List<DisplayableItem>) {
     layoutLoadingStats.invisible()
     adapter.submitList(items)
+  }
+  
+  private fun showOptionExplanationDialog(text: String) {
+    textExplanation.text = text
+    simpleDialog.show()
+    onBackPressedCallback.isEnabled = true
   }
 }

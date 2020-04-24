@@ -8,6 +8,7 @@
     <item name="colorBackground">@color/dark_background</item>
     <item name="colorMiddle">@color/dark_middle</item>
     <item name="colorSurface">@color/dark_surface</item>
+    <item name="colorRipple">@color/dark_ripple</item>
 
     <item name="colorConfirmed">@color/dark_confirmed</item>
     <item name="colorDeaths">@color/dark_deaths</item>
@@ -18,6 +19,7 @@
     <item name="colorBottomNavigationDivider">@color/dark_bottom_navigation_divider</item>
     <item name="colorDivider">@color/dark_divider</item>
 
+    <item name="colorTextAccent">@color/dark_text_accent</item>
     <item name="colorTextPrimary">@color/dark_text_primary</item>
     <item name="colorTextSecondary">@color/dark_text_secondary</item>
     <item name="colorTextLinks">@color/dark_links</item>

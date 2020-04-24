@@ -16,6 +16,9 @@ val Int.sp: Float get() = Application.Values.scaledDensity * this
 val Int.dpInt: Int get() = (Application.Values.density * this).toInt()
 val Int.spInt: Int get() = (Application.Values.scaledDensity * this).toInt()
 
+val Int.f get() = toFloat()
+
+val Float.i get() = toInt()
 
 fun Context.getAttrColor(@AttrRes resId: Int): Int {
   val typedArray = obtainStyledAttributes(TypedValue().data, intArrayOf(resId))

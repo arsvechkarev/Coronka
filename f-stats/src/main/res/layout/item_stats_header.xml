@@ -117,7 +117,8 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:fillColor="?colorDeathRate"
-      android:text="@string/text_death_rate"/>
+      android:text="@string/text_death_rate"
+      app:showIcon="true"/>
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/chipPercentByCountry"
@@ -125,7 +126,8 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:fillColor="?colorPercentByCountry"
-      android:text="@string/text_percent_by_country"/>
+      android:text="@string/text_percent_by_country"
+      app:showIcon="true"/>
 
   </com.google.android.flexbox.FlexboxLayout>
 

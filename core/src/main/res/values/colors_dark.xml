@@ -5,6 +5,7 @@
   <color name="dark_background">#051A29</color>
   <color name="dark_middle">#182842</color>
   <color name="dark_surface">#0A2F4A</color>
+  <color name="dark_ripple">#800A54A8</color>
 
   <color name="dark_confirmed">#D9270F</color>
   <color name="dark_deaths">#000000</color>
@@ -15,6 +16,7 @@
   <color name="dark_bottom_navigation_divider">#000000</color>
   <color name="dark_divider">#FFFFFF</color>
 
+  <color name="dark_text_accent">#064C9C</color>
   <color name="dark_text_primary">#FFFFFF</color>
   <color name="dark_text_secondary">#DFDFDF</color>
   <color name="dark_links">#0964DB</color>

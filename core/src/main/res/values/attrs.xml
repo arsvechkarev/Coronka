@@ -4,6 +4,7 @@
   <attr name="colorBackground" format="color"/>
   <attr name="colorMiddle" format="color"/>
   <attr name="colorSurface" format="color"/>
+  <attr name="colorRipple" format="color"/>
 
   <attr name="colorConfirmed" format="color"/>
   <attr name="colorDeaths" format="color"/>
@@ -14,6 +15,7 @@
   <attr name="colorBottomNavigationDivider" format="color"/>
   <attr name="colorDivider" format="color"/>
 
+  <attr name="colorTextAccent" format="color"/>
   <attr name="colorTextPrimary" format="color"/>
   <attr name="colorTextSecondary" format="color"/>
   <attr name="colorTextLinks" format="color"/>
