@@ -19,6 +19,11 @@ import kotlinx.android.synthetic.main.item_faq.view.textTitle
 class FAQItemAdapterDelegate : AdapterDelegate(FAQItem::class) {
   
   private var expandedItems = ArrayList<Int>()
+  private var recyclerView: RecyclerView? = null
+  
+  override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+    this.recyclerView = recyclerView
+  }
   
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
     return FAQViewHolder(parent.inflate(R.layout.item_faq))
@@ -26,6 +31,10 @@ class FAQItemAdapterDelegate : AdapterDelegate(FAQItem::class) {
   
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: DisplayableItem) {
     (holder as FAQViewHolder).bind(item as FAQItem)
+  }
+  
+  override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    this.recyclerView = null
   }
   
   inner class FAQViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

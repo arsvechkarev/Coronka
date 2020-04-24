@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import core.extenstions.forEach
 
 abstract class BaseAdapter : RecyclerView.Adapter<ViewHolder>() {
   
@@ -12,6 +13,16 @@ abstract class BaseAdapter : RecyclerView.Adapter<ViewHolder>() {
   
   protected fun addDelegate(delegate: AdapterDelegate) {
     delegates.put(delegate.modelClass.hashCode(), delegate)
+  }
+  
+  fun submitList(list: List<DisplayableItem>?) {
+    data = list ?: ArrayList()
+    notifyDataSetChanged()
+  }
+  
+  override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+    super.onAttachedToRecyclerView(recyclerView)
+    delegates.forEach { it.onAttachedToRecyclerView(recyclerView) }
   }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,8 +44,8 @@ abstract class BaseAdapter : RecyclerView.Adapter<ViewHolder>() {
     return data.size
   }
   
-  fun submitList(list: List<DisplayableItem>?) {
-    data = list ?: ArrayList()
-    notifyDataSetChanged()
+  override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    super.onDetachedFromRecyclerView(recyclerView)
+    delegates.forEach { it.onDetachedFromRecyclerView(recyclerView) }
   }
 }

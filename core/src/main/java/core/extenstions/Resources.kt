@@ -3,6 +3,8 @@ package core.extenstions
 import android.content.Context
 import android.util.TypedValue
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorRes
+import androidx.core.content.res.ResourcesCompat
 import core.Application
 
 val Double.dp: Float get() = (Application.Values.density * this).toFloat()
@@ -21,4 +23,8 @@ fun Context.getAttrColor(@AttrRes resId: Int): Int {
   typedArray.recycle()
   require(color != -1)
   return color
+}
+
+fun Context.retrieveColor(@ColorRes colorRes: Int): Int {
+  return ResourcesCompat.getColor(resources, colorRes, theme)
 }

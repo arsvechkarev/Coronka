@@ -3,7 +3,9 @@ package core.recycler
 import android.view.ViewGroup
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import core.extenstions.forEach
 import core.recycler.DisplayableItem.DiffCallBack
 
 abstract class BaseListAdapter : ListAdapter<DisplayableItem, ViewHolder>(DiffCallBack()) {
@@ -13,6 +15,10 @@ abstract class BaseListAdapter : ListAdapter<DisplayableItem, ViewHolder>(DiffCa
   
   protected fun addDelegate(delegate: AdapterDelegate) {
     delegates.put(delegate.modelClass.hashCode(), delegate)
+  }
+  
+  override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+    delegates.forEach { it.onAttachedToRecyclerView(recyclerView) }
   }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,5 +44,10 @@ abstract class BaseListAdapter : ListAdapter<DisplayableItem, ViewHolder>(DiffCa
   override fun submitList(list: List<DisplayableItem>?, commitCallback: Runnable?) {
     data = list ?: ArrayList()
     super.submitList(list, commitCallback)
+  }
+  
+  override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    super.onDetachedFromRecyclerView(recyclerView)
+    delegates.forEach { it.onDetachedFromRecyclerView(recyclerView) }
   }
 }

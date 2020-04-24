@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.faq.R
@@ -27,7 +26,6 @@ class FAQFragment : Fragment() {
   ): View? {
     val adapter = FAQAdapter()
     recyclerView = RecyclerView(requireContext()).apply {
-      addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
       setBackgroundColor(requireContext().getAttrColor(R.attr.colorBackground))
       layoutParams = RecyclerView.LayoutParams(MATCH_PARENT, MATCH_PARENT)
       layoutManager = LinearLayoutManager(requireContext())

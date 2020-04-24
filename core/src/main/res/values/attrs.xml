@@ -16,4 +16,5 @@
 
   <attr name="colorTextPrimary" format="color"/>
   <attr name="colorTextSecondary" format="color"/>
+  <attr name="colorTextLinks" format="color"/>
 </resources>

@@ -20,6 +20,7 @@
 
     <item name="colorTextPrimary">@color/dark_text_primary</item>
     <item name="colorTextSecondary">@color/dark_text_secondary</item>
+    <item name="colorTextLinks">@color/dark_links</item>
   </style>
 
 </resources>

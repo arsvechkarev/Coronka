@@ -16,21 +16,21 @@ import core.model.OptionType.PERCENT_BY_COUNTRY
 import core.model.OptionType.RECOVERED
 import core.recycler.AdapterDelegate
 import core.recycler.DisplayableItem
-import kotlinx.android.synthetic.main.item_header.view.chipConfirmed
-import kotlinx.android.synthetic.main.item_header.view.chipDeathRate
-import kotlinx.android.synthetic.main.item_header.view.chipDeaths
-import kotlinx.android.synthetic.main.item_header.view.chipPercentByCountry
-import kotlinx.android.synthetic.main.item_header.view.chipRecovered
-import kotlinx.android.synthetic.main.item_header.view.textConfirmed
-import kotlinx.android.synthetic.main.item_header.view.textDeaths
-import kotlinx.android.synthetic.main.item_header.view.textRecovered
+import kotlinx.android.synthetic.main.item_stats_header.view.chipConfirmed
+import kotlinx.android.synthetic.main.item_stats_header.view.chipDeathRate
+import kotlinx.android.synthetic.main.item_stats_header.view.chipDeaths
+import kotlinx.android.synthetic.main.item_stats_header.view.chipPercentByCountry
+import kotlinx.android.synthetic.main.item_stats_header.view.chipRecovered
+import kotlinx.android.synthetic.main.item_stats_header.view.textConfirmed
+import kotlinx.android.synthetic.main.item_stats_header.view.textDeaths
+import kotlinx.android.synthetic.main.item_stats_header.view.textRecovered
 
 class HeaderAdapterDelegate(
   private val onOptionClick: (OptionType) -> Unit
 ) : AdapterDelegate(DisplayableGeneralInfo::class) {
   
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-    return HeaderViewHolder(parent.inflate(R.layout.item_header))
+    return HeaderViewHolder(parent.inflate(R.layout.item_stats_header))
   }
   
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: DisplayableItem) {

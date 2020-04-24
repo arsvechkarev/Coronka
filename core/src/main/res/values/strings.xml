@@ -6,8 +6,8 @@
   <string name="label_stats">Stats</string>
   <string name="label_faq">FAQ</string>
 
+  <string name="text_loading_map">Loading map…</string>
   <string name="text_total_cases">Total cases</string>
-
   <string name="text_confirmed">Confirmed</string>
   <string name="text_recovered">Recovered</string>
   <string name="text_deaths">Deaths</string>
@@ -15,5 +15,10 @@
   <string name="text_percent_by_country">Percent by country</string>
   <string name="text_statistics_by_country">Statistics by country</string>
 
-  <string name="text_loading_map">Loading map…</string>
+  <string name="text_popular_questions">Popular questions</string>
+  <string name="text_visit_who">
+    More information: &lt;br>
+    &lt;a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019">
+    World Health Organization&lt;/a>
+  </string>
 </resources>
