@@ -40,9 +40,7 @@ class ListFilterer(
               DatabaseManager.instance.readableDatabase.use {
                 val cursor = DatabaseExecutor.readAll(it, PopulationsTable.TABLE_NAME)
                 val elements = populationsDao.getAll(cursor)
-                threader.mainThreadWorker.submit {
-                  populations.addAll(elements)
-                }
+                populations.addAll(elements)
               }
             }
             future!!.get()
