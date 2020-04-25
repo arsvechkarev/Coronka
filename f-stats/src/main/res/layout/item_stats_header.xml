@@ -85,51 +85,62 @@
     android:orientation="vertical"
     android:paddingVertical="8dp">
 
-    <com.arsvechkarev.views.Chip
-      android:id="@+id/chipConfirmed"
-      style="@style/Chip"
-      android:layout_width="wrap_content"
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_margin="@dimen/chip_margin"
-      android:text="@string/text_confirmed"
-      app:colorFill="?colorConfirmed"
-      app:showIcon="true"/>
+      android:gravity="center">
 
-    <com.arsvechkarev.views.Chip
-      android:id="@+id/chipRecovered"
-      style="@style/Chip"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/text_recovered"
-      app:colorFill="?colorRecovered"
-      app:showIcon="true"/>
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipConfirmed"
+        style="@style/Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/chip_margin"
+        android:text="@string/text_confirmed"
+        app:colorFill="?colorConfirmed"/>
 
-    <com.arsvechkarev.views.Chip
-      android:id="@+id/chipDeaths"
-      style="@style/Chip"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/text_deaths"
-      app:colorFill="?colorDeaths2"
-      app:showIcon="true"/>
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipRecovered"
+        style="@style/Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_recovered"
+        app:colorFill="?colorRecovered"/>
 
-    <com.arsvechkarev.views.Chip
-      android:id="@+id/chipDeathRate"
-      style="@style/Chip"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/text_death_rate"
-      app:colorFill="?colorDeathRate"
-      app:showIcon="true"/>
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipDeaths"
+        style="@style/Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_deaths"
+        app:colorFill="?colorDeaths2"/>
 
-    <com.arsvechkarev.views.Chip
-      android:id="@+id/chipPercentByCountry"
-      style="@style/Chip"
-      android:layout_width="wrap_content"
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/text_percent_by_country"
-      app:colorFill="?colorPercentByCountry"
-      app:showIcon="true"/>
+      android:gravity="center">
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipDeathRate"
+        style="@style/Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_death_rate"
+        app:colorFill="?colorDeathRate"
+        app:showIcon="true"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipPercentByCountry"
+        style="@style/Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_percent_by_country"
+        app:colorFill="?colorPercentByCountry"
+        app:showIcon="true"/>
+
+    </LinearLayout>
 
   </LinearLayout>
 

@@ -92,6 +92,11 @@ class BigStatsView @JvmOverloads constructor(
     val confirmedFormatted = numberFormatter.format(confirmed)
     val recoveredFormatted = numberFormatter.format(recovered)
     val deathsFormatted = numberFormatter.format(deaths)
+    if (confirmedNumberLayout?.text == confirmedFormatted
+        && recoveredNumberLayout?.text == recoveredFormatted
+        && deathsNumberLayout?.text == deathsFormatted) {
+      return
+    }
     val maxNumberTextWidth = maxOf(
       textPaint.measureText(confirmedFormatted),
       textPaint.measureText(recoveredFormatted),
