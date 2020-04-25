@@ -6,21 +6,14 @@
   <string name="q4">How does COVID-19 spread?</string>
   <string name="q5">What can i do to protect myself and prevent the spread of disease?</string>
   <string name="q6">How likely am I to catch COVID-19?</string>
-  <string name="q7">Should i worry about COVID-19?</string>
-  <string name="q8">Who is at risk of developing severe illness?</string>
   <string name="q9">Are antibiotics effective in preventing or treating the COVID-19?</string>
   <string name="q10">Are there any medicines or therapies that can prevent or cure COVID-19?</string>
   <string name="q11">Is there a vaccine, drug, or treatment for COVID-19?</string>
-  <string name="q12">Is COVID-19 the save as SARS?</string>
   <string name="q13">Should I wear a mask to protect myself?</string>
   <string name="q15">How long is the incubation period for COVID-19?</string>
-  <string name="q16">Can humans become infected with the COVID-19 from an animal source?</string>
-  <string name="q18">How long does the virus survive on surfaces?</string>
-  <string name="q19">Is it safe to receive a package from any area where COVID-19 has been reported?</string>
   <string name="q20">Is there anything I should not do?</string>
   <string name="q21">Is the source of the coronavirus causing COVID-19 known?</string>
   <string name="q23">Can COVID-19 be spread through coins and banknotes?</string>
   <string name="q24">How can I grocery shop safely in the time of COVID-19?</string>
-  <string name="q25">How to wash fruits and vegetables in the time of COVID-19?</string>
   <string name="q26">Is COVID-19 airborne?</string>
 </resources>

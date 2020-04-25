@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.item_stats_header.view.textRecovered
 
 class HeaderAdapterDelegate(
   private val onOptionClick: (OptionType) -> Unit,
-  private val onOptionExplanationClick: (String) -> Unit
+  private val onExplanationIconClick: (String) -> Unit
 ) : AdapterDelegate(DisplayableGeneralInfo::class) {
   
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -49,12 +49,7 @@ class HeaderAdapterDelegate(
       itemView.chipDeathRate.setOnClickListener { notifyOnClick(it as Chip) }
       itemView.chipPercentByCountry.setOnClickListener { notifyOnClick(it as Chip) }
       itemView.chipDeathRate.onIconClicked {
-        val text = "Death rate is calculated by dividing \nconfirmed cases by deaths"
-        onOptionExplanationClick(text)
-      }
-      itemView.chipPercentByCountry.onIconClicked {
-        val text = "Death rate is calculated by dividing \nconfirmed cases by deaths"
-        onOptionExplanationClick(text)
+        onExplanationIconClick(itemView.context.getString(R.string.text_death_rate_explanation))
       }
     }
     

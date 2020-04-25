@@ -1,90 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="a1">
-    Coronaviruses are a large family of viruses which may cause illness in animals or humans.  In humans, several coronaviruses are known to cause respiratory infections ranging from the common cold to more severe diseases such as Middle East Respiratory Syndrome (MERS) and Severe Acute Respiratory Syndrome (SARS)
+    Coronaviruses are a large family of viruses which may cause illness in animals or humans. In humans,
+    several coronaviruses are known to cause respiratory infections ranging from the common cold to more
+    severe diseases such as Middle East Respiratory Syndrome (MERS) and Severe Acute Respiratory Syndrome (SARS)
   </string>
   <string name="a2">
-    COVID-19 is the infectious disease caused by the most recently discovered coronavirus. This new virus and disease were unknown before the outbreak began in Wuhan, China, in December 2019
+    COVID-19 is the infectious disease caused by the most recently discovered coronavirus. This new virus and
+    disease were unknown before the outbreak began in Wuhan, China, in December 2019
   </string>
   <string name="a3">
-    The most common symptoms of COVID-19 are fever, tiredness, and dry cough. Some patients may have aches and pains, nasal congestion, runny nose, sore throat or diarrhea. These symptoms are usually mild and begin gradually. Some people become infected but don’t develop any symptoms and don’t feel unwell. Most people (about 80%) recover from the disease without needing special treatment. Around 1 out of every 6 people who gets COVID-19 becomes seriously ill and develops difficulty breathing. Older people, and those with underlying medical problems like high blood pressure, heart problems or diabetes, are more likely to develop serious illness. People with fever, cough and difficulty breathing should seek medical attention
+    The most common symptoms of COVID-19 are fever, tiredness, and dry cough. Some patients may have aches
+    and pains, nasal congestion, runny nose, sore throat or diarrhea. These symptoms are usually mild and
+    begin gradually. Some people become infected but don’t develop any symptoms and don’t feel unwell.
+    Most people (about 80%) recover from the disease without needing special treatment. Around 1 out of
+    every 6 people who gets COVID-19 becomes seriously ill and develops difficulty breathing. Older people,
+    and those with underlying medical problems like high blood pressure, heart problems or diabetes, are more
+    likely to develop serious illness. People with fever, cough and difficulty breathing should seek medical attention
   </string>
   <string name="a4">
-    People can catch COVID-19 from others who have the virus. The disease can spread from person to person through small droplets from the nose or mouth which are spread when a person with COVID-19 coughs or exhales. These droplets land on objects and surfaces around the person. Other people then catch COVID-19 by touching these objects or surfaces, then touching their eyes, nose or mouth. People can also catch COVID-19 if they breathe in droplets from a person with COVID-19 who coughs out or exhales droplets. This is why it is important to stay more than 1 meter (3 feet) away from a person who is sick
+    People can catch COVID-19 from others who have the virus. The disease can spread from person to person
+    through small droplets from the nose or mouth which are spread when a person with COVID-19 coughs or
+    exhales. These droplets land on objects and surfaces around the person. Other people then catch COVID-19
+    by touching these objects or surfaces, then touching their eyes, nose or mouth. People can also catch
+    COVID-19 if they breathe in droplets from a person with COVID-19 who coughs out or exhales droplets.
+    This is why it is important to stay more than 1 meter (3 feet) away from a person who is sick
   </string>
   <string name="a5">
-    Regularly and thoroughly clean your hands with an alcohol-based hand rub or wash them with soap and water.
-    Why? Washing your hands with soap and water or using alcohol-based hand rub kills viruses that may be on your hands.
-    Maintain at least 1 metre (3 feet) distance between yourself and anyone who is coughing or sneezing.
-    Why? When someone coughs or sneezes they spray small liquid droplets from their nose or mouth which may contain virus. If you are too close, you can breathe in the droplets, including the COVID-19 virus if the person coughing has the disease.
-    Avoid touching eyes, nose and mouth.
-    Why? Hands touch many surfaces and can pick up viruses. Once contaminated, hands can transfer the virus to your eyes, nose or mouth. From there, the virus can enter your body and can make you sick.
-    Make sure you, and the people around you, follow good respiratory hygiene. This means covering your mouth and nose with your bent elbow or tissue when you cough or sneeze. Then dispose of the used tissue immediately.
-    Why? Droplets spread virus. By following good respiratory hygiene you protect the people around you from viruses such as cold, flu and COVID-19.
-    Stay home if you feel unwell. If you have a fever, cough and difficulty breathing, seek medical attention and call in advance. Follow the directions of your local health authority.
-    Why? National and local authorities will have the most up to date information on the situation in your area. Calling in advance will allow your health care provider to quickly direct you to the right health facility. This will also protect you and help prevent spread of viruses and other infections.
-    Keep up to date on the latest COVID-19 hotspots (cities or local areas where COVID-19 is spreading widely). If possible, avoid traveling to places  – especially if you are an older person or have diabetes, heart or lung disease.
-    Why? You have a higher chance of catching COVID-19 in one of these areas.
+    • Regularly and thoroughly clean your hands with an alcohol-based hand rub or wash them with soap and water.
+    \n• Maintain at least 1 metre (3 feet) distance between yourself and anyone who is coughing or sneezing.
+    \n• Avoid touching eyes, nose and mouth.
+    \n• Make sure you, and the people around you, follow good respiratory hygiene. This means covering your mouth and nose with your bent elbow or tissue when you cough or sneeze. Then dispose of the used tissue immediately.
+    \n• Stay home if you feel unwell. If you have a fever, cough and difficulty breathing, seek medical attention and call in advance. Follow the directions of your local health authority.
+    \n• Keep up to date on the latest COVID-19 hotspots (cities or local areas where COVID-19 is spreading widely). If possible, avoid traveling to places  – especially if you are an older person or have diabetes, heart or lung disease.
   </string>
   <string name="a6">
     The risk depends on where you  are - and more specifically, whether there is a COVID-19 outbreak unfolding there.
-
-    For most people in most locations the risk of catching COVID-19 is still low. However, there are now places around the world (cities or areas) where the disease is spreading. For people living in, or visiting, these areas the risk of catching COVID-19 is higher. Governments and health authorities are taking vigorous action every time a new case of COVID-19 is identified. Be sure to comply with any local restrictions on travel, movement or large gatherings. Cooperating with disease control efforts will reduce your risk of catching or spreading COVID-19.
-  </string>
-  <string name="a7">
-    Illness due to COVID-19 infection is generally mild, especially for children and young adults. However, it can cause serious illness: about 1 in every 5 people who catch it need hospital care. It is therefore quite normal for people to worry about how the COVID-19 outbreak will affect them and their loved ones.
-  </string>
-  <string name="a8">
-    While we are still learning about how COVID-2019 affects people, older persons and persons with pre-existing medical conditions (such as high blood pressure, heart disease, lung disease, cancer or diabetes)  appear to develop serious illness more often than others.
+    For most people in most locations the risk of catching COVID-19 is still low. However, there are now places
+    around the world (cities or areas) where the disease is spreading. For people living in, or visiting,
+    these areas the risk of catching COVID-19 is higher. Governments and health authorities are taking
+    vigorous action every time a new case of COVID-19 is identified. Be sure to comply with any local
+    restrictions on travel, movement or large gatherings. Cooperating with disease control efforts will
+    reduce your risk of catching or spreading COVID-19
   </string>
   <string name="a9">
-    No. Antibiotics do not work against viruses, they only work on bacterial infections. COVID-19 is caused by a virus, so antibiotics do not work. Antibiotics should not be used as a means of prevention or treatment of COVID-19. They should only be used as directed by a physician to treat a bacterial infection.
+    No. Antibiotics do not work against viruses, they only work on bacterial infections. COVID-19 is caused
+    by a virus, so antibiotics do not work. Antibiotics should not be used as a means of prevention or
+    treatment of COVID-19. They should only be used as directed by a physician to treat a bacterial infection
   </string>
   <string name="a10">
-    While some western, traditional or home remedies may provide comfort and alleviate symptoms of COVID-19, there is no evidence that current medicine can prevent or cure the disease. WHO does not recommend self-medication with any medicines, including antibiotics, as a prevention or cure for COVID-19. However, there are several ongoing clinical trials that include both western and traditional medicines. WHO will continue to provide updated information as soon as clinical findings are available.
+    While some western, traditional or home remedies may provide comfort and alleviate symptoms of COVID-19,
+    there is no evidence that current medicine can prevent or cure the disease. WHO does not recommend
+    self-medication with any medicines, including antibiotics, as a prevention or cure for COVID-19. However,
+    there are several ongoing clinical trials that include both western and traditional medicines. WHO will
+    continue to provide updated information as soon as clinical findings are available
   </string>
   <string name="a11">
-    Not yet. To date, there is no vaccine and no specific antiviral medicine to prevent or treat COVID-2019. However, those affected should receive care to relieve symptoms. People with serious illness should be hospitalized. Most patients recover thanks to supportive care.
-  </string>
-  <string name="a12">
-    No. The virus that causes COVID-19 and the one that caused the outbreak of Severe Acute Respiratory Syndrome (SARS) in 2003 are related to each other genetically, but the diseases they cause are quite different.
+    Not yet. To date, there is no vaccine and no specific antiviral medicine to prevent or treat COVID-2019.
+    However, those affected should receive care to relieve symptoms. People with serious illness should be
+    hospitalized. Most patients recover thanks to supportive care
   </string>
   <string name="a13">
-    Only wear a mask if you are ill with COVID-19 symptoms (especially coughing) or looking after someone who may have COVID-19. Disposable face mask can only be used once. If you are not ill or looking after someone who is ill then you are wasting a mask. There is a world-wide shortage of masks, so WHO urges people to use masks wisely.
+    Only wear a mask if you are ill with COVID-19 symptoms (especially coughing) or looking after someone
+    who may have COVID-19. Disposable face mask can only be used once. If you are not ill or looking after
+    someone who is ill then you are wasting a mask. There is a world-wide shortage of masks, so WHO urges
+    people to use masks wisely
   </string>
   <string name="a15">
-    The “incubation period” means the time between catching the virus and beginning to have symptoms of the disease. Most estimates of the incubation period for COVID-19 range from 1-14 days, most commonly around five days. These estimates will be updated as more data become available.
-  </string>
-  <string name="a16">
-    Coronaviruses are a large family of viruses that are common in animals. Occasionally, people get infected with these viruses which may then spread to other people. For example, SARS-CoV was associated with civet cats and MERS-CoV is transmitted by dromedary camels. Possible animal sources of COVID-19 have not yet been confirmed.
-  </string>
-  <string name="a18">
-    It is not certain how long the virus that causes COVID-19 survives on surfaces, but it seems to behave like other coronaviruses. Studies suggest that coronaviruses (including preliminary information on the COVID-19 virus) may persist on surfaces for a few hours or up to several days. This may vary under different conditions (e.g. type of surface, temperature or humidity of the environment).
-  </string>
-  <string name="a19">
-    Yes. The likelihood of an infected person contaminating commercial goods is low and the risk of catching the virus that causes COVID-19 from a package that has been moved, travelled, and exposed to different conditions and temperature is also low.
+    The “incubation period” means the time between catching the virus and beginning to have symptoms of
+    the disease. Most estimates of the incubation period for COVID-19 range from 1-14 days, most commonly
+    around five days. These estimates will be updated as more data become available
   </string>
   <string name="a20">
     The following measures ARE NOT effective against COVID-2019 and can be harmful:
-    Smoking
-    Wearing multiple masks
-    Taking antibiotics
+    \n\n• Smoking
+    \n• Wearing multiple masks
+    \n• Taking antibiotics
   </string>
   <string name="a21">
-    Currently, the source of SARS-CoV-2, the coronavirus (CoV) causing COVID-19 is unknown. All available evidence suggests that SARS-CoV-2 has a natural animal origin and is not a constructed virus. SARS-CoV-2 virus most probably has its ecological reservoir in bats. SARS-CoV-2, belongs to a group of genetically related viruses, which also include SARS-CoV and a number of other CoVs isolated from bats populations. MERS-CoV also belongs to this group, but is less closely related.
+    Currently, the source of SARS-CoV-2, the coronavirus (CoV) causing COVID-19 is unknown. All available
+    evidence suggests that SARS-CoV-2 has a natural animal origin and is not a constructed virus. SARS-CoV-2
+    virus most probably has its ecological reservoir in bats. SARS-CoV-2, belongs to a group of genetically
+    related viruses, which also include SARS-CoV and a number of other CoVs isolated from bats populations.
+    MERS-CoV also belongs to this group, but is less closely related
   </string>
   <string name="a23">
-    There is currently no evidence to confirm or disprove that COVID-19 virus can be transmitted through coins or banknotes. However, respiratory droplets expelled from an infected person can contaminate and persist on surfaces. Wash your hands regularly and thoroughly after touching any frequently-touched surface or object, including coins or banknotes. Avoid touching your eyes, mouth and nose, if your hands are not cleaned.
+    There is currently no evidence to confirm or disprove that COVID-19 virus can be transmitted through
+    coins or banknotes. However, respiratory droplets expelled from an infected person can contaminate and
+    persist on surfaces. Wash your hands regularly and thoroughly after touching any frequently-touched
+    surface or object, including coins or banknotes. Avoid touching your eyes, mouth and nose, if
+    your hands are not cleaned
   </string>
   <string name="a24">
-    When grocery shopping, keep at least 1-metre distance from others and avoid touching your eyes, mouth and nose. If possible, sanitize the handles of shopping trolleys or baskets before shopping. Once home, wash your hands thoroughly and also after handling and storing your purchased products. There is currently no confirmed case of COVID-19 transmitted through food or food packaging.
-  </string>
-  <string name="a25">
-    Fruits and vegetables are essential components of a healthy diet. Wash them the same way you would in any other circumstance. Before handling them, wash your hands with soap and water. Then, wash fruits and vegetables thoroughly with clean water, especially if you eat them raw.
+    When grocery shopping, keep at least 1-metre distance from others and avoid touching your eyes, mouth
+    and nose. If possible, sanitize the handles of shopping trolleys or baskets before shopping. Once home,
+    wash your hands thoroughly and also after handling and storing your purchased products. There is
+    currently no confirmed case of COVID-19 transmitted through food or food packaging
   </string>
   <string name="a26">
-    The virus that causes COVID-19 is mainly transmitted through droplets generated when an infected person coughs, sneezes, or speaks. These droplets are too heavy to hang in the air. They quickly fall on floors or surfaces.
-
-    You can be infected by breathing in the virus if you are within 1 metre of a person who has COVID-19, or by touching a contaminated surface and then touching your eyes, nose or mouth before washing your hands.
+    The virus that causes COVID-19 is mainly transmitted through droplets generated when an infected person
+    coughs, sneezes, or speaks. These droplets are too heavy to hang in the air. They quickly fall on floors or
+    surfaces. You can be infected by breathing in the virus if you are within 1 metre of a person who has
+    COVID-19, or by touching a contaminated surface and then touching your eyes, nose or mouth before
+    washing your hands
   </string>
 </resources>

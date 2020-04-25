@@ -137,8 +137,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_percent_by_country"
-        app:colorFill="?colorPercentByCountry"
-        app:showIcon="true"/>
+        app:colorFill="?colorPercentByCountry"/>
 
     </LinearLayout>
 

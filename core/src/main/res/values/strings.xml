@@ -14,6 +14,7 @@
   <string name="text_death_rate">Death rate</string>
   <string name="text_percent_by_country">Percent by country</string>
   <string name="text_statistics_by_country">Statistics by country</string>
+  <string name="text_death_rate_explanation">Death rate is calculated by dividing confirmed cases by deaths</string>
 
   <string name="text_popular_questions">Popular questions</string>
   <string name="text_visit_who">

@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_stats.recyclerView
 import kotlinx.android.synthetic.main.fragment_stats.simpleDialog
 import kotlinx.android.synthetic.main.fragment_stats.textExplanation
 import kotlinx.android.synthetic.main.fragment_stats.textGotIt
+import kotlin.math.min
 
 class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   
@@ -53,6 +54,9 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
     recyclerView.adapter = adapter
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
     textGotIt.setOnClickListener { simpleDialog.dismiss() }
+    val width = min(resources.displayMetrics.widthPixels,
+      resources.displayMetrics.heightPixels) * 0.7
+    textExplanation.maxWidth = width.toInt()
     addBackPressedCallback(onBackPressedCallback)
   }
   
