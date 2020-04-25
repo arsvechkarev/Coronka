@@ -15,11 +15,12 @@ import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromNetwork
 import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
 import core.Loggable
 import core.extenstions.addBackPressedCallback
-import core.extenstions.invisible
+import core.extenstions.animateGoneAndScale
+import core.extenstions.animateVisibleAndScale
 import core.extenstions.visible
-import core.log
 import core.recycler.DisplayableItem
 import core.state.StateHandle
+import core.state.isFresh
 import kotlinx.android.synthetic.main.fragment_stats.layoutLoadingStats
 import kotlinx.android.synthetic.main.fragment_stats.recyclerView
 import kotlinx.android.synthetic.main.fragment_stats.simpleDialog
@@ -77,7 +78,6 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   }
   
   private fun handleLoading() {
-    log { "loading" }
     layoutLoadingStats.visible()
   }
   
@@ -90,12 +90,17 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   }
   
   private fun handleFilteringCountries(state: FilteredCountries) {
-    adapter.submitList(state.list)
+    if (state.isFresh) {
+      adapter.updateFiltered(state.list)
+    } else {
+      adapter.submitList(state.list)
+    }
   }
   
   private fun displayLoadedResult(items: List<DisplayableItem>) {
-    layoutLoadingStats.invisible()
     adapter.submitList(items)
+    layoutLoadingStats.animateGoneAndScale()
+    recyclerView.animateVisibleAndScale()
   }
   
   private fun showOptionExplanationDialog(text: String) {

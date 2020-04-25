@@ -2,6 +2,7 @@
 <resources>
   <color name="dark_icon_default">@android:color/white</color>
 
+  <color name="dark_accent">#0D70D4</color>
   <color name="dark_background">#051A29</color>
   <color name="dark_middle">#182842</color>
   <color name="dark_surface">#0A2F4A</color>

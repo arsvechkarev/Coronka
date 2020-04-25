@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
   def configs = rootProject.ext
@@ -24,16 +23,7 @@ android {
 
 dependencies {
   implementation project(":core")
-  implementation project(':storage')
-  implementation project(":network")
-  implementation project(":views")
-  implementation project(":progress-bar")
-  implementation project(":datetime")
-  implementation project(":f-common")
 
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
-  implementation dependencies.appCompat
-  implementation dependencies.lifecycleExtensions
-  implementation dependencies.recyclerView
 }

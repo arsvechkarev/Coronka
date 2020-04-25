@@ -6,7 +6,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class BaseListenableExecutor<S>(
   val threader: Threader = Threader,
-  private val timeoutSeconds: Long = 15
+  private val timeoutSeconds: Long = 15,
+  private val delayMillis: Long = 500
 ) {
   
   private val cacheLock = Any()
@@ -65,6 +66,7 @@ abstract class BaseListenableExecutor<S>(
     isLoadingFromNetwork.set(true)
     threader.backgroundWorker.submit {
       val future = threader.ioWorker.submit {
+        Thread.sleep(delayMillis)
         val result = performNetworkRequest()
         loadToCache(result)
         synchronized(networkLock) {

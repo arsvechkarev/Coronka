@@ -4,11 +4,12 @@
   <style name="AppTheme" parent="Theme.AppCompat"/>
 
   <style name="AppTheme.Dark">
-    <item name="colorIconDefault">@color/dark_icon_default</item>
+    <item name="colorAccent">@color/dark_accent</item>
     <item name="colorBackground">@color/dark_background</item>
     <item name="colorMiddle">@color/dark_middle</item>
     <item name="colorSurface">@color/dark_surface</item>
     <item name="colorRipple">@color/dark_ripple</item>
+    <item name="colorIconDefault">@color/dark_icon_default</item>
 
     <item name="colorConfirmed">@color/dark_confirmed</item>
     <item name="colorDeaths">@color/dark_deaths</item>

@@ -11,7 +11,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import core.extenstions.block
 import core.extenstions.cancelIfRunning
-import core.extenstions.dp
+import core.extenstions.dpInt
 import core.extenstions.f
 
 class ProgressBar @JvmOverloads constructor(
@@ -21,7 +21,7 @@ class ProgressBar @JvmOverloads constructor(
   
   private val innerStartedAngle = 50f
   private val outerStartedAngle = 120f
-  private val minSize = 32.dp.toInt()
+  private val minSize = 32.dpInt
   private val sweepAngle = 260f
   private val trackWidth: Float
   
@@ -64,7 +64,7 @@ class ProgressBar @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     if (trackWidth == -1f) {
-      paint.strokeWidth = w / 9f
+      paint.strokeWidth = w / 10f
     } else {
       paint.strokeWidth = trackWidth
     }

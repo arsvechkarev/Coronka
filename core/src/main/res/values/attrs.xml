@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <attr name="colorIconDefault" format="color"/>
   <attr name="colorBackground" format="color"/>
   <attr name="colorMiddle" format="color"/>
   <attr name="colorSurface" format="color"/>
   <attr name="colorRipple" format="color"/>
+  <attr name="colorIconDefault" format="color"/>
 
   <attr name="colorConfirmed" format="color"/>
   <attr name="colorDeaths" format="color"/>

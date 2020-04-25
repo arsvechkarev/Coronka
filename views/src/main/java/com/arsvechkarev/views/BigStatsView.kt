@@ -56,7 +56,7 @@ class BigStatsView @JvmOverloads constructor(
   private val chartLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
   
   private var animationLinePercent = 0f
-  private val animator = ValueAnimator().apply {
+  private val animator = ValueAnimator.ofFloat(0f, 1f).apply {
     duration = DURATION_MEDIUM
     interpolator = AccelerateDecelerateInterpolator()
     addUpdateListener {
@@ -107,7 +107,6 @@ class BigStatsView @JvmOverloads constructor(
     deathsNumberLayout = boringLayout(deathsFormatted, ALIGN_CENTER, maxNumberTextWidth)
     chartLineMaxLength = -1f
     requestLayout()
-    animator.setFloatValues(0f, 1f)
     animator.start()
   }
   

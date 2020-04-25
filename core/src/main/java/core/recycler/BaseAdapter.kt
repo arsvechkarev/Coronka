@@ -9,19 +9,22 @@ import core.extenstions.forEach
 abstract class BaseAdapter : RecyclerView.Adapter<ViewHolder>() {
   
   protected var data: List<DisplayableItem> = ArrayList()
+  protected var recyclerView: RecyclerView? = null
+  
   private val delegates = SparseArrayCompat<AdapterDelegate>()
   
   protected fun addDelegate(delegate: AdapterDelegate) {
     delegates.put(delegate.modelClass.hashCode(), delegate)
   }
   
-  fun submitList(list: List<DisplayableItem>?) {
+  fun submitList(list: List<DisplayableItem>?, notify: Boolean = true) {
     data = list ?: ArrayList()
-    notifyDataSetChanged()
+    if (notify) notifyDataSetChanged()
   }
   
   override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
     super.onAttachedToRecyclerView(recyclerView)
+    this.recyclerView = recyclerView
     delegates.forEach { it.onAttachedToRecyclerView(recyclerView) }
   }
   
@@ -46,6 +49,7 @@ abstract class BaseAdapter : RecyclerView.Adapter<ViewHolder>() {
   
   override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
     super.onDetachedFromRecyclerView(recyclerView)
+    this.recyclerView = null
     delegates.forEach { it.onDetachedFromRecyclerView(recyclerView) }
   }
 }

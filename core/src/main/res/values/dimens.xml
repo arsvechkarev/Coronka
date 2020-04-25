@@ -12,4 +12,5 @@
   <dimen name="divider_height">1dp</dimen>
 
   <dimen name="progress_bar_size">24dp</dimen>
+  <dimen name="progress_bar_big_size">100dp</dimen>
 </resources>
