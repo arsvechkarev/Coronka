@@ -19,7 +19,7 @@ class ClickableTextView @JvmOverloads constructor(
     isClickable = true
     isFocusable = true
     typeface = FontManager.rubik
-    setPadding(12.dpInt, 4.dpInt, 12.dpInt, 4.dpInt)
+    setPadding(16.dpInt, 8.dpInt, 16.dpInt, 8.dpInt)
     setTypeface(typeface, Typeface.BOLD)
     setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.text_h4))
     setTextColor(context.getAttrColor(R.attr.colorTextAccent))

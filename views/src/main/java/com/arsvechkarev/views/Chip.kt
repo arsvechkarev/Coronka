@@ -15,6 +15,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
+import androidx.core.content.ContextCompat
 import core.FontManager
 import core.extenstions.assertThat
 import core.extenstions.block
@@ -52,7 +53,7 @@ class Chip @JvmOverloads constructor(
   
   init {
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.Chip, 0, 0)
-    colorFill = attributes.getColor(R.styleable.Chip_android_fillColor, Color.WHITE)
+    colorFill = attributes.getColor(R.styleable.Chip_colorFill, Color.WHITE)
     colorSecondary = attributes.getColor(R.styleable.Chip_colorSecondary, Color.BLACK)
     textPaint.textSize = attributes.getDimension(R.styleable.Chip_android_textSize, 16.sp)
     textPaint.typeface = FontManager.rubik
@@ -60,7 +61,7 @@ class Chip @JvmOverloads constructor(
     textLayout = boringLayoutOf(textPaint, attributes.getText(R.styleable.Chip_android_text) ?: "")
     cornerRadius = attributes.getDimension(R.styleable.Chip_chipCornerRadius, 10.dp)
     if (attributes.getBoolean(R.styleable.Chip_showIcon, false)) {
-      icon = resources.getDrawable(R.drawable.ic_question, context.theme)
+      icon = ContextCompat.getDrawable(context, R.drawable.ic_question)!!.mutate()
       activeColorFilter = PorterDuffColorFilter(colorFill, PorterDuff.Mode.SRC_ATOP)
       inactiveColorFilter = PorterDuffColorFilter(colorSecondary, PorterDuff.Mode.SRC_ATOP)
       icon!!.colorFilter = activeColorFilter

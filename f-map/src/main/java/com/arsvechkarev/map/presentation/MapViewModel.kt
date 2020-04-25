@@ -47,7 +47,10 @@ class MapViewModel(
     }
     repository.loadCountriesInfo {
       onSuccess { _state.update(LoadedFromNetwork(it)) }
-      onFailure { log(it) { "Failing loading countries + ${it.message}" } }
+      onFailure {
+        _state.update(Failure(it.toReason()))
+        log(it) { "Failing loading countries + ${it.message}" }
+      }
     }
   }
   
@@ -78,21 +81,5 @@ class MapViewModel(
     threader.mainThreadWorker.submit {
       _state.update(FoundCountry(countries, country))
     }
-  }
-  
-  private fun notifyFailureIfNeeded(error: Throwable) {
-    val currentValue = _state.value?.currentValue
-    val reason = error.toReason()
-    if (currentValue != null
-        && currentValue is Failure
-        && currentValue.reason == reason) {
-      return
-    }
-    _state.update(Failure(reason))
-  }
-  
-  companion object {
-    private const val KEY_GENERAL_INFO = "generalInfo"
-    private const val KEY_COUNTRIES_AND_TIME = "countriesAndTime"
   }
 }

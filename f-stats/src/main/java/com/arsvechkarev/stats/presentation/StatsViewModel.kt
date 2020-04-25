@@ -62,6 +62,7 @@ class StatsViewModel(
     repository.loadGeneralInfo {
       onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
       onFailure {
+  
         log(it) { "Failure loading general info: ${it.message}" }
       }
     }
@@ -70,6 +71,7 @@ class StatsViewModel(
         networkOperations.addValue(KEY_COUNTRIES, it)
       }
       onFailure {
+        _state.update(StatsScreenState.Failure(StatsScreenState.Failure.FailureReason.UNKNOWN))
         log(it) { "fail stats countries" }
       }
     }

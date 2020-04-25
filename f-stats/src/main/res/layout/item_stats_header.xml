@@ -79,12 +79,11 @@
 
   </RelativeLayout>
 
-  <com.google.android.flexbox.FlexboxLayout
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="8dp"
-    app:flexWrap="wrap"
-    app:justifyContent="center">
+    android:orientation="vertical"
+    android:paddingVertical="8dp">
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/chipConfirmed"
@@ -92,32 +91,35 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/chip_margin"
-      android:fillColor="?colorConfirmed"
-      android:text="@string/text_confirmed"/>
+      android:text="@string/text_confirmed"
+      app:colorFill="?colorConfirmed"
+      app:showIcon="true"/>
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/chipRecovered"
       style="@style/Chip"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:fillColor="?colorRecovered"
-      android:text="@string/text_recovered"/>
+      android:text="@string/text_recovered"
+      app:colorFill="?colorRecovered"
+      app:showIcon="true"/>
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/chipDeaths"
       style="@style/Chip"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:fillColor="?attr/colorDeaths2"
-      android:text="@string/text_deaths"/>
+      android:text="@string/text_deaths"
+      app:colorFill="?colorDeaths2"
+      app:showIcon="true"/>
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/chipDeathRate"
       style="@style/Chip"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:fillColor="?colorDeathRate"
       android:text="@string/text_death_rate"
+      app:colorFill="?colorDeathRate"
       app:showIcon="true"/>
 
     <com.arsvechkarev.views.Chip
@@ -125,10 +127,10 @@
       style="@style/Chip"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:fillColor="?colorPercentByCountry"
       android:text="@string/text_percent_by_country"
+      app:colorFill="?colorPercentByCountry"
       app:showIcon="true"/>
 
-  </com.google.android.flexbox.FlexboxLayout>
+  </LinearLayout>
 
 </LinearLayout>

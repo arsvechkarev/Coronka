@@ -18,11 +18,11 @@
   </declare-styleable>
 
   <declare-styleable name="Chip">
-    <attr name="android:fillColor" format="color"/>
+    <attr name="colorFill" format="color"/>
+    <attr name="colorSecondary" format="color"/>
     <attr name="android:text" format="string"/>
     <attr name="android:textSize" format="dimension"/>
     <attr name="android:strokeWidth" format="dimension"/>
-    <attr name="colorSecondary" format="color"/>
     <attr name="chipCornerRadius" format="dimension"/>
     <attr name="showIcon" format="boolean"/>
     <attr name="iconSize" format="dimension"/>
