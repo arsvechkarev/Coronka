@@ -48,7 +48,7 @@
       android:layout_height="wrap_content"
       android:textSize="@dimen/text_h1"/>
 
-    <com.arsvechkarev.views.noconnection.WifiView
+    <com.arsvechkarev.views.noconnection.NoConnectionView
       android:id="@+id/noConnectionView"
       android:layout_width="100dp"
       android:layout_height="100dp"

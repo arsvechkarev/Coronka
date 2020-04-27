@@ -124,7 +124,8 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
     textFailureReason.text = message
     layoutLoading.animateInvisible()
     layoutFailure.animateVisibleAndScale(andThen = {
-      noConnectionView.animateColorChanging()
+      if (state.reason == NO_CONNECTION) noConnectionView.animateWifi()
+      else if (state.reason == TIMEOUT) noConnectionView.animateHourglass()
     })
   }
   

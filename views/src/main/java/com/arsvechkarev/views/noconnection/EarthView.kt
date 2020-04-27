@@ -1,16 +1,11 @@
 package com.arsvechkarev.views.noconnection
 
-import android.animation.ValueAnimator
-import android.animation.ValueAnimator.REVERSE
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.views.R
-import core.extenstions.DURATION_LONG
-import core.extenstions.DURATION_MEDIUM
 import core.extenstions.assertThat
 import core.extenstions.cancelIfRunning
 import core.extenstions.dpInt
@@ -27,33 +22,20 @@ class EarthView @JvmOverloads constructor(
   private var itemSize = 40.dpInt
   private var itemsMargin = 8.dpInt
   private val wifi = context.getDrawable(R.drawable.ic_wifi_full)!!
-  private val hourglass = context.getDrawable(R.drawable.ic_loading)!!
+  private val hourglass = context.getDrawable(R.drawable.ic_hourglass)!!
   private val earth = context.getDrawable(R.drawable.ic_planet_earth)!!
   private var currentItem: Drawable? = null
   private var hourglassRotation = 0f
   
-  private val wifiAnimator = ValueAnimator.ofInt(0, 255).apply {
-    duration = DURATION_MEDIUM
-    repeatMode = REVERSE
-    repeatCount = 4
-    addUpdateListener {
-      wifi.alpha = it.animatedValue as Int
-      invalidate()
-    }
+  private val wifiAnimator = createWifiAnimator { alpha ->
+    wifi.alpha = alpha
+    invalidate()
   }
   
-  private val hourglassAnimator = ValueAnimator.ofFloat(
-    -15f, 15f, -15f, 15f, -15f, 15f, -15f, 15f, -15f, 0f
-  ).apply {
-    duration = DURATION_LONG
-    interpolator = AccelerateDecelerateInterpolator()
-    addUpdateListener {
-      if (hourglass.alpha != 255) {
-        hourglass.alpha = (it.animatedFraction * 3 * 255).toInt().coerceAtMost(255)
-      }
-      hourglassRotation = it.animatedValue as Float
-      invalidate()
-    }
+  private val hourglassAnimator = createHourglassAnimator { hourglassAlpha ->
+    hourglass.alpha = hourglassAlpha
+    hourglassRotation = animatedValue as Float
+    invalidate()
   }
   
   fun animateWifi() {

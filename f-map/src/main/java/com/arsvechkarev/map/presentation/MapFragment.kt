@@ -108,7 +108,10 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
       NO_CONNECTION -> layoutNoConnection.visible()
       TIMEOUT, UNKNOWN -> layoutUnknownError.visible()
     }
-    layoutFailure.animateVisible(andThen = { earthView.animateWifi() })
+    layoutFailure.animateVisible(andThen = {
+      if (state.reason == NO_CONNECTION) earthView.animateWifi()
+      else if (state.reason == TIMEOUT) earthView.animateHourglass()
+    })
     layoutLoadingMap.animateInvisibleAndScale()
   }
   
