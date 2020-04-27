@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="@dimen/icon_default_size"
+  android:height="@dimen/icon_default_size"
+  android:viewportWidth="24"
+  android:viewportHeight="24">
+  <path
+    android:pathData="M 7 7.5 L 7 3 L 17 3 L 17 7.5 L 7 17 L 7 21 L 17 21 L 17 16.5 Z"
+    android:strokeWidth="3"
+    android:strokeColor="?colorIconDefault"
+    android:strokeLineCap="round"
+    android:strokeLineJoin="round"/>
+</vector>

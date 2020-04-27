@@ -35,7 +35,6 @@ class BottomSheet @JvmOverloads constructor(
   private lateinit var mainView: View
   private lateinit var slideView: View
   
-  // For touch events
   private var touchSlop = ViewConfiguration.get(context).scaledTouchSlop
   private var maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
   private var isBeingDragged = false
@@ -44,7 +43,6 @@ class BottomSheet @JvmOverloads constructor(
   private var velocityTracker: VelocityTracker? = null
   private var slideRange = 0
   
-  // Animations
   private val slideViewAnimator = ValueAnimator().apply {
     addUpdateListener {
       val value = it.animatedValue as Int

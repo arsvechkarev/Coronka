@@ -13,6 +13,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 
 const val DURATION_DEFAULT = 300L
 const val DURATION_MEDIUM = 500L
+const val DURATION_LONG = 800L
 
 fun Animator.cancelIfRunning() {
   if (isRunning) {
@@ -38,14 +39,19 @@ fun ViewPropertyAnimator.doOnEnd(block: () -> Unit): ViewPropertyAnimator {
 }
 
 fun View.animateVisible(andThen: () -> Unit = {}) {
+  isClickable = false
   alpha = 0f
   visible()
   animate().alpha(1f).setDuration(DURATION_DEFAULT)
       .setInterpolator(AccelerateDecelerateInterpolator())
-      .doOnEnd(andThen)
+      .doOnEnd {
+        isClickable = true
+        andThen()
+      }
 }
 
 fun View.animateVisibleAndScale(andThen: () -> Unit = {}) {
+  isClickable = false
   alpha = 0f
   scaleX = 0.9f
   scaleY = 0.9f
@@ -55,14 +61,19 @@ fun View.animateVisibleAndScale(andThen: () -> Unit = {}) {
       .scaleY(1f)
       .setDuration(DURATION_DEFAULT)
       .setInterpolator(AccelerateDecelerateInterpolator())
-      .doOnEnd(andThen)
+      .doOnEnd {
+        isClickable = true
+        andThen()
+      }
 }
 
 fun View.animateInvisible(andThen: () -> Unit = {}) {
+  isClickable = false
   animate().alpha(0f).setDuration(DURATION_DEFAULT)
       .setInterpolator(AccelerateDecelerateInterpolator())
       .doOnEnd {
         invisible()
+        isClickable = true
         alpha = 1f
         andThen()
       }
@@ -70,6 +81,7 @@ fun View.animateInvisible(andThen: () -> Unit = {}) {
 
 
 fun View.animateInvisibleAndScale() {
+  isClickable = false
   animate().alpha(0f)
       .scaleX(1.2f)
       .scaleY(1.2f)
@@ -77,6 +89,7 @@ fun View.animateInvisibleAndScale() {
       .setInterpolator(AccelerateDecelerateInterpolator())
       .doOnEnd {
         invisible()
+        isClickable = true
         scaleX = 1f
         scaleY = 1f
         alpha = 1f

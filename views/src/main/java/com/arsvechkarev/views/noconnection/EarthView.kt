@@ -4,13 +4,14 @@ import android.animation.ValueAnimator
 import android.animation.ValueAnimator.REVERSE
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.views.R
+import core.extenstions.DURATION_LONG
 import core.extenstions.DURATION_MEDIUM
+import core.extenstions.assertThat
 import core.extenstions.cancelIfRunning
 import core.extenstions.dpInt
 import core.extenstions.i
@@ -23,46 +24,87 @@ class EarthView @JvmOverloads constructor(
   attrs: AttributeSet? = null
 ) : View(context, attrs) {
   
-  private var wifiSize = 40.dpInt
+  private var itemSize = 40.dpInt
   private var itemsMargin = 8.dpInt
   private val wifi = context.getDrawable(R.drawable.ic_wifi_full)!!
+  private val hourglass = context.getDrawable(R.drawable.ic_loading)!!
   private val earth = context.getDrawable(R.drawable.ic_planet_earth)!!
+  private var currentItem: Drawable? = null
+  private var hourglassRotation = 0f
   
-  private val animator = ValueAnimator.ofArgb(Color.WHITE, Color.GRAY).apply {
+  private val wifiAnimator = ValueAnimator.ofInt(0, 255).apply {
     duration = DURATION_MEDIUM
     repeatMode = REVERSE
-    repeatCount = 5
+    repeatCount = 4
     addUpdateListener {
-      wifi.colorFilter = PorterDuffColorFilter(it.animatedValue as Int, PorterDuff.Mode.SRC_ATOP)
+      wifi.alpha = it.animatedValue as Int
+      invalidate()
+    }
+  }
+  
+  private val hourglassAnimator = ValueAnimator.ofFloat(
+    -15f, 15f, -15f, 15f, -15f, 15f, -15f, 15f, -15f, 0f
+  ).apply {
+    duration = DURATION_LONG
+    interpolator = AccelerateDecelerateInterpolator()
+    addUpdateListener {
+      if (hourglass.alpha != 255) {
+        hourglass.alpha = (it.animatedFraction * 3 * 255).toInt().coerceAtMost(255)
+      }
+      hourglassRotation = it.animatedValue as Float
       invalidate()
     }
   }
   
   fun animateWifi() {
-    animator.start()
+    currentItem = wifi
+    wifiAnimator.start()
+  }
+  
+  fun animateHourglass() {
+    currentItem = hourglass
+    hourglassAnimator.start()
+  }
+  
+  override fun onVisibilityChanged(changedView: View, visibility: Int) {
+    super.onVisibilityChanged(changedView, visibility)
+    if (visibility != VISIBLE) {
+      wifi.alpha = 0
+      hourglass.alpha = 0
+    }
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     val minSide = minOf(w, h)
     val emptyCornerSpace = (minSide * sqrt(2f)) / 2 - minSide / 2
-    val extraNeededSpace = (wifiSize - emptyCornerSpace).coerceAtLeast(0f).i
+    val extraNeededSpace = (itemSize - emptyCornerSpace).coerceAtLeast(0f).i
     val earthSize = minSide - extraNeededSpace
     val left = (cos(PI / 4) * earthSize / 2 + w / 2 + itemsMargin).toInt()
-    wifi.setBounds(left, 0, left + wifiSize, wifiSize)
+    wifi.setBounds(left, 0, left + itemSize, itemSize)
+    hourglass.setBounds(left, 0, left + itemSize, itemSize)
     earth.setBounds(w / 2 - earthSize / 2, h / 2 - earthSize / 2,
       w / 2 + earthSize / 2, h / 2 + earthSize / 2)
   }
   
   override fun onDraw(canvas: Canvas) {
     earth.draw(canvas)
+    currentItem ?: return
     canvas.save()
-    canvas.rotate(45f, wifi.bounds.exactCenterX(), wifi.bounds.exactCenterY())
-    wifi.draw(canvas)
+    if (currentItem == wifi) {
+      canvas.rotate(45f, wifi.bounds.exactCenterX(), wifi.bounds.exactCenterY())
+      currentItem!!.draw(canvas)
+    } else {
+      assertThat(currentItem == hourglass)
+      canvas.rotate(hourglassRotation, hourglass.bounds.exactCenterX(),
+        hourglass.bounds.exactCenterY())
+      currentItem!!.draw(canvas)
+    }
     canvas.restore()
   }
   
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    animator.cancelIfRunning()
+    wifiAnimator.cancelIfRunning()
+    hourglassAnimator.cancelIfRunning()
   }
 }
