@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class BaseListenableExecutor<S>(
   val threader: Threader = Threader,
-  private val timeoutSeconds: Long = 15,
+  private val timeoutSeconds: Long = 5,
   private val delayMillis: Long = 500
 ) {
   

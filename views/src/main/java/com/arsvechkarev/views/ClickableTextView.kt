@@ -1,13 +1,17 @@
 package com.arsvechkarev.views
 
 import android.content.Context
-import android.graphics.Typeface
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.RippleDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RoundRectShape
 import android.util.AttributeSet
-import android.util.TypedValue
 import androidx.appcompat.widget.AppCompatTextView
 import core.FontManager
+import core.extenstions.DURATION_MEDIUM
+import core.extenstions.dp
 import core.extenstions.dpInt
-import core.extenstions.getAttrColor
 
 class ClickableTextView @JvmOverloads constructor(
   context: Context,
@@ -16,13 +20,34 @@ class ClickableTextView @JvmOverloads constructor(
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
   
   init {
+    val attributes = context.obtainStyledAttributes(attrs, R.styleable.ClickableTextView,
+      defStyleAttr, 0)
+    val rippleColor = attributes.getColor(R.styleable.ClickableTextView_rippleColor, Color.WHITE)
+    setRipple(rippleColor)
+    attributes.recycle()
     isClickable = true
     isFocusable = true
     typeface = FontManager.rubik
     setPadding(16.dpInt, 8.dpInt, 16.dpInt, 8.dpInt)
-    setTypeface(typeface, Typeface.BOLD)
-    setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.text_h4))
-    setTextColor(context.getAttrColor(R.attr.colorTextAccent))
-    setBackgroundResource(R.drawable.bg_clickable_text_view)
+  }
+  
+  private fun setRipple(rippleColor: Int) {
+    val r = 4.dp
+    val roundRectShape = RoundRectShape(floatArrayOf(r, r, r, r, r, r, r, r), null, null)
+    val backgroundRect = ShapeDrawable().apply {
+      shape = roundRectShape
+      paint.color = Color.TRANSPARENT
+    }
+    val maskRect = ShapeDrawable().apply {
+      shape = roundRectShape
+      paint.color = rippleColor
+    }
+    background = RippleDrawable(ColorStateList.valueOf(rippleColor), backgroundRect, maskRect)
+  }
+  
+  override fun performClick(): Boolean {
+    isClickable = false
+    postDelayed({ isClickable = true }, DURATION_MEDIUM)
+    return super.performClick()
   }
 }

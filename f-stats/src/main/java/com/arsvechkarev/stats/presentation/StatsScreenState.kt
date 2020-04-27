@@ -18,8 +18,4 @@ sealed class StatsScreenState : BaseScreenState() {
   class FilteredCountries(
     val list: List<DisplayableItem>
   ) : StatsScreenState()
-  
-  class Failure(val reason: FailureReason) : StatsScreenState() {
-    enum class FailureReason { NO_CONNECTION, TIMEOUT, UNKNOWN }
-  }
 }

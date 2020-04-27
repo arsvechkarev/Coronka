@@ -30,7 +30,7 @@ class SimpleDialog @JvmOverloads constructor(
   private var wasNoMoveEvent = false
   
   init {
-    visibility = View.GONE
+    gone()
   }
   
   override fun onFinishInflate() {
@@ -46,7 +46,7 @@ class SimpleDialog @JvmOverloads constructor(
       dialogView.visible()
       animateColor(0x00000000, 0x70000000)
       val translateAnimation = ObjectAnimator.ofFloat(dialogView, View.TRANSLATION_Y,
-        dialogView.height / 2f, 0f)
+        dialogView.height / 3f, 0f)
       val alphaAnimation = ObjectAnimator.ofFloat(dialogView, View.ALPHA, 0f, 1f)
       AnimatorSet().apply {
         duration = DURATION_DEFAULT
@@ -58,11 +58,9 @@ class SimpleDialog @JvmOverloads constructor(
   
   fun dismiss() {
     post {
-      animateColor(0x70000000, 0x00000000, andThen = {
-        visibility = View.GONE
-      })
+      animateColor(0x70000000, 0x00000000, andThen = { gone() })
       val translateAnimation = ObjectAnimator.ofFloat(dialogView, View.TRANSLATION_Y,
-        0f, dialogView.height / 2f)
+        0f, dialogView.height / 3f)
       val alphaAnimation = ObjectAnimator.ofFloat(dialogView, View.ALPHA, 1f, 0f)
       AnimatorSet().apply {
         duration = DURATION_DEFAULT

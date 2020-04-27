@@ -15,17 +15,26 @@ import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromNetwork
 import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
 import core.Loggable
 import core.extenstions.addBackPressedCallback
-import core.extenstions.animateGoneAndScale
+import core.extenstions.animateInvisible
+import core.extenstions.animateInvisibleAndScale
 import core.extenstions.animateVisibleAndScale
-import core.extenstions.visible
 import core.recycler.DisplayableItem
+import core.state.BaseScreenState
+import core.state.Failure
+import core.state.Failure.FailureReason.NO_CONNECTION
+import core.state.Failure.FailureReason.TIMEOUT
+import core.state.Failure.FailureReason.UNKNOWN
 import core.state.StateHandle
 import core.state.isFresh
-import kotlinx.android.synthetic.main.fragment_stats.layoutLoadingStats
+import kotlinx.android.synthetic.main.fragment_stats.layoutFailure
+import kotlinx.android.synthetic.main.fragment_stats.layoutLoading
+import kotlinx.android.synthetic.main.fragment_stats.noConnectionView
 import kotlinx.android.synthetic.main.fragment_stats.recyclerView
 import kotlinx.android.synthetic.main.fragment_stats.simpleDialog
 import kotlinx.android.synthetic.main.fragment_stats.textExplanation
+import kotlinx.android.synthetic.main.fragment_stats.textFailureReason
 import kotlinx.android.synthetic.main.fragment_stats.textGotIt
+import kotlinx.android.synthetic.main.fragment_stats.textRetry
 import kotlin.math.min
 
 class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
@@ -55,6 +64,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
     recyclerView.adapter = adapter
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
     textGotIt.setOnClickListener { simpleDialog.dismiss() }
+    textRetry.setOnClickListener { viewModel.updateFromNetwork() }
     val width = min(resources.displayMetrics.widthPixels,
       resources.displayMetrics.heightPixels) * 0.7
     textExplanation.maxWidth = width.toInt()
@@ -66,19 +76,21 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
     viewModel.startInitialLoading(savedInstanceState != null)
   }
   
-  private fun handleStateChanged(stateHandle: StateHandle<StatsScreenState>) {
+  private fun handleStateChanged(stateHandle: StateHandle<BaseScreenState>) {
     stateHandle.handleUpdate { state ->
       when (state) {
         is Loading -> handleLoading()
         is LoadedFromCache -> handleLoadedFromCache(state)
         is LoadedFromNetwork -> handleLoadedFromNetwork(state)
         is FilteredCountries -> handleFilteringCountries(state)
+        is Failure -> handleFailure(state)
       }
     }
   }
   
   private fun handleLoading() {
-    layoutLoadingStats.visible()
+    layoutFailure.animateInvisibleAndScale()
+    layoutLoading.animateVisibleAndScale()
   }
   
   private fun handleLoadedFromCache(state: LoadedFromCache) {
@@ -99,8 +111,21 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   
   private fun displayLoadedResult(items: List<DisplayableItem>) {
     adapter.submitList(items)
-    layoutLoadingStats.animateGoneAndScale()
+    layoutLoading.animateInvisibleAndScale()
     recyclerView.animateVisibleAndScale()
+  }
+  
+  private fun handleFailure(state: Failure) {
+    val message = when (state.reason) {
+      NO_CONNECTION -> "No connection"
+      TIMEOUT -> "Too slow connection"
+      UNKNOWN -> "An error occurred"
+    }
+    textFailureReason.text = message
+    layoutLoading.animateInvisible()
+    layoutFailure.animateVisibleAndScale(andThen = {
+      noConnectionView.animateColorChanging()
+    })
   }
   
   private fun showOptionExplanationDialog(text: String) {

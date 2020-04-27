@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="?attr/colorBackground">
+  android:background="?colorBackground">
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recyclerView"
@@ -11,7 +12,7 @@
     android:visibility="invisible"/>
 
   <LinearLayout
-    android:id="@+id/layoutLoadingStats"
+    android:id="@+id/layoutLoading"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -23,12 +24,44 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Loading stats"
-      android:textSize="@dimen/text_h2"/>
+      android:textSize="@dimen/text_h1"/>
 
     <progressbar.ComplexProgressBar
       android:layout_width="@dimen/progress_bar_big_size"
       android:layout_height="@dimen/progress_bar_big_size"
       android:layout_margin="@dimen/progress_bar_margin"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/layoutFailure"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <com.arsvechkarev.views.FontTextView
+      android:id="@+id/textFailureReason"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="@dimen/text_h1"/>
+
+    <com.arsvechkarev.views.noconnection.WifiView
+      android:id="@+id/noConnectionView"
+      android:layout_width="100dp"
+      android:layout_height="100dp"
+      android:layout_margin="24dp"/>
+
+    <com.arsvechkarev.views.ClickableTextView
+      android:id="@+id/textRetry"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="RETRY"
+      android:textColor="?colorFailure"
+      android:textSize="@dimen/text_h4"
+      app:rippleColor="?colorFailureRipple"/>
 
   </LinearLayout>
 
@@ -59,7 +92,10 @@
         android:layout_gravity="end"
         android:layout_marginTop="20dp"
         android:gravity="end"
-        android:text="GOT IT"/>
+        android:text="GOT IT"
+        android:textColor="?colorTextAccent"
+        android:textSize="@dimen/text_h4"
+        app:rippleColor="?colorRipple"/>
 
     </LinearLayout>
 

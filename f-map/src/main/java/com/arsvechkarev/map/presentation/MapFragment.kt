@@ -2,34 +2,39 @@ package com.arsvechkarev.map.presentation
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
-import com.arsvechkarev.map.presentation.MapScreenState.Failure
-import com.arsvechkarev.map.presentation.MapScreenState.Failure.FailureReason.NO_CONNECTION
-import com.arsvechkarev.map.presentation.MapScreenState.Failure.FailureReason.TIMEOUT
-import com.arsvechkarev.map.presentation.MapScreenState.Failure.FailureReason.UNKNOWN
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
 import com.arsvechkarev.map.presentation.MapScreenState.Loading
 import com.arsvechkarev.map.utils.MapDelegate
-import core.FontManager
 import core.Loggable
+import core.extenstions.animateInvisibleAndScale
+import core.extenstions.animateVisible
+import core.extenstions.animateVisibleAndScale
 import core.extenstions.invisible
 import core.extenstions.visible
-import core.log
 import core.model.Country
+import core.state.BaseScreenState
+import core.state.Failure
+import core.state.Failure.FailureReason.NO_CONNECTION
+import core.state.Failure.FailureReason.TIMEOUT
+import core.state.Failure.FailureReason.UNKNOWN
 import core.state.StateHandle
 import core.state.isFresh
 import kotlinx.android.synthetic.main.fragment_map.bottomSheet
+import kotlinx.android.synthetic.main.fragment_map.earthView
+import kotlinx.android.synthetic.main.fragment_map.fragment_map_root
 import kotlinx.android.synthetic.main.fragment_map.layoutFailure
 import kotlinx.android.synthetic.main.fragment_map.layoutLoadingMap
+import kotlinx.android.synthetic.main.fragment_map.layoutNoConnection
+import kotlinx.android.synthetic.main.fragment_map.layoutUnknownError
 import kotlinx.android.synthetic.main.fragment_map.statsView
-import kotlinx.android.synthetic.main.fragment_map.textFailureReason
 import kotlinx.android.synthetic.main.fragment_map.textRetry
+import kotlinx.android.synthetic.main.fragment_map.textRetryUnknown
 import kotlinx.android.synthetic.main.fragment_map.textViewCountryName
 
 class MapFragment : Fragment(R.layout.fragment_map), Loggable {
@@ -43,12 +48,12 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     this.savedInstanceState = savedInstanceState
-    mapDelegate.init(requireContext(), childFragmentManager, ::onCountrySelected)
+    mapDelegate.init(requireContext(), requireFragmentManager(), ::onCountrySelected)
     viewModel = MapModuleInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
-    textViewCountryName.typeface = FontManager.rubik
     bottomSheet.setOnClickListener { bottomSheet.hide() }
     textRetry.setOnClickListener { viewModel.updateFromNetwork() }
+    textRetryUnknown.setOnClickListener { viewModel.updateFromNetwork() }
   }
   
   override fun onResume() {
@@ -56,7 +61,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     viewModel.startInitialLoading(savedInstanceState != null)
   }
   
-  private fun handleStateChanged(stateHandle: StateHandle<MapScreenState>) {
+  private fun handleStateChanged(stateHandle: StateHandle<BaseScreenState>) {
     stateHandle.handleUpdate { state ->
       when (state) {
         is Loading -> handleStartLoading()
@@ -69,8 +74,8 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleStartLoading() {
-    layoutFailure.invisible()
-    layoutLoadingMap.visible()
+    layoutFailure.animateInvisibleAndScale()
+    layoutLoadingMap.animateVisibleAndScale()
   }
   
   private fun handleCountriesLoadedFromCache(state: LoadedFromCache) {
@@ -96,21 +101,20 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleFailure(state: Failure) {
-    Toast.makeText(requireContext(), "Failure", Toast.LENGTH_SHORT).show()
-    val message = when (state.reason) {
-      NO_CONNECTION -> "No connection"
-      TIMEOUT -> "Too slow connection"
-      UNKNOWN -> "Unknown error"
+    fragment_map_root.invisible()
+    layoutUnknownError.invisible()
+    layoutNoConnection.invisible()
+    when (state.reason) {
+      NO_CONNECTION -> layoutNoConnection.visible()
+      TIMEOUT, UNKNOWN -> layoutUnknownError.visible()
     }
-    textFailureReason.text = message
-    layoutFailure.visible()
-    layoutLoadingMap.invisible()
-    Toast.makeText(context, "Failure: ${state.reason}", Toast.LENGTH_SHORT).show()
-    log { "error, reason = ${state.reason}" }
+    layoutFailure.animateVisible(andThen = { earthView.animateWifi() })
+    layoutLoadingMap.animateInvisibleAndScale()
   }
   
   private fun displayLoadedResult(countries: List<Country>) {
-    layoutLoadingMap.invisible()
+    fragment_map_root.animateVisible()
+    layoutLoadingMap.animateInvisibleAndScale()
     mapDelegate.drawCountries(countries)
   }
   

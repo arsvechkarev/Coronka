@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-  android:width="28.8dp"
-  android:height="28.8dp"
-  android:viewportWidth="28.8"
-  android:viewportHeight="28.8">
+  android:width="48dp"
+  android:height="48dp"
+  android:viewportWidth="48"
+  android:viewportHeight="48">
 
   <group
     android:name="root"
-    android:translateX="14.4"
-    android:translateY="14.4">
+    android:translateX="24"
+    android:translateY="24">
 
     <path
       android:name="progressBar"
-      android:pathData="M0, 0 m 0, -10.8 a 10.8,10.8 0 0.6,0.6 0,21.6 a 10.8,10.8 0 0.6,0.6 0,-21.6"
-      android:strokeWidth="4"
+      android:pathData="M0, 0 m 0, -18 a 18,18 0 1,1 0,36 a 18,18 0 1,1 0,-36"
+      android:strokeWidth="3.2"
       android:strokeColor="?colorAccent"
       android:strokeLineCap="round"
       android:strokeLineJoin="round"

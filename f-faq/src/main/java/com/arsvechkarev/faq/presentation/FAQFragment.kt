@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,12 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.faq.R
 import com.arsvechkarev.faq.di.FAQModuleInjector
 import com.arsvechkarev.faq.list.FAQAdapter
-import core.extenstions.getAttrColor
+import core.extenstions.animateVisibleAndScale
+import core.extenstions.invisible
+import core.extenstions.retrieveColor
 
 class FAQFragment : Fragment() {
-  
-  private lateinit var recyclerView: RecyclerView
-  private lateinit var viewModel: FAQViewModel
   
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -25,16 +25,24 @@ class FAQFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View? {
     val adapter = FAQAdapter()
-    recyclerView = RecyclerView(requireContext()).apply {
-      setBackgroundColor(requireContext().getAttrColor(R.attr.colorBackground))
+    val frameLayout = FrameLayout(requireContext()).apply {
+      setBackgroundColor(requireContext().retrieveColor(R.color.dark_background))
+      layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+    }
+    val recyclerView = RecyclerView(requireContext()).apply {
+      invisible()
       layoutParams = RecyclerView.LayoutParams(MATCH_PARENT, MATCH_PARENT)
       layoutManager = LinearLayoutManager(requireContext())
       this.adapter = adapter
     }
-    viewModel = FAQModuleInjector.provideViewModel(this).apply {
-      data.observe(this@FAQFragment, Observer { adapter.submitList(it) })
+    frameLayout.addView(recyclerView)
+    FAQModuleInjector.provideViewModel(this).apply {
+      data.observe(this@FAQFragment, Observer {
+        adapter.submitList(it)
+        recyclerView.animateVisibleAndScale()
+      })
       loadData()
     }
-    return recyclerView
+    return frameLayout
   }
 }

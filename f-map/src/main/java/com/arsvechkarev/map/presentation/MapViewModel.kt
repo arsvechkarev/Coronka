@@ -3,8 +3,6 @@ package com.arsvechkarev.map.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.arsvechkarev.common.CommonRepository
-import com.arsvechkarev.map.presentation.MapScreenState.Failure
-import com.arsvechkarev.map.presentation.MapScreenState.Failure.Companion.toReason
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
@@ -15,6 +13,9 @@ import core.NetworkConnection
 import core.log
 import core.model.Country
 import core.releasable.ReleasableViewModel
+import core.state.BaseScreenState
+import core.state.Failure
+import core.state.Failure.Companion.toReason
 import core.state.StateHandle
 import core.state.currentValue
 import core.state.update
@@ -28,8 +29,8 @@ class MapViewModel(
   
   override val logTag = "Base_Map_ViewModel"
   
-  private val _state = MutableLiveData<StateHandle<MapScreenState>>(StateHandle())
-  val state: LiveData<StateHandle<MapScreenState>>
+  private val _state = MutableLiveData<StateHandle<BaseScreenState>>(StateHandle())
+  val state: LiveData<StateHandle<BaseScreenState>>
     get() = _state
   
   fun startInitialLoading(isRecreated: Boolean) {

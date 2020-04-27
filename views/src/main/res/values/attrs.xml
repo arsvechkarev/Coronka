@@ -17,6 +17,13 @@
     <attr name="labelTextSize" format="dimension"/>
   </declare-styleable>
 
+  <declare-styleable name="BottomSheet">
+    <attr name="defaultState">
+      <enum name="shown" value="0"/>
+      <enum name="hidden" value="1"/>
+    </attr>
+  </declare-styleable>
+
   <declare-styleable name="Chip">
     <attr name="colorFill" format="color"/>
     <attr name="colorSecondary" format="color"/>
@@ -29,24 +36,13 @@
     <attr name="iconMargin" format="dimension"/>
   </declare-styleable>
 
-  <declare-styleable name="LoadingTextView">
-    <attr name="android:text" format="string"/>
-    <attr name="android:textSize" format="dimension"/>
-    <attr name="android:textColor" format="color"/>
-    <attr name="progressSize" format="dimension"/>
-    <attr name="progressColor" format="color"/>
+  <declare-styleable name="ClickableTextView">
+    <attr name="rippleColor" format="color"/>
   </declare-styleable>
 
   <declare-styleable name="ProgressBar">
     <attr name="trackWidth" format="dimension"/>
     <attr name="color" format="color"/>
-  </declare-styleable>
-
-  <declare-styleable name="BottomSheet">
-    <attr name="defaultState">
-      <enum name="shown" value="0"/>
-      <enum name="hidden" value="1"/>
-    </attr>
   </declare-styleable>
 
 </resources>

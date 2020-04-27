@@ -21,11 +21,10 @@ val Int.f get() = toFloat()
 val Float.i get() = toInt()
 
 fun Context.getAttrColor(@AttrRes resId: Int): Int {
-  val typedArray = obtainStyledAttributes(TypedValue().data, intArrayOf(resId))
-  val color = typedArray.getColor(0, -1)
-  typedArray.recycle()
-  require(color != -1)
-  return color
+  val typedValue = TypedValue()
+  val resolved = theme.resolveAttribute(resId, typedValue, false)
+  assertThat(resolved) { "Attribute cannot be resolved" }
+  return typedValue.data
 }
 
 fun Context.retrieveColor(@ColorRes colorRes: Int): Int {

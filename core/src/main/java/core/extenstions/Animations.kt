@@ -11,8 +11,8 @@ import android.view.ViewPropertyAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 
-const val DURATION_DEFAULT = 200L
-const val DURATION_MEDIUM = 400L
+const val DURATION_DEFAULT = 300L
+const val DURATION_MEDIUM = 500L
 
 fun Animator.cancelIfRunning() {
   if (isRunning) {
@@ -46,9 +46,9 @@ fun View.animateVisible(andThen: () -> Unit = {}) {
 }
 
 fun View.animateVisibleAndScale(andThen: () -> Unit = {}) {
+  alpha = 0f
   scaleX = 0.9f
   scaleY = 0.9f
-  alpha = 0f
   visible()
   animate().alpha(1f)
       .scaleX(1f)
@@ -58,19 +58,29 @@ fun View.animateVisibleAndScale(andThen: () -> Unit = {}) {
       .doOnEnd(andThen)
 }
 
-fun View.animateGone(andThen: () -> Unit = {}) {
+fun View.animateInvisible(andThen: () -> Unit = {}) {
   animate().alpha(0f).setDuration(DURATION_DEFAULT)
       .setInterpolator(AccelerateDecelerateInterpolator())
-      .doOnEnd { gone(); andThen() }
+      .doOnEnd {
+        invisible()
+        alpha = 1f
+        andThen()
+      }
 }
 
 
-fun View.animateGoneAndScale() {
+fun View.animateInvisibleAndScale() {
   animate().alpha(0f)
-      .scaleX(1.3f)
-      .scaleY(1.3f)
-      .setDuration(DURATION_MEDIUM)
+      .scaleX(1.2f)
+      .scaleY(1.2f)
+      .setDuration(DURATION_DEFAULT)
       .setInterpolator(AccelerateDecelerateInterpolator())
+      .doOnEnd {
+        invisible()
+        scaleX = 1f
+        scaleY = 1f
+        alpha = 1f
+      }
 }
 
 fun View.rotateTo(angle: Float) {

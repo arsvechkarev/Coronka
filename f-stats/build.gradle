@@ -27,7 +27,7 @@ dependencies {
   implementation project(':storage')
   implementation project(":network")
   implementation project(":views")
-  implementation project(":progress-bar")
+  implementation project(':progressbar')
   implementation project(":datetime")
   implementation project(":f-common")
 

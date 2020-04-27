@@ -24,15 +24,11 @@ class MapDelegate {
   private var currentMarker: Marker? = null
   private val markers = ArrayList<Marker>()
   
-  fun init(
-    context: Context,
-    fragmentManager: FragmentManager,
-    onCountrySelected: (String) -> Unit
-  ) {
+  fun init(context: Context, manager: FragmentManager, onCountrySelected: (String) -> Unit) {
     this.context = context
     this.onCountrySelected = onCountrySelected
     val supportMapFragment = SupportMapFragment()
-    fragmentManager.beginTransaction()
+    manager.beginTransaction()
         .add(R.id.fragment_map_root, supportMapFragment)
         .commit()
     supportMapFragment.getMapAsync(::initMap)
@@ -40,9 +36,9 @@ class MapDelegate {
   
   private fun initMap(map: GoogleMap) {
     with(map) {
+      setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style))
       uiSettings.isMapToolbarEnabled = false
       mapHolder.init(this)
-      setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style))
       uiSettings.isRotateGesturesEnabled = false
       uiSettings.isMyLocationButtonEnabled = false
       setMaxZoomPreference(4.5f)

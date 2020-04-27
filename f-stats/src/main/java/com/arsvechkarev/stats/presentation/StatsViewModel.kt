@@ -19,6 +19,9 @@ import core.model.GeneralInfo
 import core.model.OptionType
 import core.model.OptionType.CONFIRMED
 import core.releasable.ReleasableViewModel
+import core.state.BaseScreenState
+import core.state.Failure
+import core.state.Failure.Companion.toReason
 import core.state.StateHandle
 import core.state.currentValue
 import core.state.update
@@ -38,8 +41,8 @@ class StatsViewModel(
   
   private val savedData = SavedData()
   
-  private val _state = MutableLiveData<StateHandle<StatsScreenState>>(StateHandle())
-  val state: LiveData<StateHandle<StatsScreenState>>
+  private val _state = MutableLiveData<StateHandle<BaseScreenState>>(StateHandle())
+  val state: LiveData<StateHandle<BaseScreenState>>
     get() = _state
   
   init {
@@ -61,18 +64,14 @@ class StatsViewModel(
     }
     repository.loadGeneralInfo {
       onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
-      onFailure {
-  
-        log(it) { "Failure loading general info: ${it.message}" }
-      }
+      onFailure { log(it) { "Failure loading general info: ${it.message}" } }
     }
     repository.loadCountriesInfo {
       onSuccess {
         networkOperations.addValue(KEY_COUNTRIES, it)
       }
       onFailure {
-        _state.update(StatsScreenState.Failure(StatsScreenState.Failure.FailureReason.UNKNOWN))
-        log(it) { "fail stats countries" }
+        _state.update(Failure(it.toReason()))
       }
     }
     networkOperations.onDoneAll { map ->

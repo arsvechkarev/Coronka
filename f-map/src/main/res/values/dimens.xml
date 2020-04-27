@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="loading_layout_margin">8dp</dimen>
+  <dimen name="loading_layout_margin">12dp</dimen>
 
   <dimen name="layout_country_info_m_vertical">16dp</dimen>
 

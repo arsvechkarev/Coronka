@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="dark_icon_default">@android:color/white</color>
-
-  <color name="dark_accent">#0D70D4</color>
+  <color name="dark_accent">#007FFF</color>
   <color name="dark_background">#051A29</color>
   <color name="dark_middle">#182842</color>
   <color name="dark_surface">#0A2F4A</color>
-  <color name="dark_ripple">#800D70D4</color>
+  <color name="dark_icon_default">#FFFFFF</color>
+  <color name="dark_ripple">#70007FFF</color>
+  <color name="dark_failure">#E64545</color>
+  <color name="dark_failure_ripple">#70E64545</color>
 
   <color name="dark_confirmed">#D9270F</color>
   <color name="dark_deaths">#000000</color>
   <color name="dark_deaths_2">#989898</color>
   <color name="dark_recovered">#0FD916</color>
-  <color name="dark_death_rate">#3160EC</color>
+  <color name="dark_death_rate">#007FFF</color>
   <color name="dark_percent_by_country">#DBBE18</color>
   <color name="dark_bottom_navigation_divider">#000000</color>
   <color name="dark_divider">#FFFFFF</color>
