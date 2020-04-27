@@ -100,6 +100,16 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     )
   }
   
+  private fun displayLoadedResult(countries: List<Country>) {
+    fragment_map_root.animateVisible()
+    layoutLoadingMap.animateInvisibleAndScale()
+    mapDelegate.drawCountries(countries)
+  }
+  
+  private fun onCountrySelected(countryCode: String) {
+    viewModel.findCountryByCode(countryCode)
+  }
+  
   private fun handleFailure(state: Failure) {
     fragment_map_root.invisible()
     layoutUnknownError.invisible()
@@ -115,17 +125,8 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
       }
       UNKNOWN -> layoutUnknownError.visible()
     }
-    layoutFailure.animateVisible()
+    textRetry.isClickable = false
+    layoutFailure.animateVisibleAndScale(andThen = { textRetry.isClickable = true })
     layoutLoadingMap.animateInvisibleAndScale()
-  }
-  
-  private fun displayLoadedResult(countries: List<Country>) {
-    fragment_map_root.animateVisible()
-    layoutLoadingMap.animateInvisibleAndScale()
-    mapDelegate.drawCountries(countries)
-  }
-  
-  private fun onCountrySelected(countryCode: String) {
-    viewModel.findCountryByCode(countryCode)
   }
 }

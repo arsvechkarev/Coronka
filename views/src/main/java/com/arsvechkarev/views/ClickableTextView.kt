@@ -9,7 +9,7 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import core.FontManager
-import core.extenstions.DURATION_MEDIUM
+import core.extenstions.DURATION_DEFAULT
 import core.extenstions.dp
 import core.extenstions.dpInt
 
@@ -47,7 +47,7 @@ class ClickableTextView @JvmOverloads constructor(
   
   override fun performClick(): Boolean {
     isClickable = false
-    postDelayed({ isClickable = true }, DURATION_MEDIUM)
+    postDelayed({ isClickable = true }, DURATION_DEFAULT * 2 + DURATION_DEFAULT / 5)
     return super.performClick()
   }
 }

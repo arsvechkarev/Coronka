@@ -127,9 +127,10 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
       }
       UNKNOWN -> "An error occurred"
     }
+    textRetry.isClickable = false
     textFailureReason.text = message
     layoutLoading.animateInvisible()
-    layoutFailure.animateVisibleAndScale()
+    layoutFailure.animateVisibleAndScale(andThen = { textRetry.isClickable = true })
   }
   
   private fun showOptionExplanationDialog(text: String) {

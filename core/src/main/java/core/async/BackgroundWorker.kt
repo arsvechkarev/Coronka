@@ -14,7 +14,7 @@ class BackgroundWorker(
   
   companion object {
   
-    fun default() = BackgroundWorker(Executors.newSingleThreadExecutor())
+    fun default() = BackgroundWorker(Executors.newFixedThreadPool(2))
   
     fun io() = BackgroundWorker(Executors.newFixedThreadPool(4))
   }
