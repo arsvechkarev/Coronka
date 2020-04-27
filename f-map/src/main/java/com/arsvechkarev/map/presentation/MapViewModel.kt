@@ -24,7 +24,8 @@ import core.state.updateSelf
 class MapViewModel(
   private val threader: Threader,
   private val connection: NetworkConnection,
-  private val repository: CommonRepository
+  private val repository: CommonRepository,
+  private val minDelay: Long = 400L
 ) : ReleasableViewModel(repository), Loggable {
   
   override val logTag = "Base_Map_ViewModel"
@@ -46,11 +47,18 @@ class MapViewModel(
     if (notifyLoading) {
       _state.update(Loading)
     }
-    repository.loadCountriesInfo {
-      onSuccess { _state.update(LoadedFromNetwork(it)) }
-      onFailure {
-        _state.update(Failure(it.toReason()))
-        log(it) { "Failing loading countries + ${it.message}" }
+    threader.backgroundWorker.submit {
+      Thread.sleep(minDelay)
+      //      if (false) {
+      //        threader.mainThreadWorker.submit { _state.update(Failure(NO_CONNECTION)) }
+      //        return@submit
+      //      }
+      repository.loadCountriesInfo {
+        onSuccess { _state.update(LoadedFromNetwork(it)) }
+        onFailure {
+          _state.update(Failure(it.toReason()))
+          log(it) { "Failing loading countries + ${it.message}" }
+        }
       }
     }
   }

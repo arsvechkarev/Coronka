@@ -30,13 +30,6 @@ class NoConnectionView @JvmOverloads constructor(
     invalidate()
   }
   
-  override fun onVisibilityChanged(changedView: View, visibility: Int) {
-    if (visibility != VISIBLE) {
-      wifi.alpha = 0
-      hourglass.alpha = 0
-    }
-  }
-  
   fun animateWifi() {
     hourglassAnimator.cancelIfRunning()
     currentItem = wifi
@@ -47,6 +40,18 @@ class NoConnectionView @JvmOverloads constructor(
     wifiAnimator.cancelIfRunning()
     currentItem = hourglass
     hourglassAnimator.start()
+  }
+  
+  override fun onVisibilityChanged(changedView: View, visibility: Int) {
+    if (visibility == VISIBLE) {
+      wifi.alpha = 255
+      hourglass.alpha = 255
+      hourglassRotation = 0f
+    } else {
+      wifi.alpha = 0
+      hourglass.alpha = 0
+      currentItem?.alpha = 0
+    }
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

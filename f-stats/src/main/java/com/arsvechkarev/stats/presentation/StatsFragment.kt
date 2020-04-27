@@ -117,16 +117,19 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   
   private fun handleFailure(state: Failure) {
     val message = when (state.reason) {
-      NO_CONNECTION -> "No connection"
-      TIMEOUT -> "Too slow connection"
+      NO_CONNECTION -> {
+        noConnectionView.animateWifi()
+        "No connection"
+      }
+      TIMEOUT -> {
+        noConnectionView.animateHourglass()
+        "Too slow connection"
+      }
       UNKNOWN -> "An error occurred"
     }
     textFailureReason.text = message
     layoutLoading.animateInvisible()
-    layoutFailure.animateVisibleAndScale(andThen = {
-      if (state.reason == NO_CONNECTION) noConnectionView.animateWifi()
-      else if (state.reason == TIMEOUT) noConnectionView.animateHourglass()
-    })
+    layoutFailure.animateVisibleAndScale()
   }
   
   private fun showOptionExplanationDialog(text: String) {

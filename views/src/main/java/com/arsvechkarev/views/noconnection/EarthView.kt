@@ -49,10 +49,14 @@ class EarthView @JvmOverloads constructor(
   }
   
   override fun onVisibilityChanged(changedView: View, visibility: Int) {
-    super.onVisibilityChanged(changedView, visibility)
-    if (visibility != VISIBLE) {
+    if (visibility == VISIBLE) {
+      wifi.alpha = 255
+      hourglass.alpha = 255
+      hourglassRotation = 0f
+    } else {
       wifi.alpha = 0
       hourglass.alpha = 0
+      currentItem?.alpha = 0
     }
   }
   

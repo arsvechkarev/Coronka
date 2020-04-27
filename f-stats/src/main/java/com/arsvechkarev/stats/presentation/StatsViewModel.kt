@@ -22,6 +22,7 @@ import core.releasable.ReleasableViewModel
 import core.state.BaseScreenState
 import core.state.Failure
 import core.state.Failure.Companion.toReason
+import core.state.Failure.FailureReason.NO_CONNECTION
 import core.state.StateHandle
 import core.state.currentValue
 import core.state.update
@@ -31,7 +32,8 @@ class StatsViewModel(
   private val connection: NetworkConnection,
   private val threader: Application.Threader,
   private val repository: CommonRepository,
-  private val filterer: ListFilterer
+  private val filterer: ListFilterer,
+  private val minDelay: Long = 400L
 ) : ReleasableViewModel(repository), Loggable {
   
   override val logTag = "Base_Stats_ViewModel"
@@ -62,26 +64,35 @@ class StatsViewModel(
     if (notifyLoading) {
       _state.update(Loading)
     }
-    repository.loadGeneralInfo {
-      onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
-      onFailure { log(it) { "Failure loading general info: ${it.message}" } }
-    }
-    repository.loadCountriesInfo {
-      onSuccess {
-        networkOperations.addValue(KEY_COUNTRIES, it)
+    threader.backgroundWorker.submit {
+      Thread.sleep(minDelay)
+      if (connection.isNotConnected) {
+        threader.mainThreadWorker.submit {
+          _state.update(Failure(NO_CONNECTION))
+        }
+        return@submit
       }
-      onFailure {
-        _state.update(Failure(it.toReason()))
+      repository.loadGeneralInfo {
+        onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
+        onFailure { log(it) { "Failure loading general info: ${it.message}" } }
       }
-    }
-    networkOperations.onDoneAll { map ->
-      threader.backgroundWorker.submit {
-        val generalInfo = map[KEY_GENERAL_INFO] as GeneralInfo
-        val countriesAndTime = map[KEY_COUNTRIES] as List<Country>
-        savedData.add(countriesAndTime)
-        savedData.add(generalInfo)
-        filterer.filter(countriesAndTime, generalInfo, CONFIRMED) {
-          onSuccess { _state.update(LoadedFromNetwork(it)) }
+      repository.loadCountriesInfo {
+        onSuccess {
+          networkOperations.addValue(KEY_COUNTRIES, it)
+        }
+        onFailure {
+          _state.update(Failure(it.toReason()))
+        }
+      }
+      networkOperations.onDoneAll { map ->
+        threader.backgroundWorker.submit {
+          val generalInfo = map[KEY_GENERAL_INFO] as GeneralInfo
+          val countriesAndTime = map[KEY_COUNTRIES] as List<Country>
+          savedData.add(countriesAndTime)
+          savedData.add(generalInfo)
+          filterer.filter(countriesAndTime, generalInfo, CONFIRMED) {
+            onSuccess { _state.update(LoadedFromNetwork(it)) }
+          }
         }
       }
     }

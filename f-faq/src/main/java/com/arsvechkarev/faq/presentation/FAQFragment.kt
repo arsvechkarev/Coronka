@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.faq.R
 import com.arsvechkarev.faq.di.FAQModuleInjector
 import com.arsvechkarev.faq.list.FAQAdapter
+import core.extenstions.animateVisibleAndScale
+import core.extenstions.invisible
 import core.extenstions.retrieveColor
 
 class FAQFragment : Fragment() {
@@ -28,6 +30,7 @@ class FAQFragment : Fragment() {
       layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
     }
     val recyclerView = RecyclerView(requireContext()).apply {
+      invisible()
       layoutParams = RecyclerView.LayoutParams(MATCH_PARENT, MATCH_PARENT)
       layoutManager = LinearLayoutManager(requireContext())
       this.adapter = adapter
@@ -36,6 +39,7 @@ class FAQFragment : Fragment() {
     FAQModuleInjector.provideViewModel(this).apply {
       data.observe(this@FAQFragment, Observer {
         adapter.submitList(it)
+        recyclerView.animateVisibleAndScale()
       })
       loadData()
     }
