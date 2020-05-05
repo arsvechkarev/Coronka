@@ -1,10 +1,11 @@
 package com.arsvechkarev.map.presentation
 
 import com.google.android.gms.maps.GoogleMap
-import core.Application.Threader
+import core.concurrency.AndroidThreader
+import core.concurrency.Threader
 import java.util.concurrent.CountDownLatch
 
-class MapHolder(private val threader: Threader = Threader) {
+class MapHolder(private val threader: Threader = AndroidThreader) {
   
   private var googleMap: GoogleMap? = null
   private val initLatch = CountDownLatch(1)
@@ -19,9 +20,9 @@ class MapHolder(private val threader: Threader = Threader) {
       action(googleMap!!)
       return
     }
-    threader.backgroundWorker.submit {
+    threader.onBackground {
       initLatch.await()
-      threader.mainThreadWorker.submit {
+      threader.onMainThread {
         action(googleMap!!)
       }
     }

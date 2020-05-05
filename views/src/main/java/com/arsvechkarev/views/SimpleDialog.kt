@@ -2,7 +2,6 @@ package com.arsvechkarev.views
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -20,7 +19,6 @@ import core.extenstions.gone
 import core.extenstions.invisible
 import core.extenstions.visible
 
-@SuppressLint("ViewConstructor")
 class SimpleDialog @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null

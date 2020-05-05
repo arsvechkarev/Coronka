@@ -6,10 +6,19 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
+/**
+ * Represents date and time with milliseconds since epoch and allows for calculating difference
+ * between two instances
+ */
 class DateTime(
   private val millis: Long
 ) {
   
+  /**
+   * Returns the difference with [other] in a given [timeUnit]
+   *
+   * Note: the difference is absolute
+   */
   fun differenceWith(other: DateTime, timeUnit: TimeUnit): Long {
     return timeUnit.convert(abs(millis - other.millis), TimeUnit.MILLISECONDS)
   }

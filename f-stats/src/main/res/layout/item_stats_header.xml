@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_marginBottom="@dimen/header_m_bottom"
+  android:layout_marginBottom="@dimen/stats_header_m_bottom"
   android:gravity="center_horizontal"
   android:orientation="vertical">
 
@@ -11,7 +11,7 @@
     style="@style/TextHeader"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/text_top_header_m_top"
+    android:layout_marginTop="@dimen/stats_text_top_header_m_top"
     android:text="@string/text_total_cases"/>
 
   <com.arsvechkarev.views.FontTextView
@@ -45,13 +45,13 @@
     style="@style/TextNumber"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/text_number_m_bottom"
+    android:layout_marginBottom="@dimen/stats_text_number_m_bottom"
     android:textColor="?colorDeaths2"/>
 
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/line_text_padding">
+    android:paddingHorizontal="@dimen/stats_line_text_padding">
 
     <View
       android:layout_width="match_parent"
@@ -65,7 +65,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
-      android:layout_margin="@dimen/text_stats_margin"
+      android:layout_margin="@dimen/stats_text_stats_margin"
       android:text="@string/text_statistics_by_country"
       android:textColor="?colorTextSecondary"
       android:textSize="@dimen/text_h4"/>
@@ -95,7 +95,8 @@
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/chip_margin"
+        android:layout_margin="@dimen/stats_chip_margin"
+        android:padding="@dimen/stats_chip_padding"
         android:text="@string/text_confirmed"
         app:colorFill="?colorConfirmed"/>
 
@@ -104,6 +105,7 @@
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="@dimen/stats_chip_padding"
         android:text="@string/text_recovered"
         app:colorFill="?colorRecovered"/>
 
@@ -112,6 +114,7 @@
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="@dimen/stats_chip_padding"
         android:text="@string/text_deaths"
         app:colorFill="?colorDeaths2"/>
 
@@ -127,6 +130,7 @@
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="@dimen/stats_chip_padding"
         android:text="@string/text_death_rate"
         app:colorFill="?colorDeathRate"
         app:showIcon="true"/>
@@ -136,6 +140,7 @@
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="@dimen/stats_chip_padding"
         android:text="@string/text_percent_by_country"
         app:colorFill="?colorPercentByCountry"/>
 

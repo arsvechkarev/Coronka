@@ -7,15 +7,17 @@ import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
 import com.arsvechkarev.map.presentation.MapScreenState.Loading
-import core.Application.Threader
 import core.Loggable
+import core.MIN_NETWORK_DELAY
 import core.NetworkConnection
+import core.concurrency.Threader
 import core.log
 import core.model.Country
 import core.releasable.ReleasableViewModel
 import core.state.BaseScreenState
 import core.state.Failure
 import core.state.Failure.Companion.toReason
+import core.state.Failure.FailureReason.NO_CONNECTION
 import core.state.StateHandle
 import core.state.currentValue
 import core.state.update
@@ -24,8 +26,7 @@ import core.state.updateSelf
 class MapViewModel(
   private val threader: Threader,
   private val connection: NetworkConnection,
-  private val repository: CommonRepository,
-  private val minDelay: Long = 400L
+  private val repository: CommonRepository
 ) : ReleasableViewModel(repository), Loggable {
   
   override val logTag = "Base_Map_ViewModel"
@@ -47,12 +48,12 @@ class MapViewModel(
     if (notifyLoading) {
       _state.update(Loading)
     }
-    threader.backgroundWorker.submit {
-      Thread.sleep(minDelay)
-      //      if (false) {
-      //        threader.mainThreadWorker.submit { _state.update(Failure(NO_CONNECTION)) }
-      //        return@submit
-      //      }
+    threader.onIoThread {
+      Thread.sleep(MIN_NETWORK_DELAY)
+      if (connection.isNotConnected) {
+        threader.onMainThread { _state.update(Failure(NO_CONNECTION)) }
+        return@onIoThread
+      }
       repository.loadCountriesInfo {
         onSuccess { _state.update(LoadedFromNetwork(it)) }
         onFailure {
@@ -87,7 +88,7 @@ class MapViewModel(
     countryCode: String
   ) {
     val country = countries.find { it.iso2 == countryCode } ?: return
-    threader.mainThreadWorker.submit {
+    threader.onMainThread {
       _state.update(FoundCountry(countries, country))
     }
   }

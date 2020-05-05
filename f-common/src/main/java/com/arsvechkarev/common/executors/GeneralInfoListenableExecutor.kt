@@ -33,7 +33,7 @@ class GeneralInfoListenableExecutor(
   }
   
   override fun loadToCache(result: TimedData<GeneralInfo>) {
-    threader.ioWorker.submit {
+    threader.onIoThread {
       val generalInfo = result.data
       saver.execute(synchronosly = true) {
         putString(GENERAL_INFO_LAST_UPDATE_TIME, result.lastUpdateTime.toString())

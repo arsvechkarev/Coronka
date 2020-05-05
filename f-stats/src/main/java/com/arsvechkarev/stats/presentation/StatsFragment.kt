@@ -26,15 +26,15 @@ import core.state.Failure.FailureReason.TIMEOUT
 import core.state.Failure.FailureReason.UNKNOWN
 import core.state.StateHandle
 import core.state.isFresh
-import kotlinx.android.synthetic.main.fragment_stats.layoutFailure
-import kotlinx.android.synthetic.main.fragment_stats.layoutLoading
-import kotlinx.android.synthetic.main.fragment_stats.noConnectionView
-import kotlinx.android.synthetic.main.fragment_stats.recyclerView
 import kotlinx.android.synthetic.main.fragment_stats.simpleDialog
-import kotlinx.android.synthetic.main.fragment_stats.textExplanation
-import kotlinx.android.synthetic.main.fragment_stats.textFailureReason
-import kotlinx.android.synthetic.main.fragment_stats.textGotIt
-import kotlinx.android.synthetic.main.fragment_stats.textRetry
+import kotlinx.android.synthetic.main.fragment_stats.statsLayoutFailure
+import kotlinx.android.synthetic.main.fragment_stats.statsLayoutLoading
+import kotlinx.android.synthetic.main.fragment_stats.statsNoConnectionView
+import kotlinx.android.synthetic.main.fragment_stats.statsRecyclerView
+import kotlinx.android.synthetic.main.fragment_stats.statsTextExplanation
+import kotlinx.android.synthetic.main.fragment_stats.statsTextFailureReason
+import kotlinx.android.synthetic.main.fragment_stats.statsTextGotIt
+import kotlinx.android.synthetic.main.fragment_stats.statsTextRetry
 import kotlin.math.min
 
 class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
@@ -61,13 +61,13 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
     this.savedInstanceState = savedInstanceState
     viewModel = StatsModuleInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
-    recyclerView.adapter = adapter
-    recyclerView.layoutManager = LinearLayoutManager(requireContext())
-    textGotIt.setOnClickListener { simpleDialog.dismiss() }
-    textRetry.setOnClickListener { viewModel.updateFromNetwork() }
+    statsRecyclerView.adapter = adapter
+    statsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+    statsTextGotIt.setOnClickListener { simpleDialog.dismiss() }
+    statsTextRetry.setOnClickListener { viewModel.updateFromNetwork() }
     val width = min(resources.displayMetrics.widthPixels,
       resources.displayMetrics.heightPixels) * 0.7
-    textExplanation.maxWidth = width.toInt()
+    statsTextExplanation.maxWidth = width.toInt()
     addBackPressedCallback(onBackPressedCallback)
   }
   
@@ -89,8 +89,8 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   }
   
   private fun handleLoading() {
-    layoutFailure.animateInvisibleAndScale()
-    layoutLoading.animateVisibleAndScale()
+    statsLayoutFailure.animateInvisibleAndScale()
+    statsLayoutLoading.animateVisibleAndScale()
   }
   
   private fun handleLoadedFromCache(state: LoadedFromCache) {
@@ -111,30 +111,30 @@ class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
   
   private fun displayLoadedResult(items: List<DisplayableItem>) {
     adapter.submitList(items)
-    layoutLoading.animateInvisibleAndScale()
-    recyclerView.animateVisibleAndScale()
+    statsLayoutLoading.animateInvisibleAndScale()
+    statsRecyclerView.animateVisibleAndScale()
   }
   
   private fun handleFailure(state: Failure) {
     val message = when (state.reason) {
       NO_CONNECTION -> {
-        noConnectionView.animateWifi()
-        "No connection"
+        statsNoConnectionView.animateWifi()
+        getString(R.string.text_no_connection)
       }
       TIMEOUT -> {
-        noConnectionView.animateHourglass()
-        "Too slow connection"
+        statsNoConnectionView.animateHourglass()
+        getString(R.string.text_timeout)
       }
-      UNKNOWN -> "An error occurred"
+      UNKNOWN -> getString(R.string.text_unknown_error)
     }
-    textRetry.isClickable = false
-    textFailureReason.text = message
-    layoutLoading.animateInvisible()
-    layoutFailure.animateVisibleAndScale(andThen = { textRetry.isClickable = true })
+    statsTextRetry.isClickable = false
+    statsTextFailureReason.text = message
+    statsLayoutLoading.animateInvisible()
+    statsLayoutFailure.animateVisibleAndScale(andThen = { statsTextRetry.isClickable = true })
   }
   
   private fun showOptionExplanationDialog(text: String) {
-    textExplanation.text = text
+    statsTextExplanation.text = text
     simpleDialog.show()
     onBackPressedCallback.isEnabled = true
   }

@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import core.extenstions.dp
 import core.model.Country
 import kotlin.math.max
 
@@ -80,9 +81,9 @@ class CountriesMarkersDrawer {
   }
   
   companion object {
-    private const val MAX_BITMAP_SIZE = 380f
-    private const val MIN_BITMAP_SIZE = 90f
-    private const val SIZE_COEFFICIENT = MAX_BITMAP_SIZE * 3
+    private val MAX_BITMAP_SIZE get() = 300.dp
+    private val MIN_BITMAP_SIZE get() = 30.dp
+    private val SIZE_COEFFICIENT = MAX_BITMAP_SIZE * 3
     private const val DEFAULT_CIRCLE_COLOR = 0xAAFF8CA1.toInt()
     private const val DEFAULT_STROKE_COLOR = 0x55FF0000
     private const val SELECTED_CIRCLE_COLOR = 0xE2004182.toInt()

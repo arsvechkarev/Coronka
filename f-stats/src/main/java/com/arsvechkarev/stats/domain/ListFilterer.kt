@@ -4,7 +4,7 @@ import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
 import com.arsvechkarev.storage.PopulationsTable
 import com.arsvechkarev.storage.dao.PopulationsDao
-import core.Application
+import core.concurrency.Threader
 import core.extenstions.assertThat
 import core.handlers.SuccessAction
 import core.handlers.SuccessHandler
@@ -20,7 +20,7 @@ import core.recycler.DisplayableItem
 import core.releasable.Releasable
 
 class ListFilterer(
-  private val threader: Application.Threader,
+  private val threader: Threader,
   private val populationsDao: PopulationsDao
 ) : Releasable {
   
@@ -34,17 +34,17 @@ class ListFilterer(
     action: SuccessAction<List<DisplayableItem>>
   ) {
     filterHandler = createSuccessHandler(action).runIfNotAlready {
-      threader.backgroundWorker.submit {
+      threader.onBackground {
         if (optionType == PERCENT_BY_COUNTRY) {
           if (populations.isEmpty()) {
-            val future = threader.ioWorker.submit {
+            val future = threader.onIoThread {
               DatabaseManager.instance.readableDatabase.use {
                 val cursor = DatabaseExecutor.readAll(it, PopulationsTable.TABLE_NAME)
                 val elements = populationsDao.getAll(cursor)
                 populations.addAll(elements)
               }
             }
-            future!!.get()
+            future.get()
           }
           assertThat(populations.isNotEmpty())
           transformPopulations(populations, list, generalInfo, optionType)
@@ -104,7 +104,7 @@ class ListFilterer(
       )
     )
     items.addAll(countries)
-    threader.mainThreadWorker.submit {
+    threader.onMainThread {
       filterHandler?.dispatchSuccess(items)
     }
   }

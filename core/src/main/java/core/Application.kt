@@ -1,20 +1,11 @@
 package core
 
 import android.content.Context
-import core.async.BackgroundWorker
-import core.async.MainThreadWorker
-import core.async.Worker
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
 
 interface Application {
-  
-  object Threader {
-    val backgroundWorker: Worker = BackgroundWorker.default()
-    val ioWorker: Worker = BackgroundWorker.io()
-    val mainThreadWorker: Worker = MainThreadWorker()
-  }
   
   object Values {
     var density: Float = -1f

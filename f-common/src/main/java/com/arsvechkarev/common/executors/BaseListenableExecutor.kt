@@ -1,11 +1,12 @@
 package com.arsvechkarev.common.executors
 
-import core.Application.Threader
+import core.concurrency.AndroidThreader
+import core.concurrency.Threader
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class BaseListenableExecutor<S>(
-  val threader: Threader = Threader,
+  val threader: Threader = AndroidThreader,
   private val timeoutSeconds: Long = 15
 ) {
   
@@ -34,16 +35,16 @@ abstract class BaseListenableExecutor<S>(
       return
     }
     isLoadingFromCache.set(true)
-    threader.ioWorker.submit {
+    threader.onIoThread {
       val result = performCacheRequest()
       if (result != null) {
-        threader.mainThreadWorker.submit {
+        threader.onMainThread {
           cacheListeners.forEach { it.onSuccess(result) }
           cacheListeners.clear()
           isLoadingFromCache.set(false)
         }
       } else {
-        threader.mainThreadWorker.submit {
+        threader.onMainThread {
           cacheListeners.forEach { it.onNothing() }
           cacheListeners.clear()
           isLoadingFromCache.set(false)
@@ -63,24 +64,24 @@ abstract class BaseListenableExecutor<S>(
       return
     }
     isLoadingFromNetwork.set(true)
-    threader.backgroundWorker.submit {
-      val future = threader.ioWorker.submit {
+    threader.onBackground {
+      val future = threader.onIoThread {
         val result = performNetworkRequest()
         loadToCache(result)
         synchronized(networkLock) {
-          threader.mainThreadWorker.submit {
+          threader.onMainThread {
             networkListeners.forEach { it.onSuccess(result) }
             networkListeners.clear()
             isLoadingFromNetwork.set(false)
           }
         }
-      }!!
+      }
       try {
         future.get(timeoutSeconds, TimeUnit.SECONDS)
       } catch (e: Throwable) {
         future.cancel(true)
         synchronized(networkLock) {
-          threader.mainThreadWorker.submit {
+          threader.onMainThread {
             networkListeners.forEach { it.onFailure(e) }
             networkListeners.clear()
             isLoadingFromNetwork.set(false)

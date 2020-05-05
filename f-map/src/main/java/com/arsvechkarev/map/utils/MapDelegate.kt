@@ -8,13 +8,13 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
-import core.Application
+import core.concurrency.AndroidThreader
 import core.model.Country
 
 class MapDelegate {
   
   private val mapHolder = MapHolder()
-  private val threader = Application.Threader
+  private val threader = AndroidThreader
   private val creator = CountriesMarkersDrawer()
   private lateinit var context: Context
   private lateinit var onCountrySelected: (String) -> Unit
@@ -54,11 +54,11 @@ class MapDelegate {
   }
   
   fun drawCountries(countries: List<Country>) {
-    threader.backgroundWorker.submit {
+    threader.onBackground {
       this.countries = countries
       markers.clear()
       val options = creator.createMarkers(countries)
-      threader.mainThreadWorker.submit {
+      threader.onMainThread {
         mapHolder.addAction { googleMap ->
           googleMap.clear()
           for (i in options.indices) {

@@ -3,7 +3,6 @@ package com.arsvechkarev.coronavirusinfo
 import com.arsvechkarev.common.di.SingletonsInjector
 import com.arsvechkarev.storage.DatabaseManager
 import core.Application
-import core.Application.Threader
 import core.Colors
 import core.FontManager
 import android.app.Application as AndroidApp
@@ -14,7 +13,7 @@ class ApplicationLoader : AndroidApp() {
     super.onCreate()
     Application.Singletons.init(applicationContext)
     DatabaseManager.init(applicationContext)
-    FontManager.init(applicationContext, Threader)
+    FontManager.init(applicationContext)
     SingletonsInjector.init(applicationContext)
     Colors.setup(applicationContext)
   }

@@ -2,6 +2,7 @@ package core
 
 import android.content.Context
 import android.graphics.Typeface
+import core.concurrency.AndroidThreader
 import java.util.concurrent.CountDownLatch
 
 object FontManager {
@@ -14,11 +15,10 @@ object FontManager {
       return field!!
     }
   
-  fun init(context: Context, threader: Application.Threader) {
-    threader.backgroundWorker.submit {
+  fun init(context: Context) {
+    AndroidThreader.onBackground {
       rubik = Typeface.createFromAsset(context.assets, "rubik_medium.ttf")
       initializationLatch.countDown()
     }
   }
-  
 }

@@ -6,23 +6,22 @@ import androidx.lifecycle.ViewModelProviders
 import com.arsvechkarev.faq.presentation.FAQFragment
 import com.arsvechkarev.faq.presentation.FAQViewModel
 import com.arsvechkarev.faq.repository.FAQLoader
-import core.Application
+import core.concurrency.AndroidThreader
 
 object FAQModuleInjector {
   
   fun provideViewModel(fragment: FAQFragment): FAQViewModel {
     val loader = FAQLoader(fragment.resources)
-    val factory = faqViewModelFactory(Application.Threader, loader)
+    val factory = faqViewModelFactory(loader)
     return ViewModelProviders.of(fragment, factory).get(FAQViewModel::class.java)
   }
   
   @Suppress("UNCHECKED_CAST")
   fun faqViewModelFactory(
-    threader: Application.Threader,
     loader: FAQLoader
   ) = object : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-      val viewModel = FAQViewModel(threader, loader)
+      val viewModel = FAQViewModel(AndroidThreader, loader)
       return viewModel as T
     }
   }

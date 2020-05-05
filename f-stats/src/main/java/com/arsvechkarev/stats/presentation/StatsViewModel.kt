@@ -8,11 +8,12 @@ import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromCache
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromNetwork
 import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
-import core.Application
 import core.Loggable
+import core.MIN_NETWORK_DELAY
 import core.NetworkConnection
 import core.SavedData
-import core.async.AsyncOperations
+import core.concurrency.AsyncOperations
+import core.concurrency.Threader
 import core.log
 import core.model.Country
 import core.model.GeneralInfo
@@ -29,11 +30,10 @@ import core.state.update
 import core.state.updateSelf
 
 class StatsViewModel(
+  private val threader: Threader,
   private val connection: NetworkConnection,
-  private val threader: Application.Threader,
   private val repository: CommonRepository,
-  private val filterer: ListFilterer,
-  private val minDelay: Long = 400L
+  private val filterer: ListFilterer
 ) : ReleasableViewModel(repository), Loggable {
   
   override val logTag = "Base_Stats_ViewModel"
@@ -64,13 +64,11 @@ class StatsViewModel(
     if (notifyLoading) {
       _state.update(Loading)
     }
-    threader.backgroundWorker.submit {
-      Thread.sleep(minDelay)
+    threader.onIoThread {
+      Thread.sleep(MIN_NETWORK_DELAY)
       if (connection.isNotConnected) {
-        threader.mainThreadWorker.submit {
-          _state.update(Failure(NO_CONNECTION))
-        }
-        return@submit
+        threader.onMainThread { _state.update(Failure(NO_CONNECTION)) }
+        return@onIoThread
       }
       repository.loadGeneralInfo {
         onSuccess { networkOperations.addValue(KEY_GENERAL_INFO, it) }
@@ -85,7 +83,7 @@ class StatsViewModel(
         }
       }
       networkOperations.onDoneAll { map ->
-        threader.backgroundWorker.submit {
+        threader.onBackground {
           val generalInfo = map[KEY_GENERAL_INFO] as GeneralInfo
           val countriesAndTime = map[KEY_COUNTRIES] as List<Country>
           savedData.add(countriesAndTime)
@@ -119,11 +117,11 @@ class StatsViewModel(
       onNothing { cacheOperations.countDown() }
     }
     cacheOperations.onDoneAll { map ->
-      threader.backgroundWorker.submit {
+      threader.onBackground {
         val generalInfo = map[KEY_GENERAL_INFO] as? GeneralInfo
         val countriesAndTime = map[KEY_COUNTRIES_AND_TIME] as? List<Country>
         if (generalInfo == null || countriesAndTime == null) {
-          return@submit
+          return@onBackground
         }
         savedData.add(countriesAndTime)
         savedData.add(generalInfo)

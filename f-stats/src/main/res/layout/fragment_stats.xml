@@ -6,13 +6,13 @@
   android:background="?colorBackground">
 
   <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerView"
+    android:id="@+id/statsRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="invisible"/>
 
   <LinearLayout
-    android:id="@+id/layoutLoading"
+    android:id="@+id/statsLayoutLoading"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -29,12 +29,12 @@
     <progressbar.ComplexProgressBar
       android:layout_width="@dimen/progress_bar_big_size"
       android:layout_height="@dimen/progress_bar_big_size"
-      android:layout_margin="@dimen/progress_bar_margin"/>
+      android:layout_margin="@dimen/stats_progress_bar_margin"/>
 
   </LinearLayout>
 
   <LinearLayout
-    android:id="@+id/layoutFailure"
+    android:id="@+id/statsLayoutFailure"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -43,22 +43,22 @@
     android:visibility="invisible">
 
     <com.arsvechkarev.views.FontTextView
-      android:id="@+id/textFailureReason"
+      android:id="@+id/statsTextFailureReason"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textSize="@dimen/text_h1"/>
 
     <com.arsvechkarev.views.noconnection.NoConnectionView
-      android:id="@+id/noConnectionView"
-      android:layout_width="100dp"
-      android:layout_height="100dp"
-      android:layout_margin="24dp"/>
+      android:id="@+id/statsNoConnectionView"
+      android:layout_width="@dimen/stats_no_connection_view_size"
+      android:layout_height="@dimen/stats_no_connection_view_size"
+      android:layout_margin="@dimen/stats_no_connection_view_margin"/>
 
     <com.arsvechkarev.views.ClickableTextView
-      android:id="@+id/textRetry"
+      android:id="@+id/statsTextRetry"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="RETRY"
+      android:text="@string/text_retry_all_caps"
       android:textColor="?colorFailure"
       android:textSize="@dimen/text_h4"
       app:rippleColor="?colorFailureRipple"/>
@@ -69,7 +69,7 @@
     android:id="@+id/simpleDialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="24dp">
+    android:paddingHorizontal="@dimen/stats_simple_dialog_p_horizontal">
 
     <LinearLayout
       android:layout_width="wrap_content"
@@ -77,22 +77,22 @@
       android:layout_gravity="center"
       android:background="@drawable/bg_dialog"
       android:orientation="vertical"
-      android:padding="24dp">
+      android:padding="@dimen/stats_dialog_inner_layout_padding">
 
       <com.arsvechkarev.views.FontTextView
-        android:id="@+id/textExplanation"
+        android:id="@+id/statsTextExplanation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_h4"/>
 
       <com.arsvechkarev.views.ClickableTextView
-        android:id="@+id/textGotIt"
+        android:id="@+id/statsTextGotIt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/stats_text_got_it_m_top"
         android:gravity="end"
-        android:text="GOT IT"
+        android:text="@string/text_got_it_all_caps"
         android:textColor="?colorTextAccent"
         android:textSize="@dimen/text_h4"
         app:rippleColor="?colorRipple"/>

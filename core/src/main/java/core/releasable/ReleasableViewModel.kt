@@ -2,6 +2,9 @@ package core.releasable
 
 import androidx.lifecycle.ViewModel
 
+/**
+ * View model that releases given [releasables] when [onCleared] is called
+ */
 abstract class ReleasableViewModel(vararg releasables: Releasable) : ViewModel() {
   
   private val releasablesList = ArrayList<Releasable>(releasables.size).apply {

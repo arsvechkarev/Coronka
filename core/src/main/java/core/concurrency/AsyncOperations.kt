@@ -1,14 +1,16 @@
-package core.async
+package core.concurrency
 
-import core.Application.Threader
 import core.releasable.Releasable
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Future
 
-class AsyncOperations(amount: Int, private val threader: Threader = Threader) : Releasable {
+/**
+ * Enables to perform several operation concurrently
+ */
+class AsyncOperations(amount: Int, private val threader: Threader = AndroidThreader) : Releasable {
   
-  private var operation: Future<*>? = null
+  private var resultOperation: Future<*>? = null
   
   private var isCancelled: Boolean = false
   private val operations = ConcurrentHashMap<String, Any>()
@@ -26,24 +28,20 @@ class AsyncOperations(amount: Int, private val threader: Threader = Threader) : 
   
   fun cancel() {
     isCancelled = true
-    operation?.cancel(true)
+    resultOperation?.cancel(true)
   }
   
   fun onDoneAll(block: (Map<String, Any>) -> Unit) {
     if (isCancelled) return
-    operation = threader.ioWorker.submit {
+    resultOperation = threader.onIoThread {
       latch.await()
       if (!isCancelled) {
-        threader.mainThreadWorker.submit { block(operations) }
+        threader.onMainThread { block(operations) }
       }
     }
   }
   
   override fun release() {
     cancel()
-  }
-  
-  private fun throwStateError() {
-    throw IllegalStateException("AsyncOperations can be used only once")
   }
 }

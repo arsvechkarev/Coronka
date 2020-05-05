@@ -9,27 +9,25 @@ import com.arsvechkarev.common.di.SingletonsInjector.countriesInfoListenableExec
 import com.arsvechkarev.common.di.SingletonsInjector.generalInfoListenableExecutor
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.map.presentation.MapViewModel
-import core.Application.Threader
 import core.NetworkConnection
+import core.concurrency.AndroidThreader
 
 object MapModuleInjector {
   
   fun provideViewModel(fragment: MapFragment): MapViewModel {
     val repository = CommonRepository(generalInfoListenableExecutor,
       countriesInfoListenableExecutor)
-    return ViewModelProviders.of(fragment, mapViewModelFactory(Threader,
-      SingletonsInjector.connection, repository))
-        .get(MapViewModel::class.java)
+    val factory = mapViewModelFactory(SingletonsInjector.connection, repository)
+    return ViewModelProviders.of(fragment, factory).get(MapViewModel::class.java)
   }
   
   @Suppress("UNCHECKED_CAST")
   fun mapViewModelFactory(
-    threader: Threader,
     connection: NetworkConnection,
     repository: CommonRepository
   ) = object : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-      val viewModel = MapViewModel(threader, connection, repository)
+      val viewModel = MapViewModel(AndroidThreader, connection, repository)
       return viewModel as T
     }
   }

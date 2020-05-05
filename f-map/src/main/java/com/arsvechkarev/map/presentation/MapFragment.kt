@@ -25,17 +25,18 @@ import core.state.Failure.FailureReason.TIMEOUT
 import core.state.Failure.FailureReason.UNKNOWN
 import core.state.StateHandle
 import core.state.isFresh
-import kotlinx.android.synthetic.main.fragment_map.bottomSheet
-import kotlinx.android.synthetic.main.fragment_map.earthView
 import kotlinx.android.synthetic.main.fragment_map.fragment_map_root
-import kotlinx.android.synthetic.main.fragment_map.layoutFailure
-import kotlinx.android.synthetic.main.fragment_map.layoutLoadingMap
-import kotlinx.android.synthetic.main.fragment_map.layoutNoConnection
-import kotlinx.android.synthetic.main.fragment_map.layoutUnknownError
-import kotlinx.android.synthetic.main.fragment_map.statsView
-import kotlinx.android.synthetic.main.fragment_map.textRetry
-import kotlinx.android.synthetic.main.fragment_map.textRetryUnknown
-import kotlinx.android.synthetic.main.fragment_map.textViewCountryName
+import kotlinx.android.synthetic.main.fragment_map.mapBottomSheet
+import kotlinx.android.synthetic.main.fragment_map.mapEarthView
+import kotlinx.android.synthetic.main.fragment_map.mapLayoutFailure
+import kotlinx.android.synthetic.main.fragment_map.mapLayoutLoading
+import kotlinx.android.synthetic.main.fragment_map.mapLayoutNoConnection
+import kotlinx.android.synthetic.main.fragment_map.mapLayoutUnknownError
+import kotlinx.android.synthetic.main.fragment_map.mapStatsView
+import kotlinx.android.synthetic.main.fragment_map.mapTextFailureReason
+import kotlinx.android.synthetic.main.fragment_map.mapTextRetry
+import kotlinx.android.synthetic.main.fragment_map.mapTextRetryUnknown
+import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
 
 class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
@@ -51,9 +52,9 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     mapDelegate.init(requireContext(), requireFragmentManager(), ::onCountrySelected)
     viewModel = MapModuleInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(this::handleStateChanged))
-    bottomSheet.setOnClickListener { bottomSheet.hide() }
-    textRetry.setOnClickListener { viewModel.updateFromNetwork() }
-    textRetryUnknown.setOnClickListener { viewModel.updateFromNetwork() }
+    mapBottomSheet.setOnClickListener { mapBottomSheet.hide() }
+    mapTextRetry.setOnClickListener { viewModel.updateFromNetwork() }
+    mapTextRetryUnknown.setOnClickListener { viewModel.updateFromNetwork() }
   }
   
   override fun onResume() {
@@ -74,8 +75,8 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   }
   
   private fun handleStartLoading() {
-    layoutFailure.animateInvisibleAndScale()
-    layoutLoadingMap.animateVisibleAndScale()
+    mapLayoutFailure.animateInvisibleAndScale()
+    mapLayoutLoading.animateVisibleAndScale()
   }
   
   private fun handleCountriesLoadedFromCache(state: LoadedFromCache) {
@@ -88,12 +89,12 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
   private fun handleFoundCountry(state: FoundCountry) {
     if (state.isFresh) {
-      bottomSheet.show()
+      mapBottomSheet.show()
     } else {
       mapDelegate.drawCountries(state.countries)
     }
-    textViewCountryName.text = state.country.name
-    statsView.updateNumbers(
+    mapTextViewCountryName.text = state.country.name
+    mapStatsView.updateNumbers(
       state.country.confirmed,
       state.country.recovered,
       state.country.deaths
@@ -102,7 +103,7 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
   private fun displayLoadedResult(countries: List<Country>) {
     fragment_map_root.animateVisible()
-    layoutLoadingMap.animateInvisibleAndScale()
+    mapLayoutLoading.animateInvisibleAndScale()
     mapDelegate.drawCountries(countries)
   }
   
@@ -112,21 +113,23 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
   
   private fun handleFailure(state: Failure) {
     fragment_map_root.invisible()
-    layoutUnknownError.invisible()
-    layoutNoConnection.invisible()
+    mapLayoutUnknownError.invisible()
+    mapLayoutNoConnection.invisible()
     when (state.reason) {
       NO_CONNECTION -> {
-        layoutNoConnection.visible()
-        earthView.animateWifi()
+        mapTextFailureReason.text = getString(R.string.text_no_connection)
+        mapLayoutNoConnection.visible()
+        mapEarthView.animateWifi()
       }
       TIMEOUT -> {
-        layoutNoConnection.visible()
-        earthView.animateHourglass()
+        mapTextFailureReason.text = getString(R.string.text_timeout)
+        mapLayoutNoConnection.visible()
+        mapEarthView.animateHourglass()
       }
-      UNKNOWN -> layoutUnknownError.visible()
+      UNKNOWN -> mapLayoutUnknownError.visible()
     }
-    textRetry.isClickable = false
-    layoutFailure.animateVisibleAndScale(andThen = { textRetry.isClickable = true })
-    layoutLoadingMap.animateInvisibleAndScale()
+    mapTextRetry.isClickable = false
+    mapLayoutFailure.animateVisibleAndScale(andThen = { mapTextRetry.isClickable = true })
+    mapLayoutLoading.animateInvisibleAndScale()
   }
 }

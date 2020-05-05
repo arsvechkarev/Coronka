@@ -15,7 +15,8 @@ class DatabaseManager internal constructor(
     
     lateinit var instance: DatabaseManager
       private set
-    
+  
+    // Should only be called once to avoid simultaneous creation of the database
     fun init(context: Context) {
       instance = DatabaseManager(context)
     }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.arsvechkarev.views.BottomSheet xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/bottomSheet"
+  android:id="@+id/mapBottomSheet"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   app:defaultState="hidden">
 
   <FrameLayout
-    android:id="@+id/layoutMain"
+    android:id="@+id/mapLayoutMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorBackground">
@@ -19,7 +19,7 @@
       android:visibility="invisible"/>
 
     <FrameLayout
-      android:id="@+id/layoutFailure"
+      android:id="@+id/mapLayoutFailure"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:gravity="center"
@@ -27,7 +27,7 @@
       android:visibility="invisible">
 
       <LinearLayout
-        android:id="@+id/layoutNoConnection"
+        android:id="@+id/mapLayoutNoConnection"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -35,24 +35,24 @@
         android:visibility="invisible">
 
         <com.arsvechkarev.views.FontTextView
+          android:id="@+id/mapTextFailureReason"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginBottom="24dp"
+          android:layout_marginBottom="@dimen/map_text_failure_m_top"
           android:gravity="center"
-          android:text="No connection"
           android:textSize="@dimen/text_h3"/>
 
         <com.arsvechkarev.views.noconnection.EarthView
-          android:id="@+id/earthView"
+          android:id="@+id/mapEarthView"
           android:layout_width="match_parent"
-          android:layout_height="150dp"/>
+          android:layout_height="@dimen/map_earth_view_size"/>
 
         <com.arsvechkarev.views.ClickableTextView
-          android:id="@+id/textRetry"
+          android:id="@+id/mapTextRetry"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="24dp"
-          android:text="RETRY"
+          android:layout_marginTop="@dimen/map_text_retry_m_top"
+          android:text="@string/text_retry_all_caps"
           android:textColor="?colorFailure"
           android:textSize="@dimen/text_h4"
           app:rippleColor="?colorFailureRipple"/>
@@ -60,7 +60,7 @@
       </LinearLayout>
 
       <LinearLayout
-        android:id="@+id/layoutUnknownError"
+        android:id="@+id/mapLayoutUnknownError"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -70,17 +70,17 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:drawableStart="@drawable/ic_error"
-          android:drawablePadding="12dp"
+          android:drawablePadding="@dimen/map_text_unknown_drawable_padding"
           android:gravity="center"
-          android:text="Unknown error"
+          android:text="@string/text_unknown_error"
           android:textSize="@dimen/text_h2"/>
 
         <com.arsvechkarev.views.ClickableTextView
-          android:id="@+id/textRetryUnknown"
+          android:id="@+id/mapTextRetryUnknown"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="24dp"
-          android:text="RETRY"
+          android:layout_marginTop="@dimen/map_text_retry_m_top"
+          android:text="@string/text_retry_all_caps"
           android:textColor="?colorFailure"
           android:textSize="@dimen/text_h4"
           app:rippleColor="?colorFailureRipple"/>
@@ -90,7 +90,7 @@
     </FrameLayout>
 
     <LinearLayout
-      android:id="@+id/layoutLoadingMap"
+      android:id="@+id/mapLayoutLoading"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -100,13 +100,13 @@
       <com.arsvechkarev.views.ProgressBar
         android:layout_width="@dimen/progress_bar_size"
         android:layout_height="@dimen/progress_bar_size"
-        android:layout_margin="@dimen/loading_layout_margin"
+        android:layout_margin="@dimen/map_loading_layout_margin"
         app:color="?colorAccent"/>
 
       <com.arsvechkarev.views.FontTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/loading_layout_margin"
+        android:layout_margin="@dimen/map_loading_layout_margin"
         android:text="@string/text_loading_map"
         android:textColor="?colorTextPrimary"
         android:textSize="@dimen/text_h1"/>
@@ -116,29 +116,29 @@
   </FrameLayout>
 
   <LinearLayout
-    android:id="@+id/layoutCountryInfo"
+    android:id="@+id/mapLayoutCountryInfo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_simple_bottom_sheet"
     android:orientation="vertical">
 
     <com.arsvechkarev.views.FontTextView
-      android:id="@+id/textViewCountryName"
+      android:id="@+id/mapTextViewCountryName"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_margin="@dimen/text_country_name_margin"
+      android:layout_margin="@dimen/map_text_country_name_margin"
       android:gravity="center"
       android:textColor="?colorTextPrimary"
       android:textSize="@dimen/text_h1"/>
 
     <com.arsvechkarev.views.BigStatsView
-      android:id="@+id/statsView"
+      android:id="@+id/mapStatsView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:padding="@dimen/big_stats_view_padding"
+      android:padding="@dimen/map_big_stats_view_padding"
       android:textSize="@dimen/text_h3"
-      app:innerLinePadding="@dimen/big_stats_view_line_padding"
-      app:innerSidePadding="@dimen/big_stats_view_side_padding"/>
+      app:innerLinePadding="@dimen/map_big_stats_view_line_padding"
+      app:innerSidePadding="@dimen/map_big_stats_view_side_padding"/>
 
   </LinearLayout>
 

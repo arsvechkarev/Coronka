@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 
 abstract class AssetsDatabaseHelper(
   private val context: Context,
@@ -20,14 +18,14 @@ abstract class AssetsDatabaseHelper(
   }
   
   override fun onCreate(db: SQLiteDatabase) {
-    // do nothing, because result will be overridden
+    // do nothing, because all necessary tables are already in the database from assets
   }
   
   override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
   
   }
   
-  fun createDatabaseIfNeeded() {
+  private fun createDatabaseIfNeeded() {
     val dbFile: File = context.getDatabasePath(assetsName)
     if (!dbFile.exists()) {
       try {
@@ -46,14 +44,14 @@ abstract class AssetsDatabaseHelper(
   
   @Throws(IOException::class)
   private fun copyDatabase(dbFile: File) {
-    val inputStream: InputStream = context.assets.open(assetsName)
-    val outputStream: OutputStream = FileOutputStream(dbFile)
-    val buffer = ByteArray(1024)
-    while (inputStream.read(buffer) > 0) {
-      outputStream.write(buffer)
+    context.assets.open(assetsName).use { inputStream ->
+      FileOutputStream(dbFile).use { outputStream ->
+        val buffer = ByteArray(1024)
+        while (inputStream.read(buffer) > 0) {
+          outputStream.write(buffer)
+        }
+        outputStream.flush()
+      }
     }
-    outputStream.flush()
-    outputStream.close()
-    inputStream.close()
   }
 }
