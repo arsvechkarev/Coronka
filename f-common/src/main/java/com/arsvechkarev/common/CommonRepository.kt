@@ -41,91 +41,75 @@ class CommonRepository(
   }
   
   fun tryGetGeneralInfoFromCache(action: SuccessAction<GeneralInfo>) {
-    if (generalInfoCacheHandler == null && generalInfoCacheListener == null) {
-      generalInfoCacheHandler = createSuccessHandler(action)
-      generalInfoCacheListener = object : CacheListener<TimedData<GeneralInfo>> {
-        
-        override fun onSuccess(result: TimedData<GeneralInfo>) {
-          if (result.lastUpdateTime.isValid()) {
-            log { "sending general info value from cache" }
-            generalInfoCacheHandler?.dispatchSuccess(result.data)
-          } else {
-            log { "general info in cache is outdated, dispatch nothing" }
-            generalInfoCacheHandler?.dispatchNothing()
-          }
-        }
-        
-        override fun onNothing() {
+    generalInfoCacheHandler = createSuccessHandler(action)
+    generalInfoCacheListener = object : CacheListener<TimedData<GeneralInfo>> {
+    
+      override fun onSuccess(result: TimedData<GeneralInfo>) {
+        if (result.lastUpdateTime.isValid()) {
+          log { "Sending general info value from cache" }
+          generalInfoCacheHandler?.dispatchSuccess(result.data)
+        } else {
+          log { "General info in cache is outdated, dispatch nothing" }
           generalInfoCacheHandler?.dispatchNothing()
         }
       }
+    
+      override fun onNothing() {
+        generalInfoCacheHandler?.dispatchNothing()
+      }
     }
-    generalInfoCacheHandler!!.runIfNotAlready {
-      generalInfoListenableExecutor.tryGetDataFromCache(generalInfoCacheListener!!)
-    }
+    generalInfoListenableExecutor.tryGetDataFromCache(generalInfoCacheListener!!)
   }
   
   fun loadGeneralInfo(action: ResultAction<GeneralInfo, Throwable>) {
-    if (generalInfoNetworkHandler == null && generalInfoNetworkListener == null) {
-      generalInfoNetworkHandler = createResultHandler(action)
-      generalInfoNetworkListener = object : NetworkListener<TimedData<GeneralInfo>> {
-        
-        override fun onSuccess(result: TimedData<GeneralInfo>) {
-          generalInfoNetworkHandler?.dispatchSuccess(result.data)
-        }
-        
-        override fun onFailure(failure: Throwable) {
-          generalInfoNetworkHandler?.dispatchFailure(failure)
-        }
+    generalInfoNetworkHandler = createResultHandler(action)
+    generalInfoNetworkListener = object : NetworkListener<TimedData<GeneralInfo>> {
+    
+      override fun onSuccess(result: TimedData<GeneralInfo>) {
+        generalInfoNetworkHandler?.dispatchSuccess(result.data)
+      }
+    
+      override fun onFailure(failure: Throwable) {
+        generalInfoNetworkHandler?.dispatchFailure(failure)
       }
     }
-    generalInfoNetworkHandler!!.runIfNotAlready {
-      generalInfoListenableExecutor.getDataFromNetWork(generalInfoNetworkListener!!)
-    }
+    generalInfoListenableExecutor.getDataFromNetWork(generalInfoNetworkListener!!)
   }
   
   fun tryGetCountriesInfoFromCache(action: SuccessAction<List<Country>>) {
-    if (countriesInfoCacheHandler == null && countriesInfoCacheListener == null) {
-      countriesInfoCacheHandler = createSuccessHandler(action)
-      countriesInfoCacheListener = object : CacheListener<TimedData<List<Country>>> {
-        
-        override fun onSuccess(result: TimedData<List<Country>>) {
-          if (result.lastUpdateTime.isValid()) {
-            log { "sending countries info from cache" }
-            countriesInfoCacheHandler?.dispatchSuccess(result.data)
-          } else {
-            log { "countries info in cache is outdated, dispatch nothing" }
-            countriesInfoCacheHandler?.dispatchNothing()
-          }
-        }
-        
-        override fun onNothing() {
+    countriesInfoCacheHandler = createSuccessHandler(action)
+    countriesInfoCacheListener = object : CacheListener<TimedData<List<Country>>> {
+    
+      override fun onSuccess(result: TimedData<List<Country>>) {
+        if (result.lastUpdateTime.isValid()) {
+          log { "Sending countries info from cache" }
+          countriesInfoCacheHandler?.dispatchSuccess(result.data)
+        } else {
+          log { "Countries info in cache is outdated, dispatch nothing" }
           countriesInfoCacheHandler?.dispatchNothing()
         }
       }
+    
+      override fun onNothing() {
+        countriesInfoCacheHandler?.dispatchNothing()
+      }
     }
-    countriesInfoCacheHandler!!.runIfNotAlready {
-      countriesInfoListenableExecutor.tryGetDataFromCache(countriesInfoCacheListener!!)
-    }
+    countriesInfoListenableExecutor.tryGetDataFromCache(countriesInfoCacheListener!!)
   }
   
   fun loadCountriesInfo(action: ResultAction<List<Country>, Throwable>) {
-    if (countriesInfoNetworkHandler == null && countriesInfoNetworkListener == null) {
-      countriesInfoNetworkHandler = createResultHandler(action)
-      countriesInfoNetworkListener = object : NetworkListener<TimedData<List<Country>>> {
-        
-        override fun onSuccess(result: TimedData<List<Country>>) {
-          countriesInfoNetworkHandler?.dispatchSuccess(result.data)
-        }
-        
-        override fun onFailure(failure: Throwable) {
-          countriesInfoNetworkHandler?.dispatchFailure(failure)
-        }
+    countriesInfoNetworkHandler = createResultHandler(action)
+    countriesInfoNetworkListener = object : NetworkListener<TimedData<List<Country>>> {
+    
+      override fun onSuccess(result: TimedData<List<Country>>) {
+        countriesInfoNetworkHandler?.dispatchSuccess(result.data)
+      }
+    
+      override fun onFailure(failure: Throwable) {
+        countriesInfoNetworkHandler?.dispatchFailure(failure)
       }
     }
-    countriesInfoNetworkHandler!!.runIfNotAlready {
-      countriesInfoListenableExecutor.getDataFromNetWork(countriesInfoNetworkListener!!)
-    }
+    countriesInfoListenableExecutor.getDataFromNetWork(countriesInfoNetworkListener!!)
   }
   
   fun DateTime.isValid(): Boolean {

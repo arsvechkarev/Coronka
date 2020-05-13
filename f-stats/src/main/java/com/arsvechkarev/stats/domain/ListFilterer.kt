@@ -33,24 +33,23 @@ class ListFilterer(
     optionType: OptionType,
     action: SuccessAction<List<DisplayableItem>>
   ) {
-    filterHandler = createSuccessHandler(action).runIfNotAlready {
-      threader.onBackground {
-        if (optionType == PERCENT_BY_COUNTRY) {
-          if (populations.isEmpty()) {
-            val future = threader.onIoThread {
-              DatabaseManager.instance.readableDatabase.use {
-                val cursor = DatabaseExecutor.readAll(it, PopulationsTable.TABLE_NAME)
-                val elements = populationsDao.getAll(cursor)
-                populations.addAll(elements)
-              }
+    filterHandler = createSuccessHandler(action)
+    threader.onBackground {
+      if (optionType == PERCENT_BY_COUNTRY) {
+        if (populations.isEmpty()) {
+          val future = threader.onIoThread {
+            DatabaseManager.instance.readableDatabase.use {
+              val cursor = DatabaseExecutor.readAll(it, PopulationsTable.TABLE_NAME)
+              val elements = populationsDao.getAll(cursor)
+              populations.addAll(elements)
             }
-            future.get()
           }
-          assertThat(populations.isNotEmpty())
-          transformPopulations(populations, list, generalInfo, optionType)
-        } else {
-          transformOther(list, generalInfo, optionType)
+          future.get()
         }
+        assertThat(populations.isNotEmpty())
+        transformPopulations(populations, list, generalInfo, optionType)
+      } else {
+        transformOther(list, generalInfo, optionType)
       }
     }
   }

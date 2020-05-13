@@ -17,8 +17,7 @@
     android:id="@+id/bottomNavigation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
     app:bitmapIconSize="@dimen/icon_default_size"
-    app:labelColor="@android:color/white"/>
+    app:labelColor="?colorTextPrimary"/>
 
 </LinearLayout>

@@ -5,26 +5,12 @@ class SuccessHandler<S>(
   private val onNothing: () -> Unit
 ) {
   
-  @Volatile
-  var isRunning = false
-    private set
-  
-  fun runIfNotAlready(action: (SuccessHandler<S>) -> Unit): SuccessHandler<S> {
-    if (!isRunning) {
-      isRunning = true
-      action(this)
-    }
-    return this
-  }
-  
   fun dispatchSuccess(result: S) {
     onSuccess(result)
-    isRunning = false
   }
   
   fun dispatchNothing() {
     onNothing()
-    isRunning = false
   }
 }
 

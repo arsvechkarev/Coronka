@@ -22,13 +22,13 @@ class NetworkConnectionImpl(context: Context) : NetworkConnection, Loggable {
   private val callback = object : ConnectivityManager.NetworkCallback() {
     
     override fun onAvailable(network: Network) {
-      log { "connection: available" }
+      log { "Connection is available" }
       this@NetworkConnectionImpl.isConnected = true
       latch.countDown()
     }
     
     override fun onUnavailable() {
-      log { "connection: unavailable" }
+      log { "Connection is unavailable" }
       this@NetworkConnectionImpl.isConnected = false
       latch.countDown()
     }

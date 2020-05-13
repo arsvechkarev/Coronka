@@ -3,8 +3,6 @@ package com.arsvechkarev.views
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Parcel
-import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_CANCEL
@@ -51,7 +49,6 @@ class BottomSheet @JvmOverloads constructor(
   }
   
   init {
-    isSaveEnabled = true
     val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.BottomSheet, 0, 0)
     when (attributes.getInt(R.styleable.BottomSheet_defaultState, 0)) {
       0 -> currentState = SHOWN
@@ -250,48 +247,6 @@ class BottomSheet @JvmOverloads constructor(
     if (velocityTracker != null) {
       velocityTracker!!.recycle()
       velocityTracker = null
-    }
-  }
-  
-  override fun onSaveInstanceState(): Parcelable? {
-    val superState = super.onSaveInstanceState() ?: return null
-    val myState = BottomSheetSavedState(
-      superState)
-    myState.currentState = this.currentState
-    return myState
-  }
-  
-  override fun onRestoreInstanceState(state: Parcelable) {
-    super.onRestoreInstanceState(state)
-    val savedState = state as BottomSheetSavedState
-    currentState = savedState.currentState
-    requestLayout()
-  }
-  
-  class BottomSheetSavedState : BaseSavedState {
-    
-    var currentState = HIDDEN
-    
-    constructor(parcelable: Parcelable) : super(parcelable)
-    
-    constructor(parcel: Parcel) : super(parcel) {
-      currentState = parcel.readSerializable() as State
-    }
-    
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-      super.writeToParcel(parcel, flags)
-      parcel.writeSerializable(currentState)
-    }
-    
-    companion object CREATOR : Parcelable.Creator<BottomSheetSavedState> {
-      
-      override fun createFromParcel(parcel: Parcel): BottomSheetSavedState {
-        return BottomSheetSavedState(parcel)
-      }
-      
-      override fun newArray(size: Int): Array<BottomSheetSavedState?> {
-        return arrayOfNulls(size)
-      }
     }
   }
   

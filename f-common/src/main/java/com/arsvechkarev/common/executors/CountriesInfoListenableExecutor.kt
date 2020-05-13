@@ -4,7 +4,6 @@ import com.arsvechkarev.common.TimedData
 import com.arsvechkarev.network.Networker
 import com.arsvechkarev.storage.Saver
 import core.Loggable
-import core.log
 import core.model.Country
 import datetime.DateTime
 import org.json.JSONArray
@@ -33,7 +32,6 @@ class CountriesInfoListenableExecutor(
     val jsonArray = JSONArray(json)
     for (i in 0 until jsonArray.length()) {
       val item = jsonArray.get(i) as JSONObject
-      log { item.toString() }
       if (item.has("confirmed")
           && item.has("deaths")
           && item.has("recovered")
