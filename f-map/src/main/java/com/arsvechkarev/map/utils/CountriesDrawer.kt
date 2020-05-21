@@ -4,14 +4,13 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import core.extenstions.dp
 import core.model.Country
 import kotlin.math.max
 
-class CountriesMarkersDrawer {
+class CountriesDrawer {
   
   private val countriesToSizes = HashMap<Int, Int>()
   
@@ -30,10 +29,6 @@ class CountriesMarkersDrawer {
     for (i in countries.indices) {
       val country = countries[i]
       val bitmap = createMarkerBitmap(country, countryWithMaxCases.confirmed)
-      val options = MarkerOptions()
-          .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
-          .position(LatLng(country.latitude, country.longitude))
-      optionsList.add(options)
     }
     return optionsList
   }

@@ -8,9 +8,7 @@ class Country(
   val iso2: String,
   val confirmed: Int,
   val deaths: Int,
-  val recovered: Int,
-  val latitude: Double,
-  val longitude: Double
+  val recovered: Int
 )
 
 data class DisplayableCountry(

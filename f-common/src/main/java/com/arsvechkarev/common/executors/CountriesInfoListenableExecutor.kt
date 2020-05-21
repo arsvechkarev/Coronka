@@ -38,9 +38,7 @@ class CountriesInfoListenableExecutor(
         iso2 = item.getString("CountryCode"),
         confirmed = item.getString("TotalConfirmed").toInt(),
         deaths = item.getString("TotalDeaths").toInt(),
-        recovered = item.getString("TotalRecovered").toInt(),
-        latitude = 0.0,
-        longitude = 0.0
+        recovered = item.getString("TotalRecovered").toInt()
       )
       countriesList.add(country)
     }

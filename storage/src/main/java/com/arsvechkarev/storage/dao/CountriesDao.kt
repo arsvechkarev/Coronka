@@ -16,9 +16,7 @@ class CountriesDao {
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_CODE)),
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_CONFIRMED)),
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_DEATHS)),
-        cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_RECOVERED)),
-        cursor.getDouble(cursor.getColumnIndex(CountriesTable.COLUMN_LATITUDE)),
-        cursor.getDouble(cursor.getColumnIndex(CountriesTable.COLUMN_LONGITUDE))
+        cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_RECOVERED))
       )
       infoData.add(info)
     }
@@ -33,7 +31,5 @@ class CountriesDao {
     contentValues.put(CountriesTable.COLUMN_CONFIRMED, country.confirmed)
     contentValues.put(CountriesTable.COLUMN_DEATHS, country.deaths)
     contentValues.put(CountriesTable.COLUMN_RECOVERED, country.recovered)
-    contentValues.put(CountriesTable.COLUMN_LATITUDE, country.latitude)
-    contentValues.put(CountriesTable.COLUMN_LONGITUDE, country.longitude)
   }
 }
