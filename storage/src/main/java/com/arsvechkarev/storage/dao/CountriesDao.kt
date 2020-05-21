@@ -13,6 +13,7 @@ class CountriesDao {
       val info = Country(
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_ID)),
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_NAME)),
+        cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_SLUG)),
         cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_CODE)),
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_CONFIRMED)),
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_DEATHS)),
@@ -27,6 +28,7 @@ class CountriesDao {
   fun populateWithValues(country: Country, contentValues: ContentValues) {
     contentValues.put(CountriesTable.COLUMN_COUNTRY_ID, country.id)
     contentValues.put(CountriesTable.COLUMN_COUNTRY_NAME, country.name)
+    contentValues.put(CountriesTable.COLUMN_COUNTRY_SLUG, country.slug)
     contentValues.put(CountriesTable.COLUMN_COUNTRY_CODE, country.iso2)
     contentValues.put(CountriesTable.COLUMN_CONFIRMED, country.confirmed)
     contentValues.put(CountriesTable.COLUMN_DEATHS, country.deaths)

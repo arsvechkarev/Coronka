@@ -5,6 +5,7 @@ import core.recycler.DisplayableItem
 class Country(
   val id: Int,
   val name: String,
+  val slug: String,
   val iso2: String,
   val confirmed: Int,
   val deaths: Int,

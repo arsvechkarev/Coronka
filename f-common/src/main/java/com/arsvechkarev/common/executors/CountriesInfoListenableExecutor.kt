@@ -35,6 +35,7 @@ class CountriesInfoListenableExecutor(
       val country = Country(
         id = i,
         name = item.getString("Country"),
+        slug = item.getString("Slug"),
         iso2 = item.getString("CountryCode"),
         confirmed = item.getString("TotalConfirmed").toInt(),
         deaths = item.getString("TotalDeaths").toInt(),
