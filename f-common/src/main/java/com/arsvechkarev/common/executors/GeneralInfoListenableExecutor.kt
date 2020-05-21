@@ -56,10 +56,10 @@ class GeneralInfoListenableExecutor(
     const val SAVER_FILENAME = "GeneralInfoListenableExecutor"
     
     private const val GENERAL_INFO_LAST_UPDATE_TIME = "generalInfoLastUpdate"
-    private const val CONFIRMED = "confirmed"
+    private const val CONFIRMED = "cases"
     private const val RECOVERED = "recovered"
     private const val DEATHS = "deaths"
-    
-    private const val URL = "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/brief"
+  
+    private const val URL = "https://coronavirus-19-api.herokuapp.com/all"
   }
 }

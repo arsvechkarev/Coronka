@@ -5,26 +5,12 @@ class ResultHandler<S, F>(
   private val onFailure: (F) -> Unit
 ) {
   
-  @Volatile
-  var isRunning = false
-    private set
-  
-  fun runIfNotAlready(action: (ResultHandler<S, F>) -> Unit): ResultHandler<S, F> {
-    if (!isRunning) {
-      isRunning = true
-      action(this)
-    }
-    return this
-  }
-  
   fun dispatchSuccess(result: S) {
     onSuccess(result)
-    isRunning = false
   }
   
   fun dispatchFailure(error: F) {
     onFailure(error)
-    isRunning = false
   }
 }
 

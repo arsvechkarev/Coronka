@@ -6,7 +6,6 @@ import com.arsvechkarev.storage.Saver
 import core.Loggable
 import core.model.Country
 import datetime.DateTime
-import org.json.JSONArray
 import org.json.JSONObject
 
 class CountriesInfoListenableExecutor(
@@ -29,26 +28,21 @@ class CountriesInfoListenableExecutor(
   override fun performNetworkRequest(): TimedData<List<Country>> {
     val json = networker.performRequest(URL)
     val countriesList = ArrayList<Country>()
-    val jsonArray = JSONArray(json)
+    val jsonObject = JSONObject(json)
+    val jsonArray = jsonObject.getJSONArray("Countries")
     for (i in 0 until jsonArray.length()) {
       val item = jsonArray.get(i) as JSONObject
-      if (item.has("confirmed")
-          && item.has("deaths")
-          && item.has("recovered")
-          && item.has("countrycode")
-          && item.has("location")) {
-        val country = Country(
-          id = i,
-          name = item.getString("countryregion"),
-          iso2 = (item.get("countrycode") as JSONObject).getString("iso2"),
-          confirmed = item.getString("confirmed").toInt(),
-          deaths = item.getString("deaths").toInt(),
-          recovered = item.getString("recovered").toInt(),
-          latitude = (item.get("location") as JSONObject).getString("lat").toDouble(),
-          longitude = (item.get("location") as JSONObject).getString("lng").toDouble()
-        )
-        countriesList.add(country)
-      }
+      val country = Country(
+        id = i,
+        name = item.getString("Country"),
+        iso2 = item.getString("CountryCode"),
+        confirmed = item.getString("TotalConfirmed").toInt(),
+        deaths = item.getString("TotalDeaths").toInt(),
+        recovered = item.getString("TotalRecovered").toInt(),
+        latitude = 0.0,
+        longitude = 0.0
+      )
+      countriesList.add(country)
     }
     return TimedData(countriesList, DateTime.current())
   }
@@ -67,6 +61,6 @@ class CountriesInfoListenableExecutor(
   companion object {
     const val SAVER_FILENAME = "CountriesInfoListenableExecutor"
     private const val COUNTRIES_INFO_LAST_UPDATE_TIME = "countriesInfoLastUpdate"
-    private const val URL = "https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest?onlyCountries=true"
+    private const val URL = "https://api.covid19api.com/summary"
   }
 }
