@@ -63,7 +63,7 @@ class CommonRepository(
   
   fun loadGeneralInfo(action: ResultAction<GeneralInfo, Throwable>) {
     generalInfoNetworkHandler = createResultHandler(action)
-    generalInfoNetworkListener = object : NetworkListener<TimedData<GeneralInfo>> {
+    generalInfoNetworkListener = object : NetworkListener<TimedData<GeneralInfo>>() {
     
       override fun onSuccess(result: TimedData<GeneralInfo>) {
         generalInfoNetworkHandler?.dispatchSuccess(result.data)
@@ -99,7 +99,7 @@ class CommonRepository(
   
   fun loadCountriesInfo(action: ResultAction<List<Country>, Throwable>) {
     countriesInfoNetworkHandler = createResultHandler(action)
-    countriesInfoNetworkListener = object : NetworkListener<TimedData<List<Country>>> {
+    countriesInfoNetworkListener = object : NetworkListener<TimedData<List<Country>>>() {
     
       override fun onSuccess(result: TimedData<List<Country>>) {
         countriesInfoNetworkHandler?.dispatchSuccess(result.data)
@@ -125,6 +125,6 @@ class CommonRepository(
   }
   
   companion object {
-    private const val CACHE_MAX_STORE_MINUTES = 60
+    private const val CACHE_MAX_STORE_MINUTES = 10
   }
 }

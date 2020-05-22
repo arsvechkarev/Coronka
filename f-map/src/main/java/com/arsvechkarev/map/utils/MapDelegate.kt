@@ -1,14 +1,19 @@
 package com.arsvechkarev.map.utils
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Color.MAGENTA
 import androidx.fragment.app.FragmentManager
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.presentation.MapHolder
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.maps.android.data.geojson.GeoJsonLayer
+import com.google.maps.android.data.geojson.GeoJsonPolygonStyle
 import core.concurrency.AndroidThreader
 import core.model.Country
+
 
 class MapDelegate {
   
@@ -42,8 +47,21 @@ class MapDelegate {
   }
   
   fun drawCountries(countries: List<Country>) {
-    threader.onBackground {
-      this.countries = countries
+    mapHolder.addAction { map ->
+      val layer = GeoJsonLayer(map, R.raw.countries, context)
+      layer.features.forEach {
+        if (it.id == "RU") {
+          val style = GeoJsonPolygonStyle()
+          style.fillColor = Color.RED
+          style.isClickable = true
+          it.polygonStyle = style
+        }
+        println("iddd = ${it.properties}")
+      }
+      val style = layer.defaultPolygonStyle
+      style.strokeColor = MAGENTA
+      style.strokeWidth = 1f
+      layer.addLayerToMap()
     }
   }
 }

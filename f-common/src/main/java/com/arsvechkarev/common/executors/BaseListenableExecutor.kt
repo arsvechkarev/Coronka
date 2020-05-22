@@ -3,6 +3,7 @@ package com.arsvechkarev.common.executors
 import core.concurrency.AndroidThreader
 import core.concurrency.Threader
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class BaseListenableExecutor<S>(
@@ -81,10 +82,15 @@ abstract class BaseListenableExecutor<S>(
       } catch (e: Throwable) {
         future.cancel(true)
         synchronized(networkLock) {
-          threader.onMainThread {
-            networkListeners.forEach { it.onFailure(e) }
-            networkListeners.clear()
-            isLoadingFromNetwork.set(false)
+          isLoadingFromNetwork.set(false)
+          networkListeners.forEach {
+            networkListeners.remove(it)
+            if (it.retryCount == 0 || e is TimeoutException) {
+              it.onFailure(e)
+            } else {
+              it.retryCount--
+              getDataFromNetWork(it)
+            }
           }
         }
       }
@@ -106,10 +112,10 @@ abstract class BaseListenableExecutor<S>(
     fun onNothing() {}
   }
   
-  interface NetworkListener<S> {
+  abstract class NetworkListener<S>(internal var retryCount: Int = 3) {
     
-    fun onSuccess(result: S)
+    abstract fun onSuccess(result: S)
     
-    fun onFailure(failure: Throwable)
+    abstract fun onFailure(failure: Throwable)
   }
 }

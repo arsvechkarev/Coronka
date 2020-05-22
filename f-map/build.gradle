@@ -35,4 +35,5 @@ dependencies {
   implementation dependencies.appCompat
   implementation dependencies.lifecycleExtensions
   implementation dependencies.googleMaps
+  implementation dependencies.googleMapsUtils
 }
