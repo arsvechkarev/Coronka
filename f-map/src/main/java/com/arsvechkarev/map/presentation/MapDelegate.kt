@@ -48,7 +48,7 @@ class MapDelegate {
       uiSettings.isMapToolbarEnabled = false
       uiSettings.isRotateGesturesEnabled = false
       uiSettings.isMyLocationButtonEnabled = false
-      setMaxZoomPreference(3.5f)
+      setMaxZoomPreference(4f)
     }
   }
   
@@ -59,16 +59,16 @@ class MapDelegate {
         val layer = GeoJsonLayer(map, R.raw.countries, context)
         layer.features.forEach { feature ->
           feature.polygonStyle = GeoJsonPolygonStyle().apply {
-            val countryOnMap = mapCountries.find { it.iso2 == feature.id }
+            val countryOnMap = mapCountries.find { it.iso2 == feature.getProperty("iso_a2") }
             val color = countryOnMap?.color ?: Color.TRANSPARENT
             fillColor = color
             strokeWidth = STROKE_WIDTH
           }
         }
         layer.setOnFeatureClickListener { feature ->
-          countriesDrawer.drawSelection(feature as GeoJsonFeature)
-          val country = countriesMap[feature.id] ?: return@setOnFeatureClickListener
+          val country = countriesMap[feature.getProperty("iso_a2")] ?: return@setOnFeatureClickListener
           onCountrySelected(country)
+          countriesDrawer.drawSelection(feature as GeoJsonFeature)
         }
         threader.onMainThread {
           layer.addLayerToMap()
