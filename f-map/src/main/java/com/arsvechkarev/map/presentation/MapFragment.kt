@@ -10,7 +10,6 @@ import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
 import com.arsvechkarev.map.presentation.MapScreenState.Loading
-import com.arsvechkarev.map.utils.MapDelegate
 import core.Loggable
 import core.extenstions.animateInvisibleAndScale
 import core.extenstions.animateVisible
@@ -107,8 +106,8 @@ class MapFragment : Fragment(R.layout.fragment_map), Loggable {
     mapDelegate.drawCountries(countries)
   }
   
-  private fun onCountrySelected(countryCode: String) {
-    viewModel.findCountryByCode(countryCode)
+  private fun onCountrySelected(country: Country) {
+    viewModel.showCountryInfo(country)
   }
   
   private fun handleFailure(state: Failure) {

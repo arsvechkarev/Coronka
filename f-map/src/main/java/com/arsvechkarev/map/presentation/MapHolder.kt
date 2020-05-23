@@ -1,18 +1,17 @@
 package com.arsvechkarev.map.presentation
 
 import com.google.android.gms.maps.GoogleMap
-import core.concurrency.AndroidThreader
-import core.concurrency.Threader
 import java.util.concurrent.CountDownLatch
 
-class MapHolder(private val threader: Threader = AndroidThreader) {
+class MapHolder {
   
   private var googleMap: GoogleMap? = null
   private val initLatch = CountDownLatch(1)
+  private var actions = ArrayList<(GoogleMap) -> Unit>()
   
   fun init(map: GoogleMap) {
-    initLatch.countDown()
     googleMap = map
+    initLatch.countDown()
   }
   
   fun addAction(action: (GoogleMap) -> Unit) {
@@ -20,11 +19,11 @@ class MapHolder(private val threader: Threader = AndroidThreader) {
       action(googleMap!!)
       return
     }
-    threader.onBackground {
-      initLatch.await()
-      threader.onMainThread {
-        action(googleMap!!)
-      }
+    actions.add(action)
+    initLatch.await()
+    for (function in actions) {
+      function(googleMap!!)
     }
+    actions.clear()
   }
 }

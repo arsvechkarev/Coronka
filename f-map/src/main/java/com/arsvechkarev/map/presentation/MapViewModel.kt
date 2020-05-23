@@ -64,11 +64,11 @@ class MapViewModel(
     }
   }
   
-  fun findCountryByCode(countryCode: String) {
+  fun showCountryInfo(country: Country) {
     when (val currentState = _state.currentValue) {
-      is LoadedFromCache -> performCountrySearch(currentState.countries, countryCode)
-      is LoadedFromNetwork -> performCountrySearch(currentState.countries, countryCode)
-      is FoundCountry -> performCountrySearch(currentState.countries, countryCode)
+      is LoadedFromCache -> notifyFoundCountry(currentState.countries, country)
+      is LoadedFromNetwork -> notifyFoundCountry(currentState.countries, country)
+      is FoundCountry -> notifyFoundCountry(currentState.countries, country)
     }
   }
   
@@ -83,13 +83,11 @@ class MapViewModel(
     }
   }
   
-  private fun performCountrySearch(
-    countries: List<Country>,
-    countryCode: String
+  private fun notifyFoundCountry(
+    countries: List<Country>, foundCountry: Country
   ) {
-    val country = countries.find { it.iso2 == countryCode } ?: return
     threader.onMainThread {
-      _state.update(FoundCountry(countries, country))
+      _state.update(FoundCountry(countries, foundCountry))
     }
   }
 }

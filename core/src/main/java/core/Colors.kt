@@ -6,6 +6,9 @@ import com.arsvechkarev.core.R
 
 object Colors {
   
+  const val landscape = 0xff11568a.toInt()
+  const val mostInfectedCountry = 0xff041854.toInt()
+  
   var confirmedColor: Int = -1
     private set
   var deathsColor: Int = -1

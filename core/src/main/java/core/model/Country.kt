@@ -12,6 +12,11 @@ class Country(
   val recovered: Int
 )
 
+class CountryOnMap(
+  val iso2: String,
+  val color: Int
+)
+
 data class DisplayableCountry(
   val name: String,
   val amount: Number
