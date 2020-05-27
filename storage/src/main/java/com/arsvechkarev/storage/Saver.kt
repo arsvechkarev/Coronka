@@ -19,14 +19,10 @@ class Saver(filename: String, context: Context) {
     return sharedPrefs.getInt(key, Int.MAX_VALUE)
   }
   
-  fun getOrDefault(key: String, defValue: String): String {
-    return sharedPrefs.getString(key, defValue) ?: defValue
-  }
-  
-  fun execute(synchronosly: Boolean = false, block: SharedPreferences.Editor.() -> Unit) {
+  fun execute(synchronously: Boolean = false, block: SharedPreferences.Editor.() -> Unit) {
     val editor = sharedPrefs.edit()
     block(editor)
-    if (synchronosly) {
+    if (synchronously) {
       editor.commit()
     } else {
       editor.apply()

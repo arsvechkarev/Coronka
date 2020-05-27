@@ -19,7 +19,6 @@ import core.model.Country
 import core.model.CountryOnMap
 import kotlin.math.pow
 
-
 class MapDelegate {
   
   private val mapHolder = MapHolder()

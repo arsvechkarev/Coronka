@@ -8,6 +8,7 @@ class CountriesDrawer {
   private var currentFeature: GeoJsonFeature? = null
   
   fun drawSelection(newFeature: GeoJsonFeature) {
+    if (newFeature == currentFeature) return
     if (currentFeature != null) {
       drawMarkerByCountry(currentFeature!!, newFeature.polygonStyle.fillColor)
     }

@@ -48,7 +48,7 @@ class CountriesInfoListenableExecutor(
   
   override fun loadToCache(result: TimedData<List<Country>>) {
     threader.onIoThread {
-      saver.execute(synchronosly = true) {
+      saver.execute(synchronously = true) {
         putString(COUNTRIES_INFO_LAST_UPDATE_TIME, DateTime.current().toString())
       }
     }
