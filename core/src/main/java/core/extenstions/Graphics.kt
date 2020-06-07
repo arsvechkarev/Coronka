@@ -1,18 +1,8 @@
 package core.extenstions
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.Drawable
 import kotlin.math.pow
 import kotlin.math.roundToInt
-
-fun Drawable.toBitmap(width: Int = intrinsicWidth, height: Int = intrinsicHeight): Bitmap {
-  val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-  val canvas = Canvas(bitmap)
-  setBounds(0, 0, canvas.width, canvas.height)
-  draw(canvas)
-  return bitmap
-}
 
 inline fun Canvas.block(action: Canvas.() -> Unit) {
   save()
@@ -54,15 +44,4 @@ fun lerpColor(startColor: Int, endColor: Int, fraction: Float): Int {
   b = b.toDouble().pow(1.0 / 2.2).toFloat() * 255.0f
   
   return (a.roundToInt() shl 24) or (r.roundToInt() shl 16) or (g.roundToInt() shl 8) or b.roundToInt()
-}
-
-fun Int.withAlpha(alpha: Float): Int {
-  assertThat(alpha in 0f..1f) { "Incorrect alpha: $alpha" }
-  return withAlpha((alpha * 255).toInt())
-}
-
-fun Int.withAlpha(alpha: Int): Int {
-  assertThat(alpha in 0..255) { "Incorrect alpha: $alpha" }
-  val a = alpha shl 16
-  return this and 0xFF000000.toInt() or a
 }

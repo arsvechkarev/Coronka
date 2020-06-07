@@ -257,16 +257,15 @@ class BottomNavigationView @JvmOverloads constructor(
   
   override fun onSaveInstanceState(): Parcelable? {
     val superState = super.onSaveInstanceState() ?: return null
-    val myState = BottomNavigationState(
-      superState)
+    val myState = BottomNavigationState(superState)
     myState.currentItemId = this.currentItemId
     myState.formerItemId = this.formerItemId
     return myState
   }
   
   override fun onRestoreInstanceState(state: Parcelable) {
-    super.onRestoreInstanceState(state)
-    val savedState = state as BottomNavigationState
+    val savedState: BottomNavigationState = state as BottomNavigationState
+    super.onRestoreInstanceState(savedState.superState)
     currentItemId = savedState.currentItemId
     formerItemId = savedState.formerItemId
     startAnimation(currentItemId)
