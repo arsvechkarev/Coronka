@@ -1,4 +1,4 @@
-package core.handlers
+package core
 
 class SuccessHandler<S>(
   private val onSuccess: (S) -> Unit,

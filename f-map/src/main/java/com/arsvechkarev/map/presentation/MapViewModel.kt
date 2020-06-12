@@ -50,7 +50,7 @@ class MapViewModel(
       _state.update(Loading)
     }
     if (connection.isNotConnected) {
-      threader.onMainThread { _state.update(Failure(NO_CONNECTION)) }
+      _state.update(Failure(NO_CONNECTION))
       return
     }
     rxCall {

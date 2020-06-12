@@ -3,6 +3,7 @@ package com.arsvechkarev.common
 import com.arsvechkarev.network.RxNetworker
 import com.arsvechkarev.storage.Saver
 import core.Loggable
+import core.MAX_CACHE_MINUTES
 import core.concurrency.AndroidSchedulersProvider
 import core.concurrency.SchedulersProvider
 import core.log

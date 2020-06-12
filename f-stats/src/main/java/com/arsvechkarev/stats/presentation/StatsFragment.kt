@@ -13,7 +13,6 @@ import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromCache
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromNetwork
 import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
-import core.Loggable
 import core.extenstions.addBackPressedCallback
 import core.extenstions.animateInvisible
 import core.extenstions.animateInvisibleAndScale
@@ -37,9 +36,7 @@ import kotlinx.android.synthetic.main.fragment_stats.statsTextGotIt
 import kotlinx.android.synthetic.main.fragment_stats.statsTextRetry
 import kotlin.math.min
 
-class StatsFragment : Fragment(R.layout.fragment_stats), Loggable {
-  
-  override val logTag = "StatsFragment"
+class StatsFragment : Fragment(R.layout.fragment_stats) {
   
   private lateinit var viewModel: StatsViewModel
   private val adapter = StatsAdapter(

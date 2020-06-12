@@ -10,7 +10,6 @@ import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
 import com.arsvechkarev.map.presentation.MapScreenState.Loading
-import core.Loggable
 import core.extenstions.animateInvisibleAndScale
 import core.extenstions.animateVisible
 import core.extenstions.animateVisibleAndScale
@@ -37,9 +36,7 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextRetry
 import kotlinx.android.synthetic.main.fragment_map.mapTextRetryUnknown
 import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
 
-class MapFragment : Fragment(R.layout.fragment_map), Loggable {
-  
-  override val logTag = "Map_Fragment"
+class MapFragment : Fragment(R.layout.fragment_map) {
   
   private val mapDelegate = MapDelegate()
   private lateinit var viewModel: MapViewModel

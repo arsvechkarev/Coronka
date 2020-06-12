@@ -4,11 +4,11 @@ import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
 import com.arsvechkarev.storage.PopulationsTable
 import com.arsvechkarev.storage.dao.PopulationsDao
+import core.SuccessAction
+import core.SuccessHandler
 import core.concurrency.Threader
+import core.createSuccessHandler
 import core.extenstions.assertThat
-import core.handlers.SuccessAction
-import core.handlers.SuccessHandler
-import core.handlers.createSuccessHandler
 import core.model.Country
 import core.model.DisplayableCountry
 import core.model.DisplayableGeneralInfo
@@ -54,24 +54,6 @@ class ListFilterer(
     }
   }
   
-  private fun transformOther(
-    countries: List<Country>,
-    generalInfo: GeneralInfo,
-    optionType: OptionType
-  ) {
-    val displayableCountries = ArrayList<DisplayableCountry>()
-    for (i in countries.indices) {
-      val it = countries[i]
-      val number = determineNumber(optionType, it)
-      displayableCountries.add(DisplayableCountry(it.name, number))
-    }
-    displayableCountries.sortDescending()
-    for (i in countries.indices) {
-      displayableCountries[i].number = i + 1
-    }
-    notifyDone(displayableCountries, generalInfo, optionType)
-  }
-  
   private fun transformPopulations(
     populations: List<Population>,
     countries: List<Country>,
@@ -84,6 +66,24 @@ class ListFilterer(
       val population = populations.find { it.iso2 == country.iso2 }!!
       val number = country.confirmed.toFloat() / population.population.toFloat()
       displayableCountries.add(DisplayableCountry(country.name, number))
+    }
+    displayableCountries.sortDescending()
+    for (i in countries.indices) {
+      displayableCountries[i].number = i + 1
+    }
+    notifyDone(displayableCountries, generalInfo, optionType)
+  }
+  
+  private fun transformOther(
+    countries: List<Country>,
+    generalInfo: GeneralInfo,
+    optionType: OptionType
+  ) {
+    val displayableCountries = ArrayList<DisplayableCountry>()
+    for (i in countries.indices) {
+      val it = countries[i]
+      val number = determineNumber(optionType, it)
+      displayableCountries.add(DisplayableCountry(it.name, number))
     }
     displayableCountries.sortDescending()
     for (i in countries.indices) {
