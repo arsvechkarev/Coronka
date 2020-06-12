@@ -2,14 +2,13 @@ package com.arsvechkarev.storage
 
 import android.content.Context
 import android.content.SharedPreferences
+import core.extenstions.assertThat
+import datetime.DateTime
+import java.util.concurrent.TimeUnit
 
 class Saver(filename: String, context: Context) {
   
   private val sharedPrefs = context.getSharedPreferences(filename, Context.MODE_PRIVATE)
-  
-  fun has(key: String): Boolean {
-    return sharedPrefs.contains(key)
-  }
   
   fun getString(key: String): String {
     return sharedPrefs.getString(key, null)!!
@@ -17,6 +16,10 @@ class Saver(filename: String, context: Context) {
   
   fun getInt(key: String): Int {
     return sharedPrefs.getInt(key, Int.MAX_VALUE)
+  }
+  
+  fun isUpToDate(key: String, maxMinutesInCache: Int): Boolean {
+    return sharedPrefs.contains(key) && cacheIsValid(key, maxMinutesInCache)
   }
   
   fun execute(synchronously: Boolean = false, block: SharedPreferences.Editor.() -> Unit) {
@@ -27,5 +30,11 @@ class Saver(filename: String, context: Context) {
     } else {
       editor.apply()
     }
+  }
+  
+  private fun cacheIsValid(key: String, maxMinutesInCache: Int): Boolean {
+    val cacheDate = DateTime.ofMillis(sharedPrefs.getLong(key, Long.MAX_VALUE))
+    assertThat(cacheDate.millis != Long.MAX_VALUE) { "No date in cache with key $key" }
+    return cacheDate.differenceWith(DateTime.current(), TimeUnit.MINUTES) < maxMinutesInCache
   }
 }

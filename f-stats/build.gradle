@@ -36,4 +36,5 @@ dependencies {
   implementation dependencies.appCompat
   implementation dependencies.lifecycleExtensions
   implementation dependencies.recyclerView
+  implementation dependencies.rxJava
 }

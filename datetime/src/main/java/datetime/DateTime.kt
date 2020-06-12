@@ -11,7 +11,7 @@ import kotlin.math.abs
  * between two instances
  */
 class DateTime(
-  private val millis: Long
+  val millis: Long
 ) {
   
   /**
@@ -23,15 +23,13 @@ class DateTime(
     return timeUnit.convert(abs(millis - other.millis), TimeUnit.MILLISECONDS)
   }
   
-  override fun toString() = millis.toString()
-  
   companion object {
     
     fun current(): DateTime {
       return DateTime(Date().time)
     }
-    
-    fun ofString(millis: String) = DateTime(millis.toLong())
+  
+    fun ofMillis(millis: Long) = DateTime(millis)
     
     fun ofPattern(pattern: String, value: String): DateTime {
       val formatter = SimpleDateFormat(pattern, Locale.US)

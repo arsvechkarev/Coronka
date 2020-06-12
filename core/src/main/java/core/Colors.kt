@@ -16,7 +16,7 @@ object Colors {
   var recoveredColor: Int = -1
     private set
   
-  fun setup(context: Context) {
+  fun init(context: Context) {
     confirmedColor = ContextCompat.getColor(context, R.color.dark_confirmed)
     deathsColor = ContextCompat.getColor(context, R.color.dark_deaths_2)
     recoveredColor = ContextCompat.getColor(context, R.color.dark_recovered)

@@ -1,6 +1,6 @@
 package com.arsvechkarev.coronavirusinfo
 
-import com.arsvechkarev.common.di.SingletonsInjector
+import com.arsvechkarev.common.CommonModulesSingletons
 import com.arsvechkarev.storage.DatabaseManager
 import core.Application
 import core.Colors
@@ -14,7 +14,7 @@ class ApplicationLoader : AndroidApp() {
     Application.Singletons.init(applicationContext)
     DatabaseManager.init(applicationContext)
     FontManager.init(applicationContext)
-    SingletonsInjector.init(applicationContext)
-    Colors.setup(applicationContext)
+    CommonModulesSingletons.init(applicationContext)
+    Colors.init(applicationContext)
   }
 }

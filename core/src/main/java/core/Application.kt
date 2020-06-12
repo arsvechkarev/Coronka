@@ -15,9 +15,7 @@ interface Application {
   object Singletons {
     lateinit var applicationContext: Context
       private set
-    
     val decimalFormatter: NumberFormat = DecimalFormat("#0.000")
-    
     val numberFormatter: NumberFormat = NumberFormat.getInstance(Locale.US).apply {
       isGroupingUsed = true
     }

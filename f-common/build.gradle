@@ -32,4 +32,5 @@ dependencies {
   implementation dependencies.kotlin
   implementation dependencies.appCompat
   implementation dependencies.lifecycleExtensions
+  implementation dependencies.rxJava
 }

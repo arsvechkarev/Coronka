@@ -1,4 +1,4 @@
-package com.arsvechkarev.common.executors
+package com.arsvechkarev.common
 
 import android.content.ContentValues
 import com.arsvechkarev.storage.CountriesTable
