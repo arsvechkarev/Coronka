@@ -5,8 +5,6 @@ import core.state.BaseScreenState
 
 sealed class MapScreenState : BaseScreenState() {
   
-  object Loading : MapScreenState()
-  
   class LoadedFromCache(
     val countries: List<Country>
   ) : MapScreenState()

@@ -33,8 +33,9 @@ class Failure(val reason: FailureReason) : BaseScreenState() {
   
   companion object {
     
-    fun Throwable.toFailureReason() = when (this) {
+    fun Throwable.asFailureReason() = when (this) {
       is TimeoutException -> FailureReason.TIMEOUT
+      is UnknownHostException -> FailureReason.NO_CONNECTION
       is ExecutionException -> {
         when (cause) {
           is TimeoutException -> FailureReason.TIMEOUT

@@ -4,31 +4,25 @@ import com.arsvechkarev.network.RxNetworker
 import com.arsvechkarev.storage.Saver
 import core.Loggable
 import core.MAX_CACHE_MINUTES
-import core.concurrency.AndroidSchedulersProvider
-import core.concurrency.SchedulersProvider
 import core.log
 import core.model.GeneralInfo
 import datetime.DateTime
-import io.reactivex.Maybe
-import io.reactivex.Single
+import io.reactivex.Observable
 import org.json.JSONObject
 
 class GeneralInfoRepository(
   private val networker: RxNetworker,
-  private val saver: Saver,
-  private val schedulersProvider: SchedulersProvider = AndroidSchedulersProvider
+  private val saver: Saver
 ) : Loggable {
   
   override val logTag = "Request_GeneralInfoRepository"
   
-  fun getGeneralInfo(): Single<GeneralInfo> {
-    return Maybe.concat(getFromCache(), getFromNetwork())
-        .firstElement()
-        .toSingle()
+  fun getGeneralInfo(): Observable<GeneralInfo> {
+    return getFromNetwork()
   }
   
-  private fun getFromCache(): Maybe<GeneralInfo> {
-    return Maybe.create { emitter ->
+  private fun getFromCache(): Observable<GeneralInfo> {
+    return Observable.create { emitter ->
       if (saver.isUpToDate(GENERAL_INFO_LAST_UPDATE_TIME, MAX_CACHE_MINUTES)) {
         val generalInfo = GeneralInfo(
           saver.getInt(CONFIRMED),
@@ -36,19 +30,17 @@ class GeneralInfoRepository(
           saver.getInt(RECOVERED)
         )
         log { "Successfully found general info in cache" }
-        emitter.onSuccess(generalInfo)
-      } else {
-        log { "No general info in cache (or the data is out of date)" }
-        emitter.onComplete()
+        emitter.onNext(generalInfo)
       }
+      emitter.onComplete()
     }
   }
   
-  private fun getFromNetwork(): Maybe<GeneralInfo> = networker.performRequest(URL)
-      .subscribeOn(schedulersProvider.io())
-      .map(::transformJson)
-      .doOnSuccess(::loadToCache)
-      .toMaybe()
+  private fun getFromNetwork(): Observable<GeneralInfo> {
+    return networker.requestObservable(URL)
+        .map(::transformJson)
+        .doOnNext(::loadToCache)
+  }
   
   private fun transformJson(json: String): GeneralInfo {
     val jsonObject = JSONObject(json)

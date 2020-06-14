@@ -8,8 +8,7 @@ import core.concurrency.AndroidSchedulersProvider
 import core.concurrency.SchedulersProvider
 import core.log
 import core.model.Country
-import io.reactivex.Maybe
-import io.reactivex.Single
+import io.reactivex.Observable
 import org.json.JSONObject
 
 class AllCountriesRepository(
@@ -21,28 +20,37 @@ class AllCountriesRepository(
   
   override val logTag = "Request_AllCountriesRepository"
   
-  fun getAllCountries(): Single<List<Country>> {
-    return Maybe.concat(getFromCache(), getFromNetwork())
-        .firstElement()
-        .toSingle()
+  private var loadingObservable: Observable<List<Country>>? = null
+  
+  fun getAllCountries(): Observable<List<Country>> {
+    if (loadingObservable == null) {
+      loadingObservable = createLoadingObservable()
+    }
+    return loadingObservable!!
   }
   
-  private fun getFromCache(): Maybe<List<Country>> = Maybe.create { emitter ->
+  private fun createLoadingObservable(): Observable<List<Country>> {
+    return Observable.concat(getFromCache(), getFromNetwork())
+        .firstElement()
+        .toObservable()
+        .share()
+  }
+  
+  private fun getFromCache(): Observable<List<Country>> = Observable.create { emitter ->
     val isUpToDate = saver.isUpToDate(COUNTRIES_LAST_UPDATE_TIME, MAX_CACHE_MINUTES)
     if (isUpToDate && sqLiteExecutor.isTableNotEmpty()) {
-      emitter.onSuccess(sqLiteExecutor.getCountries())
+      emitter.onNext(sqLiteExecutor.getCountries())
       log { "Countries info found in cache" }
     } else {
-      emitter.onComplete()
-      log { "Countries not found in cache or is out of date" }
+      log { "Countries info not in cache" }
     }
+    emitter.onComplete()
   }
   
-  private fun getFromNetwork(): Maybe<List<Country>> {
-    return networker.performRequest(URL)
-        .subscribeOn(schedulersProvider.io())
-        .map(::transformJson)
-        .toMaybe()
+  // TODO (6/13/2020): Add cache
+  private fun getFromNetwork(): Observable<List<Country>> {
+    return networker.requestObservable(URL)
+        .map { transformJson(it) }
   }
   
   private fun transformJson(json: String): List<Country> {

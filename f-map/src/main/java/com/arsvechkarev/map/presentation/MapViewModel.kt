@@ -6,18 +6,19 @@ import com.arsvechkarev.common.AllCountriesRepository
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
-import com.arsvechkarev.map.presentation.MapScreenState.Loading
 import core.Loggable
 import core.NetworkConnection
 import core.RxViewModel
 import core.concurrency.AndroidSchedulersProvider
 import core.concurrency.SchedulersProvider
 import core.concurrency.Threader
+import core.extenstions.startWithIf
 import core.model.Country
 import core.state.BaseScreenState
 import core.state.Failure
-import core.state.Failure.Companion.toFailureReason
+import core.state.Failure.Companion.asFailureReason
 import core.state.Failure.FailureReason.NO_CONNECTION
+import core.state.Loading
 import core.state.StateHandle
 import core.state.currentValue
 import core.state.update
@@ -41,27 +42,19 @@ class MapViewModel(
       _state.updateSelf(isRecreated = true)
       return
     }
-    _state.update(Loading)
-    updateFromNetwork(notifyLoading = false)
+    updateFromNetwork()
   }
   
-  fun updateFromNetwork(notifyLoading: Boolean = true) {
-    if (notifyLoading) {
-      _state.update(Loading)
-    }
-    if (connection.isNotConnected) {
-      _state.update(Failure(NO_CONNECTION))
-      return
-    }
+  fun updateFromNetwork() {
     rxCall {
       allCountriesRepository.getAllCountries()
           .subscribeOn(schedulersProvider.io())
+          .map(::transformResult)
+          .onErrorReturn { Failure(it.asFailureReason()) }
           .observeOn(schedulersProvider.mainThread())
-          .subscribe({
-            _state.update(LoadedFromNetwork(it))
-          }, {
-            _state.update(Failure(it.toFailureReason()))
-          })
+          .startWith(Loading)
+          .startWithIf(Failure(NO_CONNECTION), connection.isNotConnected)
+          .subscribe(_state::update)
     }
   }
   
@@ -71,6 +64,10 @@ class MapViewModel(
       is LoadedFromNetwork -> notifyFoundCountry(currentState.countries, country)
       is FoundCountry -> notifyFoundCountry(currentState.countries, country)
     }
+  }
+  
+  private fun transformResult(countries: List<Country>): BaseScreenState {
+    return LoadedFromNetwork(countries)
   }
   
   private fun notifyFoundCountry(

@@ -15,13 +15,12 @@ import core.RxViewModel
 import core.SavedData
 import core.concurrency.AndroidSchedulersProvider
 import core.concurrency.SchedulersProvider
-import core.log
 import core.model.Country
 import core.model.GeneralInfo
 import core.model.OptionType
 import core.state.BaseScreenState
 import core.state.Failure
-import core.state.Failure.Companion.toFailureReason
+import core.state.Failure.Companion.asFailureReason
 import core.state.Failure.FailureReason.NO_CONNECTION
 import core.state.StateHandle
 import core.state.currentValue
@@ -51,36 +50,25 @@ class StatsViewModel(
       _state.updateSelf(isRecreated = true)
       return
     }
-    _state.update(Loading)
     updateFromNetwork(notifyLoading = false)
   }
   
   fun updateFromNetwork(notifyLoading: Boolean = true) {
-    if (notifyLoading) {
-      _state.update(Loading)
-    }
     if (connection.isNotConnected) {
       _state.update(Failure(NO_CONNECTION))
       return
     }
+  
     rxCall {
-      Single.zip(
-        allCountriesRepository.getAllCountries().subscribeOn(schedulersProvider.io()),
-        generalInfoRepository.getGeneralInfo().subscribeOn(schedulersProvider.io()),
-        BiFunction<List<Country>, GeneralInfo, Pair<List<Country>, GeneralInfo>> { countries, generalInfo ->
-          savedData.add(countries)
-          savedData.add(generalInfo)
-          return@BiFunction Pair(countries, generalInfo)
-        }
-      ).observeOn(schedulersProvider.mainThread())
-          .subscribe({ pair: Pair<List<Country>, GeneralInfo> ->
-            filterer.filter(pair.first, pair.second, OptionType.CONFIRMED) {
-              onSuccess { list -> _state.update(LoadedFromNetwork(list)) }
-            }
-          }, {
-            log(it) { "error happened" }
-            _state.update(Failure(it.toFailureReason()))
-          })
+      allCountriesRepository.getAllCountries().subscribeOn(schedulersProvider.io())
+          .zipWith(generalInfoRepository.getGeneralInfo()
+              .subscribeOn(schedulersProvider.io()), BiFunction(::convertToPair)
+          )
+          .map(::filterResult)
+          .onErrorReturn { Failure(it.asFailureReason()) }
+          .observeOn(schedulersProvider.mainThread())
+          .startWith(Loading)
+          .subscribe(_state::update)
     }
   }
   
@@ -92,9 +80,25 @@ class StatsViewModel(
     }
   }
   
+  private fun convertToPair(
+    countries: List<Country>,
+    generalInfo: GeneralInfo
+  ): Pair<List<Country>, GeneralInfo> {
+    savedData.add(countries)
+    savedData.add(generalInfo)
+    return Pair(countries, generalInfo)
+  }
+  
+  private fun filterResult(pair: Pair<List<Country>, GeneralInfo>): BaseScreenState {
+    return LoadedFromNetwork(filterer.filter(pair.first, pair.second, OptionType.CONFIRMED))
+  }
+  
   private fun performFiltering(optionType: OptionType) {
-    filterer.filter(savedData.get(), savedData.get(), optionType) {
-      onSuccess { _state.update(FilteredCountries(it)) }
+    rxCall {
+      val filteredList = filterer.filter(savedData.get(), savedData.get(), optionType)
+      Single.just(filteredList)
+          .map { list -> FilteredCountries(list) }
+          .subscribe(_state::update)
     }
   }
 }

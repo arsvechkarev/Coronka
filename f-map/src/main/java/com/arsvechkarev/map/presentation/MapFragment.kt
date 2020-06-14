@@ -9,7 +9,6 @@ import com.arsvechkarev.map.di.MapModuleInjector
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
-import com.arsvechkarev.map.presentation.MapScreenState.Loading
 import core.extenstions.animateInvisibleAndScale
 import core.extenstions.animateVisible
 import core.extenstions.animateVisibleAndScale
@@ -21,6 +20,7 @@ import core.state.Failure
 import core.state.Failure.FailureReason.NO_CONNECTION
 import core.state.Failure.FailureReason.TIMEOUT
 import core.state.Failure.FailureReason.UNKNOWN
+import core.state.Loading
 import core.state.StateHandle
 import core.state.isFresh
 import kotlinx.android.synthetic.main.fragment_map.fragment_map_root

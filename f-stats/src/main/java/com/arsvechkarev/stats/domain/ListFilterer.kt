@@ -4,10 +4,6 @@ import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
 import com.arsvechkarev.storage.PopulationsTable
 import com.arsvechkarev.storage.dao.PopulationsDao
-import core.SuccessAction
-import core.SuccessHandler
-import core.concurrency.Threader
-import core.createSuccessHandler
 import core.extenstions.assertThat
 import core.model.Country
 import core.model.DisplayableCountry
@@ -17,40 +13,28 @@ import core.model.OptionType
 import core.model.OptionType.PERCENT_BY_COUNTRY
 import core.model.Population
 import core.recycler.DisplayableItem
-import core.releasable.Releasable
 
-class ListFilterer(
-  private val threader: Threader,
-  private val populationsDao: PopulationsDao
-) : Releasable {
+class ListFilterer(private val populationsDao: PopulationsDao) {
   
-  private var filterHandler: SuccessHandler<List<DisplayableItem>>? = null
   private val populations = ArrayList<Population>()
   
   fun filter(
     list: List<Country>,
     generalInfo: GeneralInfo,
-    optionType: OptionType,
-    action: SuccessAction<List<DisplayableItem>>
-  ) {
-    filterHandler = createSuccessHandler(action)
-    threader.onBackground {
-      if (optionType == PERCENT_BY_COUNTRY) {
-        if (populations.isEmpty()) {
-          val future = threader.onIoThread {
-            DatabaseManager.instance.readableDatabase.use {
-              val cursor = DatabaseExecutor.readAll(it, PopulationsTable.TABLE_NAME)
-              val elements = populationsDao.getAll(cursor)
-              populations.addAll(elements)
-            }
-          }
-          future.get()
+    optionType: OptionType
+  ): List<DisplayableItem> {
+    if (optionType == PERCENT_BY_COUNTRY) {
+      if (populations.isEmpty()) {
+        DatabaseManager.instance.readableDatabase.use {
+          val cursor = DatabaseExecutor.readAll(it, PopulationsTable.TABLE_NAME)
+          val elements = populationsDao.getAll(cursor)
+          populations.addAll(elements)
         }
-        assertThat(populations.isNotEmpty())
-        transformPopulations(populations, list, generalInfo, optionType)
-      } else {
-        transformOther(list, generalInfo, optionType)
       }
+      assertThat(populations.isNotEmpty())
+      return transformPopulations(populations, list, generalInfo, optionType)
+    } else {
+      return transformOther(list, generalInfo, optionType)
     }
   }
   
@@ -59,7 +43,7 @@ class ListFilterer(
     countries: List<Country>,
     generalInfo: GeneralInfo,
     optionType: OptionType
-  ) {
+  ): List<DisplayableItem> {
     val displayableCountries = ArrayList<DisplayableCountry>()
     for (i in countries.indices) {
       val country = countries[i]
@@ -71,14 +55,14 @@ class ListFilterer(
     for (i in countries.indices) {
       displayableCountries[i].number = i + 1
     }
-    notifyDone(displayableCountries, generalInfo, optionType)
+    return notifyDone(displayableCountries, generalInfo, optionType)
   }
   
   private fun transformOther(
     countries: List<Country>,
     generalInfo: GeneralInfo,
     optionType: OptionType
-  ) {
+  ): List<DisplayableItem> {
     val displayableCountries = ArrayList<DisplayableCountry>()
     for (i in countries.indices) {
       val it = countries[i]
@@ -89,10 +73,14 @@ class ListFilterer(
     for (i in countries.indices) {
       displayableCountries[i].number = i + 1
     }
-    notifyDone(displayableCountries, generalInfo, optionType)
+    return notifyDone(displayableCountries, generalInfo, optionType)
   }
   
-  private fun notifyDone(countries: List<DisplayableCountry>, generalInfo: GeneralInfo, optionType: OptionType) {
+  private fun notifyDone(
+    countries: List<DisplayableCountry>,
+    generalInfo: GeneralInfo,
+    optionType: OptionType
+  ): List<DisplayableItem> {
     val items = ArrayList<DisplayableItem>()
     items.add(
       DisplayableGeneralInfo(
@@ -103,9 +91,7 @@ class ListFilterer(
       )
     )
     items.addAll(countries)
-    threader.onMainThread {
-      filterHandler?.dispatchSuccess(items)
-    }
+    return items
   }
   
   private fun determineNumber(type: OptionType, country: Country): Number = when (type) {
@@ -114,9 +100,5 @@ class ListFilterer(
     OptionType.RECOVERED -> country.recovered
     OptionType.DEATH_RATE -> country.deaths.toFloat() / country.confirmed.toFloat()
     else -> throw IllegalStateException("Unexpected type: $type")
-  }
-  
-  override fun release() {
-    filterHandler = null
   }
 }
