@@ -8,6 +8,7 @@ import core.concurrency.AndroidSchedulersProvider
 import core.concurrency.SchedulersProvider
 import core.log
 import core.model.Country
+import core.state.BaseScreenState
 import io.reactivex.Observable
 import org.json.JSONObject
 
@@ -19,21 +20,22 @@ class AllCountriesRepository(
 ) : Loggable {
   
   override val logTag = "Request_AllCountriesRepository"
-  
-  private var loadingObservable: Observable<List<Country>>? = null
+  private var observable: Observable<List<Country>>? = null
   
   fun getAllCountries(): Observable<List<Country>> {
-    if (loadingObservable == null) {
-      loadingObservable = createLoadingObservable()
+    if (observable == null) {
+      observable = createLoadingObservable()
     }
-    return loadingObservable!!
+    return observable!!
   }
   
   private fun createLoadingObservable(): Observable<List<Country>> {
     return Observable.concat(getFromCache(), getFromNetwork())
+        .subscribeOn(schedulersProvider.io())
         .firstElement()
         .toObservable()
         .share()
+        .observeOn(schedulersProvider.mainThread())
   }
   
   private fun getFromCache(): Observable<List<Country>> = Observable.create { emitter ->
@@ -41,14 +43,13 @@ class AllCountriesRepository(
     if (isUpToDate && sqLiteExecutor.isTableNotEmpty()) {
       emitter.onNext(sqLiteExecutor.getCountries())
       log { "Countries info found in cache" }
-    } else {
-      log { "Countries info not in cache" }
     }
     emitter.onComplete()
   }
   
   // TODO (6/13/2020): Add cache
   private fun getFromNetwork(): Observable<List<Country>> {
+    log { "getting countries" }
     return networker.requestObservable(URL)
         .map { transformJson(it) }
   }

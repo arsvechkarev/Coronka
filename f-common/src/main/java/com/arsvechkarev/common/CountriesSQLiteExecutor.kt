@@ -5,11 +5,15 @@ import com.arsvechkarev.storage.CountriesTable
 import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
 import com.arsvechkarev.storage.dao.CountriesDao
+import core.Loggable
+import core.log
 import core.model.Country
 
 class CountriesSQLiteExecutor(
   private val countriesDao: CountriesDao
-) {
+) : Loggable {
+  
+  override val logTag = "Request_CountriesSQLiteExecutor"
   
   fun isTableNotEmpty(): Boolean {
     DatabaseManager.instance.readableDatabase.use {
@@ -24,6 +28,7 @@ class CountriesSQLiteExecutor(
   }
   
   fun saveCountriesInfo(list: List<Country>) {
+    log { "loading countries to cache" }
     DatabaseManager.instance.writableDatabase.use { database ->
       val contentValues = ContentValues()
       for (country in list) {

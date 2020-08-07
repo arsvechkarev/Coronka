@@ -5,6 +5,7 @@ import com.arsvechkarev.storage.DatabaseManager
 import core.Application
 import core.Colors
 import core.FontManager
+import io.reactivex.plugins.RxJavaPlugins
 import android.app.Application as AndroidApp
 
 class ApplicationLoader : AndroidApp() {
@@ -16,5 +17,9 @@ class ApplicationLoader : AndroidApp() {
     FontManager.init(applicationContext)
     CommonModulesSingletons.init(applicationContext)
     Colors.init(applicationContext)
+    RxJavaPlugins.setErrorHandler {
+      println("qqq")
+      it.printStackTrace(System.out)
+    }
   }
 }

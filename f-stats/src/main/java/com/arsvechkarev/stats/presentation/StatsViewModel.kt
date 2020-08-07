@@ -27,6 +27,7 @@ import core.state.currentValue
 import core.state.update
 import core.state.updateSelf
 import io.reactivex.Single
+import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.functions.BiFunction
 
 class StatsViewModel(
@@ -58,17 +59,19 @@ class StatsViewModel(
       _state.update(Failure(NO_CONNECTION))
       return
     }
-  
+    
     rxCall {
-      allCountriesRepository.getAllCountries().subscribeOn(schedulersProvider.io())
+      allCountriesRepository.getAllCountries()
+          .subscribeOn(schedulersProvider.io())
           .zipWith(generalInfoRepository.getGeneralInfo()
               .subscribeOn(schedulersProvider.io()), BiFunction(::convertToPair)
           )
           .map(::filterResult)
           .onErrorReturn { Failure(it.asFailureReason()) }
-          .observeOn(schedulersProvider.mainThread())
           .startWith(Loading)
-          .subscribe(_state::update)
+          .subscribe(_state::update) {
+            throw OnErrorNotImplementedException(it)
+          }
     }
   }
   

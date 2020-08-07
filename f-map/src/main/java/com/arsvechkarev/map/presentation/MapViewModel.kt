@@ -23,6 +23,7 @@ import core.state.StateHandle
 import core.state.currentValue
 import core.state.update
 import core.state.updateSelf
+import io.reactivex.exceptions.OnErrorNotImplementedException
 
 class MapViewModel(
   private val threader: Threader,
@@ -51,10 +52,11 @@ class MapViewModel(
           .subscribeOn(schedulersProvider.io())
           .map(::transformResult)
           .onErrorReturn { Failure(it.asFailureReason()) }
-          .observeOn(schedulersProvider.mainThread())
           .startWith(Loading)
           .startWithIf(Failure(NO_CONNECTION), connection.isNotConnected)
-          .subscribe(_state::update)
+          .subscribe(_state::update) {
+            throw OnErrorNotImplementedException(it)
+          }
     }
   }
   
