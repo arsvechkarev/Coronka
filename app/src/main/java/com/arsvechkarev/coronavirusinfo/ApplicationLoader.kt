@@ -5,21 +5,16 @@ import com.arsvechkarev.storage.DatabaseManager
 import core.Application
 import core.Colors
 import core.FontManager
-import io.reactivex.plugins.RxJavaPlugins
 import android.app.Application as AndroidApp
 
 class ApplicationLoader : AndroidApp() {
   
   override fun onCreate() {
     super.onCreate()
-    Application.Singletons.init(applicationContext)
+    Application.init(applicationContext)
     DatabaseManager.init(applicationContext)
     FontManager.init(applicationContext)
     CommonModulesSingletons.init(applicationContext)
     Colors.init(applicationContext)
-    RxJavaPlugins.setErrorHandler {
-      println("qqq")
-      it.printStackTrace(System.out)
-    }
   }
 }

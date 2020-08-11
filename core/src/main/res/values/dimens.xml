@@ -8,6 +8,7 @@
   <dimen name="text_h0">36sp</dimen>
 
   <dimen name="icon_default_size">24dp</dimen>
+  <dimen name="icon_large_size">32dp</dimen>
   <dimen name="divider_height">1dp</dimen>
 
   <dimen name="progress_bar_size">40dp</dimen>

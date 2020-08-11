@@ -8,8 +8,8 @@ import android.graphics.Paint
 import android.text.Layout
 import android.text.TextPaint
 import android.view.View
-import core.Application.Singletons.decimalFormatter
-import core.Application.Singletons.numberFormatter
+import core.Application.decimalFormatter
+import core.Application.numberFormatter
 import core.FontManager
 import core.extenstions.block
 import core.extenstions.f

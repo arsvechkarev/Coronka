@@ -21,4 +21,7 @@
   <attr name="colorTextPrimary" format="color"/>
   <attr name="colorTextSecondary" format="color"/>
   <attr name="colorTextLinks" format="color"/>
+
+  <attr name="colorStartGradientDrawer" format="color"/>
+  <attr name="colorEndGradientDrawer" format="color"/>
 </resources>

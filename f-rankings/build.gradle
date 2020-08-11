@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -7,7 +7,6 @@ android {
 
   compileSdkVersion configs.compileSdkVersion
   defaultConfig {
-    applicationId configs.applicationId
     minSdkVersion configs.minSdkVersion
     targetSdkVersion configs.targetSdkVersion
     versionCode configs.versionCode
@@ -24,24 +23,17 @@ android {
 }
 
 dependencies {
-  implementation project(':core')
+  implementation project(":core")
   implementation project(':storage')
-  implementation project(':views')
-  implementation project(':f-common')
-  implementation project(':f-map')
-  implementation project(':f-faq')
-  implementation project(':f-stats')
-
-  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+  implementation project(":network")
+  implementation project(":views")
+  implementation project(":datetime")
+  implementation project(":f-common")
 
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
   implementation dependencies.appCompat
-  implementation dependencies.constraintLayout
-  implementation dependencies.materialDesign
+  implementation dependencies.lifecycleExtensions
+  implementation dependencies.recyclerView
   implementation dependencies.rxJava
-
-  def testDependencies = rootProject.ext.testDependencies
-  testImplementation testDependencies.junit
-  testImplementation testDependencies.mockk
 }

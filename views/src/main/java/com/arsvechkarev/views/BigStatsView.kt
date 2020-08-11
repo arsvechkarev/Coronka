@@ -13,7 +13,7 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import core.Application.Singletons.numberFormatter
+import core.Application.numberFormatter
 import core.Colors
 import core.FontManager
 import core.extenstions.DURATION_MEDIUM

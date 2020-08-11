@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.views.Chip
-import core.Application.Singletons.numberFormatter
+import core.Application.numberFormatter
 import core.extenstions.inflate
 import core.model.DisplayableGeneralInfo
 import core.model.OptionType

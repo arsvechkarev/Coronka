@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/drawerLayout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:layout_weight="1"
-  android:clipChildren="false"
-  android:orientation="vertical">
+  tools:openDrawer="start">
 
-  <FrameLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"/>
+    android:layout_height="match_parent"/>
 
-  <com.arsvechkarev.views.BottomNavigationView
-    android:id="@+id/bottomNavigation"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:bitmapIconSize="@dimen/icon_default_size"
-    app:labelColor="?colorTextPrimary"/>
+  <include layout="@layout/partial_layout_drawer"/>
 
-</LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

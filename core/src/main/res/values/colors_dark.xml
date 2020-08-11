@@ -22,4 +22,7 @@
   <color name="dark_text_primary">#FFFFFF</color>
   <color name="dark_text_secondary">#DFDFDF</color>
   <color name="dark_links">#0964DB</color>
+
+  <color name="dark_start_gradient_drawer">#333759</color>
+  <color name="dark_end_gradient_drawer">#1A1D36</color>
 </resources>

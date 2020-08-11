@@ -40,6 +40,11 @@
     <attr name="rippleColor" format="color"/>
   </declare-styleable>
 
+  <declare-styleable name="GradientHeaderView">
+    <attr name="android:startColor" format="color"/>
+    <attr name="android:endColor" format="color"/>
+  </declare-styleable>
+
   <declare-styleable name="ProgressBar">
     <attr name="trackWidth" format="dimension"/>
     <attr name="color" format="color"/>

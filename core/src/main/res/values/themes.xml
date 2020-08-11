@@ -26,6 +26,9 @@
     <item name="colorTextPrimary">@color/dark_text_primary</item>
     <item name="colorTextSecondary">@color/dark_text_secondary</item>
     <item name="colorTextLinks">@color/dark_links</item>
+
+    <item name="colorStartGradientDrawer">@color/dark_start_gradient_drawer</item>
+    <item name="colorEndGradientDrawer">@color/dark_end_gradient_drawer</item>
   </style>
 
 </resources>
