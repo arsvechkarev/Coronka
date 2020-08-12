@@ -17,9 +17,9 @@ import core.Application.numberFormatter
 import core.Colors
 import core.FontManager
 import core.extenstions.DURATION_MEDIUM
-import core.extenstions.block
 import core.extenstions.cancelIfRunning
 import core.extenstions.dp
+import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.i
 import core.extenstions.sp
@@ -126,7 +126,7 @@ class BigStatsView @JvmOverloads constructor(
     }
     chartLineMaxLength = width.f - confirmedLabel.width - confirmedNumberLayout!!.width -
         paddingStart - paddingEnd - innerSidePadding * 2
-    canvas.block {
+    canvas.execute {
       translate(paddingStart.f, paddingTop.f)
       confirmedLabel.draw(canvas)
       translate(0f, lineHeight + innerLinePadding)
@@ -134,7 +134,7 @@ class BigStatsView @JvmOverloads constructor(
       translate(0f, lineHeight + innerLinePadding)
       deathsLabel.draw(canvas)
     }
-    canvas.block {
+    canvas.execute {
       translate(
         paddingStart.f + confirmedLabel.width + innerSidePadding,
         paddingTop.f + (lineHeight / 2 - chartLineHeight / 2)
@@ -145,7 +145,7 @@ class BigStatsView @JvmOverloads constructor(
       translate(0f, lineHeight + innerLinePadding)
       drawLine(Colors.deathsColor, deathsLinePercent)
     }
-    canvas.block {
+    canvas.execute {
       translate(width - paddingEnd.f - confirmedNumberLayout!!.width, paddingTop.f)
       confirmedNumberLayout!!.draw(canvas)
       translate(0f, lineHeight + innerLinePadding)

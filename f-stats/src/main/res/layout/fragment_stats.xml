@@ -1,104 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="?colorBackground">
+  android:background="#423C61"
+  android:clickable="false">
 
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/statsRecyclerView"
+  <!-- Todo: replace with custom layout? -->
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:visibility="invisible"/>
+    android:layout_height="150dp"
+    app:layout_behavior="com.arsvechkarev.stats.behaviors.TitleHeaderBehavior">
 
-  <LinearLayout
-    android:id="@+id/statsLayoutLoading"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:visibility="invisible">
-
-    <com.arsvechkarev.views.FontTextView
+    <ImageView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Loading stats"
-      android:textSize="@dimen/text_h1"/>
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:src="@drawable/ic_drawer"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
 
-    <progressbar.ComplexProgressBar
-      android:layout_width="@dimen/progress_bar_big_size"
-      android:layout_height="@dimen/progress_bar_big_size"
-      android:layout_margin="@dimen/stats_progress_bar_margin"/>
+    <ImageView
+      android:id="@+id/imageDoctor"
+      android:layout_width="180dp"
+      android:layout_height="140dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:src="@drawable/image_doctor"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
 
-  </LinearLayout>
-
-  <LinearLayout
-    android:id="@+id/statsLayoutFailure"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:visibility="invisible">
-
-    <com.arsvechkarev.views.FontTextView
-      android:id="@+id/statsTextFailureReason"
+    <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textSize="@dimen/text_h1"/>
+      android:layout_marginStart="176dp"
+      android:fontFamily="@font/segoe_ui_bold"
+      android:gravity="center"
+      android:text="Stay home\nStay safe"
+      android:textColor="?colorTextPrimary"
+      android:textSize="28sp"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.arsvechkarev.views.noconnection.NoConnectionView
-      android:id="@+id/statsNoConnectionView"
-      android:layout_width="@dimen/stats_no_connection_view_size"
-      android:layout_height="@dimen/stats_no_connection_view_size"
-      android:layout_margin="@dimen/stats_no_connection_view_margin"/>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.arsvechkarev.views.ClickableTextView
-      android:id="@+id/statsTextRetry"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/text_retry_all_caps"
-      android:textColor="?colorFailure"
-      android:textSize="@dimen/text_h4"
-      app:rippleColor="?colorFailureRipple"/>
-
-  </LinearLayout>
-
-  <com.arsvechkarev.views.SimpleDialog
-    android:id="@+id/simpleDialog"
+  <androidx.core.widget.NestedScrollView
+    android:id="@+id/scrollingContentView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingHorizontal="@dimen/stats_simple_dialog_p_horizontal">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="150dp"
+    app:layout_behavior="com.arsvechkarev.stats.behaviors.StatsContentBehavior">
 
     <LinearLayout
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:background="@drawable/bg_dialog"
-      android:orientation="vertical"
-      android:padding="@dimen/stats_dialog_inner_layout_padding">
+      android:background="@drawable/bg_stats_content"
+      android:orientation="vertical">
 
-      <com.arsvechkarev.views.FontTextView
-        android:id="@+id/statsTextExplanation"
-        android:layout_width="wrap_content"
+      <com.arsvechkarev.views.CoronavirusMainStatsViewGroup
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_h4"/>
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="24dp">
 
-      <com.arsvechkarev.views.ClickableTextView
-        android:id="@+id/statsTextGotIt"
-        android:layout_width="wrap_content"
+        <com.arsvechkarev.views.CoronavirusMainStatsView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/bg_chart"/>
+
+        <com.arsvechkarev.views.CoronavirusMainStatsView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/bg_chart"/>
+
+        <com.arsvechkarev.views.CoronavirusMainStatsView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/bg_chart"/>
+
+      </com.arsvechkarev.views.CoronavirusMainStatsViewGroup>
+
+      <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="@dimen/stats_text_got_it_m_top"
-        android:gravity="end"
-        android:text="@string/text_got_it_all_caps"
-        android:textColor="?colorTextAccent"
-        android:textSize="@dimen/text_h4"
-        app:rippleColor="?colorRipple"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/segoe_ui_bold"
+        android:text="Total cases"
+        android:textColor="?colorTextPrimary"
+        android:textSize="24sp"/>
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="24dp"
+        android:background="@drawable/bg_chart"/>
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/segoe_ui_bold"
+        android:text="New cases"
+        android:textColor="?colorTextPrimary"
+        android:textSize="24sp"/>
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="24dp"
+        android:background="@drawable/bg_chart"/>
 
     </LinearLayout>
 
-  </com.arsvechkarev.views.SimpleDialog>
+  </androidx.core.widget.NestedScrollView>
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

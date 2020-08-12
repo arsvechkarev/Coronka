@@ -9,9 +9,9 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
-import core.extenstions.block
 import core.extenstions.cancelIfRunning
 import core.extenstions.dpInt
+import core.extenstions.execute
 import core.extenstions.f
 
 class ProgressBar @JvmOverloads constructor(
@@ -77,7 +77,7 @@ class ProgressBar @JvmOverloads constructor(
   }
   
   override fun onDraw(canvas: Canvas) {
-    canvas.block {
+    canvas.execute {
       rotate(outerRotationAngle, width / 2f, height / 2f)
       canvas.drawArc(outerOval, outerStartedAngle, sweepAngle, false, paint)
       rotate(-outerRotationAngle + innerRotationAngle, width / 2f, height / 2f)

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.navigation.NavigationView android:id="@+id/navigationView"
+<com.google.android.material.navigation.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/navigationView"
   android:layout_width="wrap_content"
   android:layout_height="match_parent"
   android:layout_gravity="start"
-  android:background="@drawable/bg_drawer"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+  android:background="@drawable/bg_drawer">
 
-  <LinearLayout
+  <com.arsvechkarev.views.DrawerGroupLinearLayout
+    android:id="@+id/drawerGroupLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
+      android:id="@+id/drawerTextTitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
@@ -26,10 +28,11 @@
       android:textStyle="bold"/>
 
     <TextView
+      android:id="@+id/drawerTextStatistics"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="24dp"
-      android:background="#22FFFFFF"
+      android:background="@drawable/bg_drawer_item"
       android:drawableStart="@drawable/ic_statistics"
       android:drawablePadding="20dp"
       android:fontFamily="@font/segoe_ui_bold"
@@ -42,8 +45,10 @@
       android:textStyle="bold"/>
 
     <TextView
-      android:layout_width="wrap_content"
+      android:id="@+id/drawerTextMap"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:background="@drawable/bg_drawer_item"
       android:drawableStart="@drawable/ic_map"
       android:drawablePadding="20dp"
       android:fontFamily="@font/segoe_ui_bold"
@@ -56,8 +61,10 @@
       android:textStyle="bold"/>
 
     <TextView
-      android:layout_width="wrap_content"
+      android:id="@+id/drawerTextTips"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:background="@drawable/bg_drawer_item"
       android:drawableStart="@drawable/ic_tips"
       android:drawablePadding="20dp"
       android:fontFamily="@font/segoe_ui_bold"
@@ -70,8 +77,10 @@
       android:textStyle="bold"/>
 
     <TextView
-      android:layout_width="wrap_content"
+      android:id="@+id/drawerTextRankings"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:background="@drawable/bg_drawer_item"
       android:drawableStart="@drawable/ic_rankings"
       android:drawablePadding="20dp"
       android:fontFamily="@font/segoe_ui_bold"
@@ -83,6 +92,6 @@
       android:textSize="20sp"
       android:textStyle="bold"/>
 
-  </LinearLayout>
+  </com.arsvechkarev.views.DrawerGroupLinearLayout>
 
 </com.google.android.material.navigation.NavigationView>

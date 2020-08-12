@@ -8,6 +8,6 @@ include ':network'
 include ':storage'
 include ':f-map'
 include ':core'
-include ':f-faq'
+include ':f-tips'
 include ':app'
 rootProject.name = "CoronavirusInfo"

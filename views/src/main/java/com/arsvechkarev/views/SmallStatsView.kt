@@ -11,7 +11,7 @@ import android.view.View
 import core.Application.decimalFormatter
 import core.Application.numberFormatter
 import core.FontManager
-import core.extenstions.block
+import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.sp
 
@@ -61,7 +61,7 @@ class SmallStatsView(
     val numberLayout = numberLayout!!
     val textLayout = textLayout!!
     val amountLayout = amountLayout!!
-    canvas.block {
+    canvas.execute {
       translate(paddingStart.f, paddingTop.f)
       numberLayout.draw(canvas)
       translate(numberLayout.width.f, 0f)

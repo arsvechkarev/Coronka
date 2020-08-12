@@ -18,8 +18,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import core.FontManager
 import core.extenstions.assertThat
-import core.extenstions.block
 import core.extenstions.dp
+import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.i
 import core.extenstions.sp
@@ -106,7 +106,7 @@ class Chip @JvmOverloads constructor(
       width - strokeOffsetForRect, height - strokeOffsetForRect)
     canvas.drawRoundRect(rect, cornerRadius, cornerRadius, rectPaint)
     val strokeOffsetItems = rectPaint.strokeWidth
-    canvas.block {
+    canvas.execute {
       translate(paddingStart.f + strokeOffsetItems, paddingTop.f + strokeOffsetItems)
       textLayout.draw(canvas)
     }

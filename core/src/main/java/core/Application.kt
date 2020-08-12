@@ -11,9 +11,9 @@ object Application {
   lateinit var applicationContext: Context
     private set
   
-  var density: Float = -1f
+  var density: Float = 1f
   
-  var scaledDensity: Float = -1f
+  var scaledDensity: Float = 1f
   
   val decimalFormatter: NumberFormat = DecimalFormat("#0.000")
   

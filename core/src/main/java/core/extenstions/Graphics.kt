@@ -4,7 +4,7 @@ import android.graphics.Canvas
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-inline fun Canvas.block(action: Canvas.() -> Unit) {
+inline fun Canvas.execute(action: Canvas.() -> Unit) {
   save()
   action(this)
   restore()
