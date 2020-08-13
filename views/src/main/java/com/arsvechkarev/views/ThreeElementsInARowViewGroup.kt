@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import core.extenstions.assertThat
 
-class CoronavirusMainStatsViewGroup @JvmOverloads constructor(
+class ThreeElementsInARowViewGroup @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null
 ) : ViewGroup(context, attrs) {
@@ -14,7 +14,7 @@ class CoronavirusMainStatsViewGroup @JvmOverloads constructor(
     assertThat(childCount == 3)
     val width = MeasureSpec.getSize(widthMeasureSpec)
     val offset = getChildMargin(width)
-    val childSize = (width - offset * 2) / 3
+    val childSize = (width - offset * 2 - paddingStart - paddingEnd) / 3
     val measureSpec = MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY)
     for (i in 0 until childCount) {
       getChildAt(i).measure(measureSpec, measureSpec)
@@ -28,10 +28,10 @@ class CoronavirusMainStatsViewGroup @JvmOverloads constructor(
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     assertThat(childCount == 3)
     val offset = getChildMargin(width)
-    val childSize = (width - offset * 2) / 3
-    var left = 0
+    val childSize = (width - offset * 2 - paddingStart - paddingEnd) / 3
+    var left = paddingStart
     for (i in 0 until childCount) {
-      getChildAt(i).layout(left, 0, left + childSize, childSize)
+      getChildAt(i).layout(left, paddingTop, left + childSize, height - paddingBottom)
       left += childSize + offset
     }
   }

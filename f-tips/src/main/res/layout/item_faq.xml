@@ -1,56 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/itemFAQRoot"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/tipsItemFaq"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:background="?selectableItemBackground"
+  android:layout_marginHorizontal="12dp"
+  android:layout_marginVertical="12dp"
+  android:background="@drawable/bg_faq_item"
   android:clickable="true"
+  android:drawableEnd="@drawable/ic_chevron_right"
   android:focusable="true"
-  android:orientation="vertical">
-
-  <RelativeLayout
-    android:id="@+id/layoutTitle"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?selectableItemBackground"
-    android:padding="@dimen/layout_title_padding">
-
-    <com.arsvechkarev.views.FontTextView
-      android:id="@+id/textTitle"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentStart="true"
-      android:layout_centerInParent="true"
-      android:layout_marginEnd="@dimen/text_title_m_end"
-      android:layout_toStartOf="@id/arrowExpand"
-      android:textColor="?colorTextPrimary"
-      android:textSize="@dimen/text_h4"/>
-
-    <ImageView
-      android:id="@+id/arrowExpand"
-      android:layout_width="@dimen/arrow_expand_size"
-      android:layout_height="@dimen/arrow_expand_size"
-      android:layout_alignParentEnd="true"
-      android:layout_centerInParent="true"
-      android:src="@drawable/ic_expand"/>
-
-  </RelativeLayout>
-
-  <com.arsvechkarev.views.ExpandableLayout
-    android:id="@+id/expandableLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <TextView
-      android:id="@+id/textDescription"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/text_description_margin"
-      android:layout_marginEnd="@dimen/text_description_margin"
-      android:layout_marginBottom="@dimen/text_description_margin"
-      android:textColor="?colorTextPrimary"
-      android:textSize="@dimen/text_h4"/>
-
-  </com.arsvechkarev.views.ExpandableLayout>
-
-</LinearLayout>
+  android:gravity="center_vertical"
+  android:paddingVertical="12dp"
+  android:paddingStart="20dp"
+  android:paddingEnd="12dp"
+  android:textSize="@dimen/text_h4"/>

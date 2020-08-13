@@ -58,7 +58,7 @@
       android:background="@drawable/bg_stats_content"
       android:orientation="vertical">
 
-      <com.arsvechkarev.views.CoronavirusMainStatsViewGroup
+      <com.arsvechkarev.views.ThreeElementsInARowViewGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -67,19 +67,19 @@
         <com.arsvechkarev.views.CoronavirusMainStatsView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:background="@drawable/bg_chart"/>
+          android:background="@drawable/bg_overlay"/>
 
         <com.arsvechkarev.views.CoronavirusMainStatsView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:background="@drawable/bg_chart"/>
+          android:background="@drawable/bg_overlay"/>
 
         <com.arsvechkarev.views.CoronavirusMainStatsView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:background="@drawable/bg_chart"/>
+          android:background="@drawable/bg_overlay"/>
 
-      </com.arsvechkarev.views.CoronavirusMainStatsViewGroup>
+      </com.arsvechkarev.views.ThreeElementsInARowViewGroup>
 
       <TextView
         android:layout_width="match_parent"
@@ -93,7 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_margin="24dp"
-        android:background="@drawable/bg_chart"/>
+        android:background="@drawable/bg_overlay"/>
 
       <TextView
         android:layout_width="match_parent"
@@ -107,7 +107,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_margin="24dp"
-        android:background="@drawable/bg_chart"/>
+        android:background="@drawable/bg_overlay"/>
 
     </LinearLayout>
 
