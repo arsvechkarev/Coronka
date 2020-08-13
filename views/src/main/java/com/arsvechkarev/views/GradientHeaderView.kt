@@ -37,7 +37,7 @@ class GradientHeaderView @JvmOverloads constructor(
     path.moveTo(0f, 0f)
     path.lineTo(w.f, 0f)
     path.lineTo(w.f, h.f - offset / 1.5f)
-    path.quadTo(w / 2f, h.f + offset, 0f, h.f - offset / 1.5f)
+    path.quadTo(w / 2f, h.f + offset / 2f, 0f, h.f - offset / 1.5f)
     path.close()
     
     paint.shader = LinearGradient(

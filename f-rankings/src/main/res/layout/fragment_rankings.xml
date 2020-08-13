@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="#1A1D36">
+
+  <androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp">
+
+
+        <com.arsvechkarev.views.GradientHeaderView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:endColor="#423C61"
+          android:startColor="#1A203C"/>
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="@font/segoe_ui_bold"
+          android:gravity="center"
+          android:text="Rankings"
+          android:textColor="?colorTextPrimary"
+          android:textSize="28sp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginTop="16dp"
+          android:src="@drawable/ic_drawer"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"/>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/segoe_ui_bold"
+        android:text="FAQ"
+        android:textColor="?colorTextPrimary"
+        android:textSize="24sp"/>
+
+      <TextView
+        android:id="@+id/tipsTextQuestion1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="16dp"
+        android:background="@drawable/bg_faq_item"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_chevron_right"
+        android:focusable="true"
+        android:fontFamily="@font/segoe_ui_bold"
+        android:gravity="center_vertical"
+        android:paddingVertical="8dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="12dp"
+        android:text="What is a coronavirus?"
+        android:textColor="?colorTextPrimary"
+        android:textSize="18sp"/>
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="16dp"
+        android:background="@drawable/bg_faq_item"
+        android:clickable="true"
+        android:drawableEnd="@drawable/ic_chevron_right"
+        android:focusable="true"
+        android:fontFamily="@font/segoe_ui_bold"
+        android:gravity="center_vertical"
+        android:paddingVertical="8dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="12dp"
+        android:text="What is a coronavirus?"
+        android:textColor="?colorTextPrimary"
+        android:textSize="18sp"/>
+
+    </LinearLayout>
+
+  </androidx.core.widget.NestedScrollView>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/tipsBottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <TextView
+      android:id="@+id/textTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="16dp"
+      android:fontFamily="@font/segoe_ui_bold"
+      android:text="What is a coronavirus?"
+      android:textColor="?colorTextPrimary"
+      android:textSize="26sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+      android:id="@+id/textAnswer"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="20dp"
+      android:text="@string/a1"
+      android:textColor="?colorTextPrimary"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/textTitle"/>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,4 +1,4 @@
-package com.arsvechkarev.faq.presentation
+package com.arsvechkarev.tips.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.arsvechkarev.faq.R
-import com.arsvechkarev.faq.di.FAQModuleInjector
-import com.arsvechkarev.faq.list.FAQAdapter
+import com.arsvechkarev.tips.R
+import com.arsvechkarev.tips.di.FAQModuleInjector
+import com.arsvechkarev.tips.list.FAQAdapter
 import core.extenstions.animateVisibleAndScale
 import core.extenstions.invisible
 import core.extenstions.retrieveColor
@@ -38,7 +38,7 @@ class FAQFragment : Fragment() {
     frameLayout.addView(recyclerView)
     FAQModuleInjector.provideViewModel(this).apply {
       data.observe(this@FAQFragment, Observer {
-        adapter.submitList(it)
+        //        adapter.submitList(it)
         recyclerView.animateVisibleAndScale()
       })
       loadData()

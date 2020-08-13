@@ -1,6 +1,6 @@
 package core.model
 
-import core.recycler.DisplayableItem
+import core.recycler.SortableDisplayableItem
 
 class Country(
   val id: Int,
@@ -20,7 +20,7 @@ class CountryOnMap(
 data class DisplayableCountry(
   val name: String,
   val amount: Number
-) : DisplayableItem, Comparable<DisplayableCountry> {
+) : SortableDisplayableItem, Comparable<DisplayableCountry> {
   
   var number: Int = 0
   

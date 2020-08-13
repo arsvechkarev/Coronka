@@ -1,11 +1,11 @@
-package com.arsvechkarev.faq.di
+package com.arsvechkarev.tips.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.arsvechkarev.faq.presentation.FAQFragment
-import com.arsvechkarev.faq.presentation.FAQViewModel
-import com.arsvechkarev.faq.repository.FAQLoader
+import com.arsvechkarev.tips.presentation.FAQFragment
+import com.arsvechkarev.tips.presentation.FAQViewModel
+import com.arsvechkarev.tips.repository.FAQLoader
 import core.concurrency.AndroidThreader
 
 object FAQModuleInjector {

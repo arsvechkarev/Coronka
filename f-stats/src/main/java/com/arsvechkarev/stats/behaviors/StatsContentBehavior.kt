@@ -10,6 +10,7 @@ import android.widget.OverScroller
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ScrollingView
 import androidx.core.view.ViewCompat
+import core.INVALID_POINTER
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -17,33 +18,29 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
   CoordinatorLayout.Behavior<V>() where V : View, V : ScrollingView {
   
   private val scroller = OverScroller(context)
-  private var viewOffsetHelper: ViewOffsetHelper<V>? = null
+  private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+  private var statsContentViewOffsetHelper: StatsContentViewOffsetHelper<V>? = null
   private var velocityTracker: VelocityTracker? = null
   private var flingRunnable: Runnable? = null
   
   private var isBeingDragged = false
   private var activePointerId = INVALID_POINTER
   private var lastMotionY = 0
-  private var touchSlop = -1
   
   fun computeScrollRange(): Int {
-    return viewOffsetHelper?.getScrollRange() ?: 0
+    return statsContentViewOffsetHelper?.getScrollRange() ?: 0
   }
   
   override fun onLayoutChild(parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
     parent.onLayoutChild(child, layoutDirection)
-    if (viewOffsetHelper == null) {
-      viewOffsetHelper = ViewOffsetHelper(child)
+    if (statsContentViewOffsetHelper == null) {
+      statsContentViewOffsetHelper = StatsContentViewOffsetHelper(child)
     }
-    viewOffsetHelper!!.onViewLayout(parent.height)
+    statsContentViewOffsetHelper!!.onViewLayout(parent.height)
     return true
   }
   
-  override fun onInterceptTouchEvent(
-    parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
-    if (touchSlop < 0) {
-      touchSlop = ViewConfiguration.get(parent.context).scaledTouchSlop
-    }
+  override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
     val action = event.action
     
     if (action == MotionEvent.ACTION_MOVE && isBeingDragged) {
@@ -89,11 +86,7 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
     return isBeingDragged
   }
   
-  override fun onTouchEvent(
-    parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
-    if (touchSlop < 0) {
-      touchSlop = ViewConfiguration.get(parent.context).scaledTouchSlop
-    }
+  override fun onTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
     when (event.actionMasked) {
       MotionEvent.ACTION_DOWN -> {
         stopScroller(child)
@@ -154,7 +147,7 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
   }
   
   private fun updateDyOffset(dy: Int): Int {
-    return viewOffsetHelper!!.updateDyOffset(dy)
+    return statsContentViewOffsetHelper!!.updateDyOffset(dy)
   }
   
   private fun fling(
@@ -171,8 +164,8 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
       velocityY.roundToInt(),
       0,
       0,
-      viewOffsetHelper!!.minScrollerY,
-      viewOffsetHelper!!.maxScrollerY
+      statsContentViewOffsetHelper!!.minScrollerY,
+      statsContentViewOffsetHelper!!.maxScrollerY
     )
     if (scroller.computeScrollOffset()) {
       flingRunnable = FlingRunnable(child)
@@ -208,9 +201,5 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
         child.postOnAnimation(this)
       }
     }
-  }
-  
-  companion object {
-    private const val INVALID_POINTER = -1
   }
 }

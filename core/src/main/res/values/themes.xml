@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="AppTheme" parent="Theme.AppCompat"/>
+  <style name="AppTheme" parent="Theme.AppCompat">
+    <item name="android:textViewStyle">@style/TextStyle</item>
+  </style>
 
   <style name="AppTheme.Dark">
-    <item name="colorAccent">@color/dark_accent</item>
     <item name="colorBackground">@color/dark_background</item>
-    <item name="colorMiddle">@color/dark_middle</item>
-    <item name="colorSurface">@color/dark_surface</item>
-    <item name="colorIconDefault">@color/dark_icon_default</item>
+    <item name="colorOverlay">@color/dark_overlay</item>
+    <item name="colorDialog">@color/dark_dialog</item>
+    <item name="colorGradientHeaderStart">@color/dark_gradient_header_start</item>
+    <item name="colorGradientHeaderEnd">@color/dark_gradient_header_end</item>
     <item name="colorRipple">@color/dark_ripple</item>
+    <item name="colorIconDefault">@color/dark_icon_default</item>
+    <item name="colorTextPrimary">@color/dark_text_primary</item>
+    <item name="colorTextSecondary">@color/dark_text_secondary</item>
+
     <item name="colorFailure">@color/dark_failure</item>
     <item name="colorFailureRipple">@color/dark_failure_ripple</item>
 
@@ -23,12 +29,15 @@
     <item name="colorDivider">@color/dark_divider</item>
 
     <item name="colorTextAccent">@color/dark_text_accent</item>
-    <item name="colorTextPrimary">@color/dark_text_primary</item>
-    <item name="colorTextSecondary">@color/dark_text_secondary</item>
     <item name="colorTextLinks">@color/dark_links</item>
 
     <item name="colorStartGradientDrawer">@color/dark_start_gradient_drawer</item>
     <item name="colorEndGradientDrawer">@color/dark_end_gradient_drawer</item>
+  </style>
+
+  <style name="TextStyle" parent="@style/TextAppearance.AppCompat">
+    <item name="fontFamily">@font/segoe_ui_bold</item>
+    <item name="android:textColor">?colorTextPrimary</item>
   </style>
 
 </resources>

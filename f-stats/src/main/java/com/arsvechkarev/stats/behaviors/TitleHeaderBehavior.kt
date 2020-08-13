@@ -14,10 +14,11 @@ class TitleHeaderBehavior<V : View>(
 ) : CoordinatorLayout.Behavior<V>() {
   
   private val offset = (5 * context.resources.displayMetrics.density).toInt()
+  private var scrollRange = 0
   private var dependentViewMaxTop = 0
   private var dependentViewMinTop = 0
   private var initialChildTop = 0
-  private var scrollRange = 0
+  private var childHeight = 0
   
   override fun layoutDependsOn(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
     val isTheDependency = dependency.id == R.id.scrollingContentView
@@ -28,6 +29,7 @@ class TitleHeaderBehavior<V : View>(
         dependentViewMaxTop = child.bottom - offset
         dependentViewMinTop = dependentViewMaxTop - scrollRange
         initialChildTop = child.top
+        childHeight = child.height
       }
     }
     return isTheDependency
@@ -40,7 +42,7 @@ class TitleHeaderBehavior<V : View>(
     }
     val normalizedTop = dependency.top - dependentViewMinTop
     val percent = normalizedTop.f / (dependentViewMaxTop - dependentViewMinTop)
-    child.top = (initialChildTop - (1 - percent) * child.height).toInt()
+    child.top = (initialChildTop - (1 - percent) * childHeight).toInt()
     return true
   }
   

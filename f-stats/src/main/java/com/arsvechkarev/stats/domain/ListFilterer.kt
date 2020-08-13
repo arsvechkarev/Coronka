@@ -7,12 +7,11 @@ import com.arsvechkarev.storage.dao.PopulationsDao
 import core.extenstions.assertThat
 import core.model.Country
 import core.model.DisplayableCountry
-import core.model.DisplayableGeneralInfo
 import core.model.GeneralInfo
 import core.model.OptionType
 import core.model.OptionType.PERCENT_BY_COUNTRY
 import core.model.Population
-import core.recycler.DisplayableItem
+import core.recycler.SortableDisplayableItem
 
 class ListFilterer(private val populationsDao: PopulationsDao) {
   
@@ -22,7 +21,7 @@ class ListFilterer(private val populationsDao: PopulationsDao) {
     list: List<Country>,
     generalInfo: GeneralInfo,
     optionType: OptionType
-  ): List<DisplayableItem> {
+  ): List<SortableDisplayableItem> {
     if (optionType == PERCENT_BY_COUNTRY) {
       if (populations.isEmpty()) {
         DatabaseManager.instance.readableDatabase.use {
@@ -43,7 +42,7 @@ class ListFilterer(private val populationsDao: PopulationsDao) {
     countries: List<Country>,
     generalInfo: GeneralInfo,
     optionType: OptionType
-  ): List<DisplayableItem> {
+  ): List<SortableDisplayableItem> {
     val displayableCountries = ArrayList<DisplayableCountry>()
     for (i in countries.indices) {
       val country = countries[i]
@@ -62,7 +61,7 @@ class ListFilterer(private val populationsDao: PopulationsDao) {
     countries: List<Country>,
     generalInfo: GeneralInfo,
     optionType: OptionType
-  ): List<DisplayableItem> {
+  ): List<SortableDisplayableItem> {
     val displayableCountries = ArrayList<DisplayableCountry>()
     for (i in countries.indices) {
       val it = countries[i]
@@ -80,16 +79,16 @@ class ListFilterer(private val populationsDao: PopulationsDao) {
     countries: List<DisplayableCountry>,
     generalInfo: GeneralInfo,
     optionType: OptionType
-  ): List<DisplayableItem> {
-    val items = ArrayList<DisplayableItem>()
-    items.add(
-      DisplayableGeneralInfo(
-        generalInfo.confirmed,
-        generalInfo.deaths,
-        generalInfo.recovered,
-        optionType
-      )
-    )
+  ): List<SortableDisplayableItem> {
+    val items = ArrayList<SortableDisplayableItem>()
+    //    items.add(
+    //      DisplayableGeneralInfo(
+    //        generalInfo.confirmed,
+    //        generalInfo.deaths,
+    //        generalInfo.recovered,
+    //        optionType
+    //      )
+    //    )
     items.addAll(countries)
     return items
   }

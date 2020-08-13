@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <attr name="colorBackground" format="color"/>
-  <attr name="colorMiddle" format="color"/>
-  <attr name="colorSurface" format="color"/>
-  <attr name="colorIconDefault" format="color"/>
+  <attr name="colorOverlay" format="color"/>
+  <attr name="colorDialog" format="color"/>
+  <attr name="colorGradientHeaderStart" format="color"/>
+  <attr name="colorGradientHeaderEnd" format="color"/>
   <attr name="colorRipple" format="color"/>
+  <attr name="colorIconDefault" format="color"/>
+  <attr name="colorTextPrimary" format="color"/>
+  <attr name="colorTextSecondary" format="color"/>
+
+
   <attr name="colorFailure" format="color"/>
   <attr name="colorFailureRipple" format="color"/>
 
@@ -18,8 +24,6 @@
   <attr name="colorDivider" format="color"/>
 
   <attr name="colorTextAccent" format="color"/>
-  <attr name="colorTextPrimary" format="color"/>
-  <attr name="colorTextSecondary" format="color"/>
   <attr name="colorTextLinks" format="color"/>
 
   <attr name="colorStartGradientDrawer" format="color"/>

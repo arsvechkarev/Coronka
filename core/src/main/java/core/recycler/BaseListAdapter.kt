@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import core.extenstions.forEach
-import core.recycler.DisplayableItem.DiffCallBack
+import core.recycler.SortableDisplayableItem.DiffCallBack
 
-abstract class BaseListAdapter : ListAdapter<DisplayableItem, ViewHolder>(DiffCallBack()) {
+abstract class BaseListAdapter : ListAdapter<SortableDisplayableItem, ViewHolder>(DiffCallBack()) {
   
-  protected var data: List<DisplayableItem> = ArrayList()
-  private val delegates = SparseArrayCompat<AdapterDelegate>()
+  protected var data: List<SortableDisplayableItem> = ArrayList()
+  private val delegates = SparseArrayCompat<ListAdapterDelegate>()
   
-  protected fun addDelegate(delegate: AdapterDelegate) {
+  protected fun addDelegate(delegate: ListAdapterDelegate) {
     delegates.put(delegate.modelClass.hashCode(), delegate)
   }
   
@@ -36,12 +36,12 @@ abstract class BaseListAdapter : ListAdapter<DisplayableItem, ViewHolder>(DiffCa
     return data[position]::class.hashCode()
   }
   
-  override fun submitList(list: List<DisplayableItem>?) {
+  override fun submitList(list: List<SortableDisplayableItem>?) {
     data = list ?: ArrayList()
     super.submitList(list)
   }
   
-  override fun submitList(list: List<DisplayableItem>?, commitCallback: Runnable?) {
+  override fun submitList(list: List<SortableDisplayableItem>?, commitCallback: Runnable?) {
     data = list ?: ArrayList()
     super.submitList(list, commitCallback)
   }

@@ -3,7 +3,10 @@ package com.arsvechkarev.coronavirusinfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.arsvechkarev.stats.presentation.StatsFragment
+import com.arsvechkarev.tips.presentation.TipsFragment
+import com.chemistry.rankings.presentation.RankingsFragment
 import core.Application
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.fragment_container
@@ -22,10 +25,8 @@ class MainActivity : AppCompatActivity() {
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)
     fragment_container.setOnClickListener { drawerLayout.openDrawer(navigationView) }
-    supportFragmentManager.beginTransaction()
-        .replace(R.id.fragment_container, StatsFragment())
-        .commit()
-    
+    goToFragment(TipsFragment())
+  
     drawerTextStatistics.setOnClickListener { handleOnDrawerItemClicked(it) }
     drawerTextMap.setOnClickListener { handleOnDrawerItemClicked(it) }
     drawerTextTips.setOnClickListener { handleOnDrawerItemClicked(it) }
@@ -34,5 +35,16 @@ class MainActivity : AppCompatActivity() {
   
   private fun handleOnDrawerItemClicked(view: View) {
     drawerGroupLinearLayout.onTextViewClicked(view)
+    when (view) {
+      drawerTextStatistics -> goToFragment(StatsFragment())
+      drawerTextTips -> goToFragment(TipsFragment())
+      drawerTextRankings -> goToFragment(RankingsFragment())
+    }
+  }
+  
+  private fun goToFragment(fragment: Fragment) {
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.fragment_container, fragment)
+        .commit()
   }
 }

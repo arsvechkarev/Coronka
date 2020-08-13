@@ -36,12 +36,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="176dp"
-      android:fontFamily="@font/segoe_ui_bold"
       android:gravity="center"
       android:text="Stay home\nStay safe"
-      android:textColor="?colorTextPrimary"
       android:textSize="28sp"
-      android:textStyle="bold"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
@@ -89,9 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/segoe_ui_bold"
         android:text="Total cases"
-        android:textColor="?colorTextPrimary"
         android:textSize="24sp"/>
 
       <View
@@ -105,9 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/segoe_ui_bold"
         android:text="New cases"
-        android:textColor="?colorTextPrimary"
         android:textSize="24sp"/>
 
       <View

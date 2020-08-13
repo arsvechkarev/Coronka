@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.views.SmallStatsView
 import core.model.DisplayableCountry
-import core.recycler.AdapterDelegate
-import core.recycler.DisplayableItem
+import core.recycler.ListAdapterDelegate
+import core.recycler.SortableDisplayableItem
 
-class CountryInfoAdapterDelegate : AdapterDelegate(DisplayableCountry::class) {
+class CountryInfoAdapterDelegate : ListAdapterDelegate(DisplayableCountry::class) {
   
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
     val textSize = parent.resources.getDimensionPixelSize(R.dimen.text_h4)
@@ -22,7 +22,7 @@ class CountryInfoAdapterDelegate : AdapterDelegate(DisplayableCountry::class) {
     return CountryViewHolder(statsView)
   }
   
-  override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: DisplayableItem) {
+  override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: SortableDisplayableItem) {
     (holder as CountryViewHolder).bind(item as DisplayableCountry)
   }
   

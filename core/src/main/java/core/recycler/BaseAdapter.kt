@@ -13,7 +13,7 @@ abstract class BaseAdapter : RecyclerView.Adapter<ViewHolder>() {
   
   private val delegates = SparseArrayCompat<AdapterDelegate>()
   
-  protected fun addDelegate(delegate: AdapterDelegate) {
+  fun addDelegate(delegate: AdapterDelegate) {
     delegates.put(delegate.modelClass.hashCode(), delegate)
   }
   

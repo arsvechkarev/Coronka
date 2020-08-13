@@ -1,10 +1,10 @@
-package com.arsvechkarev.faq.list
+package com.arsvechkarev.tips.list
 
 import android.text.method.LinkMovementMethod
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.arsvechkarev.faq.R
+import com.arsvechkarev.tips.R
 import core.extenstions.inflate
 import core.model.FAQHeader
 import core.recycler.AdapterDelegate

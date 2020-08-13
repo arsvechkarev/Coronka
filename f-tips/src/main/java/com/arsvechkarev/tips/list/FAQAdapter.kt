@@ -1,4 +1,4 @@
-package com.arsvechkarev.faq.list
+package com.arsvechkarev.tips.list
 
 import core.recycler.BaseAdapter
 

@@ -1,9 +1,9 @@
-package com.arsvechkarev.faq.list
+package com.arsvechkarev.tips.list
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.arsvechkarev.faq.R
+import com.arsvechkarev.tips.R
 import core.extenstions.inflate
 import core.extenstions.rotateTo
 import core.model.FAQItem
