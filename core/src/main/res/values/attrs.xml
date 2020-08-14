@@ -9,7 +9,7 @@
   <attr name="colorIconDefault" format="color"/>
   <attr name="colorTextPrimary" format="color"/>
   <attr name="colorTextSecondary" format="color"/>
-
+  <attr name="colorBgStats" format="color"/>
 
   <attr name="colorFailure" format="color"/>
   <attr name="colorFailureRipple" format="color"/>

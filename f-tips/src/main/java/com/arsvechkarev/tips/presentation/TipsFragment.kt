@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.common.BottomSheetBehavior
 import com.arsvechkarev.tips.R
 import core.recycler.AdapterDelegateBuilder
-import core.recycler.DisplayableItem
 import core.recycler.createAdapter
 import kotlinx.android.synthetic.main.fragment_tips.recyclerView
 import kotlinx.android.synthetic.main.fragment_tips.textAnswer
@@ -20,27 +19,9 @@ import kotlinx.android.synthetic.main.item_faq.view.tipsItemFaq
 import kotlinx.android.synthetic.main.item_header.view.tipsTextHeader
 import kotlinx.android.synthetic.main.item_main_header.view.tipsImageDrawer
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionImage
-import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionText
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionTitle
 
 class TipsFragment : Fragment(R.layout.fragment_tips) {
-  
-  object MainHeader : DisplayableItem
-  
-  class Header(val title: String) : DisplayableItem
-  
-  class FAQItem(
-    val questionLayoutRes: Int,
-    val answerLayoutRes: Int
-  ) : DisplayableItem
-  
-  object SymptomsLayout : DisplayableItem
-  
-  class PreventionItem(
-    val imageRes: Int,
-    val title: String,
-    val text: String
-  ) : DisplayableItem
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     val behavior = (tipsBottomSheet.layoutParams as CoordinatorLayout.LayoutParams).behavior!!
@@ -108,16 +89,15 @@ class TipsFragment : Fragment(R.layout.fragment_tips) {
   
   private fun preventionsLayout(): AdapterDelegateBuilder<PreventionItem>.() -> Unit = {
     data(listOf(
-      PreventionItem(R.drawable.image_wash_hands, "wert", "qwer"),
-      PreventionItem(R.drawable.image_wash_hands, "wert", "qwer"),
-      PreventionItem(R.drawable.image_wash_hands, "wert", "qwer"),
-      PreventionItem(R.drawable.image_wash_hands, "wert", "qwer")
+      PreventionItem(R.drawable.image_no_touch, "Don't touch your face with bare hands"),
+      PreventionItem(R.drawable.image_protection, "Always wear a mask and gloves"),
+      PreventionItem(R.drawable.image_wash_hands, "Wash your hands as often as you can"),
+      PreventionItem(R.drawable.image_social_distancing, "Keep the distance from other people")
     ))
     layoutRes(R.layout.item_prevention)
     onBindViewHolder { view, preventionItem ->
       view.tipsItemPreventionImage.setImageResource(preventionItem.imageRes)
       view.tipsItemPreventionTitle.text = preventionItem.title
-      view.tipsItemPreventionText.text = preventionItem.text
     }
   }
 }

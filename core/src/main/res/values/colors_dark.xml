@@ -9,7 +9,7 @@
   <color name="dark_icon_default">#FFFFFF</color>
   <color name="dark_text_primary">#FFFFFF</color>
   <color name="dark_text_secondary">#DFDFDF</color>
-
+  <color name="dark_bg_stats">#423C61</color>
 
   <color name="dark_failure">#E64545</color>
   <color name="dark_failure_ripple">#70E64545</color>

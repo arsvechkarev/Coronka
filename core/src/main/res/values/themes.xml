@@ -15,6 +15,7 @@
     <item name="colorIconDefault">@color/dark_icon_default</item>
     <item name="colorTextPrimary">@color/dark_text_primary</item>
     <item name="colorTextSecondary">@color/dark_text_secondary</item>
+    <item name="colorBgStats">@color/dark_bg_stats</item>
 
     <item name="colorFailure">@color/dark_failure</item>
     <item name="colorFailureRipple">@color/dark_failure_ripple</item>

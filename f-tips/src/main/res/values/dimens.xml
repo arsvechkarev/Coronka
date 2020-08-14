@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="text_visit_who_padding">16dp</dimen>
-  <dimen name="popular_questions_line_m_vertical">16dp</dimen>
-  <dimen name="popular_questions_line_p_horizontal">8dp</dimen>
-  <dimen name="text_popular_questions_margin">8dp</dimen>
+  <dimen name="tips_item_faq_corners">60dp</dimen>
+  <dimen name="tips_item_faq_m_horizontal">12dp</dimen>
+  <dimen name="tips_item_faq_m_vertical">12dp</dimen>
+  <dimen name="tips_item_faq_p_vertical">12dp</dimen>
+  <dimen name="tips_item_faq_p_start">20dp</dimen>
+  <dimen name="tips_item_faq_p_end">12dp</dimen>
 
-  <dimen name="layout_title_padding">12dp</dimen>
-  <dimen name="text_title_m_end">20dp</dimen>
-  <dimen name="arrow_expand_size">32dp</dimen>
-  <dimen name="text_description_margin">16dp</dimen>
+  <dimen name="tips_item_main_header_height">170dp</dimen>
+
+  <dimen name="tips_item_header_m_start">16dp</dimen>
+  <dimen name="tips_item_header_m_top">32dp</dimen>
+  <dimen name="tips_item_header_m_bottom">12dp</dimen>
+
+  <dimen name="tips_item_prevention_m_horizontal">16dp</dimen>
+  <dimen name="tips_item_prevention_m_vertical">8dp</dimen>
+  <dimen name="tips_item_prevention_padding">8dp</dimen>
+  <dimen name="tips_item_prevention_image_size">60dp</dimen>
+  <dimen name="tips_item_prevention_image_margin">8dp</dimen>
+  <dimen name="tips_item_prevention_title_m_start">24dp</dimen>
+  <dimen name="tips_item_prevention_title_m_end">16dp</dimen>
+
+  <dimen name="tips_item_symptoms_m_horizontal">16dp</dimen>
+  <dimen name="tips_item_symptoms_m_top">8dp</dimen>
+  <dimen name="tips_item_symptoms_padding">8dp</dimen>
+
+  <dimen name="tips_bottom_sheet_cross_margin">24dp</dimen>
+  <dimen name="tips_bottom_sheet_title_m_horizontal">60dp</dimen>
+  <dimen name="tips_bottom_sheet_title_m_top">16dp</dimen>
+  <dimen name="tips_bottom_sheet_text_margin">20dp</dimen>
 </resources>

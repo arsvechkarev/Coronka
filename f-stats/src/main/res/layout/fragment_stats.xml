@@ -3,30 +3,30 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#423C61"
+  android:background="?colorBgStats"
   android:clickable="false">
 
   <!-- Todo: replace with custom layout? -->
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="@dimen/stats_header_height"
     app:layout_behavior="com.arsvechkarev.stats.behaviors.TitleHeaderBehavior">
 
     <ImageView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:layout_marginTop="16dp"
+      android:layout_marginStart="@dimen/icon_drawer_margin"
+      android:layout_marginTop="@dimen/icon_drawer_margin"
       android:src="@drawable/ic_drawer"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
       android:id="@+id/imageDoctor"
-      android:layout_width="180dp"
-      android:layout_height="140dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginTop="16dp"
+      android:layout_width="@dimen/stats_image_doctor_width"
+      android:layout_height="@dimen/stats_image_doctor_height"
+      android:layout_marginStart="@dimen/stats_image_doctor_margin"
+      android:layout_marginTop="@dimen/stats_image_doctor_margin"
       android:src="@drawable/image_doctor"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -35,10 +35,10 @@
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="176dp"
+      android:layout_marginStart="@dimen/stats_title_margin_start"
       android:gravity="center"
-      android:text="Stay home\nStay safe"
-      android:textSize="28sp"
+      android:text="@string/title_stats"
+      android:textSize="@dimen/text_header"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
@@ -49,7 +49,7 @@
     android:id="@+id/scrollingContentView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="150dp"
+    android:layout_marginTop="@dimen/stats_image_doctor_height"
     app:layout_behavior="com.arsvechkarev.stats.behaviors.StatsContentBehavior">
 
     <LinearLayout
@@ -61,53 +61,53 @@
       <com.arsvechkarev.views.ThreeElementsInARowViewGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="24dp">
+        android:layout_marginHorizontal="@dimen/stats_three_elements_layout_m_horizontal"
+        android:layout_marginVertical="@dimen/stats_three_elements_layout_m_vertical">
 
         <com.arsvechkarev.views.CoronavirusMainStatsView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:background="@drawable/bg_overlay"/>
+          android:background="@drawable/bg_overlay_corners_small"/>
 
         <com.arsvechkarev.views.CoronavirusMainStatsView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:background="@drawable/bg_overlay"/>
+          android:background="@drawable/bg_overlay_corners_small"/>
 
         <com.arsvechkarev.views.CoronavirusMainStatsView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:background="@drawable/bg_overlay"/>
+          android:background="@drawable/bg_overlay_corners_small"/>
 
       </com.arsvechkarev.views.ThreeElementsInARowViewGroup>
 
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Total cases"
-        android:textSize="24sp"/>
+        android:layout_marginStart="@dimen/stats_header_m_start"
+        android:layout_marginTop="@dimen/stats_header_m_top"
+        android:text="@string/text_total_cases"
+        android:textSize="@dimen/text_h1"/>
 
       <View
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_margin="24dp"
-        android:background="@drawable/bg_overlay"/>
+        android:background="@drawable/bg_overlay_corners_small"/>
 
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="New cases"
-        android:textSize="24sp"/>
+        android:layout_marginStart="@dimen/stats_header_m_start"
+        android:layout_marginTop="@dimen/stats_header_m_top"
+        android:text="@string/text_new_cases"
+        android:textSize="@dimen/text_h1"/>
 
       <View
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_margin="24dp"
-        android:background="@drawable/bg_overlay"/>
+        android:background="@drawable/bg_overlay_corners_small"/>
 
     </LinearLayout>
 

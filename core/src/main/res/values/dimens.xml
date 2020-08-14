@@ -11,8 +11,15 @@
 
   <dimen name="icon_default_size">24dp</dimen>
   <dimen name="icon_large_size">30dp</dimen>
+  <dimen name="image_size">100dp</dimen>
   <dimen name="divider_height">1dp</dimen>
 
   <dimen name="progress_bar_size">40dp</dimen>
   <dimen name="progress_bar_big_size">120dp</dimen>
+
+  <dimen name="icon_drawer_margin">16dp</dimen>
+
+  <dimen name="bg_overlay_corners_small">12dp</dimen>
+  <dimen name="bg_overlay_corners_big">20dp</dimen>
+
 </resources>

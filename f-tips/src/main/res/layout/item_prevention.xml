@@ -3,16 +3,16 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_marginHorizontal="16dp"
-  android:layout_marginVertical="8dp"
-  android:background="@drawable/bg_overlay"
-  android:padding="8dp">
+  android:layout_marginHorizontal="@dimen/tips_item_prevention_m_horizontal"
+  android:layout_marginVertical="@dimen/tips_item_prevention_m_vertical"
+  android:background="@drawable/bg_overlay_corners_big"
+  android:padding="@dimen/tips_item_prevention_padding">
 
   <ImageView
     android:id="@+id/tipsItemPreventionImage"
-    android:layout_width="60dp"
-    android:layout_height="60dp"
-    android:layout_margin="8dp"
+    android:layout_width="@dimen/tips_item_prevention_image_size"
+    android:layout_height="@dimen/tips_item_prevention_image_size"
+    android:layout_margin="@dimen/tips_item_prevention_image_margin"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
@@ -21,25 +21,12 @@
     android:id="@+id/tipsItemPreventionTitle"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginStart="24dp"
-    android:layout_marginEnd="16dp"
-    android:textSize="24sp"
-    app:layout_constraintBottom_toTopOf="@id/tipsItemPreventionText"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toEndOf="@id/tipsItemPreventionImage"
-    app:layout_constraintTop_toTopOf="parent"/>
-
-  <TextView
-    android:id="@+id/tipsItemPreventionText"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="24dp"
-    android:layout_marginEnd="16dp"
-    android:textAppearance="@style/TextAppearance.AppCompat"
-    android:textSize="16sp"
+    android:layout_marginStart="@dimen/tips_item_prevention_title_m_start"
+    android:layout_marginEnd="@dimen/tips_item_prevention_title_m_end"
+    android:textSize="@dimen/text_h2"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@id/tipsItemPreventionImage"
-    app:layout_constraintTop_toBottomOf="@id/tipsItemPreventionTitle"/>
+    app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.navigation.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigationView"
   android:layout_width="wrap_content"
   android:layout_height="match_parent"
   android:layout_gravity="start"
-  android:background="@drawable/bg_drawer">
+  android:background="@drawable/bg_drawer"
+  tools:ignore="RtlSymmetry">
 
   <com.arsvechkarev.views.DrawerGroupLinearLayout
     android:id="@+id/drawerGroupLinearLayout"
@@ -22,7 +24,7 @@
       android:drawablePadding="16dp"
       android:fontFamily="@font/segoe_ui_bold"
       android:gravity="center"
-      android:text="COVID-19"
+      android:text="@string/title_covid_19"
       android:textColor="?colorTextPrimary"
       android:textSize="30sp"
       android:textStyle="bold"/>
@@ -37,8 +39,8 @@
       android:drawablePadding="20dp"
       android:fontFamily="@font/segoe_ui_bold"
       android:gravity="center|start"
+      android:paddingHorizontal="16dp"
       android:paddingVertical="8dp"
-      android:paddingStart="16dp"
       android:text="Statistics"
       android:textColor="?colorTextPrimary"
       android:textSize="20sp"
@@ -53,8 +55,8 @@
       android:drawablePadding="20dp"
       android:fontFamily="@font/segoe_ui_bold"
       android:gravity="center|start"
+      android:paddingHorizontal="16dp"
       android:paddingVertical="8dp"
-      android:paddingStart="16dp"
       android:text="Map"
       android:textColor="?colorTextPrimary"
       android:textSize="20sp"
@@ -69,8 +71,8 @@
       android:drawablePadding="20dp"
       android:fontFamily="@font/segoe_ui_bold"
       android:gravity="center|start"
+      android:paddingHorizontal="16dp"
       android:paddingVertical="8dp"
-      android:paddingStart="16dp"
       android:text="Tips"
       android:textColor="?colorTextPrimary"
       android:textSize="20sp"
@@ -85,8 +87,8 @@
       android:drawablePadding="20dp"
       android:fontFamily="@font/segoe_ui_bold"
       android:gravity="center|start"
+      android:paddingHorizontal="16dp"
       android:paddingVertical="8dp"
-      android:paddingStart="16dp"
       android:text="Rankings"
       android:textColor="?colorTextPrimary"
       android:textSize="20sp"

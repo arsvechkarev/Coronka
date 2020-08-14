@@ -7,7 +7,6 @@
   <string name="label_faq">FAQ</string>
 
   <string name="text_loading_map">Loading map…</string>
-  <string name="text_total_cases">Total cases</string>
   <string name="text_confirmed">Confirmed</string>
   <string name="text_recovered">Recovered</string>
   <string name="text_deaths">Deaths</string>
@@ -22,10 +21,17 @@
   <string name="text_unknown_error">An error occurred</string>
   <string name="text_retry_all_caps">RETRY</string>
 
-  <string name="text_popular_questions">Popular questions</string>
   <string name="text_visit_who">
     More information: &lt;br>
     &lt;a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019">
     World Health Organization&lt;/a>
   </string>
+
+  <string name="title_stats">Stay home\nStay safe</string>
+  <string name="title_tips">Stay home\nStay safe</string>
+
+  <string name="text_new_cases">New cases</string>
+  <string name="text_total_cases">Total cases</string>
+  <string name="title_covid_19">COVID-19</string>
+
 </resources>

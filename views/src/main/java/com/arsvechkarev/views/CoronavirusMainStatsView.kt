@@ -27,7 +27,7 @@ class CoronavirusMainStatsView @JvmOverloads constructor(
     color = ContextCompat.getColor(context, R.color.dark_text_primary)
   }
   
-  private var title: String? = "Co`nfirmed"
+  private var title: String? = "Confirmed"
   private var numberText: String? = "14.658 M"
   
   private var titleLayout: BoringLayout? = null
