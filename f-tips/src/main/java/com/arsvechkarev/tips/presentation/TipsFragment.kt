@@ -29,11 +29,11 @@ class TipsFragment : Fragment(R.layout.fragment_tips) {
     tipsBottomSheetCross.setOnClickListener { bottomSheetBehavior.hide() }
     val adapter = createAdapter {
       delegate(MainHeader::class, mainHeaderLayout())
-      delegate(Header::class, headerLayout("FAQ"))
+      delegate(Header::class, headerLayout(getString(R.string.text_faq)))
       delegate(FAQItem::class, faqItemLayout(behavior))
-      delegate(Header::class, headerLayout("Symptoms"))
+      delegate(Header::class, headerLayout(getString(R.string.text_symptoms)))
       delegate(SymptomsLayout::class, symptomsLayout())
-      delegate(Header::class, headerLayout("Prevention tips"))
+      delegate(Header::class, headerLayout(getString(R.string.text_prevention_tips)))
       delegate(PreventionItem::class, preventionsLayout())
     }
     recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -89,10 +89,11 @@ class TipsFragment : Fragment(R.layout.fragment_tips) {
   
   private fun preventionsLayout(): AdapterDelegateBuilder<PreventionItem>.() -> Unit = {
     data(listOf(
-      PreventionItem(R.drawable.image_no_touch, "Don't touch your face with bare hands"),
-      PreventionItem(R.drawable.image_protection, "Always wear a mask and gloves"),
-      PreventionItem(R.drawable.image_wash_hands, "Wash your hands as often as you can"),
-      PreventionItem(R.drawable.image_social_distancing, "Keep the distance from other people")
+      PreventionItem(R.drawable.image_no_touch, getString(R.string.text_prevention_no_touch)),
+      PreventionItem(R.drawable.image_protection, getString(R.string.text_prevention_protection)),
+      PreventionItem(R.drawable.image_wash_hands, getString(R.string.text_prevention_wash_hands)),
+      PreventionItem(R.drawable.image_social_distancing,
+        getString(R.string.text_prevention_social_distancing))
     ))
     layoutRes(R.layout.item_prevention)
     onBindViewHolder { view, preventionItem ->

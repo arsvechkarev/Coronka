@@ -27,11 +27,22 @@
     World Health Organization&lt;/a>
   </string>
 
+  <string name="title_covid_19">COVID-19</string>
   <string name="title_stats">Stay home\nStay safe</string>
   <string name="title_tips">Stay home\nStay safe</string>
 
   <string name="text_new_cases">New cases</string>
   <string name="text_total_cases">Total cases</string>
-  <string name="title_covid_19">COVID-19</string>
+  <string name="text_faq">FAQ</string>
+  <string name="text_symptoms">Symptoms</string>
+  <string name="text_prevention_tips">Prevention tips</string>
+
+  <string name="text_prevention_no_touch">Don\'t touch your face with hands</string>
+  <string name="text_prevention_protection">Always wear a mask and gloves</string>
+  <string name="text_prevention_wash_hands">Wash your hands as often as you can</string>
+  <string name="text_prevention_social_distancing">Keep the distance from other people</string>
+  <string name="text_headache">Headache</string>
+  <string name="text_fever">Fever</string>
+  <string name="text_cough">Cough</string>
 
 </resources>

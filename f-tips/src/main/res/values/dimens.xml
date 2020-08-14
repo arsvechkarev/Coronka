@@ -21,9 +21,10 @@
   <dimen name="tips_item_prevention_title_m_start">24dp</dimen>
   <dimen name="tips_item_prevention_title_m_end">16dp</dimen>
 
-  <dimen name="tips_item_symptoms_m_horizontal">16dp</dimen>
   <dimen name="tips_item_symptoms_m_top">8dp</dimen>
   <dimen name="tips_item_symptoms_padding">8dp</dimen>
+  <dimen name="tips_item_symptoms_image_margin">8dp</dimen>
+  <dimen name="tips_item_symptoms_text_m_top">8dp</dimen>
 
   <dimen name="tips_bottom_sheet_cross_margin">24dp</dimen>
   <dimen name="tips_bottom_sheet_title_m_horizontal">60dp</dimen>

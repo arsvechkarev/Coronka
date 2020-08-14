@@ -3,18 +3,16 @@ package com.arsvechkarev.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
-import core.extenstions.assertThat
 
-class ThreeElementsInARowViewGroup @JvmOverloads constructor(
+class ElementsInARowViewGroup @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null
 ) : ViewGroup(context, attrs) {
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    assertThat(childCount == 3)
     val width = MeasureSpec.getSize(widthMeasureSpec)
     val offset = getChildMargin(width)
-    val childSize = (width - offset * 2 - paddingStart - paddingEnd) / 3
+    val childSize = (width - offset * (childCount - 1) - paddingStart - paddingEnd) / childCount
     val measureSpec = MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY)
     for (i in 0 until childCount) {
       getChildAt(i).measure(measureSpec, measureSpec)
@@ -26,9 +24,8 @@ class ThreeElementsInARowViewGroup @JvmOverloads constructor(
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    assertThat(childCount == 3)
     val offset = getChildMargin(width)
-    val childSize = (width - offset * 2 - paddingStart - paddingEnd) / 3
+    val childSize = (width - offset * (childCount - 1) - paddingStart - paddingEnd) / childCount
     var left = paddingStart
     for (i in 0 until childCount) {
       getChildAt(i).layout(left, paddingTop, left + childSize, height - paddingBottom)

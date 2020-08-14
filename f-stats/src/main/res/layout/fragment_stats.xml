@@ -58,7 +58,7 @@
       android:background="@drawable/bg_stats_content"
       android:orientation="vertical">
 
-      <com.arsvechkarev.views.ThreeElementsInARowViewGroup
+      <com.arsvechkarev.views.ElementsInARowViewGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/stats_three_elements_layout_m_horizontal"
@@ -79,7 +79,7 @@
           android:layout_height="wrap_content"
           android:background="@drawable/bg_overlay_corners_small"/>
 
-      </com.arsvechkarev.views.ThreeElementsInARowViewGroup>
+      </com.arsvechkarev.views.ElementsInARowViewGroup>
 
       <TextView
         android:layout_width="match_parent"

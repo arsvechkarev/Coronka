@@ -1,26 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.arsvechkarev.views.ThreeElementsInARowViewGroup xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_marginHorizontal="@dimen/tips_item_symptoms_m_horizontal"
   android:layout_marginTop="@dimen/tips_item_symptoms_m_top"
-  android:background="@drawable/bg_overlay_corners_big"
   android:padding="@dimen/tips_item_symptoms_padding">
 
-  <ImageView
+  <com.arsvechkarev.views.SquareImageView
+    android:id="@+id/tipsItemSymptomsImageCough"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/tips_item_symptoms_image_margin"
+    android:background="@drawable/bg_overlay_corners_small"
+    app:layout_constraintBottom_toTopOf="@id/tipsItemSymptomsTextCough"
+    app:layout_constraintEnd_toStartOf="@id/guideline1"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/image_cough"/>
+
+  <com.arsvechkarev.views.SquareImageView
+    android:id="@+id/tipsItemSymptomsImageHeadache"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/tips_item_symptoms_image_margin"
+    android:background="@drawable/bg_overlay_corners_small"
+    app:layout_constraintBottom_toTopOf="@id/tipsItemSymptomsTextHeadache"
+    app:layout_constraintEnd_toStartOf="@id/guideline2"
+    app:layout_constraintStart_toEndOf="@id/guideline1"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/image_headache"/>
+
+  <com.arsvechkarev.views.SquareImageView
+    android:id="@+id/tipsItemSymptomsImageFever"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/tips_item_symptoms_image_margin"
+    android:background="@drawable/bg_overlay_corners_small"
+    app:layout_constraintBottom_toTopOf="@id/tipsItemSymptomsTextFever"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/guideline2"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/image_fever"/>
+
+  <TextView
+    android:id="@+id/tipsItemSymptomsTextCough"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:srcCompat="@drawable/image_wash_hands"/>
+    android:layout_marginTop="@dimen/tips_item_symptoms_text_m_top"
+    android:text="@string/text_cough"
+    android:textSize="@dimen/text_h4"
+    app:layout_constraintEnd_toEndOf="@id/tipsItemSymptomsImageCough"
+    app:layout_constraintStart_toStartOf="@id/tipsItemSymptomsImageCough"
+    app:layout_constraintTop_toBottomOf="@id/tipsItemSymptomsImageCough"/>
 
-  <ImageView
+  <TextView
+    android:id="@+id/tipsItemSymptomsTextFever"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:srcCompat="@drawable/image_wash_hands"/>
+    android:layout_marginTop="@dimen/tips_item_symptoms_text_m_top"
+    android:text="@string/text_fever"
+    android:textSize="@dimen/text_h4"
+    app:layout_constraintEnd_toEndOf="@id/tipsItemSymptomsImageFever"
+    app:layout_constraintStart_toStartOf="@id/tipsItemSymptomsImageFever"
+    app:layout_constraintTop_toBottomOf="@id/tipsItemSymptomsImageFever"/>
 
-  <ImageView
+  <TextView
+    android:id="@+id/tipsItemSymptomsTextHeadache"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:srcCompat="@drawable/image_wash_hands"/>
+    android:layout_marginTop="@dimen/tips_item_symptoms_text_m_top"
+    android:text="@string/text_headache"
+    android:textSize="@dimen/text_h4"
+    app:layout_constraintEnd_toEndOf="@id/tipsItemSymptomsImageHeadache"
+    app:layout_constraintStart_toStartOf="@id/tipsItemSymptomsImageHeadache"
+    app:layout_constraintTop_toBottomOf="@id/tipsItemSymptomsImageHeadache"/>
 
-</com.arsvechkarev.views.ThreeElementsInARowViewGroup>
+  <androidx.constraintlayout.widget.Guideline
+    android:id="@+id/guideline1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.33"/>
+
+  <androidx.constraintlayout.widget.Guideline
+    android:id="@+id/guideline2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.66"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
