@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="rankings_small_stats_view_p_horizontal">6dp</dimen>
+  <dimen name="rankings_small_stats_view_p_vertical">8dp</dimen>
+</resources>

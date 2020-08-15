@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * Item for displaying in [RecyclerView]
  */
-interface SortableDisplayableItem {
+interface SortableDisplayableItem : DisplayableItem {
   
   /**
    * Id to distinguish two different elements
@@ -17,7 +17,7 @@ interface SortableDisplayableItem {
    * Every class inherits from [SortableDisplayableItem] should override equals in order to compare elements
    * properly
    */
-  override operator fun equals(other: Any?): Boolean
+  override fun equals(other: Any?): Boolean
   
   /**
    * Callback for updating items in recycler view

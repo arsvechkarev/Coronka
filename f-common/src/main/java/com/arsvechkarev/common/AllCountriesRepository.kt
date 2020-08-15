@@ -8,7 +8,6 @@ import core.concurrency.AndroidSchedulersProvider
 import core.concurrency.SchedulersProvider
 import core.log
 import core.model.Country
-import core.state.BaseScreenState
 import io.reactivex.Observable
 import org.json.JSONObject
 
@@ -20,13 +19,9 @@ class AllCountriesRepository(
 ) : Loggable {
   
   override val logTag = "Request_AllCountriesRepository"
-  private var observable: Observable<List<Country>>? = null
   
   fun getAllCountries(): Observable<List<Country>> {
-    if (observable == null) {
-      observable = createLoadingObservable()
-    }
-    return observable!!
+    return createLoadingObservable()
   }
   
   private fun createLoadingObservable(): Observable<List<Country>> {

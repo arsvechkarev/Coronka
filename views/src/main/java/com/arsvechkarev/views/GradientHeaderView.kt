@@ -8,14 +8,15 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Shader
 import android.util.AttributeSet
-import android.view.View
+import android.widget.FrameLayout
+import com.arsvechkarev.views.behaviors.Header
 import core.extenstions.f
 
 class GradientHeaderView @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr), Header {
   
   private val startColor: Int
   private val endColor: Int
@@ -47,7 +48,8 @@ class GradientHeaderView @JvmOverloads constructor(
     )
   }
   
-  override fun onDraw(canvas: Canvas) {
+  override fun dispatchDraw(canvas: Canvas) {
     canvas.drawPath(path, paint)
+    super.dispatchDraw(canvas)
   }
 }

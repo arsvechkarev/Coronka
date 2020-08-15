@@ -5,6 +5,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 
 operator fun View.contains(ev: MotionEvent): Boolean {
   val x = ev.x
@@ -26,4 +27,8 @@ fun View.gone() {
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
   return LayoutInflater.from(context).inflate(layoutRes, this, false)
+}
+
+inline fun <reified T : CoordinatorLayout.Behavior<*>> View.getBehavior(): T {
+  return (layoutParams as CoordinatorLayout.LayoutParams).behavior as T
 }

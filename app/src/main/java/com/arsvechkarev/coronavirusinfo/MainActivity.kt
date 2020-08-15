@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
-import com.chemistry.rankings.presentation.RankingsFragment
 import core.Application
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.fragment_container
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)
     fragment_container.setOnClickListener { drawerLayout.openDrawer(navigationView) }
-    goToFragment(StatsFragment())
+    goToFragment(RankingsFragment())
   
     drawerTextStatistics.setOnClickListener { handleOnDrawerItemClicked(it) }
     drawerTextMap.setOnClickListener { handleOnDrawerItemClicked(it) }

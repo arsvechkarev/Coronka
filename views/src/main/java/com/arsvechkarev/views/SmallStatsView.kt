@@ -13,12 +13,11 @@ import core.Application.numberFormatter
 import core.FontManager
 import core.extenstions.execute
 import core.extenstions.f
-import core.extenstions.sp
 
 @SuppressLint("ViewConstructor")
 class SmallStatsView(
   context: Context,
-  private val textSize: Float = 18.sp,
+  private val textSize: Float = context.resources.getDimension(R.dimen.text_h4),
   private val color: Int = Color.WHITE
 ) : View(context) {
   
