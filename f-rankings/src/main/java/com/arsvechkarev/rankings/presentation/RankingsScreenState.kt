@@ -1,9 +1,9 @@
 package com.arsvechkarev.rankings.presentation
 
-import core.model.DisplayableCountry
+import core.recycler.SortableDisplayableItem
 import core.state.BaseScreenState
 
 sealed class RankingsScreenState : BaseScreenState() {
   
-  class Loaded(val list: List<DisplayableCountry>) : RankingsScreenState()
+  class Success(val list: List<SortableDisplayableItem>) : RankingsScreenState()
 }

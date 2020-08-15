@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.arsvechkarev.rankings.domain.ReverseDrawingOrderCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.arsvechkarev.views.ReverseDrawingOrderCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/rankingsRootLayout"
   android:layout_width="match_parent"
@@ -52,4 +52,4 @@
     android:paddingTop="@dimen/rankings_recycler_p_top"
     app:layout_behavior="com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior"/>
 
-</com.arsvechkarev.rankings.domain.ReverseDrawingOrderCoordinatorLayout>
+</com.arsvechkarev.views.ReverseDrawingOrderCoordinatorLayout>

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.rankings.R
 import com.arsvechkarev.rankings.di.RankingsDiInjector
 import com.arsvechkarev.rankings.list.RankingsAdapter
-import com.arsvechkarev.rankings.presentation.RankingsScreenState.Loaded
+import com.arsvechkarev.rankings.presentation.RankingsScreenState.Success
 import com.arsvechkarev.views.behaviors.HeaderBehavior
 import core.extenstions.getBehavior
 import core.state.BaseScreenState
@@ -33,8 +33,11 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   
   private fun handleState(state: BaseScreenState) {
     when (state) {
-      is Loading -> ""
-      is Loaded -> adapter.submitList(state.list)
+      is Loading -> {
+      }
+      is Success -> {
+        adapter.submitList(state.list)
+      }
     }
   }
   
@@ -42,7 +45,7 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
     val curveSize = requireContext().resources.getDimensionPixelSize(R.dimen.rankings_header_curve_size)
     rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().apply {
       reactToTouches = false
-      val coefficient = 0.6f
+      val coefficient = 0.5f
       slideRangeCoefficient = coefficient
       view.post {
         val initialTitleY = rankingsTitle.y

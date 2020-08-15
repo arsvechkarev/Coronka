@@ -45,5 +45,7 @@
   <string name="text_fever">Fever</string>
   <string name="text_cough">Cough</string>
   <string name="title_rankings">Rankings</string>
-
+  <string name="text_place">Place</string>
+  <string name="text_country">Country</string>
+  <string name="text_number_of_people">Number of people</string>
 </resources>

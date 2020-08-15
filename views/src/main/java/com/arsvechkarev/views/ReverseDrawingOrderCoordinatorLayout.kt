@@ -1,4 +1,4 @@
-package com.arsvechkarev.rankings.domain
+package com.arsvechkarev.views
 
 import android.content.Context
 import android.util.AttributeSet

@@ -4,19 +4,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.rankings.R
-import com.arsvechkarev.views.SmallStatsView
+import com.arsvechkarev.views.StatsSmallView
 import core.extenstions.i
 import core.model.DisplayableCountry
 import core.recycler.ListAdapterDelegate
 import core.recycler.SortableDisplayableItem
 
-class CountryItemDelegateAdapterDelegate : ListAdapterDelegate(DisplayableCountry::class) {
+class CountryItemAdapterDelegate : ListAdapterDelegate(DisplayableCountry::class) {
   
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-    val statsView = SmallStatsView(parent.context).apply {
-      val pHorizontal = context.resources.getDimension(R.dimen.rankings_small_stats_view_p_horizontal).i
+    val textSize = parent.context.resources.getDimension(R.dimen.rankings_small_stats_view_text_size)
+    val statsView = StatsSmallView(parent.context, textSize).apply {
+      val pSmall = context.resources.getDimension(R.dimen.rankings_small_stats_view_p_end).i
+      val pBig = context.resources.getDimension(R.dimen.rankings_small_stats_view_p_start).i
       val pVertical = context.resources.getDimension(R.dimen.rankings_small_stats_view_p_vertical).i
-      setPadding(pHorizontal, pVertical, pHorizontal, pVertical)
+      setPadding(pBig, pVertical, pSmall, pVertical)
     }
     return CountryItemViewHolder(statsView)
   }
@@ -28,7 +30,7 @@ class CountryItemDelegateAdapterDelegate : ListAdapterDelegate(DisplayableCountr
   class CountryItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     
     fun bind(item: DisplayableCountry) {
-      (itemView as SmallStatsView).updateData(item.number, item.name, item.amount)
+      (itemView as StatsSmallView).updateData(item.number, item.name, item.amount)
     }
   }
 }

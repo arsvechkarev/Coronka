@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="rankings_small_stats_view_p_horizontal">6dp</dimen>
+  <dimen name="rankings_small_stats_view_p_start">16dp</dimen>
+  <dimen name="rankings_small_stats_view_p_end">8dp</dimen>
   <dimen name="rankings_small_stats_view_p_vertical">8dp</dimen>
+  <dimen name="rankings_small_stats_view_text_size">@dimen/text_h4</dimen>
+
+  <dimen name="rankings_item_header_p_vertical">12dp</dimen>
+  <dimen name="rankings_item_header_p_horizontal">@dimen/rankings_small_stats_view_p_end</dimen>
+  <dimen name="rankings_item_header_country_name_offset">@dimen/rankings_small_stats_view_p_start</dimen>
 
   <dimen name="rankings_recycler_p_top">24dp</dimen>
 

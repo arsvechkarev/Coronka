@@ -5,6 +5,7 @@ import core.recycler.BaseListAdapter
 class RankingsAdapter : BaseListAdapter() {
   
   init {
-    addDelegate(CountryItemDelegateAdapterDelegate())
+    addDelegate(HeaderItemAdapterDelegate())
+    addDelegate(CountryItemAdapterDelegate())
   }
 }
