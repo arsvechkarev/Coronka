@@ -1,4 +1,4 @@
-package com.arsvechkarev.common
+package com.arsvechkarev.views.behaviors
 
 import android.view.View
 

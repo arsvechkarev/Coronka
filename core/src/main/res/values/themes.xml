@@ -8,6 +8,7 @@
   <style name="AppTheme.Dark">
     <item name="colorBackground">@color/dark_background</item>
     <item name="colorOverlay">@color/dark_overlay</item>
+    <item name="colorOverlayAccent">@color/dark_overlay_accent</item>
     <item name="colorDialog">@color/dark_dialog</item>
     <item name="colorGradientHeaderStart">@color/dark_gradient_header_start</item>
     <item name="colorGradientHeaderEnd">@color/dark_gradient_header_end</item>
@@ -21,19 +22,17 @@
     <item name="colorFailureRipple">@color/dark_failure_ripple</item>
 
     <item name="colorConfirmed">@color/dark_confirmed</item>
-    <item name="colorDeaths">@color/dark_deaths</item>
-    <item name="colorDeaths2">@color/dark_deaths_2</item>
     <item name="colorRecovered">@color/dark_recovered</item>
-    <item name="colorDeathRate">@color/dark_death_rate</item>
+    <item name="colorDeaths">@color/dark_deaths_old</item>
     <item name="colorPercentByCountry">@color/dark_percent_by_country</item>
+    <item name="colorDeathRate">@color/dark_death_rate</item>
+
+    <item name="colorDeaths2">@color/dark_deaths_2_old</item>
     <item name="colorBottomNavigationDivider">@color/dark_bottom_navigation_divider</item>
     <item name="colorDivider">@color/dark_divider</item>
 
     <item name="colorTextAccent">@color/dark_text_accent</item>
     <item name="colorTextLinks">@color/dark_links</item>
-
-    <item name="colorStartGradientDrawer">@color/dark_start_gradient_drawer</item>
-    <item name="colorEndGradientDrawer">@color/dark_end_gradient_drawer</item>
   </style>
 
   <style name="TextStyle" parent="@style/TextAppearance.AppCompat">

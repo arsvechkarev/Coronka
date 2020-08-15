@@ -8,7 +8,6 @@ import com.arsvechkarev.stats.domain.ListFilterer
 import com.arsvechkarev.stats.presentation.StatsScreenState.FilteredCountries
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromCache
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromNetwork
-import com.arsvechkarev.stats.presentation.StatsScreenState.Loading
 import core.Loggable
 import core.NetworkConnection
 import core.RxViewModel
@@ -20,15 +19,12 @@ import core.model.GeneralInfo
 import core.model.OptionType
 import core.state.BaseScreenState
 import core.state.Failure
-import core.state.Failure.Companion.asFailureReason
 import core.state.Failure.FailureReason.NO_CONNECTION
 import core.state.StateHandle
 import core.state.currentValue
 import core.state.update
 import core.state.updateSelf
 import io.reactivex.Single
-import io.reactivex.exceptions.OnErrorNotImplementedException
-import io.reactivex.functions.BiFunction
 
 class StatsViewModel(
   private val connection: NetworkConnection,
@@ -59,20 +55,20 @@ class StatsViewModel(
       _state.update(Failure(NO_CONNECTION))
       return
     }
-    
-    rxCall {
-      allCountriesRepository.getAllCountries()
-          .subscribeOn(schedulersProvider.io())
-          .zipWith(generalInfoRepository.getGeneralInfo()
-              .subscribeOn(schedulersProvider.io()), BiFunction(::convertToPair)
-          )
-          .map(::filterResult)
-          .onErrorReturn { Failure(it.asFailureReason()) }
-          .startWith(Loading)
-          .subscribe(_state::update) {
-            throw OnErrorNotImplementedException(it)
-          }
-    }
+  
+    //    rxCall {
+    //      allCountriesRepository.getAllCountries()
+    //          .subscribeOn(schedulersProvider.io())
+    //          .zipWith(generalInfoRepository.getGeneralInfo()
+    //              .subscribeOn(schedulersProvider.io()), BiFunction(::convertToPair)
+    //          )
+    //          .map(::filterResult)
+    //          .onErrorReturn { Failure(it.asFailureReason()) }
+    //          .startWith(Loading)
+    //          .subscribe(_state::update) {
+    //            throw OnErrorNotImplementedException(it)
+    //          }
+    //    }
   }
   
   fun filterList(optionType: OptionType) {

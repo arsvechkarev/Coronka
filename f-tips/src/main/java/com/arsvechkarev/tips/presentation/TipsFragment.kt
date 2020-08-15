@@ -6,15 +6,15 @@ import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.arsvechkarev.common.BottomSheetBehavior
 import com.arsvechkarev.tips.R
+import com.arsvechkarev.views.behaviors.BottomSheetBehavior
 import core.recycler.AdapterDelegateBuilder
 import core.recycler.createAdapter
-import kotlinx.android.synthetic.main.fragment_tips.recyclerView
-import kotlinx.android.synthetic.main.fragment_tips.textAnswer
-import kotlinx.android.synthetic.main.fragment_tips.textTitle
 import kotlinx.android.synthetic.main.fragment_tips.tipsBottomSheet
 import kotlinx.android.synthetic.main.fragment_tips.tipsBottomSheetCross
+import kotlinx.android.synthetic.main.fragment_tips.tipsRecyclerView
+import kotlinx.android.synthetic.main.fragment_tips.tipsTextAnswer
+import kotlinx.android.synthetic.main.fragment_tips.tipsTextTitle
 import kotlinx.android.synthetic.main.item_faq.view.tipsItemFaq
 import kotlinx.android.synthetic.main.item_header.view.tipsTextHeader
 import kotlinx.android.synthetic.main.item_main_header.view.tipsImageDrawer
@@ -36,8 +36,8 @@ class TipsFragment : Fragment(R.layout.fragment_tips) {
       delegate(Header::class, headerLayout(getString(R.string.text_prevention_tips)))
       delegate(PreventionItem::class, preventionsLayout())
     }
-    recyclerView.layoutManager = LinearLayoutManager(requireContext())
-    recyclerView.adapter = adapter
+    tipsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+    tipsRecyclerView.adapter = adapter
   }
   
   private fun mainHeaderLayout(): AdapterDelegateBuilder<MainHeader>.() -> Unit {
@@ -77,8 +77,8 @@ class TipsFragment : Fragment(R.layout.fragment_tips) {
     onViewHolderInitialization { header, data ->
       header.itemView.setOnClickListener {
         val item = data[header.adapterPosition - 2 /* 2 elements before faq item*/]
-        textTitle.text = getString(item.questionLayoutRes)
-        textAnswer.text = getString(item.answerLayoutRes)
+        tipsTextTitle.text = getString(item.questionLayoutRes)
+        tipsTextAnswer.text = getString(item.answerLayoutRes)
         behavior.show()
       }
     }

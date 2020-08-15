@@ -4,8 +4,8 @@ import android.content.Context
 import com.arsvechkarev.network.NetworkConnectionImpl
 import com.arsvechkarev.network.RxNetworker
 import com.arsvechkarev.storage.Saver
-import com.arsvechkarev.storage.dao.CountriesDao
 import core.NetworkConnection
+import core.dao.CountriesDao
 
 object CommonModulesSingletons {
   

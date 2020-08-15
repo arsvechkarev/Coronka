@@ -1,4 +1,4 @@
-package com.arsvechkarev.storage
+package core.dao
 
 import android.provider.BaseColumns
 
@@ -13,8 +13,9 @@ object CountriesTable : BaseColumns {
   const val COLUMN_RECOVERED = "recovered"
 }
 
-object PopulationsTable {
-  const val TABLE_NAME = "populations"
+object CountriesMetaInfoTable {
+  const val TABLE_NAME = "countries_meta_info"
   const val COLUMN_ISO2 = "iso2"
   const val COLUMN_POPULATION = "population"
+  const val COLUMN_REGION = "world_region"
 }

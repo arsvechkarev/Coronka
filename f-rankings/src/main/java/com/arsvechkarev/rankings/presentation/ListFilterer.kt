@@ -1,53 +1,56 @@
 package com.arsvechkarev.rankings.presentation
 
+import com.arsvechkarev.rankings.list.HeaderItemAdapterDelegate
 import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
-import com.arsvechkarev.storage.PopulationsTable
-import com.arsvechkarev.storage.dao.PopulationsDao
+import core.dao.CountriesMetaInfoDao
+import core.dao.CountriesMetaInfoTable
 import core.extenstions.assertThat
 import core.model.Country
+import core.model.CountryMetaInfo
 import core.model.DisplayableCountry
-import core.model.DisplayableGeneralInfo
 import core.model.GeneralInfo
 import core.model.OptionType
 import core.model.OptionType.PERCENT_BY_COUNTRY
-import core.model.Population
-import core.recycler.DisplayableItem
+import core.model.WorldRegion
+import core.recycler.SortableDisplayableItem
 
-class ListFilterer(private val populationsDao: PopulationsDao) {
+class ListFilterer(private val countriesMetaInfoDao: CountriesMetaInfoDao) {
   
-  private val populations = ArrayList<Population>()
+  private val metaInfoList = ArrayList<CountryMetaInfo>()
   
   fun filter(
     list: List<Country>,
     generalInfo: GeneralInfo,
-    optionType: OptionType
-  ): List<DisplayableItem> {
+    optionType: OptionType,
+    worldRegion: WorldRegion
+  ): List<SortableDisplayableItem> {
     if (optionType == PERCENT_BY_COUNTRY) {
-      if (populations.isEmpty()) {
+      if (metaInfoList.isEmpty()) {
         DatabaseManager.instance.readableDatabase.use {
-          val cursor = DatabaseExecutor.readAll(it, PopulationsTable.TABLE_NAME)
-          val elements = populationsDao.getAll(cursor)
-          populations.addAll(elements)
+          val cursor = DatabaseExecutor.readAll(it, CountriesMetaInfoTable.TABLE_NAME)
+          val elements = countriesMetaInfoDao.getAll(cursor)
+          metaInfoList.addAll(elements)
         }
       }
-      assertThat(populations.isNotEmpty())
-      return transformPopulations(populations, list, generalInfo, optionType)
+      assertThat(metaInfoList.isNotEmpty())
+      return transformPopulations(metaInfoList, list, generalInfo, optionType, worldRegion)
     } else {
-      return transformOther(list, generalInfo, optionType)
+      return transformOther(list, optionType, worldRegion)
     }
   }
   
   private fun transformPopulations(
-    populations: List<Population>,
+    metaInfoList: List<CountryMetaInfo>,
     countries: List<Country>,
     generalInfo: GeneralInfo,
-    optionType: OptionType
-  ): List<DisplayableItem> {
+    optionType: OptionType,
+    worldRegion: WorldRegion
+  ): List<SortableDisplayableItem> {
     val displayableCountries = ArrayList<DisplayableCountry>()
     for (i in countries.indices) {
       val country = countries[i]
-      val population = populations.find { it.iso2 == country.iso2 }!!
+      val population = metaInfoList.find { it.iso2 == country.iso2 }!!
       val number = country.confirmed.toFloat() / population.population.toFloat()
       displayableCountries.add(DisplayableCountry(country.name, number))
     }
@@ -55,14 +58,14 @@ class ListFilterer(private val populationsDao: PopulationsDao) {
     for (i in countries.indices) {
       displayableCountries[i].number = i + 1
     }
-    return notifyDone(displayableCountries, generalInfo, optionType)
+    return notifyDone(displayableCountries)
   }
   
   private fun transformOther(
     countries: List<Country>,
-    generalInfo: GeneralInfo,
-    optionType: OptionType
-  ): List<DisplayableItem> {
+    optionType: OptionType,
+    worldRegion: WorldRegion
+  ): List<SortableDisplayableItem> {
     val displayableCountries = ArrayList<DisplayableCountry>()
     for (i in countries.indices) {
       val it = countries[i]
@@ -73,23 +76,14 @@ class ListFilterer(private val populationsDao: PopulationsDao) {
     for (i in countries.indices) {
       displayableCountries[i].number = i + 1
     }
-    return notifyDone(displayableCountries, generalInfo, optionType)
+    return notifyDone(displayableCountries)
   }
   
   private fun notifyDone(
-    countries: List<DisplayableCountry>,
-    generalInfo: GeneralInfo,
-    optionType: OptionType
-  ): List<DisplayableItem> {
-    val items = ArrayList<DisplayableItem>()
-    items.add(
-      DisplayableGeneralInfo(
-        generalInfo.confirmed,
-        generalInfo.deaths,
-        generalInfo.recovered,
-        optionType
-      )
-    )
+    countries: List<DisplayableCountry>
+  ): List<SortableDisplayableItem> {
+    val items = ArrayList<SortableDisplayableItem>()
+    items.add(HeaderItemAdapterDelegate.Header)
     items.addAll(countries)
     return items
   }

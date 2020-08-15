@@ -7,59 +7,53 @@
   android:background="?colorBackground">
 
   <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerView"
+    android:id="@+id/tipsRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
-  <androidx.core.widget.NestedScrollView
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/tipsBottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_behavior="com.arsvechkarev.common.BottomSheetBehavior">
+    android:background="@drawable/bg_bottom_sheet"
+    app:layout_behavior="com.arsvechkarev.views.behaviors.BottomSheetBehavior">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ImageView
+      android:id="@+id/tipsBottomSheetCross"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/tips_bottom_sheet_cross_margin"
+      android:background="@drawable/bg_ripple"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@drawable/ic_cross"/>
+
+    <TextView
+      android:id="@+id/tipsTextTitle"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/tips_bottom_sheet_title_m_horizontal"
+      android:layout_marginTop="@dimen/tips_bottom_sheet_title_m_top"
+      android:gravity="center"
+      android:textSize="@dimen/text_h1"
+      app:layout_constraintBottom_toBottomOf="@id/tipsBottomSheetCross"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@id/tipsBottomSheetCross"/>
+
+    <TextView
+      android:id="@+id/tipsTextAnswer"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@drawable/bg_bottom_sheet">
+      android:layout_margin="@dimen/tips_bottom_sheet_text_margin"
+      android:textColor="?colorTextPrimary"
+      android:textSize="@dimen/text_h4"
+      android:theme="@style/Theme.AppCompat"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/tipsTextTitle"/>
 
-      <ImageView
-        android:id="@+id/tipsBottomSheetCross"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/tips_bottom_sheet_cross_margin"
-        android:background="@drawable/bg_ripple"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_cross"/>
-
-      <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/tips_bottom_sheet_title_m_horizontal"
-        android:layout_marginTop="@dimen/tips_bottom_sheet_title_m_top"
-        android:gravity="center"
-        android:textSize="@dimen/text_h1"
-        app:layout_constraintBottom_toBottomOf="@id/tipsBottomSheetCross"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tipsBottomSheetCross"/>
-
-      <TextView
-        android:id="@+id/textAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/tips_bottom_sheet_text_margin"
-        android:textColor="?colorTextPrimary"
-        android:textSize="@dimen/text_h4"
-        android:theme="@style/Theme.AppCompat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textTitle"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-  </androidx.core.widget.NestedScrollView>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

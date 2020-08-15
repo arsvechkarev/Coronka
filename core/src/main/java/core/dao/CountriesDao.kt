@@ -1,8 +1,7 @@
-package com.arsvechkarev.storage.dao
+package core.dao
 
 import android.content.ContentValues
 import android.database.Cursor
-import com.arsvechkarev.storage.CountriesTable
 import core.model.Country
 
 class CountriesDao {

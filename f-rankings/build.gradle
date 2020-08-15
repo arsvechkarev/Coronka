@@ -30,6 +30,8 @@ dependencies {
   implementation project(":datetime")
   implementation project(":f-common")
 
+  implementation 'com.google.android:flexbox:2.0.1'
+
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
   implementation dependencies.appCompat

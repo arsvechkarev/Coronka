@@ -12,7 +12,7 @@ import core.extenstions.inflate
 import core.recycler.ListAdapterDelegate
 import core.recycler.SortableDisplayableItem
 
-class HeaderItemAdapterDelegate : ListAdapterDelegate(Header2::class) {
+class HeaderItemAdapterDelegate : ListAdapterDelegate(Header::class) {
   
   override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
     val statsSmallHeaderViewGroup = parent.inflate(R.layout.item_rankings_header) as StatsSmallHeaderViewGroup
@@ -33,7 +33,7 @@ class HeaderItemAdapterDelegate : ListAdapterDelegate(Header2::class) {
   
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: SortableDisplayableItem) = Unit
   
-  object Header2 : SortableDisplayableItem {
+  object Header : SortableDisplayableItem {
     // Item is only one in adapter, so it doesn't matter what id it has
     override val id = -1
     override fun equals(other: Any?) = false

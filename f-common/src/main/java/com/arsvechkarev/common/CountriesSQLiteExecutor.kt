@@ -1,11 +1,11 @@
 package com.arsvechkarev.common
 
 import android.content.ContentValues
-import com.arsvechkarev.storage.CountriesTable
 import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
-import com.arsvechkarev.storage.dao.CountriesDao
 import core.Loggable
+import core.dao.CountriesDao
+import core.dao.CountriesTable
 import core.log
 import core.model.Country
 

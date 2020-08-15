@@ -12,18 +12,12 @@ import core.RxViewModel
 import core.concurrency.AndroidSchedulersProvider
 import core.concurrency.SchedulersProvider
 import core.concurrency.Threader
-import core.extenstions.startWithIf
 import core.model.Country
 import core.state.BaseScreenState
-import core.state.Failure
-import core.state.Failure.Companion.asFailureReason
-import core.state.Failure.FailureReason.NO_CONNECTION
-import core.state.Loading
 import core.state.StateHandle
 import core.state.currentValue
 import core.state.update
 import core.state.updateSelf
-import io.reactivex.exceptions.OnErrorNotImplementedException
 
 class MapViewModel(
   private val threader: Threader,
@@ -47,17 +41,17 @@ class MapViewModel(
   }
   
   fun updateFromNetwork() {
-    rxCall {
-      allCountriesRepository.getAllCountries()
-          .subscribeOn(schedulersProvider.io())
-          .map(::transformResult)
-          .onErrorReturn { Failure(it.asFailureReason()) }
-          .startWith(Loading)
-          .startWithIf(Failure(NO_CONNECTION), connection.isNotConnected)
-          .subscribe(_state::update) {
-            throw OnErrorNotImplementedException(it)
-          }
-    }
+    //    rxCall {
+    //      allCountriesRepository.getAllCountries()
+    //          .subscribeOn(schedulersProvider.io())
+    //          .map(::transformResult)
+    //          .onErrorReturn { Failure(it.asFailureReason()) }
+    //          .startWith(Loading)
+    //          .startWithIf(Failure(NO_CONNECTION), connection.isNotConnected)
+    //          .subscribe(_state::update) {
+    //            throw OnErrorNotImplementedException(it)
+    //          }
+    //    }
   }
   
   fun showCountryInfo(country: Country) {

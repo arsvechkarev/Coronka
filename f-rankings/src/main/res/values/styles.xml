@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Chip">
+    <item name="android:layout_margin">@dimen/rankings_bottom_sheet_chip_margin</item>
+    <item name="android:textSize">@dimen/text_h5</item>
+    <item name="colorSecondary">?colorOverlayAccent</item>
+  </style>
+
+  <style name="Chip.RegionName">
+    <item name="colorFill">?colorTextPrimary</item>
+  </style>
+</resources>

@@ -29,11 +29,6 @@
     <attr name="colorSecondary" format="color"/>
     <attr name="android:text" format="string"/>
     <attr name="android:textSize" format="dimension"/>
-    <attr name="android:strokeWidth" format="dimension"/>
-    <attr name="chipCornerRadius" format="dimension"/>
-    <attr name="showIcon" format="boolean"/>
-    <attr name="iconSize" format="dimension"/>
-    <attr name="iconMargin" format="dimension"/>
   </declare-styleable>
 
   <declare-styleable name="ClickableTextView">

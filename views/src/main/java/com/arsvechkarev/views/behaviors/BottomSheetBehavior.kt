@@ -1,4 +1,4 @@
-package com.arsvechkarev.common
+package com.arsvechkarev.views.behaviors
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -12,10 +12,9 @@ import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.arsvechkarev.common.BottomSheetBehavior.State.HIDDEN
-import com.arsvechkarev.common.BottomSheetBehavior.State.SHOWN
+import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.HIDDEN
+import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.SHOWN
 import core.INVALID_POINTER
-import core.extenstions.DURATION_DEFAULT
 import kotlin.math.abs
 
 class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : CoordinatorLayout.Behavior<V>() {
@@ -48,7 +47,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
     if (currentState == SHOWN || slideAnimator.isRunning) return
     bottomSheet!!.post {
       currentState = SHOWN
-      slideAnimator.duration = DURATION_DEFAULT
+      slideAnimator.duration = DURATION_SLIDE
       slideAnimator.setIntValues(bottomSheet!!.top, parentHeight - slideRange)
       slideAnimator.start()
     }
@@ -58,7 +57,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
     if (currentState == HIDDEN || slideAnimator.isRunning) return
     bottomSheet!!.post {
       currentState = HIDDEN
-      slideAnimator.duration = DURATION_DEFAULT
+      slideAnimator.duration = DURATION_SLIDE
       slideAnimator.setIntValues(bottomSheet!!.top, parentHeight)
       slideAnimator.start()
     }
@@ -133,14 +132,12 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
           latestY = y
           activePointerId = event.getPointerId(0)
           ensureVelocityTracker()
-        } else {
-          return false
         }
       }
       ACTION_MOVE -> {
         val activePointerIndex = event.findPointerIndex(activePointerId)
         if (activePointerIndex == -1) {
-          return false
+          return true
         }
         val y = event.getY(activePointerIndex).toInt()
         var dy = y - latestY
@@ -178,7 +175,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
             parentHeight
           }
           slideAnimator.setIntValues(bottomSheet!!.top, endY)
-          slideAnimator.duration = DURATION_DEFAULT
+          slideAnimator.duration = DURATION_SLIDE
           slideAnimator.start()
         }
         endTouch()
@@ -213,6 +210,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
   }
   
   companion object {
+    private const val DURATION_SLIDE = 225L
     private const val FLING_VELOCITY_THRESHOLD = 0.18f
   }
 }

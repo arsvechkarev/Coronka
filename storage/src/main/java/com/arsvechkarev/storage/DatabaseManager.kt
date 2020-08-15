@@ -11,7 +11,7 @@ class DatabaseManager internal constructor(
   
   companion object {
     const val DATABASE_VERSION = 1
-    const val DATABASE_NAME = "countries.db"
+    const val DATABASE_NAME = "countries_meta_info.db"
     
     lateinit var instance: DatabaseManager
       private set

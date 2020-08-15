@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <dimen name="rankings_recycler_padding_bottom">80dp</dimen>
+
   <dimen name="rankings_small_stats_view_p_start">16dp</dimen>
   <dimen name="rankings_small_stats_view_p_end">8dp</dimen>
   <dimen name="rankings_small_stats_view_p_vertical">8dp</dimen>
@@ -13,4 +15,15 @@
 
   <dimen name="rankings_header_height">120dp</dimen>
   <dimen name="rankings_header_curve_size">30dp</dimen>
+
+  <dimen name="rankings_header_fab_margin">16dp</dimen>
+  <dimen name="rankings_header_fab_padding">12dp</dimen>
+
+  <dimen name="rankings_bottom_sheet_title_m_start">32dp</dimen>
+  <dimen name="rankings_bottom_sheet_title_m_top">24dp</dimen>
+  <dimen name="rankings_bottom_sheet_flexbox_m_horizontal">8dp</dimen>
+  <dimen name="rankings_bottom_sheet_flexbox_m_top">24dp</dimen>
+  <dimen name="rankings_bottom_sheet_flexbox_options_m_bottom">16dp</dimen>
+  <dimen name="rankings_bottom_sheet_cross_margin">28dp</dimen>
+  <dimen name="rankings_bottom_sheet_chip_margin">4dp</dimen>
 </resources>

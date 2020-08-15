@@ -2,20 +2,20 @@ package com.arsvechkarev.stats.domain
 
 import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
-import com.arsvechkarev.storage.PopulationsTable
-import com.arsvechkarev.storage.dao.PopulationsDao
+import core.dao.CountriesMetaInfoDao
+import core.dao.CountriesMetaInfoTable
 import core.extenstions.assertThat
 import core.model.Country
+import core.model.CountryMetaInfo
 import core.model.DisplayableCountry
 import core.model.GeneralInfo
 import core.model.OptionType
 import core.model.OptionType.PERCENT_BY_COUNTRY
-import core.model.Population
 import core.recycler.SortableDisplayableItem
 
-class ListFilterer(private val populationsDao: PopulationsDao) {
+class ListFilterer(private val countriesMetaInfoDao: CountriesMetaInfoDao) {
   
-  private val populations = ArrayList<Population>()
+  private val populations = ArrayList<CountryMetaInfo>()
   
   fun filter(
     list: List<Country>,
@@ -25,8 +25,8 @@ class ListFilterer(private val populationsDao: PopulationsDao) {
     if (optionType == PERCENT_BY_COUNTRY) {
       if (populations.isEmpty()) {
         DatabaseManager.instance.readableDatabase.use {
-          val cursor = DatabaseExecutor.readAll(it, PopulationsTable.TABLE_NAME)
-          val elements = populationsDao.getAll(cursor)
+          val cursor = DatabaseExecutor.readAll(it, CountriesMetaInfoTable.TABLE_NAME)
+          val elements = countriesMetaInfoDao.getAll(cursor)
           populations.addAll(elements)
         }
       }
@@ -38,7 +38,7 @@ class ListFilterer(private val populationsDao: PopulationsDao) {
   }
   
   private fun transformPopulations(
-    populations: List<Population>,
+    countryMetaInfos: List<CountryMetaInfo>,
     countries: List<Country>,
     generalInfo: GeneralInfo,
     optionType: OptionType
@@ -46,7 +46,7 @@ class ListFilterer(private val populationsDao: PopulationsDao) {
     val displayableCountries = ArrayList<DisplayableCountry>()
     for (i in countries.indices) {
       val country = countries[i]
-      val population = populations.find { it.iso2 == country.iso2 }!!
+      val population = countryMetaInfos.find { it.iso2 == country.iso2 }!!
       val number = country.confirmed.toFloat() / population.population.toFloat()
       displayableCountries.add(DisplayableCountry(country.name, number))
     }

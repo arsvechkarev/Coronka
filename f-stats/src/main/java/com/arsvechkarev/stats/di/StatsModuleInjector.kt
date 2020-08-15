@@ -12,15 +12,15 @@ import com.arsvechkarev.stats.domain.ListFilterer
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.stats.presentation.StatsViewModel
 import com.arsvechkarev.storage.Saver
-import com.arsvechkarev.storage.dao.PopulationsDao
 import core.NetworkConnection
+import core.dao.CountriesMetaInfoDao
 
 object StatsModuleInjector {
   
   fun provideViewModel(fragment: StatsFragment): StatsViewModel {
     val generalInfoSaver = Saver(GeneralInfoRepository.SAVER_FILENAME, fragment.requireContext())
     val generalInfoRepository = GeneralInfoRepository(networker, generalInfoSaver)
-    val filterer = ListFilterer(PopulationsDao())
+    val filterer = ListFilterer(CountriesMetaInfoDao())
     val factory = statsViewModelFactory(
       connection, allCountriesRepository, generalInfoRepository, filterer
     )

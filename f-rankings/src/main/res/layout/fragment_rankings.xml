@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.arsvechkarev.views.ReverseDrawingOrderCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/rankingsRootLayout"
   android:layout_width="match_parent"
@@ -7,13 +7,14 @@
   android:background="?colorBackground"
   android:clipChildren="false">
 
-  <ImageView
-    android:id="@+id/rankingsIconDrawer"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/icon_drawer_margin"
-    android:layout_marginTop="@dimen/icon_drawer_margin"
-    android:src="@drawable/ic_drawer"/>
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/rankingsRecyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingTop="@dimen/rankings_recycler_p_top"
+    android:paddingBottom="@dimen/rankings_recycler_padding_bottom"
+    app:layout_behavior="com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior"/>
 
   <com.arsvechkarev.views.GradientHeaderView
     android:id="@+id/rankingsHeaderLayout"
@@ -44,12 +45,171 @@
 
   </com.arsvechkarev.views.GradientHeaderView>
 
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/rankingsRecyclerView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingTop="@dimen/rankings_recycler_p_top"
-    app:layout_behavior="com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior"/>
+  <ImageView
+    android:id="@+id/rankingsIconDrawer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/icon_drawer_margin"
+    android:layout_marginTop="@dimen/icon_drawer_margin"
+    android:src="@drawable/ic_drawer"/>
 
-</com.arsvechkarev.views.ReverseDrawingOrderCoordinatorLayout>
+  <ImageButton
+    android:id="@+id/rankingsFabFilter"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end|bottom"
+    android:layout_margin="@dimen/rankings_header_fab_margin"
+    android:background="@drawable/bg_button_filter"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/rankings_header_fab_padding"
+    android:src="@drawable/ic_filter"/>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/rankingsBottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    app:layout_behavior="com.arsvechkarev.views.behaviors.BottomSheetBehavior">
+
+    <TextView
+      android:id="@+id/rankingsBottomSheetTitle"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/rankings_bottom_sheet_title_m_start"
+      android:layout_marginTop="@dimen/rankings_bottom_sheet_title_m_top"
+      android:gravity="center"
+      android:text="@string/text_filters"
+      android:textSize="@dimen/text_h0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+      android:id="@+id/rankingsBottomSheetCross"
+      android:layout_width="@dimen/icon_large_size"
+      android:layout_height="@dimen/icon_large_size"
+      android:layout_margin="@dimen/rankings_bottom_sheet_cross_margin"
+      android:background="@drawable/bg_ripple"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@drawable/ic_cross"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+      android:id="@+id/rankingsBottomSheetLayoutWorldRegion"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_bottom_sheet_flexbox_m_horizontal"
+      android:layout_marginTop="@dimen/rankings_bottom_sheet_flexbox_m_top"
+      android:textColor="?colorTextPrimary"
+      android:textSize="@dimen/text_h4"
+      app:flexWrap="wrap"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/rankingsBottomSheetTitle">
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipWorldwide"
+        style="@style/Chip.RegionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Worldwide"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipAsia"
+        style="@style/Chip.RegionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Asia"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipEurope"
+        style="@style/Chip.RegionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Europe"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipOceania"
+        style="@style/Chip.RegionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Oceania"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipNorthAmerica"
+        style="@style/Chip.RegionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="North America"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipSouthAmerica"
+        style="@style/Chip.RegionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="South America"/>
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <com.google.android.flexbox.FlexboxLayout
+      android:id="@+id/rankingsBottomSheetLayoutOptionTypes"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_bottom_sheet_flexbox_m_horizontal"
+      android:layout_marginTop="@dimen/rankings_bottom_sheet_flexbox_m_top"
+      android:layout_marginBottom="@dimen/rankings_bottom_sheet_flexbox_options_m_bottom"
+      android:orientation="vertical"
+      android:textColor="?colorTextPrimary"
+      android:textSize="@dimen/text_h4"
+      android:theme="@style/Theme.AppCompat"
+      app:flexWrap="wrap"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/rankingsBottomSheetLayoutWorldRegion">
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipConfirmed"
+        style="@style/Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirmed"
+        app:colorFill="?colorConfirmed"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipRecovered"
+        style="@style/Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recovered"
+        app:colorFill="?colorRecovered"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipDeaths"
+        style="@style/Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deaths"
+        app:colorFill="?colorDeaths"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipPercentByCountry"
+        style="@style/Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Percent by country"
+        app:colorFill="?colorPercentByCountry"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipDeathRate"
+        style="@style/Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Death rate"
+        app:colorFill="?colorDeathRate"/>
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

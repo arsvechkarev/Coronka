@@ -8,6 +8,8 @@ import core.concurrency.AndroidSchedulersProvider
 import core.concurrency.SchedulersProvider
 import core.log
 import core.model.Country
+import core.model.GeneralInfo
+import core.model.TotalData
 import io.reactivex.Observable
 import org.json.JSONObject
 
@@ -20,45 +22,11 @@ class AllCountriesRepository(
   
   override val logTag = "Request_AllCountriesRepository"
   
-  fun getAllCountries(): Observable<List<Country>> {
-    //    return Observable.just(listOf(
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 12354, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 1235654, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 12223, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
-    //      Country(1, "Lol", "ll", "sdf", 123, 123, 123)
-    //    )).observeOn(schedulersProvider.mainThread())
+  fun getAllCountries(): Observable<TotalData> {
     return createLoadingObservable()
   }
   
-  private fun createLoadingObservable(): Observable<List<Country>> {
+  private fun createLoadingObservable(): Observable<TotalData> {
     return Observable.concat(getFromCache(), getFromNetwork())
         .subscribeOn(schedulersProvider.io())
         .firstElement()
@@ -67,25 +35,31 @@ class AllCountriesRepository(
         .observeOn(schedulersProvider.mainThread())
   }
   
-  private fun getFromCache(): Observable<List<Country>> = Observable.create { emitter ->
+  private fun getFromCache(): Observable<TotalData> = Observable.create { emitter ->
     val isUpToDate = saver.isUpToDate(COUNTRIES_LAST_UPDATE_TIME, MAX_CACHE_MINUTES)
-    if (isUpToDate && sqLiteExecutor.isTableNotEmpty()) {
-      emitter.onNext(sqLiteExecutor.getCountries())
-      log { "Countries info found in cache" }
-    }
+    //    if (isUpToDate && sqLiteExecutor.isTableNotEmpty()) {
+    //      emitter.onNext(sqLiteExecutor.getCountries())
+    //      log { "Countries info found in cache" }
+    //    }
     emitter.onComplete()
   }
   
   // TODO (6/13/2020): Add cache
-  private fun getFromNetwork(): Observable<List<Country>> {
+  private fun getFromNetwork(): Observable<TotalData> {
     log { "getting countries" }
     return networker.requestObservable(URL)
         .map { transformJson(it) }
   }
   
-  private fun transformJson(json: String): List<Country> {
+  private fun transformJson(json: String): TotalData {
     val countriesList = ArrayList<Country>()
     val jsonObject = JSONObject(json)
+    val jsonGlobalInfo = jsonObject.getJSONObject("Global")
+    val generalInfo = GeneralInfo(
+      jsonGlobalInfo.getString("TotalConfirmed").toInt(),
+      jsonGlobalInfo.getString("TotalDeaths").toInt(),
+      jsonGlobalInfo.getString("TotalRecovered").toInt()
+    )
     val jsonArray = jsonObject.getJSONArray("Countries")
     for (i in 0 until jsonArray.length()) {
       val item = jsonArray.get(i) as JSONObject
@@ -100,7 +74,7 @@ class AllCountriesRepository(
       )
       countriesList.add(country)
     }
-    return countriesList
+    return TotalData(countriesList, generalInfo)
   }
   
   companion object {
