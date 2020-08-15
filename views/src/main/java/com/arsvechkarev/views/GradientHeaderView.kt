@@ -10,6 +10,7 @@ import android.graphics.Shader
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import com.arsvechkarev.views.behaviors.Header
+import core.extenstions.dp
 import core.extenstions.f
 
 class GradientHeaderView @JvmOverloads constructor(
@@ -24,21 +25,23 @@ class GradientHeaderView @JvmOverloads constructor(
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val path = Path()
   
+  val curveSize: Float
+  
   init {
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.GradientHeaderView,
       defStyleAttr, 0)
     startColor = attributes.getColor(R.styleable.GradientHeaderView_android_startColor, Color.BLACK)
     endColor = attributes.getColor(R.styleable.GradientHeaderView_android_endColor, Color.WHITE)
+    curveSize = attributes.getDimension(R.styleable.GradientHeaderView_curveSize, 40.dp)
     attributes.recycle()
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    val offset = h / 4f
     path.reset()
     path.moveTo(0f, 0f)
     path.lineTo(w.f, 0f)
-    path.lineTo(w.f, h.f - offset / 1.5f)
-    path.quadTo(w / 2f, h.f + offset / 2f, 0f, h.f - offset / 1.5f)
+    path.lineTo(w.f, h.f)
+    path.quadTo(w / 2f, h.f + curveSize, 0f, h.f)
     path.close()
     
     paint.shader = LinearGradient(

@@ -41,6 +41,7 @@ class RankingsViewModel(
           .map(::transformToBaseState)
           .onErrorReturn { Failure(it.asFailureReason()) }
           .startWith(Loading)
+          .observeOn(schedulersProvider.mainThread())
           .subscribe({
             _state.value = it
           }) {

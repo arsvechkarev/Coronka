@@ -14,7 +14,6 @@ import core.extenstions.getBehavior
 import core.state.BaseScreenState
 import core.state.Loading
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsHeaderLayout
-import kotlinx.android.synthetic.main.fragment_rankings.rankingsIconDrawer
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRecyclerView
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsTitle
 
@@ -40,14 +39,16 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   }
   
   private fun setupBehavior(view: View) {
-    val behavior = rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>()
-    behavior.slideRangeCoefficient = 0.5f
-    view.post {
-      val initialTitleY = rankingsTitle.y
-      val drawerIconDistanceToTitle = rankingsIconDrawer.y - initialTitleY
-      behavior.addOnOffsetListener { fraction ->
-        rankingsTitle.y = initialTitleY + (fraction * initialTitleY / 2)
-        rankingsIconDrawer.y = rankingsTitle.y + (1 - fraction) * drawerIconDistanceToTitle
+    val curveSize = requireContext().resources.getDimensionPixelSize(R.dimen.rankings_header_curve_size)
+    rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().apply {
+      reactToTouches = false
+      val coefficient = 0.6f
+      slideRangeCoefficient = coefficient
+      view.post {
+        val initialTitleY = rankingsTitle.y
+        addOnOffsetListener { fraction ->
+          rankingsTitle.y = initialTitleY + (fraction * (initialTitleY + curveSize) * (1 - coefficient))
+        }
       }
     }
   }

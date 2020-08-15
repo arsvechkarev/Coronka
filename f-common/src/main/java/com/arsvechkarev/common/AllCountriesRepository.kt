@@ -21,7 +21,40 @@ class AllCountriesRepository(
   override val logTag = "Request_AllCountriesRepository"
   
   fun getAllCountries(): Observable<List<Country>> {
-    return createLoadingObservable()
+    return Observable.just(listOf(
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123),
+      Country(1, "Lol", "ll", "sdf", 123, 123, 123)
+    )).observeOn(schedulersProvider.mainThread())
   }
   
   private fun createLoadingObservable(): Observable<List<Country>> {

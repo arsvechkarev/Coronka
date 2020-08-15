@@ -2,4 +2,9 @@
 <resources>
   <dimen name="rankings_small_stats_view_p_horizontal">6dp</dimen>
   <dimen name="rankings_small_stats_view_p_vertical">8dp</dimen>
+
+  <dimen name="rankings_recycler_p_top">24dp</dimen>
+
+  <dimen name="rankings_header_height">120dp</dimen>
+  <dimen name="rankings_header_curve_size">30dp</dimen>
 </resources>

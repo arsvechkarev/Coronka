@@ -1,41 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.arsvechkarev.rankings.domain.ReverseDrawingOrderCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/rankingsRootLayout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#1A1D36">
+  android:background="?colorBackground"
+  android:clipChildren="false">
+
+  <ImageView
+    android:id="@+id/rankingsIconDrawer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/icon_drawer_margin"
+    android:layout_marginTop="@dimen/icon_drawer_margin"
+    android:src="@drawable/ic_drawer"/>
 
   <com.arsvechkarev.views.GradientHeaderView
     android:id="@+id/rankingsHeaderLayout"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
+    android:layout_height="@dimen/rankings_header_height"
     android:endColor="?colorGradientHeaderEnd"
     android:startColor="?colorGradientHeaderStart"
+    app:curveSize="@dimen/rankings_header_curve_size"
     app:layout_behavior="com.arsvechkarev.views.behaviors.HeaderBehavior">
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-      <ImageView
-        android:id="@+id/rankingsIconDrawer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/icon_drawer_margin"
-        android:layout_marginTop="@dimen/icon_drawer_margin"
-        android:src="@drawable/ic_drawer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
       <TextView
         android:id="@+id/rankingsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/segoe_ui_bold"
         android:gravity="center"
-        android:text="Rankings"
-        android:textColor="?colorTextPrimary"
-        android:textSize="28sp"
+        android:text="@string/title_rankings"
+        android:textSize="@dimen/text_header"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +48,8 @@
     android:id="@+id/rankingsRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingTop="@dimen/rankings_recycler_p_top"
     app:layout_behavior="com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</com.arsvechkarev.rankings.domain.ReverseDrawingOrderCoordinatorLayout>

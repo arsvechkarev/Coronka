@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.View.MeasureSpec
+import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import core.extenstions.getBehavior
@@ -21,7 +22,12 @@ class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet)
   
   override fun onDependentViewChanged(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
     minHeaderHeight = dependency.getBehavior<HeaderBehavior<*>>().minHeight
-    offset = if (offsettingFirstTime) dependency.bottom else dependency.bottom - child.top
+    val topMargin = (child.layoutParams as ViewGroup.MarginLayoutParams).topMargin
+    if (offsettingFirstTime) {
+      offset = dependency.bottom + topMargin
+    } else {
+      offset = dependency.bottom - child.top + topMargin
+    }
     offsettingFirstTime = false
     ViewCompat.offsetTopAndBottom(child, offset)
     return true
@@ -43,7 +49,8 @@ class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet)
   
   override fun onLayoutChild(parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
     parent.onLayoutChild(child, layoutDirection)
-    ViewCompat.offsetTopAndBottom(child, offset)
+    val topMargin = (child.layoutParams as ViewGroup.MarginLayoutParams).topMargin
+    ViewCompat.offsetTopAndBottom(child, offset - topMargin)
     return true
   }
 }

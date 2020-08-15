@@ -44,5 +44,6 @@
   <string name="text_headache">Headache</string>
   <string name="text_fever">Fever</string>
   <string name="text_cough">Cough</string>
+  <string name="title_rankings">Rankings</string>
 
 </resources>
