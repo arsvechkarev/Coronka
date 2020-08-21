@@ -1,12 +1,9 @@
-package com.arsvechkarev.network
+package core
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
-import core.Loggable
-import core.NetworkConnection
-import core.log
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 

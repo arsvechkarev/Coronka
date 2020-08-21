@@ -27,7 +27,4 @@
 
   <attr name="colorTextAccent" format="color"/>
   <attr name="colorTextLinks" format="color"/>
-
-  <attr name="colorStartGradientDrawer" format="color"/>
-  <attr name="colorEndGradientDrawer" format="color"/>
 </resources>

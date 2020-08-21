@@ -13,19 +13,17 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/datetime" />
             <option value="$PROJECT_DIR$/f-common" />
             <option value="$PROJECT_DIR$/f-map" />
             <option value="$PROJECT_DIR$/f-rankings" />
             <option value="$PROJECT_DIR$/f-stats" />
             <option value="$PROJECT_DIR$/f-tips" />
-            <option value="$PROJECT_DIR$/network" />
-            <option value="$PROJECT_DIR$/progressbar" />
             <option value="$PROJECT_DIR$/storage" />
             <option value="$PROJECT_DIR$/views" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
+        <option name="useQualifiedModuleNames" value="true" />
       </GradleProjectSettings>
     </option>
   </component>

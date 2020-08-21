@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Application.initResources(resources)
+    Application.initDensities(resources)
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)
     fragment_container.setOnClickListener { drawerLayout.openDrawer(navigationView) }

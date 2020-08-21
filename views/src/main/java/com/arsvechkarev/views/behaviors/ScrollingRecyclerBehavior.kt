@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.View.MeasureSpec
-import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import core.extenstions.getBehavior
@@ -22,11 +21,10 @@ class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet)
   
   override fun onDependentViewChanged(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
     minHeaderHeight = dependency.getBehavior<HeaderBehavior<*>>().minHeight
-    val topMargin = (child.layoutParams as ViewGroup.MarginLayoutParams).topMargin
     if (offsettingFirstTime) {
-      offset = dependency.bottom + topMargin
+      offset = dependency.bottom
     } else {
-      offset = dependency.bottom - child.top + topMargin
+      offset = dependency.bottom - child.top
     }
     offsettingFirstTime = false
     ViewCompat.offsetTopAndBottom(child, offset)
@@ -49,8 +47,18 @@ class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet)
   
   override fun onLayoutChild(parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
     parent.onLayoutChild(child, layoutDirection)
-    val topMargin = (child.layoutParams as ViewGroup.MarginLayoutParams).topMargin
-    ViewCompat.offsetTopAndBottom(child, offset - topMargin)
+    val behavior =
+        ViewCompat.offsetTopAndBottom(child, offset)
     return true
   }
-}
+  
+  fun findHeader(parent: CoordinatorLayout): View {
+    repeat(parent.childCount) {
+      val child = parent.getChildAt(it)
+      if (child is Header) {
+        return child
+      }
+    }
+    throw IllegalStateException()
+  }
+} 

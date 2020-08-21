@@ -25,7 +25,7 @@ object Application {
     applicationContext = context
   }
   
-  fun initResources(resources: Resources) {
+  fun initDensities(resources: Resources) {
     density = resources.displayMetrics.density
     scaledDensity = resources.displayMetrics.scaledDensity
   }

@@ -3,30 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-  def configs = rootProject.ext
-
-  compileSdkVersion configs.compileSdkVersion
-  defaultConfig {
-    minSdkVersion configs.minSdkVersion
-    targetSdkVersion configs.targetSdkVersion
-    versionCode configs.versionCode
-    versionName configs.versionName
-    testInstrumentationRunner configs.testInstrumentationRunner
-  }
-
-  buildTypes {
-    release {
-      minifyEnabled configs.minifyEnabled
-      proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
-    }
-  }
+  compileSdkVersion rootProject.ext.compileSdkVersion
 }
 
 dependencies {
   implementation project(":core")
   implementation project(':storage')
-  implementation project(":network")
-  implementation project(":datetime")
 
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin

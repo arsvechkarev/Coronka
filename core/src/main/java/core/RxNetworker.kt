@@ -1,4 +1,4 @@
-package com.arsvechkarev.network
+package core
 
 import io.reactivex.Observable
 import io.reactivex.Single
