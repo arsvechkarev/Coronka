@@ -34,7 +34,9 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
   private var activePointerId = INVALID_POINTER
   private var lastMotionY = 0
   
-  private val offsetListeners = ArrayList<((Float) -> Unit)>()
+  private val offsetListeners = ArrayList<((fraction: Float) -> Unit)>()
+  
+  private var currentOffset = 0f
   
   /**
    * Returns minimum height the header can have taking into account [slideRangeCoefficient]
@@ -66,23 +68,23 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
    * @param onOffsetListener lambda that receives fraction from 0 to 1 of current offset to total
    * scrolling range
    */
-  fun addOnOffsetListener(onOffsetListener: (Float) -> Unit) {
+  fun addOnOffsetListener(onOffsetListener: (fraction: Float) -> Unit) {
     offsetListeners.add(onOffsetListener)
   }
   
-  override fun onLayoutChild(
-    parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
+  override fun onLayoutChild(parent: CoordinatorLayout,
+                             child: V, layoutDirection: Int): Boolean {
+    val prevOffset = viewOffsetHelper?.topAndBottomOffset ?: 0
+    viewOffsetHelper = ViewOffsetHelper(child, slideRangeCoefficient)
     parent.onLayoutChild(child, layoutDirection)
-    if (viewOffsetHelper == null) {
-      viewOffsetHelper = ViewOffsetHelper(child)
-    }
-    viewOffsetHelper!!.onViewLayout()
+    ViewCompat.offsetTopAndBottom(child, prevOffset)
+    offsetListeners.forEach { it(currentOffset) }
     return true
   }
   
-  override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
+  override fun onInterceptTouchEvent(parent: CoordinatorLayout,
+                                     child: V, event: MotionEvent): Boolean {
     if (!reactToTouches) return false
-    
     if (event.action == ACTION_MOVE && isBeingDragged) {
       return true
     }
@@ -108,7 +110,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
           return false
         }
         val y = event.getY(pointerIndex).toInt()
-        val yDiff = Math.abs(y - lastMotionY)
+        val yDiff = abs(y - lastMotionY)
         if (yDiff > touchSlop) {
           isBeingDragged = true
           lastMotionY = y
@@ -118,13 +120,12 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
         endTouch()
       }
     }
-    if (velocityTracker != null) {
-      velocityTracker!!.addMovement(event)
-    }
+    velocityTracker?.addMovement(event)
     return isBeingDragged
   }
   
-  override fun onTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
+  override fun onTouchEvent(parent: CoordinatorLayout,
+                            child: V, event: MotionEvent): Boolean {
     if (!reactToTouches) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {
@@ -171,9 +172,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
         endTouch()
       }
     }
-    if (velocityTracker != null) {
-      velocityTracker!!.addMovement(event)
-    }
+    velocityTracker?.addMovement(event)
     return true
   }
   
@@ -220,13 +219,14 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
   }
   
   private fun updateTopBottomOffset(dy: Int): Int {
-    val prefOffset = topAndBottomOffset
-    if (dy != 0) {
-      val resultOffset = (topAndBottomOffset - dy).coerceIn(maxScrollingRange, 0)
-      viewOffsetHelper!!.setTopAndBottomOffset(resultOffset)
-      offsetListeners.forEach { it(abs(topAndBottomOffset.f / maxScrollingRange)) }
-    }
-    return prefOffset - topAndBottomOffset
+    notifyOffsetListeners()
+    return viewOffsetHelper!!.updateOffset(dy)
+  }
+  
+  private fun notifyOffsetListeners() {
+    currentOffset = abs(
+      viewOffsetHelper!!.topAndBottomOffset.f / viewOffsetHelper!!.maxScrollingRange)
+    offsetListeners.forEach { it(currentOffset) }
   }
   
   private fun fling(
@@ -238,12 +238,12 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
     }
     scroller.fling(
       0,
-      topAndBottomOffset,
+      viewOffsetHelper!!.topAndBottomOffset,
       0,
       velocityY.roundToInt(),
       0,
       0,
-      maxScrollingRange,
+      viewOffsetHelper!!.maxScrollingRange.toInt(),
       0
     )
     if (scroller.computeScrollOffset()) {
@@ -261,29 +261,21 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
   private fun endTouch() {
     isBeingDragged = false
     activePointerId = INVALID_POINTER
-    if (velocityTracker != null) {
-      velocityTracker!!.recycle()
-      velocityTracker = null
-    }
+    velocityTracker?.recycle()
+    velocityTracker = null
   }
-  
-  private val topAndBottomOffset: Int
-    get() = viewOffsetHelper!!.topAndBottomOffset
-  
-  private val maxScrollingRange: Int
-    get() = (-viewOffsetHelper!!.view.height * (1 - slideRangeCoefficient)).toInt()
   
   private inner class FlingRunnable(val child: V) : Runnable {
     
     override fun run() {
       if (scroller.computeScrollOffset()) {
-        updateTopBottomOffset(topAndBottomOffset - scroller.currY)
+        updateTopBottomOffset(viewOffsetHelper!!.topAndBottomOffset - scroller.currY)
         child.postOnAnimation(this)
       }
     }
   }
   
-  companion object {
+  private companion object {
     private const val INVALID_POINTER = -1
   }
 }

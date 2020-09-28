@@ -76,8 +76,7 @@ class MultipleTypeAdapterBuilder {
   }
   
   internal fun build(): RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    val adapter = object : BaseAdapter() {}
-    delegates.forEach(adapter::addDelegate)
+    val adapter = object : BaseAdapter(delegates) {}
     adapter.submitList(data)
     return adapter
   }

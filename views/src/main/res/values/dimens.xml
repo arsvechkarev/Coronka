@@ -8,4 +8,6 @@
   <dimen name="chip_padding_horizontal">20dp</dimen>
   <dimen name="chip_padding_vertical">4dp</dimen>
   <dimen name="chip_stroke_size">2.5dp</dimen>
+
+  <dimen name="rankings_header_curve_size">30dp</dimen>
 </resources>

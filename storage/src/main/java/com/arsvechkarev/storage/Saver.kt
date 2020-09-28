@@ -1,5 +1,6 @@
 package com.arsvechkarev.storage
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import core.DateTime
@@ -22,6 +23,7 @@ class Saver(filename: String, context: Context) {
     return sharedPrefs.contains(key) && cacheIsValid(key, maxMinutesInCache)
   }
   
+  @SuppressLint("ApplySharedPref")
   fun execute(synchronously: Boolean = false, block: SharedPreferences.Editor.() -> Unit) {
     val editor = sharedPrefs.edit()
     block(editor)

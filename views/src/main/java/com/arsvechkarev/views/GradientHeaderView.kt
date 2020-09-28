@@ -25,7 +25,7 @@ class GradientHeaderView @JvmOverloads constructor(
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val path = Path()
   
-  val curveSize: Float
+  private val curveSize: Float
   
   init {
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.GradientHeaderView,
@@ -53,6 +53,12 @@ class GradientHeaderView @JvmOverloads constructor(
   
   override fun dispatchDraw(canvas: Canvas) {
     canvas.drawPath(path, paint)
+    println("qqq2 = $height")
+    canvas.drawRect(0f, 0f, width.f, height.f, Paint().apply {
+      color = Color.GREEN
+      style = Paint.Style.STROKE
+      strokeWidth = 6f
+    })
     super.dispatchDraw(canvas)
   }
 }

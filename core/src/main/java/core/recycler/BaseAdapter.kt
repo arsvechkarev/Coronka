@@ -4,17 +4,25 @@ import android.view.ViewGroup
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import core.extenstions.forEach
+import kotlin.reflect.KClass
 
-abstract class BaseAdapter : RecyclerView.Adapter<ViewHolder>() {
+abstract class BaseAdapter(
+  private val delegates: List<AdapterDelegate>
+) : RecyclerView.Adapter<ViewHolder>() {
   
   protected var data: List<DisplayableItem> = ArrayList()
   protected var recyclerView: RecyclerView? = null
   
-  private val delegates = SparseArrayCompat<AdapterDelegate>()
+  private val classesMap = HashMap<KClass<*>, Int>()
+  private val delegatesSparseArray = SparseArrayCompat<AdapterDelegate>()
   
-  fun addDelegate(delegate: AdapterDelegate) {
-    delegates.put(delegate.modelClass.hashCode(), delegate)
+  constructor(vararg delegates: AdapterDelegate) : this(delegates.toList())
+  
+  init {
+    delegates.forEachIndexed { i, delegate ->
+      classesMap[delegate.modelClass] = i
+      delegatesSparseArray.put(i, delegate)
+    }
   }
   
   fun submitList(list: List<DisplayableItem>?, notify: Boolean = true) {
@@ -29,18 +37,18 @@ abstract class BaseAdapter : RecyclerView.Adapter<ViewHolder>() {
   }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    return delegates[viewType]?.onCreateViewHolder(parent)
-        ?: error("Can't find delegate for type $viewType")
+    return delegatesSparseArray[viewType]?.onCreateViewHolder(parent)
+        ?: error("No delegate for view type $viewType")
   }
   
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val adapterDelegate = delegates[getItemViewType(position)]
-        ?: error("Can't find delegate for position: $position")
+    val adapterDelegate = delegatesSparseArray[getItemViewType(position)]
+        ?: error("No delegate for position $position")
     adapterDelegate.onBindViewHolder(holder, data[position])
   }
   
   override fun getItemViewType(position: Int): Int {
-    return data[position]::class.hashCode()
+    return classesMap[data[position]::class] ?: error("Can't find delegate for position: $position")
   }
   
   override fun getItemCount(): Int {

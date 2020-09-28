@@ -116,9 +116,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
         endTouch()
       }
     }
-    if (velocityTracker != null) {
-      velocityTracker!!.addMovement(event)
-    }
+    velocityTracker?.addMovement(event)
     return isBeingDragged
   }
   
@@ -156,9 +154,9 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
         }
       }
       ACTION_UP -> {
-        velocityTracker!!.addMovement(event)
-        velocityTracker!!.computeCurrentVelocity(1000)
-        val yVelocity = velocityTracker!!.getYVelocity(activePointerId)
+        velocityTracker?.addMovement(event)
+        velocityTracker?.computeCurrentVelocity(1000)
+        val yVelocity = velocityTracker?.getYVelocity(activePointerId) ?: 0f
         if (yVelocity / maxFlingVelocity > FLING_VELOCITY_THRESHOLD) {
           currentState = HIDDEN
           val timeInSeconds = abs((parentHeight - bottomSheet!!.top) / yVelocity)
@@ -184,9 +182,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
         endTouch()
       }
     }
-    if (velocityTracker != null) {
-      velocityTracker!!.addMovement(event)
-    }
+    velocityTracker?.addMovement(event)
     return true
   }
   

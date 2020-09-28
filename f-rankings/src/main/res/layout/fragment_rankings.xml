@@ -7,7 +7,7 @@
   android:background="?colorBackground"
   android:clipChildren="false">
 
-  <androidx.recyclerview.widget.RecyclerView
+  <com.arsvechkarev.views.BoxRecyclerView
     android:id="@+id/rankingsRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
