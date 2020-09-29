@@ -2,8 +2,8 @@ package com.arsvechkarev.stats.domain
 
 import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
-import core.dao.CountriesMetaInfoDao
-import core.dao.CountriesMetaInfoTable
+import core.db.CountriesMetaInfoDao
+import core.db.CountriesMetaInfoTable
 import core.extenstions.assertThat
 import core.model.Country
 import core.model.CountryMetaInfo

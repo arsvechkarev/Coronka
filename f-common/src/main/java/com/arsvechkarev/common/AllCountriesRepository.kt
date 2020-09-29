@@ -22,7 +22,7 @@ class AllCountriesRepository(
   
   override val logTag = "Request_AllCountriesRepository"
   
-  fun getAllCountries(): Observable<TotalData> {
+  fun getData(): Observable<TotalData> {
     return createLoadingObservable()
   }
   

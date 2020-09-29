@@ -4,12 +4,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.text.BoringLayout
-import android.text.Layout
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import core.FontManager
+import core.extenstions.assertThat
 import core.extenstions.execute
 
 class CoronavirusMainStatsView @JvmOverloads constructor(
@@ -27,57 +27,88 @@ class CoronavirusMainStatsView @JvmOverloads constructor(
     color = ContextCompat.getColor(context, R.color.dark_text_primary)
   }
   
-  private var title: String? = "Confirmed"
-  private var numberText: String? = "14.658 M"
-  
+  private val title: String
+  private var numberText: String? = null
   private var titleLayout: BoringLayout? = null
   private var numberLayout: BoringLayout? = null
   
-  fun setTitle(title: String) {
-    this.title = title
-    requestLayout()
+  init {
+    val attributes = context.obtainStyledAttributes(attrs, R.styleable.CoronavirusMainStatsView,
+      0, 0)
+    title = attributes.getString(R.styleable.CoronavirusMainStatsView_android_title)!!
+    attributes.recycle()
   }
   
-  fun setNumberText(text: String) {
-    this.numberText = text
-    requestLayout()
+  fun prepareNumber(number: Int, textSize: Float) {
+    numberText = getTextForNumber(number)
+    numberTextPaint.textSize = textSize
+    invalidate()
   }
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    if (title == null || numberText == null) {
-      return
-    }
-    val offset = getTextOffset(w)
-    titleLayout = setupTextLayout(w, offset, title!!, titlePaint)
-    numberLayout = setupTextLayout(w, offset, numberText!!, numberTextPaint)
+    titlePaint.textSize = getTitleTextSize(w, context)
+    titleLayout = boringLayoutOf(titlePaint, title)
   }
   
   override fun onDraw(canvas: Canvas) {
-    if (titleLayout == null || numberLayout == null) {
+    if (numberText == null) {
       return
+    }
+    if (numberLayout == null) {
+      numberLayout = boringLayoutOf(numberTextPaint, numberText!!)
     }
     val offset = getTextOffset(width)
     canvas.execute {
-      translate(offset, offset)
+      translate(width / 2f - titleLayout!!.width / 2f, offset)
       titleLayout!!.draw(canvas)
     }
     canvas.execute {
-      translate(offset, height - offset - numberLayout!!.height)
+      translate(width / 2f - numberLayout!!.width / 2f, height - offset - numberLayout!!.height)
       numberLayout!!.draw(canvas)
     }
   }
   
-  private fun setupTextLayout(w: Int, offset: Float, text: String, paint: TextPaint): BoringLayout {
-    paint.textSize = 10f
-    while (true) {
-      val titleTextWidth = paint.measureText(text)
-      if (titleTextWidth > w - offset * 2f) {
-        break
+  companion object {
+    
+    fun getTextSize(width: Int, text: String): Float {
+      assertThat(width != 0) { "Width = 0, unable to calculate text size" }
+      val paint = Paint().apply {
+        typeface = FontManager.segoeUI
       }
-      paint.textSize++
+      return calculateTextSize(width, text, paint)
     }
-    return boringLayoutOf(paint, text, alignment = Layout.Alignment.ALIGN_CENTER)
+    
+    fun getTextForNumber(number: Int): String {
+      val thousands = number / 1000
+      val millionsPart = thousands / 1000
+      var thousandsPart = (thousands % 1000).toString()
+      when {
+        thousandsPart.isEmpty() -> thousandsPart = "000"
+        thousandsPart.length == 1 -> thousandsPart = "00$thousandsPart"
+        thousandsPart.length == 2 -> thousandsPart = "0$thousandsPart"
+      }
+      return "$millionsPart.$thousandsPart M"
+    }
+    
+    private fun getTitleTextSize(width: Int, context: Context): Float {
+      val confirmedTitleSize = getTextSize(width, context.getString(R.string.text_confirmed))
+      val recoveredTitleSize = getTextSize(width, context.getString(R.string.text_recovered))
+      val deathsTitleSize = getTextSize(width, context.getString(R.string.text_deaths))
+      return minOf(confirmedTitleSize, recoveredTitleSize, deathsTitleSize)
+    }
+    
+    private fun calculateTextSize(width: Int, text: String, paint: Paint): Float {
+      paint.textSize = 10f
+      while (true) {
+        val titleTextWidth = paint.measureText(text)
+        if (titleTextWidth > width - getTextOffset(width) * 2f) {
+          break
+        }
+        paint.textSize++
+      }
+      return paint.textSize
+    }
+    
+    private fun getTextOffset(width: Int) = width / 12f
   }
-  
-  private fun getTextOffset(width: Int) = width / 12f
 }

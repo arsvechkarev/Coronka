@@ -45,7 +45,7 @@ class RankingsViewModel(
     }
     
     rxCall {
-      allCountriesRepository.getAllCountries()
+      allCountriesRepository.getData()
           .subscribeOn(schedulersProvider.io())
           .map(::transformToScreenState)
           .onErrorReturn { Failure(it.asFailureReason()) }

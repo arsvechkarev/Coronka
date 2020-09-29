@@ -35,6 +35,10 @@
     <attr name="rippleColor" format="color"/>
   </declare-styleable>
 
+  <declare-styleable name="CoronavirusMainStatsView">
+    <attr name="android:title" format="string"/>
+  </declare-styleable>
+
   <declare-styleable name="GradientHeaderView">
     <attr name="android:startColor" format="color"/>
     <attr name="android:endColor" format="color"/>

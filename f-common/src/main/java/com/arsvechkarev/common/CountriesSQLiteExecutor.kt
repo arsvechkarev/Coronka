@@ -4,8 +4,8 @@ import android.content.ContentValues
 import com.arsvechkarev.storage.DatabaseExecutor
 import com.arsvechkarev.storage.DatabaseManager
 import core.Loggable
-import core.dao.CountriesDao
-import core.dao.CountriesTable
+import core.db.CountriesDao
+import core.db.CountriesTable
 import core.log
 import core.model.Country
 

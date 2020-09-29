@@ -1,4 +1,4 @@
-package core.dao
+package core.db
 
 import android.provider.BaseColumns
 

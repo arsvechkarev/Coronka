@@ -5,7 +5,7 @@ import com.arsvechkarev.storage.Saver
 import core.NetworkConnection
 import core.NetworkConnectionImpl
 import core.RxNetworker
-import core.dao.CountriesDao
+import core.db.CountriesDao
 
 object CommonModulesSingletons {
   

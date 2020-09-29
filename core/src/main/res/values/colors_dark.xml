@@ -13,7 +13,7 @@
   <color name="dark_bg_stats">#423C61</color>
 
   <color name="dark_confirmed">#FF4A4A</color>
-  <color name="dark_recovered">#18D80A</color>
+  <color name="dark_recovered">#22BF17</color>
   <color name="dark_deaths">#FF7D00</color>
   <color name="dark_percent_by_country">#DBBE18</color>
   <color name="dark_death_rate">#007FFF</color>

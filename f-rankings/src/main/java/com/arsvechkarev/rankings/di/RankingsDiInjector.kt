@@ -9,7 +9,7 @@ import com.arsvechkarev.rankings.presentation.ListFilterer
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.rankings.presentation.RankingsViewModel
 import core.NetworkConnection
-import core.dao.CountriesMetaInfoDao
+import core.db.CountriesMetaInfoDao
 
 object RankingsDiInjector {
   
