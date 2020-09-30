@@ -1,6 +1,7 @@
 package com.arsvechkarev.stats.presentation
 
 import core.model.TotalData
+import core.model.WorldCasesInfo
 import core.state.BaseScreenState
 
 sealed class StatsScreenState : BaseScreenState() {
@@ -9,7 +10,7 @@ sealed class StatsScreenState : BaseScreenState() {
     val data: TotalData
   ) : StatsScreenState()
   
-  class LoadedFromNetwork(
-    val data: TotalData
+  class LoadedWorldCasesInfo(
+    val worldCasesInfo: WorldCasesInfo
   ) : StatsScreenState()
 }

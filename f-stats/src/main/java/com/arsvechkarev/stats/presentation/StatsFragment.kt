@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.stats.di.StatsModuleInjector
-import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedFromNetwork
+import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedWorldCasesInfo
 import com.arsvechkarev.views.CoronavirusMainStatsView
 import core.model.GeneralInfo
+import core.model.WorldCasesInfo
 import core.state.BaseScreenState
 import core.state.Loading
+import kotlinx.android.synthetic.main.fragment_stats.statsNewCasesChart
+import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesChart
 import kotlinx.android.synthetic.main.fragment_stats.statsViewConfirmed
 import kotlinx.android.synthetic.main.fragment_stats.statsViewDeaths
 import kotlinx.android.synthetic.main.fragment_stats.statsViewRecovered
@@ -30,11 +33,16 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
       is Loading -> {
     
       }
-      is LoadedFromNetwork -> {
-        renderGeneralInfo(state.data.generalInfo)
-        println("general = ${state.data.generalInfo}")
+      is LoadedWorldCasesInfo -> {
+        renderGeneralInfo(state.worldCasesInfo.generalInfo)
+        renderCharts(state.worldCasesInfo)
       }
     }
+  }
+  
+  private fun renderCharts(info: WorldCasesInfo) {
+    statsTotalCasesChart.update(info.totalDailyCases)
+    statsNewCasesChart.update(info.newDailyCases)
   }
   
   private fun renderGeneralInfo(generalInfo: GeneralInfo) {

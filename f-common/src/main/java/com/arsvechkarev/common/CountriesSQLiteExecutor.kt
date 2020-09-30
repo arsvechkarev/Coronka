@@ -28,7 +28,7 @@ class CountriesSQLiteExecutor(
   }
   
   fun saveCountriesInfo(list: List<Country>) {
-    log { "loading countries to cache" }
+    log { "Loading countries to cache" }
     DatabaseManager.instance.writableDatabase.use { database ->
       val contentValues = ContentValues()
       for (country in list) {

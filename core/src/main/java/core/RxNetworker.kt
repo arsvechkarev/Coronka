@@ -19,7 +19,7 @@ class RxNetworker {
     requestBlocking(url)
   }
   
-  fun requestBlocking(url: String): String {
+  private fun requestBlocking(url: String): String {
     val stringBuilder = StringBuilder()
     val urlInstance = URL(url)
     BufferedReader(InputStreamReader(urlInstance.openStream())).use {

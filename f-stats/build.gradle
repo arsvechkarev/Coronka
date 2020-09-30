@@ -15,8 +15,6 @@ dependencies {
   implementation project(":views")
   implementation project(":f-common")
 
-  implementation "com.arsvechkarev:timerx:2.1.0"
-
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
   implementation dependencies.appCompat
@@ -25,4 +23,5 @@ dependencies {
   implementation dependencies.lifecycleExtensions
   implementation dependencies.recyclerView
   implementation dependencies.rxJava
+  implementation dependencies.mpAndroidChart
 }

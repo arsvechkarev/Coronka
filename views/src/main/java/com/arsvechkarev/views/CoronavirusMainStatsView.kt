@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import core.FontManager
 import core.extenstions.assertThat
 import core.extenstions.execute
+import core.extenstions.formattedMillions
 
 class CoronavirusMainStatsView @JvmOverloads constructor(
   context: Context,
@@ -79,15 +80,7 @@ class CoronavirusMainStatsView @JvmOverloads constructor(
     }
     
     fun getTextForNumber(number: Int): String {
-      val thousands = number / 1000
-      val millionsPart = thousands / 1000
-      var thousandsPart = (thousands % 1000).toString()
-      when {
-        thousandsPart.isEmpty() -> thousandsPart = "000"
-        thousandsPart.length == 1 -> thousandsPart = "00$thousandsPart"
-        thousandsPart.length == 2 -> thousandsPart = "0$thousandsPart"
-      }
-      return "$millionsPart.$thousandsPart M"
+      return number.formattedMillions()
     }
     
     private fun getTitleTextSize(width: Int, context: Context): Float {

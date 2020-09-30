@@ -1,41 +1,29 @@
 ext {
   kotlin_version = '1.4.0'
 
-  appCompat_version = '1.1.0'
-  materialDesign_version = '1.2.0'
-  lifecycle_version = '2.1.0'
-  googleMaps_version = "17.0.0"
-  googleMapsUtils_version = "1.0.2"
-  recyclerView_version = "1.1.0"
-
-  rxJava_version = "2.2.19"
-  rxAndroid_version = "2.1.1"
-
   applicationDependencies = [
       kotlin             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
-      appCompat          : "androidx.appcompat:appcompat:$appCompat_version",
+      appCompat          : "androidx.appcompat:appcompat:1.1.0",
       constraintLayout   : "androidx.constraintlayout:constraintlayout:1.1.0",
-      materialDesign     : "com.google.android.material:material:$materialDesign_version",
-      lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
-      googleMaps         : "com.google.android.gms:play-services-maps:$googleMaps_version",
-      googleMapsUtils    : "com.google.maps.android:android-maps-utils:$googleMapsUtils_version",
-      recyclerView       : "androidx.recyclerview:recyclerview:$recyclerView_version",
-      rxJava             : "io.reactivex.rxjava2:rxjava:$rxJava_version",
-      rxAndroid          : "io.reactivex.rxjava2:rxandroid:$rxAndroid_version"
+      materialDesign     : "com.google.android.material:material:1.2.0",
+      lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:2.1.0",
+      googleMaps         : "com.google.android.gms:play-services-maps:17.0.0",
+      googleMapsUtils    : "com.google.maps.android:android-maps-utils:1.0.2",
+      recyclerView       : "androidx.recyclerview:recyclerview:1.1.0",
+      rxJava             : "io.reactivex.rxjava2:rxjava:2.2.19",
+      rxAndroid          : "io.reactivex.rxjava2:rxandroid:2.1.1",
+      mpAndroidChart     : "com.github.PhilJay:MPAndroidChart:v3.1.0"
   ]
 
-  junit_version = '4.12'
-  mockk_version = '1.9.3'
-  kotlinTest_version = '3.3.2'
-  kakao_version = '2.2.0'
+
   espresso_version = '3.2.0'
   androidTest_version = '1.1.0'
 
   testDependencies = [
-      junit              : "junit:junit:$junit_version",
-      mockk              : "io.mockk:mockk:$mockk_version",
-      kotlinTestFramework: "io.kotlintest:kotlintest-runner-junit5:$kotlinTest_version",
-      kakao              : "com.agoda.kakao:kakao:$kakao_version",
+      junit              : "junit:junit:4.12",
+      mockk              : "io.mockk:mockk:1.9.3",
+      kotlinTestFramework: "io.kotlintest:kotlintest-runner-junit5:3.3.2",
+      kakao              : "com.agoda.kakao:kakao:2.2.0",
       espresso           : "androidx.test.espresso:espresso-core:$espresso_version",
       espressoContrib    : "androidx.test.espresso:espresso-contrib:$espresso_version",
       androidTestRunner  : "androidx.test:runner:$androidTest_version",
