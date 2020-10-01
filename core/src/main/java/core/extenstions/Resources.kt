@@ -3,6 +3,7 @@ package core.extenstions
 import android.content.Context
 import android.util.TypedValue
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.res.ResourcesCompat
 import core.Application
@@ -20,6 +21,7 @@ val Int.f get() = toFloat()
 
 val Float.i get() = toInt()
 
+@ColorInt
 fun Context.getAttrColor(@AttrRes resId: Int): Int {
   val typedValue = TypedValue()
   val resolved = theme.resolveAttribute(resId, typedValue, false)
@@ -27,6 +29,7 @@ fun Context.getAttrColor(@AttrRes resId: Int): Int {
   return typedValue.data
 }
 
+@ColorInt
 fun Context.retrieveColor(@ColorRes colorRes: Int): Int {
   return ResourcesCompat.getColor(resources, colorRes, theme)
 }

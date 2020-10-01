@@ -102,10 +102,15 @@
         android:background="@drawable/bg_overlay_corners_small"
         android:padding="16dp">
 
-        <com.arsvechkarev.views.TotalCasesChart
+        <com.arsvechkarev.views.charts.TotalCasesChart
           android:id="@+id/statsTotalCasesChart"
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
+
+        <com.arsvechkarev.views.charts.DateAndNumberLabel
+          android:id="@+id/statsLabelTotalCases"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
 
       </FrameLayout>
 
@@ -124,10 +129,15 @@
         android:background="@drawable/bg_overlay_corners_small"
         android:padding="16dp">
 
-        <com.arsvechkarev.views.NewCasesChart
+        <com.arsvechkarev.views.charts.NewCasesChart
           android:id="@+id/statsNewCasesChart"
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
+
+        <com.arsvechkarev.views.charts.DateAndNumberLabel
+          android:id="@+id/statsLabelNewCases"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
 
       </FrameLayout>
 

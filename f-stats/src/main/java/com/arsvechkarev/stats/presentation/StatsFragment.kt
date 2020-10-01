@@ -12,6 +12,8 @@ import core.model.GeneralInfo
 import core.model.WorldCasesInfo
 import core.state.BaseScreenState
 import core.state.Loading
+import kotlinx.android.synthetic.main.fragment_stats.statsLabelNewCases
+import kotlinx.android.synthetic.main.fragment_stats.statsLabelTotalCases
 import kotlinx.android.synthetic.main.fragment_stats.statsNewCasesChart
 import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesChart
 import kotlinx.android.synthetic.main.fragment_stats.statsViewConfirmed
@@ -26,6 +28,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
     viewModel = StatsModuleInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(::handleState))
     viewModel.startInitialLoading()
+    initChartsClickListeners()
   }
   
   private fun handleState(state: BaseScreenState) {
@@ -60,5 +63,10 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   private fun getTextSize(number: Int): Float {
     return CoronavirusMainStatsView.getTextSize(statsViewConfirmed.width,
       CoronavirusMainStatsView.getTextForNumber(number))
+  }
+  
+  private fun initChartsClickListeners() {
+    statsTotalCasesChart.onDailyCaseClicked { statsLabelTotalCases.drawCase(it) }
+    statsNewCasesChart.onDailyCaseClicked { statsLabelNewCases.drawCase(it) }
   }
 }

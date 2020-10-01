@@ -17,7 +17,8 @@ object Application {
   
   val decimalFormatter: NumberFormat = DecimalFormat("#0.000")
   
-  val numberFormatter: NumberFormat = NumberFormat.getInstance(Locale.US).apply {
+  // Use FRANCE locale because it uses spaces for grouping digits (e.g 12354 -> 12 354)
+  val numberFormatter: NumberFormat = NumberFormat.getInstance(Locale.FRANCE).apply {
     isGroupingUsed = true
   }
   

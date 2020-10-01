@@ -1,15 +1,22 @@
 package core.extenstions
 
 import android.graphics.Canvas
+import android.graphics.Rect
+import android.graphics.RectF
+import androidx.annotation.ColorInt
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
+val TEMP_RECTF = RectF()
+val TEMP_RECT = Rect()
+
 inline fun Canvas.execute(action: Canvas.() -> Unit) {
-  save()
+  val count = save()
   action(this)
-  restore()
+  restoreToCount(count)
 }
 
+@ColorInt
 fun lerpColor(startColor: Int, endColor: Int, fraction: Float): Int {
   val startA = (startColor shr 24 and 0xff) / 255.0f
   var startR = (startColor shr 16 and 0xff) / 255.0f
