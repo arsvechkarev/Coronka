@@ -2,6 +2,8 @@
 <resources>
   <color name="dark_background">#1A1D36</color>
   <color name="dark_overlay">#282C48</color>
+  <color name="dark_overlay_shine">#2C304E</color>
+  <color name="dark_overlay_shine_light">#2F3453</color>
   <color name="dark_overlay_accent">#5A6088</color>
   <color name="dark_dialog">#34395C</color>
   <color name="dark_gradient_header_start">#282E4B</color>

@@ -33,7 +33,10 @@ class ElementsInARowViewGroup @JvmOverloads constructor(
     }
   }
   
-  private fun getChildMargin(width: Int): Int {
-    return width / 18
+  companion object {
+    
+    fun getChildMargin(width: Int): Int {
+      return width / 18
+    }
   }
 }

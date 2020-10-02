@@ -8,6 +8,8 @@
   <style name="AppTheme.Dark">
     <item name="colorBackground">@color/dark_background</item>
     <item name="colorOverlay">@color/dark_overlay</item>
+    <item name="colorOverlayShine">@color/dark_overlay_shine</item>
+    <item name="colorOverlayShineLight">@color/dark_overlay_shine_light</item>
     <item name="colorOverlayAccent">@color/dark_overlay_accent</item>
     <item name="colorDialog">@color/dark_dialog</item>
     <item name="colorGradientHeaderStart">@color/dark_gradient_header_start</item>

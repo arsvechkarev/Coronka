@@ -2,6 +2,8 @@
 <resources>
   <attr name="colorBackground" format="color"/>
   <attr name="colorOverlay" format="color"/>
+  <attr name="colorOverlayShine" format="color"/>
+  <attr name="colorOverlayShineLight" format="color"/>
   <attr name="colorOverlayAccent" format="color"/>
   <attr name="colorDialog" format="color"/>
   <attr name="colorGradientHeaderStart" format="color"/>

@@ -33,7 +33,7 @@ class StatsViewModel(
     get() = _state
   
   fun startInitialLoading() {
-    performNetworkRequest()
+    //    performNetworkRequest()
   }
   
   fun performNetworkRequest() {

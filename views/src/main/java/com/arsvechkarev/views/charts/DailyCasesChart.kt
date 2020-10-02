@@ -15,15 +15,14 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import core.extenstions.f
 import core.extenstions.toFormattedShortString
 import core.model.DailyCase
 
-class NewCasesChart(context: Context, attrs: AttributeSet) : LineChart(context, attrs),
+class DailyCasesChart(context: Context, attrs: AttributeSet) : LineChart(context, attrs),
   OnChartValueSelectedListener {
   
   private var dailyCaseListener: (dailyCase: DailyCase) -> Unit = { _ -> }
-  private var newDailyCases: List<DailyCase>? = null
+  private var dailyCases: List<DailyCase>? = null
   
   init {
     setOnChartValueSelectedListener(this)
@@ -45,13 +44,14 @@ class NewCasesChart(context: Context, attrs: AttributeSet) : LineChart(context, 
       isEnabled = false
     }
     description.isEnabled = false
+    setNoDataText("")
     legend.isEnabled = false
     isDoubleTapToZoomEnabled = false
     setScaleEnabled(false)
   }
   
   fun update(dailyCases: List<DailyCase>) {
-    this.newDailyCases = dailyCases
+    this.dailyCases = dailyCases
     val entries = createEntries(dailyCases)
     val lineDataSet = LineDataSet(entries, "")
     lineDataSet.apply {
@@ -69,7 +69,11 @@ class NewCasesChart(context: Context, attrs: AttributeSet) : LineChart(context, 
       setDrawValues(false)
     }
     invalidate()
-    post { highlightValue(highlighter.getHighlight(width.f, 0f), true); }
+    post {
+      val x = entries.last().x
+      val y = entries.last().y
+      highlightValue(Highlight(x, y, 0), true)
+    }
   }
   
   fun onDailyCaseClicked(listener: (dailyCase: DailyCase) -> Unit) {
@@ -77,7 +81,7 @@ class NewCasesChart(context: Context, attrs: AttributeSet) : LineChart(context, 
   }
   
   override fun onValueSelected(e: Entry, h: Highlight) {
-    dailyCaseListener.invoke(newDailyCases!![e.x.toInt()])
+    dailyCaseListener.invoke(dailyCases!![e.x.toInt()])
   }
   
   override fun onNothingSelected() {
@@ -100,7 +104,7 @@ class NewCasesChart(context: Context, attrs: AttributeSet) : LineChart(context, 
   private inner class DateAxisFormatter : ValueFormatter() {
     
     override fun getFormattedValue(value: Float): String {
-      return newDailyCases!![value.toInt()].date
+      return dailyCases!![value.toInt()].date
     }
   }
 }

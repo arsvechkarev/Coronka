@@ -8,7 +8,7 @@
   <dimen name="stats_image_doctor_margin">16dp</dimen>
 
   <dimen name="stats_title_margin_start">176dp</dimen>
-  <dimen name="stats_three_elements_layout_m_horizontal">20dp</dimen>
+  <dimen name="stats_three_elements_layout_m_horizontal">24dp</dimen>
   <dimen name="stats_three_elements_layout_m_vertical">24dp</dimen>
 
   <dimen name="stats_header_m_start">16dp</dimen>
