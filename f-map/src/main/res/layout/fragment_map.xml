@@ -52,7 +52,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/map_text_retry_m_top"
-          android:text="@string/text_retry_all_caps"
+          android:text="@string/text_retry"
           android:textColor="?colorFailure"
           android:textSize="@dimen/text_h4"
           app:rippleColor="?colorFailureRipple"/>
@@ -80,7 +80,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/map_text_retry_m_top"
-          android:text="@string/text_retry_all_caps"
+          android:text="@string/text_retry"
           android:textColor="?colorFailure"
           android:textSize="@dimen/text_h4"
           app:rippleColor="?colorFailureRipple"/>

@@ -2,8 +2,8 @@ package com.arsvechkarev.common
 
 import core.Loggable
 import core.RxNetworker
-import core.concurrency.AndroidSchedulersProvider
-import core.concurrency.SchedulersProvider
+import core.concurrency.AndroidSchedulers
+import core.concurrency.Schedulers
 import core.extenstions.assertThat
 import core.model.DailyCase
 import io.reactivex.Observable
@@ -11,18 +11,18 @@ import org.json.JSONObject
 
 class WorldCasesInfoRepository(
   private val networker: RxNetworker,
-  private val schedulersProvider: SchedulersProvider = AndroidSchedulersProvider
+  private val schedulers: Schedulers = AndroidSchedulers
 ) : Loggable {
   
   override val logTag = "Request_WorldCasesRepository"
   
   fun getWorldDailyTotalCases(): Observable<List<DailyCase>> {
     return Observable.concat(getTotalCasesFromCache(), getTotalCasesFromNetwork())
-        .subscribeOn(schedulersProvider.io())
+        .subscribeOn(schedulers.io())
         .firstElement()
         .toObservable()
         .share()
-        .observeOn(schedulersProvider.mainThread())
+        .observeOn(schedulers.mainThread())
   }
   
   private fun getTotalCasesFromCache(): Observable<List<DailyCase>> = Observable.create { emitter ->

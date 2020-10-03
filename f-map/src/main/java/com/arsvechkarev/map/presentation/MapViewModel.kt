@@ -9,8 +9,8 @@ import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
 import core.Loggable
 import core.NetworkConnection
 import core.RxViewModel
-import core.concurrency.AndroidSchedulersProvider
-import core.concurrency.SchedulersProvider
+import core.concurrency.AndroidSchedulers
+import core.concurrency.Schedulers
 import core.concurrency.Threader
 import core.model.Country
 import core.state.BaseScreenState
@@ -23,7 +23,7 @@ class MapViewModel(
   private val threader: Threader,
   private val connection: NetworkConnection,
   private val allCountriesRepository: AllCountriesRepository,
-  private val schedulersProvider: SchedulersProvider = AndroidSchedulersProvider
+  private val schedulers: Schedulers = AndroidSchedulers
 ) : RxViewModel(), Loggable {
   
   override val logTag = "Base_Map_ViewModel"

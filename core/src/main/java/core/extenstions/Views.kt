@@ -25,10 +25,22 @@ fun View.gone() {
   visibility = View.GONE
 }
 
+inline fun <reified T : CoordinatorLayout.Behavior<*>> View.getBehavior(): T {
+  return (layoutParams as CoordinatorLayout.LayoutParams).behavior as T
+}
+
+inline fun <reified T : CoordinatorLayout.Behavior<*>> View.getBehaviorSafe(): T? {
+  return (layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? T
+}
+
+inline fun ViewGroup.forEachChild(action: (child: View) -> Unit) {
+  for (i in 0 until childCount) action(getChildAt(i))
+}
+
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
   return LayoutInflater.from(context).inflate(layoutRes, this, false)
 }
 
-inline fun <reified T : CoordinatorLayout.Behavior<*>> View.getBehavior(): T {
-  return (layoutParams as CoordinatorLayout.LayoutParams).behavior as T
-}
+fun ViewGroup.animateChildrenVisible() = forEachChild { it.animateVisible() }
+
+fun ViewGroup.animateChildrenInvisible() = forEachChild { it.animateInvisible() }

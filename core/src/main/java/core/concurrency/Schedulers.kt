@@ -2,7 +2,7 @@ package core.concurrency
 
 import io.reactivex.Scheduler
 
-interface SchedulersProvider {
+interface Schedulers {
   
   fun io(): Scheduler
   fun computation(): Scheduler

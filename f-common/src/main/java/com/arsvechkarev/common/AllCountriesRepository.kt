@@ -4,8 +4,8 @@ import com.arsvechkarev.storage.Saver
 import core.Loggable
 import core.MAX_CACHE_MINUTES
 import core.RxNetworker
-import core.concurrency.AndroidSchedulersProvider
-import core.concurrency.SchedulersProvider
+import core.concurrency.AndroidSchedulers
+import core.concurrency.Schedulers
 import core.log
 import core.model.Country
 import core.model.GeneralInfo
@@ -17,7 +17,7 @@ class AllCountriesRepository(
   private val networker: RxNetworker,
   private val saver: Saver,
   private val sqLiteExecutor: CountriesSQLiteExecutor,
-  private val schedulersProvider: SchedulersProvider = AndroidSchedulersProvider
+  private val schedulers: Schedulers = AndroidSchedulers
 ) : Loggable {
   
   override val logTag = "Request_AllCountriesRepository"
@@ -28,11 +28,11 @@ class AllCountriesRepository(
   
   private fun createLoadingObservable(): Observable<TotalData> {
     return Observable.concat(getFromCache(), getFromNetwork())
-        .subscribeOn(schedulersProvider.io())
+        .subscribeOn(schedulers.io())
         .firstElement()
         .toObservable()
         .share()
-        .observeOn(schedulersProvider.mainThread())
+        .observeOn(schedulers.mainThread())
   }
   
   private fun getFromCache(): Observable<TotalData> = Observable.create { emitter ->

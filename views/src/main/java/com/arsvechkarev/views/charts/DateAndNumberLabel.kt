@@ -44,7 +44,6 @@ class DateAndNumberLabel @JvmOverloads constructor(
     duration = DURATION_LONG
     addUpdateListener {
       currentNumber = (it.animatedFraction * resultNumber).toInt()
-      dateTextPaint.alpha = (it.animatedFraction * 255).toInt()
       numberText = Application.numberFormatter.format(currentNumber)
       invalidate()
     }

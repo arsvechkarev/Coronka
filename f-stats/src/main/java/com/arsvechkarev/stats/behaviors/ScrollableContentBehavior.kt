@@ -14,7 +14,7 @@ import core.INVALID_POINTER
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
+class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
   CoordinatorLayout.Behavior<V>() where V : View, V : ScrollingView {
   
   private val scroller = OverScroller(context)
@@ -22,10 +22,11 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
   private var statsContentViewOffsetHelper: StatsContentViewOffsetHelper<V>? = null
   private var velocityTracker: VelocityTracker? = null
   private var flingRunnable: Runnable? = null
-  
   private var isBeingDragged = false
   private var activePointerId = INVALID_POINTER
   private var lastMotionY = 0
+  
+  var respondToTouches = true
   
   fun computeScrollRange(): Int {
     return statsContentViewOffsetHelper?.getScrollRange() ?: 0
@@ -41,8 +42,8 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
   }
   
   override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
+    if (!respondToTouches) return false
     val action = event.action
-    
     if (action == MotionEvent.ACTION_MOVE && isBeingDragged) {
       return true
     }
@@ -87,6 +88,7 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
   }
   
   override fun onTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
+    if (!respondToTouches) return false
     when (event.actionMasked) {
       MotionEvent.ACTION_DOWN -> {
         stopScroller(child)
@@ -118,7 +120,7 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
         if (isBeingDragged) {
           lastMotionY = y
           // We're being dragged so scroll the view
-          updateDyOffset(dy)
+          updateOffset(dy)
         }
       }
       MotionEvent.ACTION_UP -> {
@@ -146,8 +148,8 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
     flingRunnable = null
   }
   
-  private fun updateDyOffset(dy: Int): Int {
-    return statsContentViewOffsetHelper!!.updateDyOffset(dy)
+  private fun updateOffset(dy: Int): Int {
+    return statsContentViewOffsetHelper!!.updateOffset(dy)
   }
   
   private fun fling(
@@ -195,7 +197,7 @@ class StatsContentBehavior<V>(context: Context, attrs: AttributeSet?) :
     override fun run() {
       if (scroller.computeScrollOffset()) {
         if (latestY != Int.MAX_VALUE) {
-          updateDyOffset(scroller.currY - latestY)
+          updateOffset(scroller.currY - latestY)
         }
         latestY = scroller.currY
         child.postOnAnimation(this)

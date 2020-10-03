@@ -6,8 +6,8 @@ import com.arsvechkarev.common.AllCountriesRepository
 import com.arsvechkarev.rankings.list.HeaderItemAdapterDelegate
 import core.NetworkConnection
 import core.RxViewModel
-import core.concurrency.AndroidSchedulersProvider
-import core.concurrency.SchedulersProvider
+import core.concurrency.AndroidSchedulers
+import core.concurrency.Schedulers
 import core.extenstions.assertThat
 import core.model.DisplayableCountry
 import core.model.OptionType
@@ -25,7 +25,7 @@ class RankingsViewModel(
   private val connection: NetworkConnection,
   private val allCountriesRepository: AllCountriesRepository,
   private val listFilterer: ListFilterer,
-  private val schedulersProvider: SchedulersProvider = AndroidSchedulersProvider
+  private val schedulers: Schedulers = AndroidSchedulers
 ) : RxViewModel() {
   
   private var totalData: TotalData? = null
@@ -46,11 +46,11 @@ class RankingsViewModel(
     
     rxCall {
       allCountriesRepository.getData()
-          .subscribeOn(schedulersProvider.io())
+          .subscribeOn(schedulers.io())
           .map(::transformToScreenState)
           .onErrorReturn { Failure(it.asFailureReason()) }
           .startWith(Loading)
-          .observeOn(schedulersProvider.mainThread())
+          .observeOn(schedulers.mainThread())
           .subscribe({
             _state.value = it
           }) {
@@ -64,8 +64,8 @@ class RankingsViewModel(
       Observable.fromCallable {
         listFilterer.filter(totalData!!.countries, totalData!!.generalInfo, optionType, worldRegion)
       }
-          .subscribeOn(schedulersProvider.computation())
-          .observeOn(schedulersProvider.mainThread())
+          .subscribeOn(schedulers.computation())
+          .observeOn(schedulers.mainThread())
           .subscribe({
             _state.value = RankingsScreenState.Success(it, optionType, worldRegion)
           }, {

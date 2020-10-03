@@ -28,7 +28,7 @@ class StatsContentViewOffsetHelper<V>(private val view: V) where V : View, V : S
     maxScrollerY = topMargin + viewScrollRange
   }
   
-  fun updateDyOffset(offset: Int): Int {
+  fun updateOffset(offset: Int): Int {
     val newTop = view.top + offset
     val oldTop = view.top
     view.top = newTop.coerceIn(maxTop, layoutTop)

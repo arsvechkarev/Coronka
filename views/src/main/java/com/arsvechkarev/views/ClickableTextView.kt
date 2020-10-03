@@ -10,8 +10,6 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import core.FontManager
 import core.extenstions.DURATION_DEFAULT
-import core.extenstions.dp
-import core.extenstions.dpInt
 
 class ClickableTextView @JvmOverloads constructor(
   context: Context,
@@ -28,11 +26,13 @@ class ClickableTextView @JvmOverloads constructor(
     isClickable = true
     isFocusable = true
     typeface = FontManager.rubik
-    setPadding(16.dpInt, 8.dpInt, 16.dpInt, 8.dpInt)
+    val pHorizontal = context.resources.getDimension(R.dimen.clickable_text_view_p_horizontal).toInt()
+    val pVertical = context.resources.getDimension(R.dimen.clickable_text_view_p_vertical).toInt()
+    setPadding(pHorizontal, pVertical, pHorizontal, pVertical)
   }
   
   private fun setRipple(rippleColor: Int) {
-    val r = 4.dp
+    val r = context.resources.getDimension(R.dimen.clickable_text_view_corners)
     val roundRectShape = RoundRectShape(floatArrayOf(r, r, r, r, r, r, r, r), null, null)
     val backgroundRect = ShapeDrawable().apply {
       shape = roundRectShape
@@ -47,7 +47,7 @@ class ClickableTextView @JvmOverloads constructor(
   
   override fun performClick(): Boolean {
     isClickable = false
-    postDelayed({ isClickable = true }, DURATION_DEFAULT * 2 + DURATION_DEFAULT / 5)
+    postDelayed({ isClickable = true }, DURATION_DEFAULT * 2)
     return super.performClick()
   }
 }

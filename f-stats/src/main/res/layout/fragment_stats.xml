@@ -3,8 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="?colorBgStats"
-  android:clickable="false">
+  android:background="?colorBgStats">
 
   <!-- Todo: replace with custom layout? -->
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,14 +44,15 @@
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
-  <androidx.core.widget.NestedScrollView
-    android:id="@+id/scrollingContentView"
+  <com.arsvechkarev.views.ScrollingView
+    android:id="@+id/statsScrollingContentView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/stats_image_doctor_height"
-    app:layout_behavior="com.arsvechkarev.stats.behaviors.StatsContentBehavior">
+    app:layout_behavior="com.arsvechkarev.stats.behaviors.ScrollableContentBehavior">
 
     <LinearLayout
+      android:id="@+id/statsContentView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@drawable/bg_stats_content"
@@ -65,33 +65,39 @@
         android:layout_marginHorizontal="@dimen/stats_three_elements_layout_m_horizontal"
         android:layout_marginVertical="@dimen/stats_three_elements_layout_m_vertical">
 
+        <View
+          android:id="@+id/statsMainInfoLoadingStub"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+
         <com.arsvechkarev.views.CoronavirusMainStatsView
-          android:visibility="invisible"
           android:id="@+id/statsViewConfirmed"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:background="@drawable/bg_stats_confirmed"
-          android:title="@string/text_confirmed"/>
+          android:title="@string/text_confirmed"
+          android:visibility="invisible"/>
 
         <com.arsvechkarev.views.CoronavirusMainStatsView
           android:id="@+id/statsViewRecovered"
-          android:visibility="invisible"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:background="@drawable/bg_stats_recovered"
-          android:title="@string/text_recovered"/>
+          android:title="@string/text_recovered"
+          android:visibility="invisible"/>
 
         <com.arsvechkarev.views.CoronavirusMainStatsView
           android:id="@+id/statsViewDeaths"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:visibility="invisible"
           android:background="@drawable/bg_stats_deaths"
-          android:title="@string/text_deaths"/>
+          android:title="@string/text_deaths"
+          android:visibility="invisible"/>
 
       </com.arsvechkarev.views.ElementsInARowViewGroup>
 
       <TextView
+        android:id="@+id/statsTitleTotalCases"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/stats_header_m_start"
@@ -102,24 +108,33 @@
       <FrameLayout
         android:id="@+id/statsTotalCasesLayout"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="24dp"
-        android:background="@drawable/bg_overlay_corners_small"
-        android:padding="16dp">
+        android:layout_height="@dimen/stats_chart_height"
+        android:layout_margin="@dimen/stats_chart_layout_margin"
+        android:background="@drawable/bg_overlay_corners_small">
+
+        <View
+          android:id="@+id/statsTotalCasesLoadingStub"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
 
         <com.arsvechkarev.views.charts.DailyCasesChart
           android:id="@+id/statsTotalCasesChart"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"/>
+          android:layout_height="match_parent"
+          android:layout_margin="@dimen/stats_chart_margin"
+          android:visibility="invisible"/>
 
         <com.arsvechkarev.views.charts.DateAndNumberLabel
-          android:id="@+id/statsLabelTotalCases"
+          android:id="@+id/statsTotalCasesLabel"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"/>
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/stats_chart_margin"
+          android:visibility="invisible"/>
 
       </FrameLayout>
 
       <TextView
+        android:id="@+id/statsTitleNewCases"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/stats_header_m_start"
@@ -130,25 +145,66 @@
       <FrameLayout
         android:id="@+id/statsNewCasesLayout"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="24dp"
-        android:background="@drawable/bg_overlay_corners_small"
-        android:padding="16dp">
+        android:layout_height="@dimen/stats_chart_height"
+        android:layout_margin="@dimen/stats_chart_layout_margin"
+        android:background="@drawable/bg_overlay_corners_small">
+
+        <View
+          android:id="@+id/statsNewCasesLoadingStub"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
 
         <com.arsvechkarev.views.charts.DailyCasesChart
           android:id="@+id/statsNewCasesChart"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"/>
+          android:layout_height="match_parent"
+          android:layout_margin="@dimen/stats_chart_margin"
+          android:visibility="invisible"/>
 
         <com.arsvechkarev.views.charts.DateAndNumberLabel
-          android:id="@+id/statsLabelNewCases"
+          android:id="@+id/statsNewCasesLabel"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"/>
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/stats_chart_margin"
+          android:visibility="invisible"/>
 
       </FrameLayout>
 
     </LinearLayout>
 
-  </androidx.core.widget.NestedScrollView>
+  </com.arsvechkarev.views.ScrollingView>
+
+  <LinearLayout
+    android:id="@+id/statsErrorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/stats_header_height"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <TextView
+      android:id="@+id/statsErrorMessage"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="@dimen/text_h3"/>
+
+    <ImageView
+      android:id="@+id/statsImageFailure"
+      android:layout_width="@dimen/stats_error_image_size"
+      android:layout_height="@dimen/stats_error_image_size"
+      android:layout_margin="@dimen/stats_error_image_margin"
+      android:src="@drawable/image_unknown_error"/>
+
+    <com.arsvechkarev.views.ClickableTextView
+      android:id="@+id/statsRetryButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/text_retry"
+      android:textColor="?colorFailure"
+      android:textSize="@dimen/text_h3"
+      app:rippleColor="?colorFailureRipple"/>
+
+  </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

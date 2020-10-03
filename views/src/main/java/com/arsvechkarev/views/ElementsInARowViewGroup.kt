@@ -4,6 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 
+/**
+ * Lays out elements (except first one) in a row with assigning equal width and height to
+ * each. First child is laid out to fill width and height of a parent
+ */
 class ElementsInARowViewGroup @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null
@@ -12,11 +16,13 @@ class ElementsInARowViewGroup @JvmOverloads constructor(
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val width = MeasureSpec.getSize(widthMeasureSpec)
     val offset = getChildMargin(width)
-    val childSize = (width - offset * (childCount - 1) - paddingStart - paddingEnd) / childCount
+    val children = childCount - 1
+    val childSize = (width - offset * (children - 1) - paddingStart - paddingEnd) / children
     val measureSpec = MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY)
-    for (i in 0 until childCount) {
+    for (i in 1 until childCount) {
       getChildAt(i).measure(measureSpec, measureSpec)
     }
+    getChildAt(0).measure(widthMeasureSpec, heightMeasureSpec)
     setMeasuredDimension(
       resolveSize(width, widthMeasureSpec),
       resolveSize(childSize, heightMeasureSpec)
@@ -24,10 +30,12 @@ class ElementsInARowViewGroup @JvmOverloads constructor(
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+    getChildAt(0).layout(0, 0, width, height)
+    val children = childCount - 1
     val offset = getChildMargin(width)
-    val childSize = (width - offset * (childCount - 1) - paddingStart - paddingEnd) / childCount
+    val childSize = (width - offset * (children - 1) - paddingStart - paddingEnd) / children
     var left = paddingStart
-    for (i in 0 until childCount) {
+    for (i in 1 until childCount) {
       getChildAt(i).layout(left, paddingTop, left + childSize, height - paddingBottom)
       left += childSize + offset
     }

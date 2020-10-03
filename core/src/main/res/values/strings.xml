@@ -19,7 +19,7 @@
   <string name="text_no_connection">No connection</string>
   <string name="text_timeout">Too slow connection</string>
   <string name="text_unknown_error">An error occurred</string>
-  <string name="text_retry_all_caps">RETRY</string>
+  <string name="text_retry">RETRY</string>
 
   <string name="text_visit_who">
     More information: &lt;br>

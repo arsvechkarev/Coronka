@@ -97,8 +97,10 @@ class DailyCasesChart(context: Context, attrs: AttributeSet) : LineChart(context
   
   
   private object YAxisFormatter : ValueFormatter() {
-    
-    override fun getFormattedValue(value: Float) = value.toFormattedShortString()
+  
+    override fun getFormattedValue(value: Float): String {
+      return if (value == 0f) "" else value.toFormattedShortString()
+    }
   }
   
   private inner class DateAxisFormatter : ValueFormatter() {
