@@ -1,4 +1,4 @@
-package com.arsvechkarev.views.loadingstubs
+package com.arsvechkarev.views.drawables
 
 import android.content.Context
 import android.graphics.Path
@@ -8,9 +8,10 @@ import com.arsvechkarev.views.R
 import core.extenstions.i
 
 class MainStatsInfoLoadingDrawable(context: Context)
-  : BaseStubDrawable(context), Animatable, Runnable {
+  : BaseLoadingDrawable(context), Animatable, Runnable {
   
-  private val cornersRadius = context.resources.getDimension(R.dimen.bg_overlay_corners_small)
+  private val cornersRadius = context.resources.getDimension(
+    R.dimen.bg_overlay_corners_small)
   
   override fun drawBackgroundWithPath(path: Path, width: Float, height: Float) {
     val margin = ElementsInARowViewGroup.getChildMargin(width.i)

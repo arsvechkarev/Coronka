@@ -12,46 +12,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    android:paddingTop="@dimen/rankings_recycler_p_top"
     android:paddingBottom="@dimen/rankings_recycler_padding_bottom"
     app:layout_behavior="com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior"/>
 
-  <com.arsvechkarev.views.GradientHeaderView
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/rankingsHeaderLayout"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/rankings_header_height"
-    android:endColor="?colorGradientHeaderEnd"
-    android:startColor="?colorGradientHeaderStart"
-    app:curveSize="@dimen/rankings_header_curve_size"
+    android:layout_height="wrap_content"
+    android:background="?colorBackground"
+    android:clipChildren="false"
     app:layout_behavior="com.arsvechkarev.views.behaviors.HeaderBehavior">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <View
+      android:id="@+id/rankingsHeaderGradientView"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="@dimen/rankings_header_height"
+      app:layout_constraintTop_toTopOf="parent"/>
 
-      <TextView
-        android:id="@+id/rankingsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/title_rankings"
-        android:textSize="@dimen/text_header"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    <ImageView
+      android:id="@+id/rankingsIconDrawer"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/icon_drawer_margin"
+      android:layout_marginTop="@dimen/icon_drawer_margin"
+      android:src="@drawable/ic_drawer"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+      android:id="@+id/rankingsTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/title_rankings"
+      android:textSize="@dimen/text_header"
+      app:layout_constraintBottom_toBottomOf="@id/rankingsHeaderGradientView"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@id/rankingsHeaderGradientView"/>
 
-  </com.arsvechkarev.views.GradientHeaderView>
+    <com.arsvechkarev.views.Chip
+      android:id="@+id/rankingsChipWorldRegion"
+      style="@style/Chip.RegionName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/rankings_header_chip_margin"
+      android:text="Worldwide"
+      app:colorSecondary="?colorBackground"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/rankingsHeaderGradientView"/>
 
-  <ImageView
-    android:id="@+id/rankingsIconDrawer"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/icon_drawer_margin"
-    android:layout_marginTop="@dimen/icon_drawer_margin"
-    android:src="@drawable/ic_drawer"/>
+    <com.arsvechkarev.views.Chip
+      android:id="@+id/rankingsChipOptionType"
+      style="@style/Chip"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/rankings_header_chip_margin"
+      android:text="Confirmed"
+      app:colorFill="?colorConfirmed"
+      app:colorSecondary="?colorBackground"
+      app:layout_constraintBottom_toBottomOf="@id/rankingsChipWorldRegion"
+      app:layout_constraintStart_toEndOf="@id/rankingsChipWorldRegion"
+      app:layout_constraintTop_toTopOf="@id/rankingsChipWorldRegion"/>
+
+    <View
+      android:id="@+id/rankingsDivider"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/divider_height"
+      android:layout_marginTop="16dp"
+      android:background="?colorDivider"
+      app:layout_constraintTop_toBottomOf="@id/rankingsChipOptionType"/>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
   <ImageButton
     android:id="@+id/rankingsFabFilter"
@@ -127,6 +158,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Europe"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipAfrica"
+        style="@style/Chip.RegionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Africa"/>
 
       <com.arsvechkarev.views.Chip
         android:id="@+id/chipOceania"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <attr name="colorBackground" format="color"/>
+  <attr name="colorBackgroundLight" format="color"/>
   <attr name="colorOverlay" format="color"/>
   <attr name="colorOverlayShine" format="color"/>
   <attr name="colorOverlayShineLight" format="color"/>
@@ -12,7 +13,6 @@
   <attr name="colorIconDefault" format="color"/>
   <attr name="colorTextPrimary" format="color"/>
   <attr name="colorTextSecondary" format="color"/>
-  <attr name="colorBgStats" format="color"/>
 
   <attr name="colorConfirmed" format="color"/>
   <attr name="colorRecovered" format="color"/>
@@ -23,7 +23,6 @@
   <attr name="colorFailure" format="color"/>
   <attr name="colorFailureRipple" format="color"/>
 
-  <attr name="colorDeaths2" format="color"/>
   <attr name="colorBottomNavigationDivider" format="color"/>
   <attr name="colorDivider" format="color"/>
 

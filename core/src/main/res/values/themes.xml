@@ -7,6 +7,7 @@
 
   <style name="AppTheme.Dark">
     <item name="colorBackground">@color/dark_background</item>
+    <item name="colorBackgroundLight">@color/dark_background_light</item>
     <item name="colorOverlay">@color/dark_overlay</item>
     <item name="colorOverlayShine">@color/dark_overlay_shine</item>
     <item name="colorOverlayShineLight">@color/dark_overlay_shine_light</item>
@@ -18,18 +19,16 @@
     <item name="colorIconDefault">@color/dark_icon_default</item>
     <item name="colorTextPrimary">@color/dark_text_primary</item>
     <item name="colorTextSecondary">@color/dark_text_secondary</item>
-    <item name="colorBgStats">@color/dark_bg_stats</item>
 
     <item name="colorFailure">@color/dark_failure</item>
     <item name="colorFailureRipple">@color/dark_failure_ripple</item>
 
     <item name="colorConfirmed">@color/dark_confirmed</item>
     <item name="colorRecovered">@color/dark_recovered</item>
-    <item name="colorDeaths">@color/dark_deaths_old</item>
+    <item name="colorDeaths">@color/dark_deaths</item>
     <item name="colorPercentByCountry">@color/dark_percent_by_country</item>
     <item name="colorDeathRate">@color/dark_death_rate</item>
 
-    <item name="colorDeaths2">@color/dark_deaths_2_old</item>
     <item name="colorBottomNavigationDivider">@color/dark_bottom_navigation_divider</item>
     <item name="colorDivider">@color/dark_divider</item>
 

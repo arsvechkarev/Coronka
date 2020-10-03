@@ -9,9 +9,9 @@ import com.arsvechkarev.stats.behaviors.ScrollableContentBehavior
 import com.arsvechkarev.stats.di.StatsModuleInjector
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedWorldCasesInfo
 import com.arsvechkarev.views.CoronavirusMainStatsView
-import com.arsvechkarev.views.loadingstubs.BaseStubDrawable.Companion.applyLoadingDrawable
-import com.arsvechkarev.views.loadingstubs.MainStatsInfoLoadingDrawable
-import com.arsvechkarev.views.loadingstubs.StatsGraphLoadingDrawable
+import com.arsvechkarev.views.drawables.BaseLoadingDrawable.Companion.applyLoadingDrawable
+import com.arsvechkarev.views.drawables.MainStatsInfoLoadingDrawable
+import com.arsvechkarev.views.drawables.StatsGraphLoadingDrawable
 import core.extenstions.animateChildrenInvisible
 import core.extenstions.animateChildrenVisible
 import core.extenstions.animateInvisible

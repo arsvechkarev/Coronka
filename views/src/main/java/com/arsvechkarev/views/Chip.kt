@@ -19,16 +19,12 @@ class Chip @JvmOverloads constructor(
   attrs: AttributeSet? = null
 ) : View(context, attrs) {
   
-  private val colorFill: Int
-  private val colorSecondary: Int
-  private val textLayout: Layout
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
   private val rect = RectF()
+  private var textLayout: Layout
   
-  private val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE }
-  
-  val text: String
-    get() = textLayout.text.toString()
+  private val rectPaint = Paint(
+    Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE }
   
   var isActive = false
     set(value) {
@@ -38,23 +34,51 @@ class Chip @JvmOverloads constructor(
       }
     }
   
+  var colorFill: Int = 0
+    set(value) {
+      rectPaint.color = value
+      field = value
+      invalidate()
+    }
+  
+  var colorSecondary: Int = 0
+    set(value) {
+      rectPaint.color = value
+      field = value
+      invalidate()
+    }
+  
+  var text: String
+    get() = textLayout.text.toString()
+    set(value) {
+      textLayout = boringLayoutOf(textPaint, value)
+      requestLayout()
+    }
+  
   init {
-    val attributes = context.obtainStyledAttributes(attrs, R.styleable.Chip, 0, 0)
-    colorFill = attributes.getColor(R.styleable.Chip_colorFill, Color.WHITE)
-    colorSecondary = attributes.getColor(R.styleable.Chip_colorSecondary, Color.BLACK)
-    textPaint.textSize = attributes.getDimension(R.styleable.Chip_android_textSize, 16.sp)
+    val attributes = context.obtainStyledAttributes(attrs, R.styleable.Chip, 0,
+      0)
+    this.colorFill = attributes.getColor(R.styleable.Chip_colorFill, Color.WHITE)
+    colorSecondary = attributes.getColor(R.styleable.Chip_colorSecondary,
+      Color.BLACK)
+    textPaint.textSize = attributes.getDimension(
+      R.styleable.Chip_android_textSize, 16.sp)
     textPaint.typeface = FontManager.segoeUI
-    rectPaint.strokeWidth = context.resources.getDimension(R.dimen.chip_stroke_size)
-    textLayout = boringLayoutOf(textPaint, attributes.getText(R.styleable.Chip_android_text) ?: "")
-    rectPaint.color = colorFill
-    textPaint.color = colorFill
+    rectPaint.strokeWidth = context.resources.getDimension(
+      R.dimen.chip_stroke_size)
+    textLayout = boringLayoutOf(textPaint,
+      attributes.getText(R.styleable.Chip_android_text) ?: "")
+    rectPaint.color = this.colorFill
     attributes.recycle()
     
     if (paddingStart == 0 && paddingEnd == 0 && paddingTop == 0 && paddingBottom == 0) {
       // Padding is not set applying default padding
-      val paddingHorizontal = context.resources.getDimension(R.dimen.chip_padding_horizontal).toInt()
-      val poddingVertical = context.resources.getDimension(R.dimen.chip_padding_vertical).toInt()
-      setPadding(paddingHorizontal, poddingVertical, paddingHorizontal, poddingVertical)
+      val paddingHorizontal = context.resources.getDimension(
+        R.dimen.chip_padding_horizontal).toInt()
+      val poddingVertical = context.resources.getDimension(
+        R.dimen.chip_padding_vertical).toInt()
+      setPadding(paddingHorizontal, poddingVertical, paddingHorizontal,
+        poddingVertical)
     }
   }
   
@@ -76,14 +100,15 @@ class Chip @JvmOverloads constructor(
     } else {
       strokeOffsetForRect = rectPaint.strokeWidth
       rectPaint.style = Paint.Style.STROKE
-      textPaint.color = colorFill
+      textPaint.color = this.colorFill
     }
     rect.set(strokeOffsetForRect, strokeOffsetForRect,
       width - strokeOffsetForRect, height - strokeOffsetForRect)
     canvas.drawRoundRect(rect, height.f, height.f, rectPaint)
     val strokeOffsetItems = rectPaint.strokeWidth
     canvas.execute {
-      translate(paddingStart.f + strokeOffsetItems, paddingTop.f + strokeOffsetItems)
+      translate(paddingStart.f + strokeOffsetItems,
+        paddingTop.f + strokeOffsetItems)
       textLayout.draw(canvas)
     }
   }

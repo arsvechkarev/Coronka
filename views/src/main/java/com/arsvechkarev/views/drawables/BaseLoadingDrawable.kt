@@ -1,4 +1,4 @@
-package com.arsvechkarev.views.loadingstubs
+package com.arsvechkarev.views.drawables
 
 import android.content.Context
 import android.graphics.Canvas
@@ -19,7 +19,7 @@ import com.arsvechkarev.views.R
 import core.extenstions.execute
 import core.extenstions.f
 
-abstract class BaseStubDrawable(
+abstract class BaseLoadingDrawable(
   context: Context,
   backgroundColorRes: Int = R.color.dark_overlay,
   shineColorRes: Int = R.color.dark_overlay_shine,
@@ -111,8 +111,8 @@ abstract class BaseStubDrawable(
   }
   
   companion object {
-    
-    fun View.applyLoadingDrawable(drawable: BaseStubDrawable) {
+  
+    fun View.applyLoadingDrawable(drawable: BaseLoadingDrawable) {
       background = drawable.apply { post { start() } }
     }
   }

@@ -6,18 +6,16 @@ import android.view.View
 import android.view.View.MeasureSpec
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import core.extenstions.getBehavior
+import core.extenstions.getBehaviorSafe
 
 class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet) :
   CoordinatorLayout.Behavior<V>() {
   
-  private var minHeaderHeight = -1
-  
   override fun layoutDependsOn(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
-    return dependency is Header
+    return dependency.getBehaviorSafe<HeaderBehavior<*>>() != null
   }
   
   override fun onDependentViewChanged(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
-    minHeaderHeight = dependency.getBehavior<HeaderBehavior<*>>().minHeight
     child.top = dependency.bottom
     return true
   }
@@ -30,9 +28,11 @@ class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet)
     parentHeightMeasureSpec: Int,
     heightUsed: Int
   ): Boolean {
-    val height = parent.height - minHeaderHeight
+    val findHeader = findHeader(parent)
+    val height = parent.height - findHeader.getBehavior<HeaderBehavior<*>>().minHeight
     val heightSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
-    parent.onMeasureChild(child, parentWidthMeasureSpec, widthUsed, heightSpec, heightUsed)
+    parent.onMeasureChild(child, parentWidthMeasureSpec, widthUsed, heightSpec,
+      heightUsed)
     return true
   }
   
@@ -45,7 +45,7 @@ class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet)
   private fun findHeader(parent: CoordinatorLayout): View {
     repeat(parent.childCount) {
       val child = parent.getChildAt(it)
-      if (child is Header) {
+      if (child.getBehaviorSafe<HeaderBehavior<*>>() != null) {
         return child
       }
     }

@@ -18,22 +18,27 @@ class ClickableTextView @JvmOverloads constructor(
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
   
   init {
-    val attributes = context.obtainStyledAttributes(attrs, R.styleable.ClickableTextView,
+    val attributes = context.obtainStyledAttributes(attrs,
+      R.styleable.ClickableTextView,
       defStyleAttr, 0)
-    val rippleColor = attributes.getColor(R.styleable.ClickableTextView_rippleColor, Color.WHITE)
+    val rippleColor = attributes.getColor(
+      R.styleable.ClickableTextView_rippleColor, Color.WHITE)
     setRipple(rippleColor)
     attributes.recycle()
     isClickable = true
     isFocusable = true
     typeface = FontManager.rubik
-    val pHorizontal = context.resources.getDimension(R.dimen.clickable_text_view_p_horizontal).toInt()
-    val pVertical = context.resources.getDimension(R.dimen.clickable_text_view_p_vertical).toInt()
+    val pHorizontal = context.resources.getDimension(
+      R.dimen.clickable_text_view_p_horizontal).toInt()
+    val pVertical = context.resources.getDimension(
+      R.dimen.clickable_text_view_p_vertical).toInt()
     setPadding(pHorizontal, pVertical, pHorizontal, pVertical)
   }
   
   private fun setRipple(rippleColor: Int) {
     val r = context.resources.getDimension(R.dimen.clickable_text_view_corners)
-    val roundRectShape = RoundRectShape(floatArrayOf(r, r, r, r, r, r, r, r), null, null)
+    val roundRectShape = RoundRectShape(floatArrayOf(r, r, r, r, r, r, r, r),
+      null, null)
     val backgroundRect = ShapeDrawable().apply {
       shape = roundRectShape
       paint.color = Color.TRANSPARENT
@@ -42,7 +47,8 @@ class ClickableTextView @JvmOverloads constructor(
       shape = roundRectShape
       paint.color = rippleColor
     }
-    background = RippleDrawable(ColorStateList.valueOf(rippleColor), backgroundRect, maskRect)
+    background = RippleDrawable(ColorStateList.valueOf(rippleColor),
+      backgroundRect, maskRect)
   }
   
   override fun performClick(): Boolean {

@@ -38,7 +38,8 @@ class AdapterDelegateBuilder<T : DisplayableItem>(private val modelClass: KClass
     return object : AdapterDelegate(modelClass) {
       
       override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return AdapterViewHolder(parent.inflate(layoutRes), onViewHolderInitialization, data!!)
+        return AdapterViewHolder(parent.inflate(layoutRes),
+          onViewHolderInitialization, data!!)
       }
       
       @Suppress("UNCHECKED_CAST")

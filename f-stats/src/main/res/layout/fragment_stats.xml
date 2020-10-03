@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="?colorBgStats">
+  android:background="?colorBackgroundLight">
 
   <!-- Todo: replace with custom layout? -->
   <androidx.constraintlayout.widget.ConstraintLayout

@@ -25,6 +25,11 @@ fun View.gone() {
   visibility = View.GONE
 }
 
+fun View.heightWithMargins(): Int {
+  val params = layoutParams as ViewGroup.MarginLayoutParams
+  return height + params.topMargin + params.bottomMargin
+}
+
 inline fun <reified T : CoordinatorLayout.Behavior<*>> View.getBehavior(): T {
   return (layoutParams as CoordinatorLayout.LayoutParams).behavior as T
 }

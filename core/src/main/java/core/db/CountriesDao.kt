@@ -11,9 +11,12 @@ class CountriesDao {
     while (cursor.moveToNext()) {
       val info = Country(
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_ID)),
-        cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_NAME)),
-        cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_SLUG)),
-        cursor.getString(cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_CODE)),
+        cursor.getString(
+          cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_NAME)),
+        cursor.getString(
+          cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_SLUG)),
+        cursor.getString(
+          cursor.getColumnIndex(CountriesTable.COLUMN_COUNTRY_CODE)),
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_CONFIRMED)),
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_DEATHS)),
         cursor.getInt(cursor.getColumnIndex(CountriesTable.COLUMN_RECOVERED))

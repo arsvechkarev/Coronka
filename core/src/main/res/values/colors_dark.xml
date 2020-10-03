@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <color name="dark_background">#1A1D36</color>
+  <color name="dark_background_light">#262940</color>
   <color name="dark_overlay">#282C48</color>
   <color name="dark_overlay_shine">#2C304E</color>
   <color name="dark_overlay_shine_light">#2F3453</color>
   <color name="dark_overlay_accent">#5A6088</color>
-  <color name="dark_dialog">#34395C</color>
-  <color name="dark_gradient_header_start">#282E4B</color>
+  <color name="dark_dialog">#2E3353</color>
+  <color name="dark_gradient_header_start">#282C48</color>
   <color name="dark_gradient_header_end">#423C61</color>
   <color name="dark_ripple">#60FFFFFF</color>
   <color name="dark_icon_default">#FFFFFF</color>
   <color name="dark_text_primary">#FFFFFF</color>
   <color name="dark_text_secondary">#9DA6B8</color>
-  <color name="dark_bg_stats">#423C61</color>
 
   <color name="dark_confirmed">#FF4A4A</color>
   <color name="dark_recovered">#22BF17</color>
@@ -22,10 +22,8 @@
 
   <color name="dark_failure">#E64545</color>
   <color name="dark_failure_ripple">#70E64545</color>
-  <color name="dark_deaths_old">#000000</color>
-  <color name="dark_deaths_2_old">#989898</color>
   <color name="dark_bottom_navigation_divider">#000000</color>
-  <color name="dark_divider">#FFFFFF</color>
+  <color name="dark_divider">#979797</color>
   <color name="dark_text_accent">#0D70D4</color>
   <color name="dark_links">#0964DB</color>
 </resources>

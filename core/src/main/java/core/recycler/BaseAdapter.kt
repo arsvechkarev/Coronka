@@ -48,7 +48,8 @@ abstract class BaseAdapter(
   }
   
   override fun getItemViewType(position: Int): Int {
-    return classesMap[data[position]::class] ?: error("Can't find delegate for position: $position")
+    return classesMap[data[position]::class] ?: error(
+      "Can't find delegate for position: $position")
   }
   
   override fun getItemCount(): Int {

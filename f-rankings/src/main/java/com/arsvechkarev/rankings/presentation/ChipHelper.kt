@@ -1,13 +1,16 @@
 package com.arsvechkarev.rankings.presentation
 
 import com.arsvechkarev.rankings.R
+import com.arsvechkarev.views.Chip
 import core.model.OptionType
 import core.model.WorldRegion
 
 class ChipHelper(
   optionsTypeChips: ChipGroup,
   worldRegionChips: ChipGroup,
-  private val onNewChipSelected: (OptionType, WorldRegion) -> Unit
+  private val onNewChipSelected: (OptionType, WorldRegion) -> Unit,
+  private val onWorldRegionChipSelected: (Chip) -> Unit,
+  private val onOptionTypeChipSelected: (Chip) -> Unit,
 ) {
   
   private var currentOptionType = OptionType.CONFIRMED
@@ -15,6 +18,7 @@ class ChipHelper(
   
   init {
     optionsTypeChips.onNewChipSelected = { chip ->
+      onOptionTypeChipSelected(chip)
       when (chip.id) {
         R.id.chipConfirmed -> notifyClick(OptionType.CONFIRMED)
         R.id.chipRecovered -> notifyClick(OptionType.RECOVERED)
@@ -24,10 +28,12 @@ class ChipHelper(
       }
     }
     worldRegionChips.onNewChipSelected = { chip ->
+      onWorldRegionChipSelected(chip)
       when (chip.id) {
         R.id.chipWorldwide -> notifyClick(WorldRegion.WORLDWIDE)
         R.id.chipAsia -> notifyClick(WorldRegion.ASIA)
         R.id.chipEurope -> notifyClick(WorldRegion.EUROPE)
+        R.id.chipAfrica -> notifyClick(WorldRegion.AFRICA)
         R.id.chipOceania -> notifyClick(WorldRegion.OCEANIA)
         R.id.chipNorthAmerica -> notifyClick(WorldRegion.NORTH_AMERICA)
         R.id.chipSouthAmerica -> notifyClick(WorldRegion.SOUTH_AMERICA)

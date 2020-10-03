@@ -3,17 +3,13 @@ package com.arsvechkarev.rankings.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.arsvechkarev.common.AllCountriesRepository
-import com.arsvechkarev.rankings.list.HeaderItemAdapterDelegate
 import core.NetworkConnection
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
-import core.extenstions.assertThat
-import core.model.DisplayableCountry
 import core.model.OptionType
 import core.model.TotalData
 import core.model.WorldRegion
-import core.recycler.SortableDisplayableItem
 import core.state.BaseScreenState
 import core.state.Failure
 import core.state.Failure.Companion.asFailureReason
@@ -62,7 +58,7 @@ class RankingsViewModel(
   fun filter(optionType: OptionType, worldRegion: WorldRegion) {
     rxCall {
       Observable.fromCallable {
-        listFilterer.filter(totalData!!.countries, totalData!!.generalInfo, optionType, worldRegion)
+        listFilterer.filter(totalData!!.countries, optionType, worldRegion)
       }
           .subscribeOn(schedulers.computation())
           .observeOn(schedulers.mainThread())
@@ -76,22 +72,9 @@ class RankingsViewModel(
   
   private fun transformToScreenState(totalData: TotalData): BaseScreenState {
     this.totalData = totalData
-    val countries = totalData.countries
-    val displayableItems = ArrayList<SortableDisplayableItem>(countries.size + 1)
-    displayableItems.add(HeaderItemAdapterDelegate.Header)
-    for (i in countries.indices) {
-      val country = countries[i]
-      displayableItems.add(DisplayableCountry(country.name, country.confirmed))
-    }
-    displayableItems.sortWith(Comparator { item1, item2 ->
-      if (item1 is HeaderItemAdapterDelegate.Header) return@Comparator -1
-      if (item2 is HeaderItemAdapterDelegate.Header) return@Comparator 1
-      assertThat(item1 is DisplayableCountry && item2 is DisplayableCountry)
-      return@Comparator item2.compareTo(item1)
-    })
-    for (i in 1 until displayableItems.size) {
-      (displayableItems[i] as DisplayableCountry).number = i
-    }
-    return RankingsScreenState.Success(displayableItems, OptionType.CONFIRMED, WorldRegion.WORLDWIDE)
+    val worldRegion = WorldRegion.WORLDWIDE
+    val optionType = OptionType.CONFIRMED
+    val data = listFilterer.filter(totalData.countries, optionType, worldRegion)
+    return RankingsScreenState.Success(data, optionType, worldRegion)
   }
 }

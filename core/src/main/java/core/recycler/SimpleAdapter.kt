@@ -24,7 +24,8 @@ class SimpleAdapter<T>(
     return data.size
   }
   
-  inner class SimpleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+  inner class SimpleViewHolder(itemView: View) :
+    RecyclerView.ViewHolder(itemView) {
     
     init {
       onViewHolderInitialization(this)

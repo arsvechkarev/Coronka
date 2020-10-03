@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import core.extenstions.forEach
 import core.recycler.SortableDisplayableItem.DiffCallBack
 
-abstract class BaseListAdapter : ListAdapter<SortableDisplayableItem, ViewHolder>(DiffCallBack()) {
+abstract class BaseListAdapter :
+  ListAdapter<SortableDisplayableItem, ViewHolder>(DiffCallBack()) {
   
   protected var data: List<SortableDisplayableItem> = ArrayList()
   private val delegates = SparseArrayCompat<ListAdapterDelegate>()

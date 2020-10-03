@@ -14,7 +14,8 @@ class NetworkConnectionImpl(context: Context) : NetworkConnection, Loggable {
   override val logTag = "NetworkConnection"
   
   private val connectivityManager =
-      context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+      context.getSystemService(
+        Context.CONNECTIVITY_SERVICE) as ConnectivityManager
   
   private val latch = CountDownLatch(1)
   
@@ -35,6 +36,7 @@ class NetworkConnectionImpl(context: Context) : NetworkConnection, Loggable {
     }
   
   init {
-    connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
+    connectivityManager.registerNetworkCallback(
+      NetworkRequest.Builder().build(), callback)
   }
 }

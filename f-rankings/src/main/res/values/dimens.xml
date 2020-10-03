@@ -11,12 +11,11 @@
   <dimen name="rankings_item_header_p_horizontal">@dimen/rankings_small_stats_view_p_end</dimen>
   <dimen name="rankings_item_header_country_name_offset">@dimen/rankings_small_stats_view_p_start</dimen>
 
-  <dimen name="rankings_recycler_p_top">24dp</dimen>
-
   <dimen name="rankings_header_height">120dp</dimen>
 
   <dimen name="rankings_header_fab_margin">16dp</dimen>
   <dimen name="rankings_header_fab_padding">12dp</dimen>
+  <dimen name="rankings_header_chip_margin">8dp</dimen>
 
   <dimen name="rankings_bottom_sheet_title_m_start">32dp</dimen>
   <dimen name="rankings_bottom_sheet_title_m_top">24dp</dimen>
