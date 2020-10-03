@@ -1,5 +1,5 @@
 ext {
-  kotlin_version = '1.4.0'
+  kotlin_version = '1.4.10'
 
   applicationDependencies = [
       kotlin             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
