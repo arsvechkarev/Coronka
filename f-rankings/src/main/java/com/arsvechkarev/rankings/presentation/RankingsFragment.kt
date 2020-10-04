@@ -8,13 +8,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.rankings.R
 import com.arsvechkarev.rankings.di.RankingsDiInjector
 import com.arsvechkarev.rankings.list.RankingsAdapter
-import com.arsvechkarev.rankings.presentation.RankingsScreenState.Success
+import com.arsvechkarev.rankings.presentation.RankingsScreenState.Filtered
+import com.arsvechkarev.rankings.presentation.RankingsScreenState.Loaded
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior
 import com.arsvechkarev.views.behaviors.HeaderBehavior
-import com.arsvechkarev.views.drawables.GradientHeaderDrawable.Companion.createGradientHeaderDrawable
+import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
+import com.arsvechkarev.views.drawables.GradientHeaderStub.Companion.createGradientHeaderDrawable
+import com.arsvechkarev.views.drawables.RankingsListLoadingStub
+import com.arsvechkarev.views.drawables.SelectedChipsLoadingStub
+import core.extenstions.animateInvisible
+import core.extenstions.animateVisible
 import core.extenstions.getBehavior
 import core.extenstions.heightWithMargins
 import core.state.BaseScreenState
+import core.state.Failure
+import core.state.Failure.FailureReason
 import core.state.Loading
 import kotlinx.android.synthetic.main.fragment_rankings.chipAfrica
 import kotlinx.android.synthetic.main.fragment_rankings.chipAsia
@@ -33,10 +41,15 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsBottomSheetCross
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsChipOptionType
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsChipWorldRegion
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsDivider
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsErrorLayout
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsErrorMessage
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsFabFilter
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsHeaderGradientView
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsHeaderLayout
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsImageFailure
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsListLoadingStub
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRecyclerView
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsSelectedChipsLoadingStub
 
 class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   
@@ -47,29 +60,67 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel = RankingsDiInjector.provideViewModel(this)
-    viewModel.startInitialLoading()
     viewModel.state.observe(this, Observer(::handleState))
+    viewModel.startLoadingData()
     rankingsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     rankingsRecyclerView.adapter = adapter
+    setupClickListeners()
+    setupBehavior()
+    setupChips()
+    setupDrawables()
+  }
+  
+  private fun handleState(state: BaseScreenState) {
+    when (state) {
+      is Loading -> renderLoading()
+      is Loaded -> renderLoaded(state)
+      is Filtered -> renderFiltered(state)
+      is Failure -> renderFailure(state.reason)
+    }
+  }
+  
+  private fun renderLoading() {
+    rankingsFabFilter.isEnabled = false
+    animateInvisible(rankingsErrorLayout, rankingsChipWorldRegion, rankingsChipOptionType,
+      rankingsDivider, rankingsRecyclerView)
+    animateVisible(rankingsListLoadingStub, rankingsSelectedChipsLoadingStub)
+  }
+  
+  private fun renderLoaded(state: Loaded) {
+    rankingsFabFilter.isEnabled = true
+    animateInvisible(rankingsListLoadingStub, rankingsSelectedChipsLoadingStub)
+    animateVisible(rankingsRecyclerView, rankingsChipWorldRegion,
+      rankingsChipOptionType, rankingsDivider)
+    adapter.submitList(state.list)
+  }
+  
+  private fun renderFiltered(state: Filtered) {
+    rankingsFabFilter.isEnabled = true
+    adapter.submitList(state.list)
+  }
+  
+  private fun renderFailure(reason: FailureReason) {
+    rankingsFabFilter.isEnabled = false
+    animateInvisible(rankingsListLoadingStub, rankingsSelectedChipsLoadingStub)
+    rankingsErrorLayout.animateVisible()
+    when (reason) {
+      FailureReason.NO_CONNECTION -> {
+        rankingsImageFailure.setImageResource(R.drawable.image_no_connection)
+        rankingsErrorMessage.setText(R.string.text_no_connection)
+      }
+      FailureReason.TIMEOUT, FailureReason.UNKNOWN -> {
+        rankingsImageFailure.setImageResource(R.drawable.image_unknown_error)
+        rankingsErrorMessage.setText(R.string.text_unknown_error)
+      }
+    }
+  }
+  
+  private fun setupClickListeners() {
     rankingsFabFilter.setOnClickListener {
       rankingsBottomSheet.getBehavior<BottomSheetBehavior<*>>().show()
     }
     rankingsBottomSheetCross.setOnClickListener {
       rankingsBottomSheet.getBehavior<BottomSheetBehavior<*>>().hide()
-    }
-    rankingsHeaderGradientView.background =
-        createGradientHeaderDrawable(R.dimen.rankings_header_curve_size)
-    setupBehavior()
-    setupChips()
-  }
-  
-  private fun handleState(state: BaseScreenState) {
-    when (state) {
-      is Loading -> {
-      }
-      is Success -> {
-        adapter.submitList(state.list)
-      }
     }
   }
   
@@ -107,5 +158,16 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
       onWorldRegionChipSelected = { chip ->
         rankingsChipWorldRegion.text = chip.text
       })
+  }
+  
+  private fun setupDrawables() {
+    rankingsHeaderGradientView.background =
+        createGradientHeaderDrawable(curveSizeRes = R.dimen.rankings_header_curve_size)
+    rankingsListLoadingStub.applyLoadingDrawable(RankingsListLoadingStub(requireContext()))
+    rankingsSelectedChipsLoadingStub.applyLoadingDrawable(
+      SelectedChipsLoadingStub(
+        requireContext(), R.dimen.rankings_chip_text_size, R.dimen.rankings_header_chip_margin
+      )
+    )
   }
 }

@@ -7,7 +7,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.arsvechkarev.stats.R
 import core.extenstions.f
 import core.extenstions.forEachChild
-import core.extenstions.getBehaviorSafe
+import core.extenstions.hasBehavior
 
 class TitleHeaderBehavior<V : View>(context: Context, attrs: AttributeSet)
   : CoordinatorLayout.Behavior<V>() {
@@ -54,7 +54,7 @@ class TitleHeaderBehavior<V : View>(context: Context, attrs: AttributeSet)
   private fun findViewWithStatsContentBehavior(parent: CoordinatorLayout): View {
     var header: View? = null
     parent.forEachChild { child ->
-      if (child.getBehaviorSafe<ScrollableContentBehavior<*>>() != null) {
+      if (child.hasBehavior<ScrollableContentBehavior<*>>()) {
         header = child
       }
     }

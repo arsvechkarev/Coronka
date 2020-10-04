@@ -1,11 +1,9 @@
 package com.arsvechkarev.rankings.list
 
 import core.recycler.BaseListAdapter
+import core.recycler.SortableDisplayableItem.AlwaysFalseCallback
 
-class RankingsAdapter : BaseListAdapter() {
-  
-  init {
-    addDelegate(HeaderItemAdapterDelegate())
-    addDelegate(CountryItemAdapterDelegate())
-  }
-}
+class RankingsAdapter : BaseListAdapter(
+  delegates = listOf(CountryItemAdapterDelegate()),
+  diffCallback = AlwaysFalseCallback
+)

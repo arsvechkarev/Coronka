@@ -3,12 +3,10 @@ package com.arsvechkarev.views.behaviors
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.View.MeasureSpec
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import core.extenstions.getBehavior
 import core.extenstions.hasBehavior
 
-class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet) :
+class ViewUnderHeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   CoordinatorLayout.Behavior<V>() {
   
   override fun layoutDependsOn(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
@@ -29,10 +27,9 @@ class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet)
     heightUsed: Int
   ): Boolean {
     val header = findHeader(parent)
-    val height = parent.height - header.getBehavior<HeaderBehavior<*>>().minHeight
-    val heightSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
-    parent.onMeasureChild(child, parentWidthMeasureSpec, widthUsed, heightSpec,
-      heightUsed)
+    val height = parent.measuredHeight - header.measuredHeight
+    val heightSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
+    parent.onMeasureChild(child, parentWidthMeasureSpec, widthUsed, heightSpec, heightUsed)
     return true
   }
   
@@ -51,4 +48,4 @@ class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet)
     }
     throw IllegalStateException()
   }
-} 
+}

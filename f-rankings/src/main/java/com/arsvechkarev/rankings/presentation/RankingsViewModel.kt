@@ -19,7 +19,6 @@ import core.state.Failure
 import core.state.Failure.Companion.asFailureReason
 import core.state.Loading
 import io.reactivex.Observable
-import io.reactivex.exceptions.OnErrorNotImplementedException
 
 class RankingsViewModel(
   private val connection: NetworkConnection,
@@ -34,16 +33,7 @@ class RankingsViewModel(
   val state: LiveData<BaseScreenState>
     get() = _state
   
-  fun startInitialLoading() {
-    updateFromNetwork()
-  }
-  
-  fun updateFromNetwork() {
-    if (connection.isNotConnected) {
-      _state.value = Failure(Failure.FailureReason.NO_CONNECTION)
-      return
-    }
-    
+  fun startLoadingData() {
     rxCall {
       allCountriesRepository.getData()
           .subscribeOn(schedulers.io())
@@ -51,11 +41,7 @@ class RankingsViewModel(
           .onErrorReturn { Failure(it.asFailureReason()) }
           .startWith(Loading)
           .observeOn(schedulers.mainThread())
-          .subscribe({
-            _state.value = it
-          }) {
-            throw OnErrorNotImplementedException(it)
-          }
+          .subscribe(_state::setValue)
     }
   }
   
@@ -66,11 +52,9 @@ class RankingsViewModel(
       }
           .subscribeOn(schedulers.computation())
           .observeOn(schedulers.mainThread())
-          .subscribe({
-            _state.value = RankingsScreenState.Success(it, optionType, worldRegion)
-          }, {
-            throw Exception(it)
-          })
+          .subscribe { list ->
+            _state.value = RankingsScreenState.Filtered(list)
+          }
     }
   }
   
@@ -83,7 +67,7 @@ class RankingsViewModel(
       val worldRegion = WorldRegion.WORLDWIDE
       val optionType = OptionType.CONFIRMED
       val data = countriesFilterer.filter(optionType, worldRegion)
-      return RankingsScreenState.Success(data, optionType, worldRegion)
+      return RankingsScreenState.Loaded(data, optionType, worldRegion)
     }
   }
 }

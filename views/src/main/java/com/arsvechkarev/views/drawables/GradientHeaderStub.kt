@@ -15,7 +15,7 @@ import core.extenstions.f
 import core.extenstions.getDimen
 import core.extenstions.retrieveColor
 
-class GradientHeaderDrawable(
+class GradientHeaderStub(
   private val startColor: Int,
   private val endColor: Int,
   private val curveSize: Float
@@ -56,9 +56,9 @@ class GradientHeaderDrawable(
   override fun getOpacity() = PixelFormat.OPAQUE
   
   companion object {
-    
-    fun Fragment.createGradientHeaderDrawable(curveSizeRes: Int): GradientHeaderDrawable {
-      return GradientHeaderDrawable(
+  
+    fun Fragment.createGradientHeaderDrawable(curveSizeRes: Int): GradientHeaderStub {
+      return GradientHeaderStub(
         requireContext().retrieveColor(R.color.dark_gradient_header_start),
         requireContext().retrieveColor(R.color.dark_gradient_header_end),
         requireContext().getDimen(curveSizeRes)

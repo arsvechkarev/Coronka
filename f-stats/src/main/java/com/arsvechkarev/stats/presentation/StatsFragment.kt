@@ -9,9 +9,9 @@ import com.arsvechkarev.stats.behaviors.ScrollableContentBehavior
 import com.arsvechkarev.stats.di.StatsModuleInjector
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedWorldCasesInfo
 import com.arsvechkarev.views.CoronavirusMainStatsView
-import com.arsvechkarev.views.drawables.BaseLoadingDrawable.Companion.applyLoadingDrawable
-import com.arsvechkarev.views.drawables.MainStatsInfoLoadingDrawable
-import com.arsvechkarev.views.drawables.StatsGraphLoadingDrawable
+import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
+import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
+import com.arsvechkarev.views.drawables.StatsGraphLoadingStub
 import core.extenstions.animateChildrenInvisible
 import core.extenstions.animateChildrenVisible
 import core.extenstions.animateInvisible
@@ -137,9 +137,9 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   }
   
   private fun initLoadingStubs() {
-    statsMainInfoLoadingStub.applyLoadingDrawable(MainStatsInfoLoadingDrawable(requireContext()))
-    statsTotalCasesLoadingStub.applyLoadingDrawable(StatsGraphLoadingDrawable(requireContext()))
-    statsNewCasesLoadingStub.applyLoadingDrawable(StatsGraphLoadingDrawable(requireContext()))
+    statsMainInfoLoadingStub.applyLoadingDrawable(MainStatsInfoLoadingStub(requireContext()))
+    statsTotalCasesLoadingStub.applyLoadingDrawable(StatsGraphLoadingStub(requireContext()))
+    statsNewCasesLoadingStub.applyLoadingDrawable(StatsGraphLoadingStub(requireContext()))
   }
   
   private fun initClickListeners() {

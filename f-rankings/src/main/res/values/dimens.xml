@@ -13,6 +13,8 @@
 
   <dimen name="rankings_header_height">120dp</dimen>
 
+  <dimen name="rankings_chip_text_size">@dimen/text_h5</dimen>
+
   <dimen name="rankings_header_fab_margin">16dp</dimen>
   <dimen name="rankings_header_fab_padding">12dp</dimen>
   <dimen name="rankings_header_chip_margin">8dp</dimen>

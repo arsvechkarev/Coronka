@@ -2,13 +2,11 @@ package com.arsvechkarev.views.drawables
 
 import android.content.Context
 import android.graphics.Path
-import android.graphics.drawable.Animatable
 import com.arsvechkarev.views.ElementsInARowViewGroup
 import com.arsvechkarev.views.R
 import core.extenstions.i
 
-class MainStatsInfoLoadingDrawable(context: Context)
-  : BaseLoadingDrawable(context), Animatable, Runnable {
+class MainStatsInfoLoadingStub(context: Context) : BaseLoadingStub(context) {
   
   private val cornersRadius = context.resources.getDimension(
     R.dimen.bg_overlay_corners_small)

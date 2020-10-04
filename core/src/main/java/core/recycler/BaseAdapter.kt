@@ -11,7 +11,6 @@ abstract class BaseAdapter(
 ) : RecyclerView.Adapter<ViewHolder>() {
   
   protected var data: List<DisplayableItem> = ArrayList()
-  protected var recyclerView: RecyclerView? = null
   
   private val classesMap = HashMap<KClass<*>, Int>()
   private val delegatesSparseArray = SparseArrayCompat<AdapterDelegate>()
@@ -31,8 +30,6 @@ abstract class BaseAdapter(
   }
   
   override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-    super.onAttachedToRecyclerView(recyclerView)
-    this.recyclerView = recyclerView
     delegates.forEach { it.onAttachedToRecyclerView(recyclerView) }
   }
   
@@ -48,8 +45,7 @@ abstract class BaseAdapter(
   }
   
   override fun getItemViewType(position: Int): Int {
-    return classesMap[data[position]::class] ?: error(
-      "Can't find delegate for position: $position")
+    return classesMap[data[position]::class] ?: error("Can't find delegate for position: $position")
   }
   
   override fun getItemCount(): Int {
@@ -58,7 +54,6 @@ abstract class BaseAdapter(
   
   override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
     super.onDetachedFromRecyclerView(recyclerView)
-    this.recyclerView = null
     delegates.forEach { it.onDetachedFromRecyclerView(recyclerView) }
   }
 }

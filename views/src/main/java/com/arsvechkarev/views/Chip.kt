@@ -19,12 +19,17 @@ class Chip @JvmOverloads constructor(
   attrs: AttributeSet? = null
 ) : View(context, attrs) {
   
-  private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
+  private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+    typeface = FontManager.segoeUI
+  }
+  private val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.STROKE
+    strokeWidth = context.resources.getDimension(R.dimen.chip_stroke_size)
+  }
+  
   private val rect = RectF()
   private var textLayout: Layout
-  
-  private val rectPaint = Paint(
-    Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE }
+  private var colorSecondary: Int = 0
   
   var isActive = false
     set(value) {
@@ -41,13 +46,6 @@ class Chip @JvmOverloads constructor(
       invalidate()
     }
   
-  var colorSecondary: Int = 0
-    set(value) {
-      rectPaint.color = value
-      field = value
-      invalidate()
-    }
-  
   var text: String
     get() = textLayout.text.toString()
     set(value) {
@@ -56,21 +54,14 @@ class Chip @JvmOverloads constructor(
     }
   
   init {
-    val attributes = context.obtainStyledAttributes(attrs, R.styleable.Chip, 0,
-      0)
-    this.colorFill = attributes.getColor(R.styleable.Chip_colorFill, Color.WHITE)
-    colorSecondary = attributes.getColor(R.styleable.Chip_colorSecondary,
-      Color.BLACK)
-    textPaint.textSize = attributes.getDimension(
-      R.styleable.Chip_android_textSize, 16.sp)
-    textPaint.typeface = FontManager.segoeUI
-    rectPaint.strokeWidth = context.resources.getDimension(
-      R.dimen.chip_stroke_size)
-    textLayout = boringLayoutOf(textPaint,
-      attributes.getText(R.styleable.Chip_android_text) ?: "")
-    rectPaint.color = this.colorFill
+    val attributes = context.obtainStyledAttributes(attrs, R.styleable.Chip, 0, 0)
+    colorFill = attributes.getColor(R.styleable.Chip_colorFill, Color.WHITE)
+    colorSecondary = attributes.getColor(R.styleable.Chip_colorSecondary, Color.BLACK)
+    textPaint.textSize = attributes.getDimension(R.styleable.Chip_android_textSize, 16.sp)
+    textLayout = boringLayoutOf(textPaint, attributes.getText(R.styleable.Chip_android_text) ?: "")
+    rectPaint.color = colorFill
     attributes.recycle()
-    
+  
     if (paddingStart == 0 && paddingEnd == 0 && paddingTop == 0 && paddingBottom == 0) {
       // Padding is not set applying default padding
       val paddingHorizontal = context.resources.getDimension(
@@ -80,6 +71,11 @@ class Chip @JvmOverloads constructor(
       setPadding(paddingHorizontal, poddingVertical, paddingHorizontal,
         poddingVertical)
     }
+  }
+  
+  fun setTextSize(textSize: Float) {
+    textPaint.textSize = textSize
+    requestLayout()
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

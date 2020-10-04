@@ -38,6 +38,10 @@ fun View.animateVisible(andThen: () -> Unit = {}) {
       .start()
 }
 
+fun animateVisible(vararg views: View) {
+  views.forEach { it.animateVisible() }
+}
+
 fun View.animateInvisible(andThen: () -> Unit = {}) {
   animate().alpha(0f).setDuration(DURATION_DEFAULT)
       .setInterpolator(AccelerateDecelerateInterpolator)
@@ -46,6 +50,10 @@ fun View.animateInvisible(andThen: () -> Unit = {}) {
         andThen()
       }
       .start()
+}
+
+fun animateInvisible(vararg views: View) {
+  views.forEach { it.animateInvisible() }
 }
 
 fun View.animateVisibleAndScale(andThen: () -> Unit = {}) {

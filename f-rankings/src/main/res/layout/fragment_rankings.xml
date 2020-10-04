@@ -13,6 +13,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:paddingBottom="@dimen/rankings_recycler_padding_bottom"
+    android:visibility="invisible"
     app:layout_behavior="com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior"/>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,6 +58,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/rankings_header_chip_margin"
       android:text="@string/text_worldwide"
+      android:visibility="invisible"
       app:colorSecondary="?colorBackground"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/rankingsHeaderGradientView"/>
@@ -68,6 +70,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/rankings_header_chip_margin"
       android:text="@string/text_confirmed"
+      android:visibility="invisible"
       app:colorFill="?colorConfirmed"
       app:colorSecondary="?colorBackground"
       app:layout_constraintBottom_toBottomOf="@id/rankingsChipWorldRegion"
@@ -81,6 +84,15 @@
       android:layout_marginTop="@dimen/rankings_divider_m_top"
       android:background="?colorDivider"
       app:layout_constraintTop_toBottomOf="@id/rankingsChipOptionType"/>
+
+    <View
+      android:id="@+id/rankingsSelectedChipsLoadingStub"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@id/rankingsChipWorldRegion"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -249,5 +261,44 @@
     </com.google.android.flexbox.FlexboxLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <View
+    android:id="@+id/rankingsListLoadingStub"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="com.arsvechkarev.views.behaviors.ViewUnderHeaderBehavior"/>
+
+  <LinearLayout
+    android:id="@+id/rankingsErrorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/rankings_header_height"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <TextView
+      android:id="@+id/rankingsErrorMessage"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="@dimen/text_h3"/>
+
+    <ImageView
+      android:id="@+id/rankingsImageFailure"
+      android:layout_width="120dp"
+      android:layout_height="120dp"
+      android:layout_margin="24dp"
+      android:src="@drawable/image_unknown_error"/>
+
+    <com.arsvechkarev.views.ClickableTextView
+      android:id="@+id/rankingsRetryButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/text_retry"
+      android:textColor="?colorFailure"
+      android:textSize="@dimen/text_h3"
+      app:rippleColor="?colorFailureRipple"/>
+
+  </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

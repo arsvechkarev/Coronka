@@ -2,7 +2,7 @@
 <resources>
   <style name="Chip">
     <item name="android:layout_margin">@dimen/rankings_bottom_sheet_chip_margin</item>
-    <item name="android:textSize">@dimen/text_h5</item>
+    <item name="android:textSize">@dimen/rankings_chip_text_size</item>
     <item name="colorSecondary">?colorDialog</item>
   </style>
 

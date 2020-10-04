@@ -19,7 +19,7 @@ import com.arsvechkarev.views.R
 import core.extenstions.execute
 import core.extenstions.f
 
-abstract class BaseLoadingDrawable(
+abstract class BaseLoadingStub(
   context: Context,
   backgroundColorRes: Int = R.color.dark_overlay,
   shineColorRes: Int = R.color.dark_overlay_shine,
@@ -56,7 +56,8 @@ abstract class BaseLoadingDrawable(
       shineRect.height() / 2f,
       shineRect.right,
       shineRect.height() / 2f,
-      intArrayOf(backgroundColor, shineColor, shineColor2, shineColor2, shineColor, backgroundColor),
+      intArrayOf(backgroundColor, shineColor, shineColor2,
+        shineColor2, shineColor, backgroundColor),
       floatArrayOf(0f, 0.2f, 0.45f, 0.55f, 0.8f, 0.95f),
       Shader.TileMode.CLAMP
     )
@@ -112,7 +113,7 @@ abstract class BaseLoadingDrawable(
   
   companion object {
   
-    fun View.applyLoadingDrawable(drawable: BaseLoadingDrawable) {
+    fun View.applyLoadingDrawable(drawable: BaseLoadingStub) {
       background = drawable.apply { post { start() } }
     }
   }

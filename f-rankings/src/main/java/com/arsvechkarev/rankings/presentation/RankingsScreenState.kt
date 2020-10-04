@@ -7,7 +7,11 @@ import core.state.BaseScreenState
 
 sealed class RankingsScreenState : BaseScreenState() {
   
-  class Success(
+  class Filtered(
+    val list: List<SortableDisplayableItem>
+  ) : RankingsScreenState()
+  
+  class Loaded(
     val list: List<SortableDisplayableItem>,
     val optionType: OptionType,
     val worldRegion: WorldRegion

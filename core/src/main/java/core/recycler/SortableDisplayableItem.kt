@@ -22,7 +22,7 @@ interface SortableDisplayableItem : DisplayableItem {
   /**
    * Callback for updating items in recycler view
    */
-  open class DiffCallBack<T : SortableDisplayableItem> :
+  class DiffCallBack<T : SortableDisplayableItem> :
     DiffUtil.ItemCallback<T>() {
   
     override fun areItemsTheSame(oldItem: T, newItem: T) =
@@ -30,5 +30,16 @@ interface SortableDisplayableItem : DisplayableItem {
   
     override fun areContentsTheSame(oldItem: T, newItem: T) =
         oldItem == newItem
+  }
+  
+  /**
+   * Callback for updating items in recycler view when items are always considered to be
+   * not equal
+   */
+  object AlwaysFalseCallback : DiffUtil.ItemCallback<SortableDisplayableItem>() {
+    
+    override fun areItemsTheSame(oldItem: SortableDisplayableItem, newItem: SortableDisplayableItem) = false
+    
+    override fun areContentsTheSame(oldItem: SortableDisplayableItem, newItem: SortableDisplayableItem) = false
   }
 }

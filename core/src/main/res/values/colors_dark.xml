@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <color name="dark_background">#25263A</color>
-  <color name="dark_background_light">#343651</color>
-  <color name="dark_overlay">#2D2F4A</color>
-  <color name="dark_overlay_shine">#2E304C</color>
-  <color name="dark_overlay_shine_light">#303250</color>
+  <color name="dark_background_light">@color/dark_overlay</color>
+  <color name="dark_overlay">#32344E</color>
+  <color name="dark_overlay_shine">#363853</color>
+  <color name="dark_overlay_shine_light">#393B57</color>
   <color name="dark_overlay_accent">#4D516C</color>
   <color name="dark_dialog">#363A55</color>
   <color name="dark_gradient_header_start">#2B2F4A</color>
@@ -23,7 +23,7 @@
   <color name="dark_failure">#E64545</color>
   <color name="dark_failure_ripple">#70E64545</color>
   <color name="dark_bottom_navigation_divider">#000000</color>
-  <color name="dark_divider">#676767</color>
+  <color name="dark_divider">@color/dark_overlay</color>
   <color name="dark_text_accent">#0D70D4</color>
   <color name="dark_links">#0964DB</color>
 </resources>

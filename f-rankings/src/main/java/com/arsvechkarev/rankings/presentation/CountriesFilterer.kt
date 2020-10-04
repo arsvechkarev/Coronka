@@ -43,7 +43,7 @@ class CountriesFilterer(
       return@Comparator item2.compareTo(item1)
     })
     for (i in 0 until displayableCountries.size) {
-      (displayableCountries[i] as DisplayableCountry).number = (i + 1)
+      (displayableCountries[i] as DisplayableCountry).number = i + 1
     }
     cache[Pair(optionType, worldRegion)] = displayableCountries
     return displayableCountries
@@ -63,12 +63,18 @@ class CountriesFilterer(
       regionsToCountries.getValue(worldRegion.letters!!)
     }
     for (country in list) {
-      val amount = determineAmount(optionType, country)
-      val amountString = when (amount) {
-        is Float -> if (amount == 0f) "0%" else "${decimalFormatter.format(amount)}%"
-        else -> Application.numberFormatter.format(amount)
+      when (val amount = determineAmount(optionType, country)) {
+        is Float -> {
+          if (amount > 0.001f) {
+            val amountString = "${decimalFormatter.format(amount)}%"
+            items.add(DisplayableCountry(country.name, amount, amountString))
+          }
+        }
+        else -> {
+          val amountString = Application.numberFormatter.format(amount)
+          items.add(DisplayableCountry(country.name, amount, amountString))
+        }
       }
-      items.add(DisplayableCountry(country.name, amount, amountString))
     }
     return items
   }
@@ -86,10 +92,10 @@ class CountriesFilterer(
       if (country.isFromRegion(worldRegion)) {
         val countryMetaInfo = metaInfoList.find { it.iso2 == country.iso2 }!!
         val amount = country.confirmed.toFloat() / countryMetaInfo.population.toFloat() * 100
-        val amountString = if (amount == 0f) "0%" else "${
-          decimalFormatter.format(amount)
-        }%"
-        items.add(DisplayableCountry(country.name, amount, amountString))
+        if (amount >= 0.001f) {
+          val amountString = "${decimalFormatter.format(amount)}%"
+          items.add(DisplayableCountry(country.name, amount, amountString))
+        }
       }
     }
     return items
