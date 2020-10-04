@@ -8,8 +8,6 @@ import android.graphics.Paint
 import android.text.Layout
 import android.text.TextPaint
 import android.view.View
-import core.Application.decimalFormatter
-import core.Application.numberFormatter
 import core.FontManager
 import core.extenstions.execute
 import core.extenstions.f
@@ -33,16 +31,11 @@ class StatsSmallView(
   private var amountLayout: Layout? = null
   private var numberLayoutMaxWidth = 0f
   
-  fun updateData(number: Int, text: String, amount: Number) {
+  fun updateData(rankNumber: Int, text: String, amount: String) {
     this.text = text
-    numberLayout = boringLayoutOf(textPaint, "$number.")
+    numberLayout = boringLayoutOf(textPaint, "$rankNumber.")
     numberLayoutMaxWidth = textPaint.measureText(RANK_TEXT_FOR_MEASURE)
-    val amountString = when (amount) {
-      is Double -> decimalFormatter.format(amount)
-      is Float -> decimalFormatter.format(amount)
-      else -> numberFormatter.format(amount)
-    }
-    amountLayout = boringLayoutOf(textPaint, amountString)
+    amountLayout = boringLayoutOf(textPaint, amount)
     invalidate()
   }
   

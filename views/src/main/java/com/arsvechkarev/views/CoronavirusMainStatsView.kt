@@ -41,7 +41,7 @@ class CoronavirusMainStatsView @JvmOverloads constructor(
   }
   
   fun prepareNumber(number: Int, textSize: Float) {
-    numberText = getTextForNumber(number)
+    numberText = getTextForNumber(context, number)
     numberTextPaint.textSize = textSize
     invalidate()
   }
@@ -70,7 +70,7 @@ class CoronavirusMainStatsView @JvmOverloads constructor(
   }
   
   companion object {
-    
+  
     fun getTextSize(width: Int, text: String): Float {
       assertThat(width != 0) { "Width = 0, unable to calculate text size" }
       val paint = Paint().apply {
@@ -78,18 +78,20 @@ class CoronavirusMainStatsView @JvmOverloads constructor(
       }
       return calculateTextSize(width, text, paint)
     }
-    
-    fun getTextForNumber(number: Int): String {
-      return number.formattedMillions()
+  
+    fun getTextForNumber(context: Context, number: Int): String {
+      return number.formattedMillions(context)
     }
-    
+  
     private fun getTitleTextSize(width: Int, context: Context): Float {
-      val confirmedTitleSize = getTextSize(width, context.getString(R.string.text_confirmed))
-      val recoveredTitleSize = getTextSize(width, context.getString(R.string.text_recovered))
+      val confirmedTitleSize = getTextSize(width,
+        context.getString(R.string.text_confirmed))
+      val recoveredTitleSize = getTextSize(width,
+        context.getString(R.string.text_recovered))
       val deathsTitleSize = getTextSize(width, context.getString(R.string.text_deaths))
       return minOf(confirmedTitleSize, recoveredTitleSize, deathsTitleSize)
     }
-    
+  
     private fun calculateTextSize(width: Int, text: String, paint: Paint): Float {
       paint.textSize = 10f
       while (true) {

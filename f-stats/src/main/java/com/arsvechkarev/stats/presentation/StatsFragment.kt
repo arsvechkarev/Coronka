@@ -133,7 +133,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   
   private fun getTextSize(number: Int): Float {
     return CoronavirusMainStatsView.getTextSize(statsViewConfirmed.width,
-      CoronavirusMainStatsView.getTextForNumber(number))
+      CoronavirusMainStatsView.getTextForNumber(requireContext(), number))
   }
   
   private fun initLoadingStubs() {

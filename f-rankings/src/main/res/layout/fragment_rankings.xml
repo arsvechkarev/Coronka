@@ -7,7 +7,7 @@
   android:background="?colorBackground"
   android:clipChildren="false">
 
-  <com.arsvechkarev.views.BoxRecyclerView
+  <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/rankingsRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -56,7 +56,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/rankings_header_chip_margin"
-      android:text="Worldwide"
+      android:text="@string/text_worldwide"
       app:colorSecondary="?colorBackground"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/rankingsHeaderGradientView"/>
@@ -67,7 +67,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/rankings_header_chip_margin"
-      android:text="Confirmed"
+      android:text="@string/text_confirmed"
       app:colorFill="?colorConfirmed"
       app:colorSecondary="?colorBackground"
       app:layout_constraintBottom_toBottomOf="@id/rankingsChipWorldRegion"
@@ -78,7 +78,7 @@
       android:id="@+id/rankingsDivider"
       android:layout_width="match_parent"
       android:layout_height="@dimen/divider_height"
-      android:layout_marginTop="16dp"
+      android:layout_marginTop="@dimen/rankings_divider_m_top"
       android:background="?colorDivider"
       app:layout_constraintTop_toBottomOf="@id/rankingsChipOptionType"/>
 
@@ -143,49 +143,49 @@
         style="@style/Chip.RegionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Worldwide"/>
+        android:text="@string/text_worldwide"/>
 
       <com.arsvechkarev.views.Chip
         android:id="@+id/chipAsia"
         style="@style/Chip.RegionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Asia"/>
+        android:text="@string/text_asia"/>
 
       <com.arsvechkarev.views.Chip
         android:id="@+id/chipEurope"
         style="@style/Chip.RegionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Europe"/>
+        android:text="@string/text_europe"/>
 
       <com.arsvechkarev.views.Chip
         android:id="@+id/chipAfrica"
         style="@style/Chip.RegionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Africa"/>
+        android:text="@string/text_africa"/>
 
       <com.arsvechkarev.views.Chip
         android:id="@+id/chipOceania"
         style="@style/Chip.RegionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Oceania"/>
+        android:text="@string/text_oceania"/>
 
       <com.arsvechkarev.views.Chip
         android:id="@+id/chipNorthAmerica"
         style="@style/Chip.RegionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="North America"/>
+        android:text="@string/text_north_america"/>
 
       <com.arsvechkarev.views.Chip
         android:id="@+id/chipSouthAmerica"
         style="@style/Chip.RegionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="South America"/>
+        android:text="@string/text_south_america"/>
 
     </com.google.android.flexbox.FlexboxLayout>
 
@@ -211,7 +211,7 @@
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Confirmed"
+        android:text="@string/text_confirmed"
         app:colorFill="?colorConfirmed"/>
 
       <com.arsvechkarev.views.Chip
@@ -219,7 +219,7 @@
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recovered"
+        android:text="@string/text_recovered"
         app:colorFill="?colorRecovered"/>
 
       <com.arsvechkarev.views.Chip
@@ -227,7 +227,7 @@
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Deaths"
+        android:text="@string/text_deaths"
         app:colorFill="?colorDeaths"/>
 
       <com.arsvechkarev.views.Chip
@@ -235,7 +235,7 @@
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Percent by country"
+        android:text="@string/text_percent_in_country"
         app:colorFill="?colorPercentByCountry"/>
 
       <com.arsvechkarev.views.Chip
@@ -243,7 +243,7 @@
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Death rate"
+        android:text="@string/text_death_rate"
         app:colorFill="?colorDeathRate"/>
 
     </com.google.android.flexbox.FlexboxLayout>

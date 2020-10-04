@@ -37,7 +37,7 @@ class DailyCasesChart(context: Context, attrs: AttributeSet) : LineChart(context
       axisMinimum = 0f
       setDrawGridLines(false)
       textColor = ContextCompat.getColor(context, R.color.dark_text_primary)
-      valueFormatter = YAxisFormatter
+      valueFormatter = YAxisFormatter()
     }
     axisLeft.apply {
       axisMinimum = 0f
@@ -96,10 +96,10 @@ class DailyCasesChart(context: Context, attrs: AttributeSet) : LineChart(context
   }
   
   
-  private object YAxisFormatter : ValueFormatter() {
-  
+  private inner class YAxisFormatter : ValueFormatter() {
+    
     override fun getFormattedValue(value: Float): String {
-      return if (value == 0f) "" else value.toFormattedShortString()
+      return if (value == 0f) "" else value.toFormattedShortString(context)
     }
   }
   

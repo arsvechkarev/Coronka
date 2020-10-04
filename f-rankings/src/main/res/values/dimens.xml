@@ -16,6 +16,7 @@
   <dimen name="rankings_header_fab_margin">16dp</dimen>
   <dimen name="rankings_header_fab_padding">12dp</dimen>
   <dimen name="rankings_header_chip_margin">8dp</dimen>
+  <dimen name="rankings_divider_m_top">16dp</dimen>
 
   <dimen name="rankings_bottom_sheet_title_m_start">32dp</dimen>
   <dimen name="rankings_bottom_sheet_title_m_top">24dp</dimen>

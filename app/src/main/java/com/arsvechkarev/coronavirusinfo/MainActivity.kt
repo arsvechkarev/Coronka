@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     Application.initDensities(resources)
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)
-    goToFragment(RankingsFragment::class)
+    goToFragment(StatsFragment::class)
     drawerTextStatistics.setOnClickListener { handleOnDrawerItemClicked(it) }
     drawerTextMap.setOnClickListener { handleOnDrawerItemClicked(it) }
     drawerTextTips.setOnClickListener { handleOnDrawerItemClicked(it) }

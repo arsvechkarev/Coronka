@@ -34,6 +34,7 @@
 
     <item name="colorTextAccent">@color/dark_text_accent</item>
     <item name="colorTextLinks">@color/dark_links</item>
+    <item name="colorPrimary">?colorOverlay</item>
   </style>
 
   <style name="TextStyle" parent="@style/TextAppearance.AppCompat">

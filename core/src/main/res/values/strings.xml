@@ -6,13 +6,24 @@
   <string name="label_stats">Stats</string>
   <string name="label_faq">FAQ</string>
 
+  <string name="number_thousands">%1$d K</string>
+  <string name="number_millions">%1$d M</string>
+  <string name="number_formatted_with_parts">%1$d.%2$s M</string>
+
+  <string name="text_worldwide">Worldwide</string>
+  <string name="text_asia">Asia</string>
+  <string name="text_europe">Europe</string>
+  <string name="text_africa">Africa</string>
+  <string name="text_oceania">Oceania</string>
+  <string name="text_north_america">North america</string>
+  <string name="text_south_america">South america</string>
+
   <string name="text_loading_map">Loading map…</string>
   <string name="text_confirmed">Confirmed</string>
   <string name="text_recovered">Recovered</string>
   <string name="text_deaths">Deaths</string>
   <string name="text_death_rate">Death rate</string>
-  <string name="text_percent_by_country">Percent by country</string>
-  <string name="text_statistics_by_country">Statistics by country</string>
+  <string name="text_percent_in_country">Percent in country</string>
   <string name="text_death_rate_explanation">Death rate is calculated by dividing confirmed cases by deaths</string>
   <string name="text_got_it_all_caps">GOT IT</string>
 

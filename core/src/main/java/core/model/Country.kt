@@ -19,7 +19,8 @@ class CountryOnMap(
 
 data class DisplayableCountry(
   val name: String,
-  val amount: Number
+  val amount: Number,
+  val amountString: String
 ) : SortableDisplayableItem, Comparable<DisplayableCountry> {
   
   var number: Int = 0

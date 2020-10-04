@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="dark_background">#1A1D36</color>
-  <color name="dark_background_light">#262940</color>
-  <color name="dark_overlay">#282C48</color>
-  <color name="dark_overlay_shine">#2C304E</color>
-  <color name="dark_overlay_shine_light">#2F3453</color>
-  <color name="dark_overlay_accent">#5A6088</color>
-  <color name="dark_dialog">#2E3353</color>
-  <color name="dark_gradient_header_start">#282C48</color>
-  <color name="dark_gradient_header_end">#423C61</color>
+  <color name="dark_background">#25263A</color>
+  <color name="dark_background_light">#343651</color>
+  <color name="dark_overlay">#2D2F4A</color>
+  <color name="dark_overlay_shine">#2E304C</color>
+  <color name="dark_overlay_shine_light">#303250</color>
+  <color name="dark_overlay_accent">#4D516C</color>
+  <color name="dark_dialog">#363A55</color>
+  <color name="dark_gradient_header_start">#2B2F4A</color>
+  <color name="dark_gradient_header_end">#474B65</color>
   <color name="dark_ripple">#60FFFFFF</color>
   <color name="dark_icon_default">#FFFFFF</color>
   <color name="dark_text_primary">#FFFFFF</color>
@@ -17,13 +17,13 @@
   <color name="dark_confirmed">#FF4A4A</color>
   <color name="dark_recovered">#22BF17</color>
   <color name="dark_deaths">#FF7D00</color>
-  <color name="dark_percent_by_country">#DBBE18</color>
+  <color name="dark_percent_by_country">#FFDA1E</color>
   <color name="dark_death_rate">#007FFF</color>
 
   <color name="dark_failure">#E64545</color>
   <color name="dark_failure_ripple">#70E64545</color>
   <color name="dark_bottom_navigation_divider">#000000</color>
-  <color name="dark_divider">#979797</color>
+  <color name="dark_divider">#676767</color>
   <color name="dark_text_accent">#0D70D4</color>
   <color name="dark_links">#0964DB</color>
 </resources>
