@@ -10,6 +10,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 
+const val DURATION_SHORT = 150L
 const val DURATION_DEFAULT = 300L
 const val DURATION_MEDIUM = 500L
 const val DURATION_LONG = 800L
@@ -22,9 +23,21 @@ fun Animator.cancelIfRunning() {
   }
 }
 
+fun Animator.doOnStart(block: () -> Unit) {
+  addListener(object : AnimatorListenerAdapter() {
+    override fun onAnimationStart(animation: Animator?) {
+      block()
+      removeListener(this)
+    }
+  })
+}
+
 fun Animator.doOnEnd(block: () -> Unit) {
   addListener(object : AnimatorListenerAdapter() {
-    override fun onAnimationEnd(animation: Animator?) = block()
+    override fun onAnimationEnd(animation: Animator?) {
+      block()
+      removeListener(this)
+    }
   })
 }
 

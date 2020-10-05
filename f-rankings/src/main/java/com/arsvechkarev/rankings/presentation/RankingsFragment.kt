@@ -101,7 +101,9 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   
   private fun renderFiltered(state: Filtered) {
     rankingsFabFilter.isEnabled = true
-    adapter.submitList(state.list)
+    rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().animateScrollToTop(andThen = {
+      adapter.submitList(state.list)
+    })
   }
   
   private fun renderFailure(reason: FailureReason) {
@@ -127,11 +129,13 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
       rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().isScrollable = false
       rankingsRecyclerView.isEnabled = false
     })
-    rankingsBottomSheetCross.setOnClickListener {
+    val whenBottomSheetClosed = {
       rankingsBottomSheet.getBehavior<BottomSheetBehavior<*>>().hide()
       rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().isScrollable = true
       rankingsRecyclerView.isEnabled = true
     }
+    rankingsBottomSheetCross.setOnClickListener { whenBottomSheetClosed() }
+    rankingsBottomSheet.getBehavior<BottomSheetBehavior<*>>().onHide = { whenBottomSheetClosed() }
   }
   
   private fun stopLoadingStubs() {

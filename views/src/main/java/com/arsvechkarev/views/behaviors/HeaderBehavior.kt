@@ -16,8 +16,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ScrollingView
 import androidx.core.view.ViewCompat
 import core.extenstions.AccelerateDecelerateInterpolator
-import core.extenstions.DURATION_DEFAULT
+import core.extenstions.DURATION_SHORT
 import core.extenstions.assertThat
+import core.extenstions.doOnEnd
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -32,13 +33,14 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   private var viewOffsetHelper: ViewOffsetHelper? = null
   private var velocityTracker: VelocityTracker? = null
   private var flingRunnable: Runnable? = null
-  
   private var isBeingDragged = false
+  
   private var activePointerId = INVALID_POINTER
   private var lastMotionY = 0
+  private var offsetFromPreviousLayout = 0
   
   private val scrollAnimator = ValueAnimator().apply {
-    duration = DURATION_DEFAULT
+    duration = DURATION_SHORT
     interpolator = AccelerateDecelerateInterpolator
     addUpdateListener {
       val offset = it.animatedValue as Int
@@ -76,13 +78,25 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
    */
   var reactToHeaderTouches: Boolean = false
   
+  /**
+   * Smoothly scrolls header view to initial position
+   */
+  fun animateScrollToTop(andThen: () -> Unit = {}) {
+    if (offsetFromPreviousLayout != 0) {
+      scrollAnimator.setIntValues(offsetFromPreviousLayout, 0)
+      scrollAnimator.start()
+      scrollAnimator.doOnEnd(andThen)
+    } else {
+      andThen()
+    }
+  }
+  
   override fun onLayoutChild(parent: CoordinatorLayout,
                              child: V, layoutDirection: Int): Boolean {
-    val prevOffset = viewOffsetHelper?.topAndBottomOffset ?: 0
+    offsetFromPreviousLayout = viewOffsetHelper?.topAndBottomOffset ?: 0
     viewOffsetHelper = ViewOffsetHelper(child, slideRangeCoefficient)
     parent.onLayoutChild(child, layoutDirection)
-    scrollAnimator.setIntValues(prevOffset, 0)
-    scrollAnimator.start()
+    ViewCompat.offsetTopAndBottom(child, offsetFromPreviousLayout)
     return true
   }
   

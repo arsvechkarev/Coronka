@@ -15,9 +15,11 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.HIDDEN
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.SHOWN
 import core.INVALID_POINTER
+import core.extenstions.doOnEnd
 import kotlin.math.abs
 
-class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : CoordinatorLayout.Behavior<V>() {
+class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
+  CoordinatorLayout.Behavior<V>() {
   
   enum class State {
     SHOWN, HIDDEN
@@ -29,19 +31,20 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
   private var isBeingDragged = false
   private var latestY = -1
   private var velocityTracker: VelocityTracker? = null
-  
   private var bottomSheetOffsetHelper: BottomSheetOffsetHelper? = null
+  
   private var currentState = HIDDEN
   private var bottomSheet: View? = null
   private var parentHeight = 0
   private var slideRange = 0
-  
   private val slideAnimator = ValueAnimator().apply {
     addUpdateListener {
       val value = it.animatedValue as Int
       bottomSheetOffsetHelper!!.updateTop(value)
     }
   }
+  
+  var onHide: () -> Unit = {}
   
   fun show() {
     if (currentState == SHOWN || slideAnimator.isRunning) return
@@ -162,6 +165,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
           val timeInSeconds = abs((parentHeight - bottomSheet!!.top) / yVelocity)
           slideAnimator.duration = (timeInSeconds * 1000).toLong()
           slideAnimator.setIntValues(bottomSheet!!.top, parentHeight)
+          slideAnimator.doOnEnd(onHide)
           slideAnimator.start()
         } else {
           val middlePoint = parentHeight - slideRange * 0.65
@@ -170,6 +174,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
             parentHeight - slideRange
           } else {
             currentState = HIDDEN
+            slideAnimator.doOnEnd(onHide)
             parentHeight
           }
           slideAnimator.setIntValues(bottomSheet!!.top, endY)
