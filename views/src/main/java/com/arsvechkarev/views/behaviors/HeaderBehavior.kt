@@ -1,5 +1,6 @@
 package com.arsvechkarev.views.behaviors
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -14,15 +15,17 @@ import android.widget.OverScroller
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ScrollingView
 import androidx.core.view.ViewCompat
+import core.extenstions.AccelerateDecelerateInterpolator
+import core.extenstions.DURATION_DEFAULT
 import core.extenstions.assertThat
-import core.extenstions.f
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
 /**
  * Behavior for header view in coordinator layout
  */
-class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : CoordinatorLayout.Behavior<V>() {
+class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
+  CoordinatorLayout.Behavior<V>() {
   
   private val scroller = OverScroller(context)
   private var touchSlop = ViewConfiguration.get(context).scaledTouchSlop
@@ -34,9 +37,14 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
   private var activePointerId = INVALID_POINTER
   private var lastMotionY = 0
   
-  private val offsetListeners = ArrayList<((fraction: Float) -> Unit)>()
-  
-  private var currentOffset = 0f
+  private val scrollAnimator = ValueAnimator().apply {
+    duration = DURATION_DEFAULT
+    interpolator = AccelerateDecelerateInterpolator
+    addUpdateListener {
+      val offset = it.animatedValue as Int
+      updateTopBottomOffset(viewOffsetHelper!!.topAndBottomOffset - offset)
+    }
+  }
   
   /**
    * Returns minimum height the header can have taking into account [slideRangeCoefficient]
@@ -49,7 +57,8 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
   /**
    * Determines how much slide range should be squashed compared to header height
    *
-   * Example: if header height is 400 and slideRangeCoefficient is 0.8, total range would be 400 * 0.8 = 320
+   * Example: if header height is 400 and slideRangeCoefficient is 0.8, total range
+   * would be 400 * 0.8 = 320
    */
   var slideRangeCoefficient = 1f
     set(value) {
@@ -60,31 +69,26 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
   /**
    * Determines whether the header should react to touch events
    */
-  var reactToTouches: Boolean = true
+  var isScrollable: Boolean = true
   
   /**
-   * Adds an offset listener
-   *
-   * @param onOffsetListener lambda that receives fraction from 0 to 1 of current offset to total
-   * scrolling range
+   * Determines whether the header should react to touch events received from header view
    */
-  fun addOnOffsetListener(onOffsetListener: (fraction: Float) -> Unit) {
-    offsetListeners.add(onOffsetListener)
-  }
+  var reactToHeaderTouches: Boolean = false
   
   override fun onLayoutChild(parent: CoordinatorLayout,
                              child: V, layoutDirection: Int): Boolean {
     val prevOffset = viewOffsetHelper?.topAndBottomOffset ?: 0
     viewOffsetHelper = ViewOffsetHelper(child, slideRangeCoefficient)
     parent.onLayoutChild(child, layoutDirection)
-    ViewCompat.offsetTopAndBottom(child, prevOffset)
-    offsetListeners.forEach { it(currentOffset) }
+    scrollAnimator.setIntValues(prevOffset, 0)
+    scrollAnimator.start()
     return true
   }
   
   override fun onInterceptTouchEvent(parent: CoordinatorLayout,
                                      child: V, event: MotionEvent): Boolean {
-    if (!reactToTouches) return false
+    if (!allowScrolling || !reactToHeaderTouches) return false
     if (event.action == ACTION_MOVE && isBeingDragged) {
       return true
     }
@@ -126,7 +130,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
   
   override fun onTouchEvent(parent: CoordinatorLayout,
                             child: V, event: MotionEvent): Boolean {
-    if (!reactToTouches) return false
+    if (!allowScrolling || !reactToHeaderTouches) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {
         val x = event.x.toInt()
@@ -184,8 +188,9 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
     axes: Int,
     type: Int
   ): Boolean {
-    return axes and ViewCompat.SCROLL_AXIS_VERTICAL != 0
+    return allowScrolling && (axes and ViewCompat.SCROLL_AXIS_VERTICAL != 0)
   }
+  
   
   override fun onNestedPreScroll(
     coordinatorLayout: CoordinatorLayout,
@@ -196,8 +201,8 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
     consumed: IntArray,
     type: Int
   ) {
-    val targetViewOffset = (target as? ScrollingView)?.computeVerticalScrollOffset() ?: 0
-    if (targetViewOffset == 0) {
+    val targetViewOffset = (target as? ScrollingView)?.computeVerticalScrollOffset()
+    if (allowScrolling && targetViewOffset == 0) {
       consumed[1] = updateTopBottomOffset(dy)
     }
   }
@@ -213,20 +218,13 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
     type: Int,
     consumed: IntArray
   ) {
-    if (dyUnconsumed < 0) {
+    if (allowScrolling && dyUnconsumed < 0) {
       consumed[1] = updateTopBottomOffset(dyUnconsumed)
     }
   }
   
   private fun updateTopBottomOffset(dy: Int): Int {
-    notifyOffsetListeners()
     return viewOffsetHelper!!.updateOffset(dy)
-  }
-  
-  private fun notifyOffsetListeners() {
-    currentOffset = abs(
-      viewOffsetHelper!!.topAndBottomOffset.f / viewOffsetHelper!!.maxScrollingRange)
-    offsetListeners.forEach { it(currentOffset) }
   }
   
   private fun fling(
@@ -243,7 +241,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
       velocityY.roundToInt(),
       0,
       0,
-      viewOffsetHelper!!.maxScrollingRange.toInt(),
+      viewOffsetHelper!!.maxScrollingRange,
       0
     )
     if (scroller.computeScrollOffset()) {
@@ -264,6 +262,8 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) : Coordina
     velocityTracker?.recycle()
     velocityTracker = null
   }
+  
+  private val allowScrolling get() = !scrollAnimator.isRunning && isScrollable
   
   private inner class FlingRunnable(val child: V) : Runnable {
     

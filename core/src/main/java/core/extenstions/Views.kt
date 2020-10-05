@@ -49,3 +49,7 @@ fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
 fun ViewGroup.animateChildrenVisible() = forEachChild { it.animateVisible() }
 
 fun ViewGroup.animateChildrenInvisible() = forEachChild { it.animateInvisible() }
+
+fun onClick(vararg views: View, action: (View) -> Unit) {
+  views.forEach { it.setOnClickListener(action) }
+}

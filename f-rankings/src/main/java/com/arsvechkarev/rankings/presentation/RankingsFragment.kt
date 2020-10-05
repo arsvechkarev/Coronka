@@ -12,6 +12,7 @@ import com.arsvechkarev.rankings.presentation.RankingsScreenState.Filtered
 import com.arsvechkarev.rankings.presentation.RankingsScreenState.Loaded
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior
 import com.arsvechkarev.views.behaviors.HeaderBehavior
+import com.arsvechkarev.views.drawables.BaseLoadingStub
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
 import com.arsvechkarev.views.drawables.GradientHeaderStub.Companion.createGradientHeaderDrawable
 import com.arsvechkarev.views.drawables.RankingsListLoadingStub
@@ -20,6 +21,7 @@ import core.extenstions.animateInvisible
 import core.extenstions.animateVisible
 import core.extenstions.getBehavior
 import core.extenstions.heightWithMargins
+import core.extenstions.onClick
 import core.state.BaseScreenState
 import core.state.Failure
 import core.state.Failure.FailureReason
@@ -49,6 +51,7 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsHeaderLayout
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsImageFailure
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsListLoadingStub
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRecyclerView
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsRetryButton
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsSelectedChipsLoadingStub
 
 class RankingsFragment : Fragment(R.layout.fragment_rankings) {
@@ -83,12 +86,14 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
     rankingsFabFilter.isEnabled = false
     animateInvisible(rankingsErrorLayout, rankingsChipWorldRegion, rankingsChipOptionType,
       rankingsDivider, rankingsRecyclerView)
+    (rankingsListLoadingStub.background as BaseLoadingStub).start()
+    (rankingsSelectedChipsLoadingStub.background as BaseLoadingStub).start()
     animateVisible(rankingsListLoadingStub, rankingsSelectedChipsLoadingStub)
   }
   
   private fun renderLoaded(state: Loaded) {
     rankingsFabFilter.isEnabled = true
-    animateInvisible(rankingsListLoadingStub, rankingsSelectedChipsLoadingStub)
+    stopLoadingStubs()
     animateVisible(rankingsRecyclerView, rankingsChipWorldRegion,
       rankingsChipOptionType, rankingsDivider)
     adapter.submitList(state.list)
@@ -101,7 +106,7 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   
   private fun renderFailure(reason: FailureReason) {
     rankingsFabFilter.isEnabled = false
-    animateInvisible(rankingsListLoadingStub, rankingsSelectedChipsLoadingStub)
+    stopLoadingStubs()
     rankingsErrorLayout.animateVisible()
     when (reason) {
       FailureReason.NO_CONNECTION -> {
@@ -116,17 +121,31 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   }
   
   private fun setupClickListeners() {
-    rankingsFabFilter.setOnClickListener {
+    rankingsRetryButton.setOnClickListener { viewModel.startLoadingData() }
+    onClick(rankingsFabFilter, rankingsChipOptionType, rankingsChipWorldRegion, action = {
       rankingsBottomSheet.getBehavior<BottomSheetBehavior<*>>().show()
-    }
+      rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().isScrollable = false
+      rankingsRecyclerView.isEnabled = false
+    })
     rankingsBottomSheetCross.setOnClickListener {
       rankingsBottomSheet.getBehavior<BottomSheetBehavior<*>>().hide()
+      rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().isScrollable = true
+      rankingsRecyclerView.isEnabled = true
     }
+  }
+  
+  private fun stopLoadingStubs() {
+    animateInvisible(rankingsListLoadingStub, rankingsSelectedChipsLoadingStub,
+      andThen = {
+        (rankingsListLoadingStub.background as BaseLoadingStub).stop()
+        (rankingsSelectedChipsLoadingStub.background as BaseLoadingStub).stop()
+      }
+    )
   }
   
   private fun setupBehavior() {
     rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().apply {
-      reactToTouches = false
+      reactToHeaderTouches = false
       rankingsHeaderLayout.post {
         val height = calculateSelectedChipsHeight()
         slideRangeCoefficient = height.toFloat() / rankingsHeaderLayout.height
@@ -143,8 +162,8 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
     rankingsChipOptionType.isActive = true
     chipWorldwide.isActive = true
     chipConfirmed.isActive = true
-    val groupWorldRegions = ChipGroup(chipWorldwide, chipAsia, chipEurope,
-      chipAfrica, chipOceania, chipNorthAmerica, chipSouthAmerica)
+    val groupWorldRegions = ChipGroup(chipWorldwide, chipEurope, chipAsia,
+      chipAfrica, chipNorthAmerica, chipOceania, chipSouthAmerica)
     val groupOptionTypes = ChipGroup(chipConfirmed, chipRecovered, chipDeaths,
       chipPercentByCountry, chipDeathRate)
     chipHelper = ChipHelper(groupOptionTypes, groupWorldRegions,

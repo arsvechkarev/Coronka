@@ -7,7 +7,7 @@
   android:background="?colorBackground"
   android:clipChildren="false">
 
-  <androidx.recyclerview.widget.RecyclerView
+  <com.arsvechkarev.views.CustomRecyclerView
     android:id="@+id/rankingsRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -96,6 +96,45 @@
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
+  <View
+    android:id="@+id/rankingsListLoadingStub"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="com.arsvechkarev.views.behaviors.ViewUnderHeaderBehavior"/>
+
+  <LinearLayout
+    android:id="@+id/rankingsErrorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/rankings_header_height"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <TextView
+      android:id="@+id/rankingsErrorMessage"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="@dimen/text_h3"/>
+
+    <ImageView
+      android:id="@+id/rankingsImageFailure"
+      android:layout_width="120dp"
+      android:layout_height="120dp"
+      android:layout_margin="24dp"
+      android:src="@drawable/image_unknown_error"/>
+
+    <com.arsvechkarev.views.ClickableTextView
+      android:id="@+id/rankingsRetryButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/text_retry"
+      android:textColor="?colorFailure"
+      android:textSize="@dimen/text_h3"
+      app:rippleColor="?colorFailureRipple"/>
+
+  </LinearLayout>
+
   <ImageButton
     android:id="@+id/rankingsFabFilter"
     android:layout_width="wrap_content"
@@ -158,18 +197,18 @@
         android:text="@string/text_worldwide"/>
 
       <com.arsvechkarev.views.Chip
-        android:id="@+id/chipAsia"
-        style="@style/Chip.RegionName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/text_asia"/>
-
-      <com.arsvechkarev.views.Chip
         android:id="@+id/chipEurope"
         style="@style/Chip.RegionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_europe"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipAsia"
+        style="@style/Chip.RegionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_asia"/>
 
       <com.arsvechkarev.views.Chip
         android:id="@+id/chipAfrica"
@@ -179,18 +218,18 @@
         android:text="@string/text_africa"/>
 
       <com.arsvechkarev.views.Chip
-        android:id="@+id/chipOceania"
-        style="@style/Chip.RegionName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/text_oceania"/>
-
-      <com.arsvechkarev.views.Chip
         android:id="@+id/chipNorthAmerica"
         style="@style/Chip.RegionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_north_america"/>
+
+      <com.arsvechkarev.views.Chip
+        android:id="@+id/chipOceania"
+        style="@style/Chip.RegionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_oceania"/>
 
       <com.arsvechkarev.views.Chip
         android:id="@+id/chipSouthAmerica"
@@ -261,44 +300,5 @@
     </com.google.android.flexbox.FlexboxLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
-
-  <View
-    android:id="@+id/rankingsListLoadingStub"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="com.arsvechkarev.views.behaviors.ViewUnderHeaderBehavior"/>
-
-  <LinearLayout
-    android:id="@+id/rankingsErrorLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/rankings_header_height"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:visibility="invisible">
-
-    <TextView
-      android:id="@+id/rankingsErrorMessage"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/text_h3"/>
-
-    <ImageView
-      android:id="@+id/rankingsImageFailure"
-      android:layout_width="120dp"
-      android:layout_height="120dp"
-      android:layout_margin="24dp"
-      android:src="@drawable/image_unknown_error"/>
-
-    <com.arsvechkarev.views.ClickableTextView
-      android:id="@+id/rankingsRetryButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/text_retry"
-      android:textColor="?colorFailure"
-      android:textSize="@dimen/text_h3"
-      app:rippleColor="?colorFailureRipple"/>
-
-  </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

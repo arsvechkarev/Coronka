@@ -23,7 +23,7 @@ abstract class BaseLoadingStub(
   context: Context,
   backgroundColorRes: Int = R.color.dark_overlay,
   shineColorRes: Int = R.color.dark_overlay_shine,
-  shineColorRes2: Int = R.color.dark_overlay_shine_light,
+  shineColorLightRes: Int = R.color.dark_overlay_shine_light,
   private val durationMillis: Long = 1200
 ) : Drawable(), Animatable, Runnable {
   
@@ -35,7 +35,7 @@ abstract class BaseLoadingStub(
   private val path = Path()
   private val backgroundColor = ContextCompat.getColor(context, backgroundColorRes)
   private val shineColor = ContextCompat.getColor(context, shineColorRes)
-  private val shineColor2 = ContextCompat.getColor(context, shineColorRes2)
+  private val shineColorLight = ContextCompat.getColor(context, shineColorLightRes)
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = backgroundColor }
   
   private var shineXStart = 0f
@@ -56,8 +56,8 @@ abstract class BaseLoadingStub(
       shineRect.height() / 2f,
       shineRect.right,
       shineRect.height() / 2f,
-      intArrayOf(backgroundColor, shineColor, shineColor2,
-        shineColor2, shineColor, backgroundColor),
+      intArrayOf(backgroundColor, shineColor, shineColorLight,
+        shineColorLight, shineColor, backgroundColor),
       floatArrayOf(0f, 0.2f, 0.45f, 0.55f, 0.8f, 0.95f),
       Shader.TileMode.CLAMP
     )
@@ -89,7 +89,7 @@ abstract class BaseLoadingStub(
     if (isRunning) return
     isRunning = true
     shineXOffset = shineXStart
-    scheduleSelf(this, 0)
+    scheduleSelf(this, SystemClock.uptimeMillis() + 1000 / 60)
   }
   
   override fun stop() {
@@ -103,12 +103,15 @@ abstract class BaseLoadingStub(
   }
   
   override fun run() {
+    if (!isRunning) {
+      return
+    }
     shineXOffset += shineDx
     if (shineXOffset >= shineXEnd) {
       shineXOffset = shineXStart
     }
-    invalidateSelf()
     scheduleSelf(this, SystemClock.uptimeMillis() + 1000 / 60)
+    invalidateSelf()
   }
   
   companion object {

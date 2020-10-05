@@ -19,11 +19,13 @@ import core.state.Failure
 import core.state.Failure.Companion.asFailureReason
 import core.state.Loading
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 class RankingsViewModel(
   private val connection: NetworkConnection,
   private val allCountriesRepository: AllCountriesRepository,
-  private val schedulers: Schedulers = AndroidSchedulers
+  private val schedulers: Schedulers = AndroidSchedulers,
+  private val delayMilliseconds: Long = 1000
 ) : RxViewModel() {
   
   private var totalData: TotalData? = null
@@ -37,6 +39,7 @@ class RankingsViewModel(
     rxCall {
       allCountriesRepository.getData()
           .subscribeOn(schedulers.io())
+          .delay(delayMilliseconds, TimeUnit.MILLISECONDS, schedulers.computation(), true)
           .map(::transformToScreenState)
           .onErrorReturn { Failure(it.asFailureReason()) }
           .startWith(Loading)

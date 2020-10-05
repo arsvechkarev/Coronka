@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="dark_background">#25263A</color>
+  <color name="dark_background">#1F2030</color>
   <color name="dark_background_light">@color/dark_overlay</color>
   <color name="dark_overlay">#32344E</color>
   <color name="dark_overlay_shine">#363853</color>
@@ -14,9 +14,9 @@
   <color name="dark_text_primary">#FFFFFF</color>
   <color name="dark_text_secondary">#9DA6B8</color>
 
-  <color name="dark_confirmed">#FF4A4A</color>
+  <color name="dark_confirmed">#EC3E3E</color>
   <color name="dark_recovered">#22BF17</color>
-  <color name="dark_deaths">#FF7D00</color>
+  <color name="dark_deaths">#FF6F00</color>
   <color name="dark_percent_by_country">#FFDA1E</color>
   <color name="dark_death_rate">#007FFF</color>
 

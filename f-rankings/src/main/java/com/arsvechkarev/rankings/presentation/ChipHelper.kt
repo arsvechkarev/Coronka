@@ -31,11 +31,11 @@ class ChipHelper(
       onWorldRegionChipSelected(chip)
       when (chip.id) {
         R.id.chipWorldwide -> notifyClick(WorldRegion.WORLDWIDE)
-        R.id.chipAsia -> notifyClick(WorldRegion.ASIA)
         R.id.chipEurope -> notifyClick(WorldRegion.EUROPE)
+        R.id.chipAsia -> notifyClick(WorldRegion.ASIA)
         R.id.chipAfrica -> notifyClick(WorldRegion.AFRICA)
-        R.id.chipOceania -> notifyClick(WorldRegion.OCEANIA)
         R.id.chipNorthAmerica -> notifyClick(WorldRegion.NORTH_AMERICA)
+        R.id.chipOceania -> notifyClick(WorldRegion.OCEANIA)
         R.id.chipSouthAmerica -> notifyClick(WorldRegion.SOUTH_AMERICA)
       }
     }

@@ -5,8 +5,6 @@ import androidx.core.view.ViewCompat
 
 class ViewOffsetHelper(val view: View, private val slideRangeCoefficient: Float) {
   
-  private var layoutTop: Int = 0
-  
   var topAndBottomOffset = 0
     private set
   
@@ -18,7 +16,7 @@ class ViewOffsetHelper(val view: View, private val slideRangeCoefficient: Float)
     if (dy != 0) {
       val resultOffset = (topAndBottomOffset - dy).coerceIn(maxScrollingRange, 0)
       topAndBottomOffset = resultOffset
-      ViewCompat.offsetTopAndBottom(view, topAndBottomOffset - (view.top - layoutTop))
+      ViewCompat.offsetTopAndBottom(view, topAndBottomOffset - view.top)
     }
     return prefOffset - topAndBottomOffset
   }

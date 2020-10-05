@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import core.recycler.SortableDisplayableItem.DiffCallBack
 import kotlin.reflect.KClass
 
 abstract class BaseListAdapter(
@@ -19,11 +18,6 @@ abstract class BaseListAdapter(
   
   private val classesMap = HashMap<KClass<*>, Int>()
   private val delegatesSparseArray = SparseArrayCompat<ListAdapterDelegate>()
-  
-  constructor(
-    vararg delegates: ListAdapterDelegate,
-    diffCallBack: ItemCallback<SortableDisplayableItem> = DiffCallBack()
-  ) : this(delegates.toList(), diffCallBack)
   
   init {
     delegates.forEachIndexed { i, delegate ->

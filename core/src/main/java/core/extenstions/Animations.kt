@@ -38,8 +38,16 @@ fun View.animateVisible(andThen: () -> Unit = {}) {
       .start()
 }
 
-fun animateVisible(vararg views: View) {
-  views.forEach { it.animateVisible() }
+fun animateVisible(vararg views: View, andThen: () -> Unit = {}) {
+  var andThenPosted = false
+  for (view in views) {
+    if (!andThenPosted) {
+      view.animateVisible(andThen)
+      andThenPosted = true
+    } else {
+      view.animateVisible()
+    }
+  }
 }
 
 fun View.animateInvisible(andThen: () -> Unit = {}) {
@@ -52,8 +60,16 @@ fun View.animateInvisible(andThen: () -> Unit = {}) {
       .start()
 }
 
-fun animateInvisible(vararg views: View) {
-  views.forEach { it.animateInvisible() }
+fun animateInvisible(vararg views: View, andThen: () -> Unit = {}) {
+  var andThenPosted = false
+  for (view in views) {
+    if (!andThenPosted) {
+      view.animateInvisible(andThen)
+      andThenPosted = true
+    } else {
+      view.animateInvisible()
+    }
+  }
 }
 
 fun View.animateVisibleAndScale(andThen: () -> Unit = {}) {
