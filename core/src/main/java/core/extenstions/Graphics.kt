@@ -2,18 +2,23 @@ package core.extenstions
 
 import android.graphics.Canvas
 import android.graphics.Rect
-import android.graphics.RectF
 import androidx.annotation.ColorInt
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-val TEMP_RECTF = RectF()
 val TEMP_RECT = Rect()
 
 inline fun Canvas.execute(action: Canvas.() -> Unit) {
   val count = save()
   action(this)
   restoreToCount(count)
+}
+
+@ColorInt
+fun Int.withAlpha(alpha: Float): Int {
+  assertThat(alpha in 0f..1f) { "Alpha should be in range 0..1, but is $alpha" }
+  val alphaInt = (alpha * 255).toInt()
+  return this and (alphaInt shl 24)
 }
 
 @ColorInt

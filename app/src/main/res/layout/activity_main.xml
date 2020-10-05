@@ -1,16 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
+<com.arsvechkarev.views.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/drawerLayout"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  tools:openDrawer="start">
+  android:layout_height="match_parent">
 
   <FrameLayout
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
-  <include layout="@layout/partial_layout_drawer"/>
+  <com.arsvechkarev.views.DrawerGroupLinearLayout
+    android:id="@+id/drawerGroupLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_drawer"
+    android:orientation="vertical">
 
-</androidx.drawerlayout.widget.DrawerLayout>
+    <TextView
+      android:id="@+id/drawerTextTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="24dp"
+      android:drawableStart="@drawable/logo_icon"
+      android:drawablePadding="16dp"
+      android:fontFamily="@font/segoe_ui_bold"
+      android:gravity="center"
+      android:text="@string/title_covid_19"
+      android:textColor="?colorTextPrimary"
+      android:textSize="30sp"
+      android:textStyle="bold"/>
+
+    <TextView
+      android:id="@+id/drawerTextStatistics"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
+      android:background="@drawable/bg_drawer_item"
+      android:drawableStart="@drawable/ic_statistics"
+      android:drawablePadding="20dp"
+      android:fontFamily="@font/segoe_ui_bold"
+      android:gravity="center|start"
+      android:paddingHorizontal="16dp"
+      android:paddingVertical="8dp"
+      android:text="Statistics"
+      android:textColor="?colorTextPrimary"
+      android:textSize="20sp"
+      android:textStyle="bold"/>
+
+    <TextView
+      android:id="@+id/drawerTextMap"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/bg_drawer_item"
+      android:drawableStart="@drawable/ic_map"
+      android:drawablePadding="20dp"
+      android:fontFamily="@font/segoe_ui_bold"
+      android:gravity="center|start"
+      android:paddingHorizontal="16dp"
+      android:paddingVertical="8dp"
+      android:text="Map"
+      android:textColor="?colorTextPrimary"
+      android:textSize="20sp"
+      android:textStyle="bold"/>
+
+    <TextView
+      android:id="@+id/drawerTextTips"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/bg_drawer_item"
+      android:drawableStart="@drawable/ic_tips"
+      android:drawablePadding="20dp"
+      android:fontFamily="@font/segoe_ui_bold"
+      android:gravity="center|start"
+      android:paddingHorizontal="16dp"
+      android:paddingVertical="8dp"
+      android:text="Tips"
+      android:textColor="?colorTextPrimary"
+      android:textSize="20sp"
+      android:textStyle="bold"/>
+
+    <TextView
+      android:id="@+id/drawerTextRankings"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/bg_drawer_item"
+      android:drawableStart="@drawable/ic_rankings"
+      android:drawablePadding="20dp"
+      android:fontFamily="@font/segoe_ui_bold"
+      android:gravity="center|start"
+      android:paddingHorizontal="16dp"
+      android:paddingVertical="8dp"
+      android:text="Rankings"
+      android:textColor="?colorTextPrimary"
+      android:textSize="20sp"
+      android:textStyle="bold"/>
+
+  </com.arsvechkarev.views.DrawerGroupLinearLayout>
+
+</com.arsvechkarev.views.DrawerLayout>

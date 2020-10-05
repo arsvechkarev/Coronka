@@ -69,14 +69,14 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
     }
   
   /**
-   * Determines whether the header should react to touch events
+   * Determines whether the header should respond to touch events
    */
   var isScrollable: Boolean = true
   
   /**
-   * Determines whether the header should react to touch events received from header view
+   * Determines whether the header should respond to touch events received from header view
    */
-  var reactToHeaderTouches: Boolean = false
+  var respondToHeaderTouches: Boolean = false
   
   /**
    * Smoothly scrolls header view to initial position
@@ -102,7 +102,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   
   override fun onInterceptTouchEvent(parent: CoordinatorLayout,
                                      child: V, event: MotionEvent): Boolean {
-    if (!allowScrolling || !reactToHeaderTouches) return false
+    if (!allowScrolling || !respondToHeaderTouches) return false
     if (event.action == ACTION_MOVE && isBeingDragged) {
       return true
     }
@@ -144,7 +144,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   
   override fun onTouchEvent(parent: CoordinatorLayout,
                             child: V, event: MotionEvent): Boolean {
-    if (!allowScrolling || !reactToHeaderTouches) return false
+    if (!allowScrolling || !respondToHeaderTouches) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {
         val x = event.x.toInt()

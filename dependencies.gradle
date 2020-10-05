@@ -5,7 +5,7 @@ ext {
       kotlin             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
       appCompat          : "androidx.appcompat:appcompat:1.1.0",
       constraintLayout   : "androidx.constraintlayout:constraintlayout:1.1.0",
-      materialDesign     : "com.google.android.material:material:1.2.0",
+      coordinatorLayout  : "androidx.coordinatorlayout:coordinatorlayout:1.1.0",
       lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:2.1.0",
       googleMaps         : "com.google.android.gms:play-services-maps:17.0.0",
       googleMapsUtils    : "com.google.maps.android:android-maps-utils:1.0.2",

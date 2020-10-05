@@ -17,11 +17,13 @@ import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDr
 import com.arsvechkarev.views.drawables.GradientHeaderStub.Companion.createGradientHeaderDrawable
 import com.arsvechkarev.views.drawables.RankingsListLoadingStub
 import com.arsvechkarev.views.drawables.SelectedChipsLoadingStub
+import core.HostActivity
 import core.extenstions.animateInvisible
 import core.extenstions.animateVisible
 import core.extenstions.getBehavior
 import core.extenstions.heightWithMargins
 import core.extenstions.onClick
+import core.hostActivity
 import core.state.BaseScreenState
 import core.state.Failure
 import core.state.Failure.FailureReason
@@ -48,6 +50,7 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsErrorMessage
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsFabFilter
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsHeaderGradientView
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsHeaderLayout
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsIconDrawer
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsImageFailure
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsListLoadingStub
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRecyclerView
@@ -58,7 +61,6 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   
   private lateinit var viewModel: RankingsViewModel
   private lateinit var chipHelper: ChipHelper
-  
   private val adapter = RankingsAdapter()
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,6 +73,11 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
     setupBehavior()
     setupChips()
     setupDrawables()
+  }
+  
+  override fun onDestroyView() {
+    super.onDestroyView()
+    hostActivity.removeDrawerOpenCloseListener(drawerOpenCloseListener)
   }
   
   private fun handleState(state: BaseScreenState) {
@@ -122,17 +129,34 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
     }
   }
   
+  private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
+    
+    private fun toggleItems(enable: Boolean) {
+      rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().isScrollable = enable
+      rankingsRecyclerView.isEnabled = enable
+      rankingsFabFilter.isEnabled = enable
+    }
+    
+    override fun onDrawerOpened() = toggleItems(false)
+    
+    override fun onDrawerClosed() = toggleItems(true)
+  }
+  
   private fun setupClickListeners() {
+    hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
+    rankingsIconDrawer.setOnClickListener { hostActivity.onDrawerIconClicked() }
     rankingsRetryButton.setOnClickListener { viewModel.startLoadingData() }
     onClick(rankingsFabFilter, rankingsChipOptionType, rankingsChipWorldRegion, action = {
       rankingsBottomSheet.getBehavior<BottomSheetBehavior<*>>().show()
       rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().isScrollable = false
       rankingsRecyclerView.isEnabled = false
+      hostActivity.disableDrawer()
     })
     val whenBottomSheetClosed = {
       rankingsBottomSheet.getBehavior<BottomSheetBehavior<*>>().hide()
       rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().isScrollable = true
       rankingsRecyclerView.isEnabled = true
+      hostActivity.enableDrawer()
     }
     rankingsBottomSheetCross.setOnClickListener { whenBottomSheetClosed() }
     rankingsBottomSheet.getBehavior<BottomSheetBehavior<*>>().onHide = { whenBottomSheetClosed() }
@@ -149,7 +173,7 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   
   private fun setupBehavior() {
     rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().apply {
-      reactToHeaderTouches = false
+      respondToHeaderTouches = false
       rankingsHeaderLayout.post {
         val height = calculateSelectedChipsHeight()
         slideRangeCoefficient = height.toFloat() / rankingsHeaderLayout.height

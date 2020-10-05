@@ -4,6 +4,9 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.MotionEvent.ACTION_UP
 import androidx.core.content.ContextCompat
 import com.arsvechkarev.views.R
 import com.github.mikephil.charting.charts.LineChart
@@ -23,6 +26,9 @@ class DailyCasesChart(context: Context, attrs: AttributeSet) : LineChart(context
   
   private var dailyCaseListener: (dailyCase: DailyCase) -> Unit = { _ -> }
   private var dailyCases: List<DailyCase>? = null
+  
+  var onDown: () -> Unit = {}
+  var onUp: () -> Unit = {}
   
   init {
     setOnChartValueSelectedListener(this)
@@ -84,7 +90,12 @@ class DailyCasesChart(context: Context, attrs: AttributeSet) : LineChart(context
     dailyCaseListener.invoke(dailyCases!![e.x.toInt()])
   }
   
-  override fun onNothingSelected() {
+  override fun onNothingSelected() = Unit
+  
+  override fun onTouchEvent(event: MotionEvent): Boolean {
+    if (event.action == ACTION_DOWN) onDown()
+    if (event.action == ACTION_UP) onUp()
+    return super.onTouchEvent(event)
   }
   
   private fun createEntries(dailyCases: List<DailyCase>): List<BarEntry> {

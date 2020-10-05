@@ -6,6 +6,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -39,6 +40,19 @@ fun Animator.doOnEnd(block: () -> Unit) {
       removeListener(this)
     }
   })
+}
+
+fun ValueAnimator.doInTheMiddle(block: () -> Unit) {
+  var executed = false
+  val listener: (ValueAnimator) -> Unit = {
+    val fraction = it.animatedFraction
+    if (!executed && fraction > 0.5f) {
+      block()
+      executed = true
+    }
+  }
+  addUpdateListener(listener)
+  doOnEnd { removeUpdateListener(listener) }
 }
 
 fun View.animateVisible(andThen: () -> Unit = {}) {

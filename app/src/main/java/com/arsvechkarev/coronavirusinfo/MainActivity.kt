@@ -8,14 +8,16 @@ import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
 import core.Application
-import kotlinx.android.synthetic.main.partial_layout_drawer.drawerGroupLinearLayout
-import kotlinx.android.synthetic.main.partial_layout_drawer.drawerTextMap
-import kotlinx.android.synthetic.main.partial_layout_drawer.drawerTextRankings
-import kotlinx.android.synthetic.main.partial_layout_drawer.drawerTextStatistics
-import kotlinx.android.synthetic.main.partial_layout_drawer.drawerTextTips
+import core.HostActivity
+import kotlinx.android.synthetic.main.activity_main.drawerGroupLinearLayout
+import kotlinx.android.synthetic.main.activity_main.drawerLayout
+import kotlinx.android.synthetic.main.activity_main.drawerTextMap
+import kotlinx.android.synthetic.main.activity_main.drawerTextRankings
+import kotlinx.android.synthetic.main.activity_main.drawerTextStatistics
+import kotlinx.android.synthetic.main.activity_main.drawerTextTips
 import kotlin.reflect.KClass
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HostActivity {
   
   private val fragments = HashMap<KClass<*>, Fragment>()
   private var currentFragment: Fragment? = null
@@ -26,19 +28,42 @@ class MainActivity : AppCompatActivity() {
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)
     goToFragment(RankingsFragment::class)
+    drawerTextRankings.isSelected = true
     drawerTextStatistics.setOnClickListener { handleOnDrawerItemClicked(it) }
     drawerTextMap.setOnClickListener { handleOnDrawerItemClicked(it) }
     drawerTextTips.setOnClickListener { handleOnDrawerItemClicked(it) }
     drawerTextRankings.setOnClickListener { handleOnDrawerItemClicked(it) }
   }
   
+  override fun onDrawerIconClicked() {
+    drawerLayout.open()
+  }
+  
+  override fun enableDrawer() {
+    drawerLayout.respondToTouches = true
+  }
+  
+  override fun disableDrawer() {
+    drawerLayout.respondToTouches = false
+  }
+  
+  override fun addDrawerOpenCloseListener(listener: HostActivity.DrawerOpenCloseListener) {
+    drawerLayout.addOpenCloseListener(listener)
+  }
+  
+  override fun removeDrawerOpenCloseListener(listener: HostActivity.DrawerOpenCloseListener) {
+    drawerLayout.removeOpenCloseListener(listener)
+  }
+  
   private fun handleOnDrawerItemClicked(view: View) {
     drawerGroupLinearLayout.onTextViewClicked(view)
-    when (view) {
-      drawerTextStatistics -> goToFragment(StatsFragment::class)
-      drawerTextTips -> goToFragment(TipsFragment::class)
-      drawerTextRankings -> goToFragment(RankingsFragment::class)
-    }
+    drawerLayout.close(andThen = {
+      when (view) {
+        drawerTextStatistics -> goToFragment(StatsFragment::class)
+        drawerTextTips -> goToFragment(TipsFragment::class)
+        drawerTextRankings -> goToFragment(RankingsFragment::class)
+      }
+    })
   }
   
   private fun goToFragment(fragmentClass: KClass<out Fragment>) {

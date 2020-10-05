@@ -16,6 +16,8 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import com.arsvechkarev.views.BottomSheet.State.HIDDEN
 import com.arsvechkarev.views.BottomSheet.State.SHOWN
+import core.extenstions.assertThat
+import core.extenstions.cancelIfRunning
 import core.extenstions.contains
 import kotlin.math.abs
 
@@ -24,20 +26,16 @@ class BottomSheet @JvmOverloads constructor(
   attrs: AttributeSet? = null
 ) : ViewGroup(context, attrs) {
   
-  enum class State {
-    SHOWN, HIDDEN
-  }
-  
   private var currentState: State
   
   private lateinit var mainView: View
   private lateinit var slideView: View
   
-  private var touchSlop = ViewConfiguration.get(context).scaledTouchSlop
-  private var maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
+  private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+  private val maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
   private var isBeingDragged = false
   private var wasDownEventInSlideView = false
-  private var lastY = -1f
+  private var latestY = -1f
   private var velocityTracker: VelocityTracker? = null
   private var slideRange = 0
   
@@ -77,11 +75,9 @@ class BottomSheet @JvmOverloads constructor(
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    val widthMode = MeasureSpec.getMode(widthMeasureSpec)
     val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-    val heightMode = MeasureSpec.getMode(heightMeasureSpec)
     val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-    performMeasureChecks(widthMode, heightMode)
+    assertThat(childCount == 2) { "Layout must have exactly 2 children" }
     mainView = getChildAt(0)
     slideView = getChildAt(1)
     measureChildWithMargins(mainView, widthMeasureSpec, 0, heightMeasureSpec, 0)
@@ -92,7 +88,6 @@ class BottomSheet @JvmOverloads constructor(
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     if (!changed) return
-    check(childCount == 2)
     val parentLeft = l + paddingLeft
     val parentTop = t + paddingTop
     val parentBottom = b - t - paddingBottom
@@ -127,7 +122,7 @@ class BottomSheet @JvmOverloads constructor(
       ACTION_DOWN -> {
         wasDownEventInSlideView = event in slideView
         if (wasDownEventInSlideView) {
-          lastY = event.y
+          latestY = event.y
           initVelocityTrackerIfNeeded()
           velocityTracker!!.addMovement(event)
         } else {
@@ -138,11 +133,11 @@ class BottomSheet @JvmOverloads constructor(
       ACTION_MOVE -> {
         if (wasDownEventInSlideView) {
           val y = event.y.toInt()
-          val yDiff = abs(lastY - y)
+          val yDiff = abs(latestY - y)
           if (yDiff > touchSlop) {
             velocityTracker!!.addMovement(event)
             isBeingDragged = true
-            lastY = event.y
+            latestY = event.y
           }
         }
       }
@@ -161,19 +156,19 @@ class BottomSheet @JvmOverloads constructor(
     when (event.actionMasked) {
       ACTION_DOWN -> {
         if (wasDownEventInSlideView) {
-          lastY = event.y
+          latestY = event.y
           velocityTracker!!.addMovement(event)
         }
       }
       ACTION_MOVE -> {
         if (wasDownEventInSlideView) {
           velocityTracker!!.addMovement(event)
-          val distance = event.y - lastY
+          val distance = event.y - latestY
           var newTop = slideView.top + distance.toInt()
           val maxTop = height - slideRange
           if (newTop <= maxTop) newTop = maxTop
           slideView.top = newTop
-          lastY = event.y
+          latestY = event.y
           invalidate()
         }
       }
@@ -224,17 +219,7 @@ class BottomSheet @JvmOverloads constructor(
   
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    slideViewAnimator.cancel()
-  }
-  
-  private fun performMeasureChecks(widthMode: Int, heightMode: Int) {
-    check(widthMode == MeasureSpec.EXACTLY || widthMode == MeasureSpec.AT_MOST) {
-      "Width must have an exact value or MATCH_PARENT"
-    }
-    check(heightMode == MeasureSpec.EXACTLY || heightMode == MeasureSpec.AT_MOST) {
-      "Height must have an exact value or MATCH_PARENT"
-    }
-    check(childCount == 2) { "Layout must have exactly 2 children" }
+    slideViewAnimator.cancelIfRunning()
   }
   
   private fun initVelocityTrackerIfNeeded() {
@@ -250,7 +235,11 @@ class BottomSheet @JvmOverloads constructor(
     }
   }
   
-  companion object {
+  private enum class State {
+    SHOWN, HIDDEN
+  }
+  
+  private companion object {
     const val DEFAULT_DURATION = 250L
     const val FLING_VELOCITY_THRESHOLD = 0.18f
   }

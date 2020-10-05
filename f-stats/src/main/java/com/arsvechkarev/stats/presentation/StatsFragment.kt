@@ -17,6 +17,7 @@ import core.extenstions.animateChildrenVisible
 import core.extenstions.animateInvisible
 import core.extenstions.animateVisible
 import core.extenstions.getBehavior
+import core.hostActivity
 import core.model.GeneralInfo
 import core.model.WorldCasesInfo
 import core.state.BaseScreenState
@@ -29,6 +30,7 @@ import core.state.Loading
 import kotlinx.android.synthetic.main.fragment_stats.statsContentView
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorLayout
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorMessage
+import kotlinx.android.synthetic.main.fragment_stats.statsIconDrawer
 import kotlinx.android.synthetic.main.fragment_stats.statsImageFailure
 import kotlinx.android.synthetic.main.fragment_stats.statsMainInfoLoadingStub
 import kotlinx.android.synthetic.main.fragment_stats.statsNewCasesChart
@@ -52,8 +54,8 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
     }
-    initLoadingStubs()
     initClickListeners()
+    initLoadingStubs()
   }
   
   private fun handleState(state: BaseScreenState) {
@@ -136,15 +138,22 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
       CoronavirusMainStatsView.getTextForNumber(requireContext(), number))
   }
   
+  private fun initClickListeners() {
+    val onDown = { hostActivity.disableDrawer() }
+    val onUp = { hostActivity.enableDrawer() }
+    statsTotalCasesChart.onDown = onDown
+    statsNewCasesChart.onDown = onDown
+    statsTotalCasesChart.onUp = onUp
+    statsNewCasesChart.onUp = onUp
+    statsIconDrawer.setOnClickListener { hostActivity.onDrawerIconClicked() }
+    statsTotalCasesChart.onDailyCaseClicked { statsTotalCasesLabel.drawCase(it) }
+    statsNewCasesChart.onDailyCaseClicked { statsNewCasesLabel.drawCase(it) }
+    statsRetryButton.setOnClickListener { viewModel.startLoadingData() }
+  }
+  
   private fun initLoadingStubs() {
     statsMainInfoLoadingStub.applyLoadingDrawable(MainStatsInfoLoadingStub(requireContext()))
     statsTotalCasesLoadingStub.applyLoadingDrawable(StatsGraphLoadingStub(requireContext()))
     statsNewCasesLoadingStub.applyLoadingDrawable(StatsGraphLoadingStub(requireContext()))
-  }
-  
-  private fun initClickListeners() {
-    statsTotalCasesChart.onDailyCaseClicked { statsTotalCasesLabel.drawCase(it) }
-    statsNewCasesChart.onDailyCaseClicked { statsNewCasesLabel.drawCase(it) }
-    statsRetryButton.setOnClickListener { viewModel.startLoadingData() }
   }
 }
