@@ -27,12 +27,13 @@ class MainActivity : AppCompatActivity(), HostActivity {
     Application.initDensities(resources)
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)
-    goToFragment(RankingsFragment::class)
-    drawerTextRankings.isSelected = true
-    drawerTextStatistics.setOnClickListener { handleOnDrawerItemClicked(it) }
-    drawerTextMap.setOnClickListener { handleOnDrawerItemClicked(it) }
-    drawerTextTips.setOnClickListener { handleOnDrawerItemClicked(it) }
-    drawerTextRankings.setOnClickListener { handleOnDrawerItemClicked(it) }
+    goToFragment(StatsFragment::class)
+    drawerTextStatistics.isSelected = true
+    val onDrawerItemClick: (v: View) -> Unit = { handleOnDrawerItemClicked(it) }
+    drawerTextStatistics.setOnClickListener(onDrawerItemClick)
+    drawerTextMap.setOnClickListener(onDrawerItemClick)
+    drawerTextTips.setOnClickListener(onDrawerItemClick)
+    drawerTextRankings.setOnClickListener(onDrawerItemClick)
   }
   
   override fun onDrawerIconClicked() {

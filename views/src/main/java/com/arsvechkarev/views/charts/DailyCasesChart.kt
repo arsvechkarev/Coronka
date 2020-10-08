@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_UP
 import androidx.core.content.ContextCompat
@@ -93,8 +94,9 @@ class DailyCasesChart(context: Context, attrs: AttributeSet) : LineChart(context
   override fun onNothingSelected() = Unit
   
   override fun onTouchEvent(event: MotionEvent): Boolean {
+    if (!isEnabled) return false
     if (event.action == ACTION_DOWN) onDown()
-    if (event.action == ACTION_UP) onUp()
+    if (event.action == ACTION_UP || event.action == ACTION_CANCEL) onUp()
     return super.onTouchEvent(event)
   }
   

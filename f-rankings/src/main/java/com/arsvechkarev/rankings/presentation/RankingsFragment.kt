@@ -63,12 +63,26 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   private lateinit var chipHelper: ChipHelper
   private val adapter = RankingsAdapter()
   
+  private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
+    
+    private fun toggleItems(enable: Boolean) {
+      rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().isScrollable = enable
+      rankingsRecyclerView.isEnabled = enable
+      rankingsFabFilter.isEnabled = enable
+    }
+    
+    override fun onDrawerOpened() = toggleItems(false)
+    
+    override fun onDrawerClosed() = toggleItems(true)
+  }
+  
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel = RankingsDiInjector.provideViewModel(this)
     viewModel.state.observe(this, Observer(::handleState))
     viewModel.startLoadingData()
     rankingsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     rankingsRecyclerView.adapter = adapter
+    hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
     setupClickListeners()
     setupBehavior()
     setupChips()
@@ -129,21 +143,7 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
     }
   }
   
-  private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
-    
-    private fun toggleItems(enable: Boolean) {
-      rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().isScrollable = enable
-      rankingsRecyclerView.isEnabled = enable
-      rankingsFabFilter.isEnabled = enable
-    }
-    
-    override fun onDrawerOpened() = toggleItems(false)
-    
-    override fun onDrawerClosed() = toggleItems(true)
-  }
-  
   private fun setupClickListeners() {
-    hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
     rankingsIconDrawer.setOnClickListener { hostActivity.onDrawerIconClicked() }
     rankingsRetryButton.setOnClickListener { viewModel.startLoadingData() }
     onClick(rankingsFabFilter, rankingsChipOptionType, rankingsChipWorldRegion, action = {

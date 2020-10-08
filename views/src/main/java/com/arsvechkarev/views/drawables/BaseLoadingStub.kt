@@ -20,7 +20,7 @@ import core.extenstions.execute
 import core.extenstions.f
 
 abstract class BaseLoadingStub(
-  context: Context,
+  private val context: Context,
   backgroundColorRes: Int = R.color.dark_overlay,
   shineColorRes: Int = R.color.dark_overlay_shine,
   shineColorLightRes: Int = R.color.dark_overlay_shine_light,
@@ -45,7 +45,7 @@ abstract class BaseLoadingStub(
   
   override fun onBoundsChange(bounds: Rect) {
     val width = bounds.width().f
-    val height = bounds.height().f
+    val height = bounds.height().f.coerceAtMost(context.resources.displayMetrics.heightPixels.f)
     val shineWidth = width * 3
     shineXStart = -width * 3
     shineXEnd = width * 4

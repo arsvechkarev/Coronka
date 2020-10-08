@@ -80,14 +80,17 @@ class DrawerLayout @JvmOverloads constructor(
     post {
       drawerViewAnimator.duration = DEFAULT_DURATION
       drawerViewAnimator.setIntValues(drawerView.left, -slideRange)
-      drawerViewAnimator.doOnEnd { openCloseListeners.forEach { it.onDrawerClosed() } }
-      drawerViewAnimator.doOnEnd(andThen)
+      drawerViewAnimator.doOnEnd {
+        openCloseListeners.forEach { it.onDrawerClosed() }
+        andThen()
+      }
       drawerViewAnimator.start()
     }
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+    val heightSize = MeasureSpec.getSize(heightMeasureSpec)
     assertThat(childCount == 2) { "Layout must have exactly 2 children" }
     mainView = getChildAt(0)
     mainView.measure(widthMeasureSpec, heightMeasureSpec)
@@ -96,7 +99,7 @@ class DrawerLayout @JvmOverloads constructor(
         .coerceAtMost(widthSize)
     val widthSpec = MeasureSpec.makeMeasureSpec(slideRange, MeasureSpec.EXACTLY)
     drawerView.measure(widthSpec, heightMeasureSpec)
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    setMeasuredDimension(widthMeasureSpec, heightMeasureSpec)
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -112,7 +115,7 @@ class DrawerLayout @JvmOverloads constructor(
     if (!respondToTouches) return false
     when (event.action) {
       ACTION_DOWN -> {
-        if (event.x > drawerView.right) {
+        if (currentState == OPENED && event.x > drawerView.right) {
           outsideOnDrawerDownX = event.x
           outsideOnDrawerDownY = event.y
           outsideOnDrawerDown = true
@@ -124,17 +127,17 @@ class DrawerLayout @JvmOverloads constructor(
       ACTION_MOVE -> {
         val x = event.x.toInt()
         val xDiff = abs(latestX - x)
-        if (x < slideRange * 0.1f || xDiff > touchSlop * TOUCH_SLOP_MULTIPLIER) {
+        if (xDiff > touchSlop * TOUCH_SLOP_MULTIPLIER) {
           velocityTracker!!.addMovement(event)
           isBeingDragged = true
           latestX = event.x
         }
       }
       ACTION_UP, ACTION_CANCEL -> {
-        if (event.action == ACTION_UP) {
+        if (outsideOnDrawerDown && event.action == ACTION_UP) {
           val xDist = abs(event.x - outsideOnDrawerDownX)
           val yDist = abs(event.y - outsideOnDrawerDownY)
-          if (outsideOnDrawerDown && hypot(xDist, yDist) < touchSlop) {
+          if (hypot(xDist, yDist) < touchSlop) {
             close()
           }
         }

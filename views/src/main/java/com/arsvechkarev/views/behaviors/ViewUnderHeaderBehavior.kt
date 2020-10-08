@@ -35,7 +35,7 @@ class ViewUnderHeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   
   override fun onLayoutChild(parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
     val top = findHeader(parent).bottom
-    child.layout(0, top, parent.width, top + child.measuredHeight)
+    child.layout(0, top, parent.width, parent.height)
     return true
   }
   

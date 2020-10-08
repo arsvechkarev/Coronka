@@ -12,6 +12,7 @@ import com.arsvechkarev.views.CoronavirusMainStatsView
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
 import com.arsvechkarev.views.drawables.StatsGraphLoadingStub
+import core.HostActivity
 import core.extenstions.animateChildrenInvisible
 import core.extenstions.animateChildrenVisible
 import core.extenstions.animateInvisible
@@ -49,13 +50,26 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   
   private lateinit var viewModel: StatsViewModel
   
+  private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
+    
+    override fun onDrawerOpened() = toggleScrollingContent(false)
+    
+    override fun onDrawerClosed() = toggleScrollingContent(true)
+  }
+  
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel = StatsModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
     }
+    hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
     initClickListeners()
     initLoadingStubs()
+  }
+  
+  override fun onDestroyView() {
+    super.onDestroyView()
+    hostActivity.removeDrawerOpenCloseListener(drawerOpenCloseListener)
   }
   
   private fun handleState(state: BaseScreenState) {
@@ -64,7 +78,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         renderLoading()
       }
       is LoadedWorldCasesInfo -> {
-        toggleScrollingContent(turnOn = true)
+        toggleScrollingContent(enable = true)
         renderGeneralInfo(state.worldCasesInfo.generalInfo)
         renderCharts(state.worldCasesInfo)
       }
@@ -117,7 +131,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   }
   
   private fun updateContentView(putLoading: Boolean) {
-    toggleScrollingContent(turnOn = false)
+    toggleScrollingContent(enable = false)
     if (putLoading) {
       statsErrorLayout.animateInvisible()
       statsContentView.animateChildrenVisible()
@@ -127,10 +141,12 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
     }
   }
   
-  private fun toggleScrollingContent(turnOn: Boolean) {
+  private fun toggleScrollingContent(enable: Boolean) {
     val behavior = statsScrollingContentView.getBehavior<ScrollableContentBehavior<*>>()
-    behavior.respondToTouches = turnOn
-    statsScrollingContentView.isEnabled = turnOn
+    behavior.respondToTouches = enable
+    statsScrollingContentView.isEnabled = enable
+    statsNewCasesChart.isEnabled = enable
+    statsTotalCasesChart.isEnabled = enable
   }
   
   private fun getTextSize(number: Int): Float {
