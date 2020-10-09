@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.View.MeasureSpec
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import core.extenstions.getBehavior
+import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
 import core.extenstions.hasBehavior
 
 class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet) :
@@ -29,7 +29,7 @@ class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet)
     heightUsed: Int
   ): Boolean {
     val header = findHeader(parent)
-    val height = parent.height - header.getBehavior<HeaderBehavior<*>>().minHeight
+    val height = parent.height - header.asHeader.minHeight
     val heightSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
     parent.onMeasureChild(child, parentWidthMeasureSpec, widthUsed, heightSpec,
       heightUsed)

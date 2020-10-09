@@ -2,17 +2,20 @@ package com.arsvechkarev.views.drawables
 
 import android.content.Context
 import android.graphics.Path
+import com.arsvechkarev.views.R
+import kotlin.math.ceil
 import kotlin.random.Random
 
 class RankingsListLoadingStub(context: Context) : BaseLoadingStub(context) {
   
   override fun drawBackgroundWithPath(path: Path, width: Float, height: Float) {
-    val itemHeight = height / ITEM_HEIGHT_COEFFICIENT
-    val itemMargin = (height - itemHeight * ITEM_COUNT) / (ITEM_COUNT + 1f)
+    val itemHeight = context.resources.getDimension(R.dimen.text_h4) * 1.5f
+    val itemMargin = itemHeight * 0.4f
+    val itemCount = ceil(height / (itemHeight + itemMargin)).toInt()
     var top = itemMargin
     val cornersRadius = itemHeight / 6f
     val rectLeft = itemHeight * 2.8f
-    repeat(ITEM_COUNT) {
+    repeat(itemCount) {
       val circleY = top + itemHeight / 2f
       val radius = itemHeight / 2f
       path.addCircle(itemHeight, circleY, radius, Path.Direction.CW)
@@ -21,11 +24,5 @@ class RankingsListLoadingStub(context: Context) : BaseLoadingStub(context) {
         cornersRadius, Path.Direction.CW)
       top += itemHeight + itemMargin
     }
-  }
-  
-  companion object {
-    
-    const val ITEM_COUNT = 13
-    const val ITEM_HEIGHT_COEFFICIENT = 18
   }
 }

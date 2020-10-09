@@ -1,17 +1,12 @@
 package com.arsvechkarev.map.presentation
 
 import android.content.Context
-import android.graphics.Color
 import androidx.annotation.WorkerThread
 import androidx.fragment.app.FragmentManager
 import com.arsvechkarev.map.R
-import com.arsvechkarev.map.presentation.CountriesDrawer.Companion.STROKE_WIDTH
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.maps.android.data.geojson.GeoJsonFeature
-import com.google.maps.android.data.geojson.GeoJsonLayer
-import com.google.maps.android.data.geojson.GeoJsonPolygonStyle
 import core.Colors
 import core.concurrency.AndroidThreader
 import core.extenstions.lerpColor
@@ -52,28 +47,28 @@ class MapDelegate {
   }
   
   fun drawCountries(countries: List<Country>) {
-    threader.onBackground {
-      val mapCountries = getMapCountries(countries.toMutableList())
-      mapHolder.addAction { map ->
-        val layer = GeoJsonLayer(map, R.raw.countries, context)
-        layer.features.forEach { feature ->
-          feature.polygonStyle = GeoJsonPolygonStyle().apply {
-            val countryOnMap = mapCountries.find { it.iso2 == feature.getProperty("iso_a2") }
-            val color = countryOnMap?.color ?: Color.TRANSPARENT
-            fillColor = color
-            strokeWidth = STROKE_WIDTH
-          }
-        }
-        layer.setOnFeatureClickListener { feature ->
-          val country = countriesMap[feature.getProperty("iso_a2")] ?: return@setOnFeatureClickListener
-          onCountrySelected(country)
-          countriesDrawer.drawSelection(feature as GeoJsonFeature)
-        }
-        threader.onMainThread {
-          layer.addLayerToMap()
-        }
-      }
-    }
+    //    threader.onBackground {
+    //      val mapCountries = getMapCountries(countries.toMutableList())
+    //      mapHolder.addAction { map ->
+    //        val layer = GeoJsonLayer(map, R.raw.countries, context)
+    //        layer.features.forEach { feature ->
+    //          feature.polygonStyle = GeoJsonPolygonStyle().apply {
+    //            val countryOnMap = mapCountries.find { it.iso2 == feature.getProperty("iso_a2") }
+    //            val color = countryOnMap?.color ?: Color.TRANSPARENT
+    //            fillColor = color
+    //            strokeWidth = STROKE_WIDTH
+    //          }
+    //        }
+    //        layer.setOnFeatureClickListener { feature ->
+    //          val country = countriesMap[feature.getProperty("iso_a2")] ?: return@setOnFeatureClickListener
+    //          onCountrySelected(country)
+    //          countriesDrawer.drawSelection(feature as GeoJsonFeature)
+    //        }
+    //        threader.onMainThread {
+    //          layer.addLayerToMap()
+    //        }
+    //      }
+    //    }
   }
   
   @WorkerThread

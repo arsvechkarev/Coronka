@@ -16,6 +16,7 @@ import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.HIDDEN
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.SHOWN
 import core.INVALID_POINTER
 import core.extenstions.doOnEnd
+import core.extenstions.getBehavior
 import kotlin.math.abs
 
 class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
@@ -217,5 +218,8 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
   companion object {
     private const val DURATION_SLIDE = 225L
     private const val FLING_VELOCITY_THRESHOLD = 0.18f
+  
+    val View.asBottomSheet: BottomSheetBehavior<*>
+      get() = getBehavior()
   }
 }

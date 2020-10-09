@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.arsvechkarev.views.BottomSheet xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/mapBottomSheet"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  app:defaultState="hidden">
+  android:layout_height="match_parent">
 
   <FrameLayout
     android:id="@+id/mapLayoutMain"
@@ -17,6 +15,29 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:visibility="invisible"/>
+
+    <com.arsvechkarev.views.GradientHeaderView
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/map_gradient_header_height"
+      android:endColor="?colorGradientHeaderEnd"
+      android:startColor="?colorGradientHeaderStart">
+
+      <ImageView
+        android:id="@+id/mapIconDrawer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/icon_drawer_margin"
+        android:layout_marginTop="@dimen/icon_drawer_margin"
+        android:src="@drawable/ic_drawer"/>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Map"
+        android:textSize="@dimen/text_header"/>
+
+    </com.arsvechkarev.views.GradientHeaderView>
 
     <FrameLayout
       android:id="@+id/mapLayoutFailure"
@@ -120,7 +141,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_simple_bottom_sheet"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:layout_behavior="com.arsvechkarev.views.behaviors.BottomSheetBehavior">
 
     <com.arsvechkarev.views.FontTextView
       android:id="@+id/mapTextViewCountryName"
@@ -142,4 +164,4 @@
 
   </LinearLayout>
 
-</com.arsvechkarev.views.BottomSheet>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

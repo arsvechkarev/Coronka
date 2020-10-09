@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.tips.R
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior
 import core.BaseFragment
+import core.HostActivity
 import core.hostActivity
 import core.recycler.AdapterDelegateBuilder
 import core.recycler.createAdapter
@@ -21,6 +22,17 @@ import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionIma
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionTitle
 
 class TipsFragment : BaseFragment(R.layout.fragment_tips) {
+  
+  private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
+    
+    override fun onDrawerOpened() {
+      tipsRecyclerView.isEnabled = false
+    }
+    
+    override fun onDrawerClosed() {
+      tipsRecyclerView.isEnabled = true
+    }
+  }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     val behavior = (tipsBottomSheet.layoutParams as CoordinatorLayout.LayoutParams).behavior!!
@@ -40,13 +52,17 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
     tipsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     tipsRecyclerView.adapter = adapter
     tipsRecyclerView.setHasFixedSize(true)
+    hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
   }
   
-  private fun mainHeaderLayout(): AdapterDelegateBuilder<MainHeader>.() -> Unit {
-    return {
-      data(MainHeader)
-      layoutRes(R.layout.item_main_header)
-    }
+  override fun onDestroyView() {
+    super.onDestroyView()
+    hostActivity.removeDrawerOpenCloseListener(drawerOpenCloseListener)
+  }
+  
+  private fun mainHeaderLayout(): AdapterDelegateBuilder<MainHeader>.() -> Unit = {
+    data(MainHeader)
+    layoutRes(R.layout.item_main_header)
   }
   
   private fun headerLayout(title: String): AdapterDelegateBuilder<Header>.() -> Unit = {
@@ -73,10 +89,12 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
     layoutRes(R.layout.item_faq)
     onViewHolderInitialization { header, data ->
       header.itemView.setOnClickListener {
-        val item = data[header.adapterPosition - 2 /* 2 elements before faq item*/]
-        tipsTextTitle.text = getString(item.questionLayoutRes)
-        tipsTextAnswer.text = getString(item.answerLayoutRes)
-        behavior.show()
+        if (tipsRecyclerView.isEnabled) {
+          val item = data[header.adapterPosition - 2 /* 2 elements before faq item*/]
+          tipsTextTitle.text = getString(item.questionLayoutRes)
+          tipsTextAnswer.text = getString(item.answerLayoutRes)
+          behavior.show()
+        }
       }
     }
     onBindViewHolder { view, faqItem ->

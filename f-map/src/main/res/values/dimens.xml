@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <dimen name="map_gradient_header_height">100dp</dimen>
   <dimen name="map_loading_layout_margin">12dp</dimen>
   <dimen name="map_layout_country_info_m_vertical">16dp</dimen>
-  <dimen name="map_text_country_name_margin">8dp</dimen>
+  <dimen name="map_text_country_name_margin">16dp</dimen>
   <dimen name="map_big_stats_view_padding">16dp</dimen>
   <dimen name="map_big_stats_view_line_padding">12dp</dimen>
   <dimen name="map_big_stats_view_side_padding">16dp</dimen>

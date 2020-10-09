@@ -6,14 +6,15 @@ import androidx.lifecycle.Observer
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
-import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
-import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
+import com.arsvechkarev.map.presentation.MapScreenState.Loaded
+import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import core.BaseFragment
 import core.extenstions.animateInvisibleAndScale
 import core.extenstions.animateVisible
 import core.extenstions.animateVisibleAndScale
 import core.extenstions.invisible
 import core.extenstions.visible
+import core.hostActivity
 import core.model.Country
 import core.state.BaseScreenState
 import core.state.Failure
@@ -21,11 +22,10 @@ import core.state.Failure.FailureReason.NO_CONNECTION
 import core.state.Failure.FailureReason.TIMEOUT
 import core.state.Failure.FailureReason.UNKNOWN
 import core.state.Loading
-import core.state.StateHandle
-import core.state.isFresh
 import kotlinx.android.synthetic.main.fragment_map.fragment_map_root
-import kotlinx.android.synthetic.main.fragment_map.mapBottomSheet
 import kotlinx.android.synthetic.main.fragment_map.mapEarthView
+import kotlinx.android.synthetic.main.fragment_map.mapIconDrawer
+import kotlinx.android.synthetic.main.fragment_map.mapLayoutCountryInfo
 import kotlinx.android.synthetic.main.fragment_map.mapLayoutFailure
 import kotlinx.android.synthetic.main.fragment_map.mapLayoutLoading
 import kotlinx.android.synthetic.main.fragment_map.mapLayoutNoConnection
@@ -39,56 +39,50 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
 class MapFragment : BaseFragment(R.layout.fragment_map) {
   
   private val mapDelegate = MapDelegate()
-  private lateinit var viewModel: MapViewModel
   
-  private var savedInstanceState: Bundle? = null
+  private var viewModel: MapViewModel? = null
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    this.savedInstanceState = savedInstanceState
     mapDelegate.init(requireContext(), requireFragmentManager(), ::onCountrySelected)
-    viewModel = MapModuleInjector.provideViewModel(this)
-    viewModel.state.observe(this, Observer(this::handleStateChanged))
-    mapBottomSheet.setOnClickListener { mapBottomSheet.hide() }
-    mapTextRetry.setOnClickListener { viewModel.updateFromNetwork() }
-    mapTextRetryUnknown.setOnClickListener { viewModel.updateFromNetwork() }
+    viewModel = MapModuleInjector.provideViewModel(this).also { model ->
+      model.state.observe(this, Observer(this::handleStateChanged))
+      model.startLoadingData()
+    }
+    setupClickListeners()
   }
   
-  override fun onResume() {
-    super.onResume()
-    viewModel.startInitialLoading(savedInstanceState != null)
-  }
-  
-  private fun handleStateChanged(stateHandle: StateHandle<BaseScreenState>) {
-    stateHandle.handleUpdate { state ->
-      when (state) {
-        is Loading -> handleStartLoading()
-        is LoadedFromCache -> handleCountriesLoadedFromCache(state)
-        is LoadedFromNetwork -> handleCountriesLoadedFromNetwork(state)
-        is FoundCountry -> handleFoundCountry(state)
-        is Failure -> handleFailure(state)
-      }
+  override fun onNetworkAvailable() {
+    val viewModel = viewModel ?: return
+    val value = viewModel.state.value ?: return
+    if (value !is Loading && value !is FoundCountry && value !is Loaded) {
+      viewModel.startLoadingData()
     }
   }
   
-  private fun handleStartLoading() {
+  
+  private fun handleStateChanged(state: BaseScreenState) {
+    when (state) {
+      is Loading -> renderLoading()
+      is Loaded -> renderLoadedFromNetwork(state)
+      is FoundCountry -> renderFoundCountry(state)
+      is Failure -> renderFailure(state)
+    }
+  }
+  
+  private fun renderLoading() {
     mapLayoutFailure.animateInvisibleAndScale()
     mapLayoutLoading.animateVisibleAndScale()
   }
   
-  private fun handleCountriesLoadedFromCache(state: LoadedFromCache) {
-    displayLoadedResult(state.countries)
+  private fun renderLoadedFromNetwork(state: Loaded) {
+    fragment_map_root.animateVisible()
+    mapLayoutLoading.animateInvisibleAndScale()
+    mapDelegate.drawCountries(state.countries)
   }
   
-  private fun handleCountriesLoadedFromNetwork(state: LoadedFromNetwork) {
-    displayLoadedResult(state.countries)
-  }
-  
-  private fun handleFoundCountry(state: FoundCountry) {
-    if (state.isFresh) {
-      mapBottomSheet.show()
-    } else {
-      mapDelegate.drawCountries(state.countries)
-    }
+  private fun renderFoundCountry(state: FoundCountry) {
+    mapLayoutCountryInfo.asBottomSheet.show()
+    mapDelegate.drawCountries(state.countries)
     mapTextViewCountryName.text = state.country.name
     mapStatsView.updateNumbers(
       state.country.confirmed,
@@ -97,17 +91,11 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
     )
   }
   
-  private fun displayLoadedResult(countries: List<Country>) {
-    fragment_map_root.animateVisible()
-    mapLayoutLoading.animateInvisibleAndScale()
-    mapDelegate.drawCountries(countries)
-  }
-  
   private fun onCountrySelected(country: Country) {
-    viewModel.showCountryInfo(country)
+    viewModel!!.showCountryInfo(country)
   }
   
-  private fun handleFailure(state: Failure) {
+  private fun renderFailure(state: Failure) {
     fragment_map_root.invisible()
     mapLayoutUnknownError.invisible()
     mapLayoutNoConnection.invisible()
@@ -127,5 +115,11 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
     mapTextRetry.isClickable = false
     mapLayoutFailure.animateVisibleAndScale(andThen = { mapTextRetry.isClickable = true })
     mapLayoutLoading.animateInvisibleAndScale()
+  }
+  
+  private fun setupClickListeners() {
+    mapIconDrawer.setOnClickListener { hostActivity.openDrawer() }
+    mapTextRetry.setOnClickListener { viewModel!!.startLoadingData() }
+    mapTextRetryUnknown.setOnClickListener { viewModel!!.startLoadingData() }
   }
 }

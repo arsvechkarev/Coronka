@@ -4,71 +4,52 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.arsvechkarev.common.AllCountriesRepository
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
-import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
-import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
-import core.Loggable
-import core.NetworkConnection
+import com.arsvechkarev.map.presentation.MapScreenState.Loaded
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
+import core.concurrency.AndroidThreader
 import core.concurrency.Schedulers
 import core.concurrency.Threader
 import core.model.Country
+import core.model.TotalData
 import core.state.BaseScreenState
-import core.state.StateHandle
-import core.state.currentValue
-import core.state.update
-import core.state.updateSelf
+import core.state.Failure
+import core.state.Failure.Companion.asFailureReason
+import core.state.Loading
 
 class MapViewModel(
-  private val threader: Threader,
-  private val connection: NetworkConnection,
   private val allCountriesRepository: AllCountriesRepository,
+  private val threader: Threader = AndroidThreader,
   private val schedulers: Schedulers = AndroidSchedulers
-) : RxViewModel(), Loggable {
+) : RxViewModel() {
   
-  override val logTag = "Base_Map_ViewModel"
-  
-  private val _state = MutableLiveData<StateHandle<BaseScreenState>>(StateHandle())
-  val state: LiveData<StateHandle<BaseScreenState>>
+  private val _state = MutableLiveData<BaseScreenState>()
+  val state: LiveData<BaseScreenState>
     get() = _state
   
-  fun startInitialLoading(isRecreated: Boolean) {
-    if (isRecreated) {
-      _state.updateSelf(isRecreated = true)
-      return
+  fun startLoadingData() {
+    rxCall {
+      allCountriesRepository.getData()
+          .subscribeOn(schedulers.io())
+          .map(::transformResult)
+          .onErrorReturn { Failure(it.asFailureReason()) }
+          .startWith(Loading)
+          .subscribe(_state::setValue)
     }
-    updateFromNetwork()
-  }
-  
-  fun updateFromNetwork() {
-    //    rxCall {
-    //      allCountriesRepository.getAllCountries()
-    //          .subscribeOn(schedulersProvider.io())
-    //          .map(::transformResult)
-    //          .onErrorReturn { Failure(it.asFailureReason()) }
-    //          .startWith(Loading)
-    //          .startWithIf(Failure(NO_CONNECTION), connection.isNotConnected)
-    //          .subscribe(_state::update) {
-    //            throw OnErrorNotImplementedException(it)
-    //          }
-    //    }
   }
   
   fun showCountryInfo(country: Country) {
-    when (val currentState = _state.currentValue) {
-      is LoadedFromCache -> notifyFoundCountry(currentState.countries, country)
-      is LoadedFromNetwork -> notifyFoundCountry(currentState.countries, country)
+    when (val currentState = _state.value) {
+      is Loaded -> notifyFoundCountry(currentState.countries, country)
       is FoundCountry -> notifyFoundCountry(currentState.countries, country)
     }
   }
   
-  private fun transformResult(countries: List<Country>): BaseScreenState {
-    return LoadedFromNetwork(countries)
+  private fun transformResult(totalData: TotalData): BaseScreenState {
+    return Loaded(totalData.countries)
   }
   
-  private fun notifyFoundCountry(
-    countries: List<Country>, foundCountry: Country
-  ) {
-    threader.onMainThread { _state.update(FoundCountry(countries, foundCountry)) }
+  private fun notifyFoundCountry(countries: List<Country>, foundCountry: Country) {
+    threader.onMainThread { _state.value = FoundCountry(countries, foundCountry) }
   }
 }

@@ -106,7 +106,6 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   
   private fun renderLoading() {
     updateContentView(putLoading = true)
-    hostActivity.disableDrawer()
   }
   
   private fun renderCharts(info: WorldCasesInfo) {
@@ -179,7 +178,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     statsNewCasesChart.onDown = onDown
     statsTotalCasesChart.onUp = onUp
     statsNewCasesChart.onUp = onUp
-    statsIconDrawer.setOnClickListener { hostActivity.onDrawerIconClicked() }
+    statsIconDrawer.setOnClickListener { hostActivity.openDrawer() }
     statsTotalCasesChart.onDailyCaseClicked { statsTotalCasesLabel.drawCase(it) }
     statsNewCasesChart.onDailyCaseClicked { statsNewCasesLabel.drawCase(it) }
     statsRetryButton.setOnClickListener { viewModel!!.startLoadingData() }

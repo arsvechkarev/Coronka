@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 
 interface HostActivity {
   
-  fun onDrawerIconClicked()
+  fun openDrawer()
   
   fun enableDrawer()
   

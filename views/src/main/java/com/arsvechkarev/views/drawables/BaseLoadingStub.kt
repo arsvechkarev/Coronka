@@ -20,7 +20,7 @@ import core.extenstions.execute
 import core.extenstions.f
 
 abstract class BaseLoadingStub(
-  private val context: Context,
+  protected val context: Context,
   backgroundColorRes: Int = R.color.dark_overlay,
   shineColorRes: Int = R.color.dark_overlay_shine,
   shineColorLightRes: Int = R.color.dark_overlay_shine_light,
@@ -62,6 +62,7 @@ abstract class BaseLoadingStub(
       Shader.TileMode.CLAMP
     )
     shinePaint.shader = gradient
+    path.reset()
     drawBackgroundWithPath(path, width, height)
   }
   

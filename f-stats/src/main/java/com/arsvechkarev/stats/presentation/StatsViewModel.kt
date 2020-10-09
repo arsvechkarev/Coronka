@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.arsvechkarev.common.GeneralInfoRepository
 import com.arsvechkarev.common.WorldCasesInfoRepository
 import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedWorldCasesInfo
-import core.Loggable
-import core.NetworkConnection
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
@@ -21,14 +19,11 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 class StatsViewModel(
-  private val connection: NetworkConnection,
   private val generalInfoRepository: GeneralInfoRepository,
   private val worldCasesInfoRepository: WorldCasesInfoRepository,
   private val schedulers: Schedulers = AndroidSchedulers,
   private val delayMilliseconds: Long = 1000
-) : RxViewModel(), Loggable {
-  
-  override val logTag = "Base_Stats_ViewModel"
+) : RxViewModel() {
   
   private val _state = MutableLiveData<BaseScreenState>()
   val state: LiveData<BaseScreenState>

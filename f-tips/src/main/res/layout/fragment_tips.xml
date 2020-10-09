@@ -6,7 +6,7 @@
   android:layout_height="match_parent"
   android:background="?colorBackground">
 
-  <androidx.recyclerview.widget.RecyclerView
+  <com.arsvechkarev.views.CustomRecyclerView
     android:id="@+id/tipsRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>

@@ -2,7 +2,7 @@
 <resources>
   <dimen name="small_divider_height">0.5dp</dimen>
   <dimen name="dialog_corners_radius">16dp</dimen>
-  <dimen name="bottom_sheet_corners_radius">16dp</dimen>
+  <dimen name="bottom_sheet_corners_radius">50dp</dimen>
   <dimen name="clickable_text_view_corners_radius">4dp</dimen>
 
   <dimen name="chip_padding_horizontal">20dp</dimen>

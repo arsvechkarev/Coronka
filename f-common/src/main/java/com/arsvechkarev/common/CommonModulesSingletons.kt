@@ -13,6 +13,7 @@ object CommonModulesSingletons {
   
   lateinit var connection: NetworkConnection
     private set
+  
   lateinit var allCountriesRepository: AllCountriesRepository
     private set
   

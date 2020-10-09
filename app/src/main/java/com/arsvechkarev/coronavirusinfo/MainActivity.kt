@@ -6,6 +6,7 @@ import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
@@ -31,8 +32,8 @@ class MainActivity : AppCompatActivity(), HostActivity {
     Application.initDensities(resources)
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)
-    goToFragment(StatsFragment::class)
-    drawerTextStatistics.isSelected = true
+    goToFragment(MapFragment::class)
+    drawerTextMap.isSelected = true
     val onDrawerItemClick: (v: View) -> Unit = { handleOnDrawerItemClicked(it) }
     drawerTextStatistics.setOnClickListener(onDrawerItemClick)
     drawerTextMap.setOnClickListener(onDrawerItemClick)
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
     registerCallback()
   }
   
-  override fun onDrawerIconClicked() {
+  override fun openDrawer() {
     drawerLayout.open()
   }
   
@@ -77,6 +78,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
     drawerLayout.close(andThen = {
       when (view) {
         drawerTextStatistics -> goToFragment(StatsFragment::class)
+        drawerTextMap -> goToFragment(MapFragment::class)
         drawerTextTips -> goToFragment(TipsFragment::class)
         drawerTextRankings -> goToFragment(RankingsFragment::class)
       }

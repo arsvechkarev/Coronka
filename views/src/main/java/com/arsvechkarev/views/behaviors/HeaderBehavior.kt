@@ -19,6 +19,7 @@ import core.extenstions.AccelerateDecelerateInterpolator
 import core.extenstions.DURATION_SHORT
 import core.extenstions.assertThat
 import core.extenstions.doOnEnd
+import core.extenstions.getBehavior
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -289,7 +290,10 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
     }
   }
   
-  private companion object {
+  companion object {
     private const val INVALID_POINTER = -1
+    
+    val View.asHeader: HeaderBehavior<*>
+      get() = getBehavior()
   }
 }

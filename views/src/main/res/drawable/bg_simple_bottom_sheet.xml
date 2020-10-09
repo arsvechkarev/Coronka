@@ -3,7 +3,7 @@
   <item>
     <shape android:shape="rectangle">
       <corners android:topLeftRadius="@dimen/bottom_sheet_corners_radius" android:topRightRadius="@dimen/bottom_sheet_corners_radius"/>
-      <solid android:color="?colorOverlay"/>
+      <solid android:color="?colorDialog"/>
       <stroke android:width="@dimen/small_divider_height" android:color="?colorBottomNavigationDivider"/>
     </shape>
   </item>
