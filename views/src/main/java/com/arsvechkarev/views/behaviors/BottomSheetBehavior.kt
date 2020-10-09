@@ -45,6 +45,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
   }
   
   var onHide: () -> Unit = {}
+  var onShow: () -> Unit = {}
   
   fun show() {
     if (currentState == SHOWN || slideAnimator.isRunning) return
@@ -52,6 +53,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
       currentState = SHOWN
       slideAnimator.duration = DURATION_SLIDE
       slideAnimator.setIntValues(bottomSheet!!.top, parentHeight - slideRange)
+      slideAnimator.doOnEnd(onShow)
       slideAnimator.start()
     }
   }
@@ -62,6 +64,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
       currentState = HIDDEN
       slideAnimator.duration = DURATION_SLIDE
       slideAnimator.setIntValues(bottomSheet!!.top, parentHeight)
+      slideAnimator.doOnEnd(onHide)
       slideAnimator.start()
     }
   }
@@ -171,6 +174,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
           val middlePoint = parentHeight - slideRange * 0.65
           val endY = if (bottomSheet!!.top < middlePoint) {
             currentState = SHOWN
+            slideAnimator.doOnEnd(onShow)
             parentHeight - slideRange
           } else {
             currentState = HIDDEN

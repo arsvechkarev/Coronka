@@ -2,12 +2,12 @@ package com.arsvechkarev.tips.presentation
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.tips.R
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior
+import core.hostActivity
 import core.recycler.AdapterDelegateBuilder
 import core.recycler.createAdapter
 import kotlinx.android.synthetic.main.fragment_tips.tipsBottomSheet
@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.fragment_tips.tipsTextAnswer
 import kotlinx.android.synthetic.main.fragment_tips.tipsTextTitle
 import kotlinx.android.synthetic.main.item_faq.view.tipsItemFaq
 import kotlinx.android.synthetic.main.item_header.view.tipsTextHeader
-import kotlinx.android.synthetic.main.item_main_header.view.tipsImageDrawer
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionImage
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionTitle
 
@@ -26,6 +25,8 @@ class TipsFragment : Fragment(R.layout.fragment_tips) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     val behavior = (tipsBottomSheet.layoutParams as CoordinatorLayout.LayoutParams).behavior!!
     val bottomSheetBehavior = behavior as BottomSheetBehavior<View>
+    behavior.onHide = { hostActivity.enableDrawer() }
+    behavior.onShow = { hostActivity.disableDrawer() }
     tipsBottomSheetCross.setOnClickListener { bottomSheetBehavior.hide() }
     val adapter = createAdapter {
       delegate(MainHeader::class, mainHeaderLayout())
@@ -38,17 +39,13 @@ class TipsFragment : Fragment(R.layout.fragment_tips) {
     }
     tipsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     tipsRecyclerView.adapter = adapter
+    tipsRecyclerView.setHasFixedSize(true)
   }
   
   private fun mainHeaderLayout(): AdapterDelegateBuilder<MainHeader>.() -> Unit {
     return {
       data(MainHeader)
       layoutRes(R.layout.item_main_header)
-      onViewHolderInitialization { header, _ ->
-        header.itemView.tipsImageDrawer.setOnClickListener {
-          Toast.makeText(requireContext(), "Lol", Toast.LENGTH_SHORT).show()
-        }
-      }
     }
   }
   

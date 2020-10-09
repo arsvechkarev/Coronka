@@ -11,7 +11,7 @@ class SquareImageView @JvmOverloads constructor(
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    val size = minOf(measuredWidth, measuredHeight)
+    val size = maxOf(measuredWidth, measuredHeight)
     setMeasuredDimension(resolveSize(size, widthMeasureSpec), resolveSize(size, heightMeasureSpec))
   }
 }

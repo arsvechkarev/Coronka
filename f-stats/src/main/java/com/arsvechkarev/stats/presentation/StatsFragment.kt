@@ -72,10 +72,32 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
     hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
     initClickListeners()
     initLoadingStubs()
+    println("fragment stats = onViewCreated")
+  }
+  
+  override fun onStart() {
+    super.onStart()
+    println("fragment stats = onStart")
+  }
+  
+  override fun onResume() {
+    super.onResume()
+    println("fragment stats = onResume")
+  }
+  
+  override fun onStop() {
+    super.onStop()
+    println("fragment stats = onStop")
+  }
+  
+  override fun onDestroy() {
+    super.onDestroy()
+    println("fragment stats = onDestroy")
   }
   
   override fun onDestroyView() {
     super.onDestroyView()
+    println("fragment stats = onDestroyView")
     hostActivity.removeDrawerOpenCloseListener(drawerOpenCloseListener)
   }
   

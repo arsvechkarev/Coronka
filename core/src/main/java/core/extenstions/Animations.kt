@@ -56,10 +56,13 @@ fun ValueAnimator.doInTheMiddle(block: () -> Unit) {
 }
 
 fun View.animateVisible(andThen: () -> Unit = {}) {
+  if (alpha == 1f && visibility == View.VISIBLE) {
+    andThen()
+    return
+  }
   alpha = 0f
   visible()
   animate().alpha(1f).setDuration(DURATION_DEFAULT)
-      .withEndAction { }
       .setInterpolator(AccelerateDecelerateInterpolator)
       .withEndAction(andThen)
       .start()

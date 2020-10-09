@@ -116,6 +116,7 @@ class DrawerLayout @JvmOverloads constructor(
     if (!respondToTouches) return false
     when (event.action) {
       ACTION_DOWN -> {
+        handleDownOutsideEvent(event)
         latestX = event.x
         initVelocityTrackerIfNeeded()
         velocityTracker!!.addMovement(event)
@@ -130,6 +131,9 @@ class DrawerLayout @JvmOverloads constructor(
         }
       }
       ACTION_UP, ACTION_CANCEL -> {
+        if (outsideOnDrawerDown) {
+          handleUpOutsideEvent(event)
+        }
         recycleVelocityTracker()
         isBeingDragged = false
       }
@@ -143,11 +147,7 @@ class DrawerLayout @JvmOverloads constructor(
     initVelocityTrackerIfNeeded()
     when (event.action) {
       ACTION_DOWN -> {
-        if (currentState == OPENED && event.x > drawerView.right) {
-          outsideOnDrawerDownX = event.x
-          outsideOnDrawerDownY = event.y
-          outsideOnDrawerDown = true
-        }
+        handleDownOutsideEvent(event)
         latestX = event.x
         velocityTracker!!.addMovement(event)
       }
@@ -161,18 +161,30 @@ class DrawerLayout @JvmOverloads constructor(
         invalidate()
         if (event.action == ACTION_UP) {
           if (outsideOnDrawerDown) {
-            outsideOnDrawerDown = false
-            val xDist = abs(event.x - outsideOnDrawerDownX)
-            val yDist = abs(event.y - outsideOnDrawerDownY)
-            if (hypot(xDist, yDist) < touchSlop) {
-              close()
-            }
+            handleUpOutsideEvent(event)
           }
           handleUpEvent()
         }
       }
     }
     return true
+  }
+  
+  private fun handleDownOutsideEvent(event: MotionEvent) {
+    if (currentState == OPENED && event.x > drawerView.right) {
+      outsideOnDrawerDownX = event.x
+      outsideOnDrawerDownY = event.y
+      outsideOnDrawerDown = true
+    }
+  }
+  
+  private fun handleUpOutsideEvent(event: MotionEvent) {
+    outsideOnDrawerDown = false
+    val xDist = abs(event.x - outsideOnDrawerDownX)
+    val yDist = abs(event.y - outsideOnDrawerDownY)
+    if (hypot(xDist, yDist) < touchSlop) {
+      close()
+    }
   }
   
   private fun handleUpEvent() {
@@ -199,15 +211,16 @@ class DrawerLayout @JvmOverloads constructor(
           OPENED -> -slideRange
           CLOSED -> 0
         }
-        currentState = currentState.swap()
         result
       }
     }
     if (endX == 0) {
       drawerViewAnimator.doOnEnd { openCloseListeners.forEach { it.onDrawerOpened() } }
+      currentState = OPENED
     } else {
       assertThat(endX == -slideRange)
       drawerViewAnimator.doOnEnd { openCloseListeners.forEach { it.onDrawerClosed() } }
+      currentState = CLOSED
     }
     drawerViewAnimator.cancelIfRunning()
     drawerViewAnimator.setIntValues(drawerView.left, endX)

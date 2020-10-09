@@ -87,10 +87,32 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
     setupBehavior()
     setupChips()
     setupDrawables()
+    println("fragment rankings = onViewCreated")
+  }
+  
+  override fun onStart() {
+    super.onStart()
+    println("fragment rankings = onStart")
+  }
+  
+  override fun onResume() {
+    super.onResume()
+    println("fragment rankings = onResume")
+  }
+  
+  override fun onStop() {
+    super.onStop()
+    println("fragment rankings = onStop")
+  }
+  
+  override fun onDestroy() {
+    super.onDestroy()
+    println("fragment rankings = onDestroy")
   }
   
   override fun onDestroyView() {
     super.onDestroyView()
+    println("fragment rankings = onDestroyView")
     hostActivity.removeDrawerOpenCloseListener(drawerOpenCloseListener)
   }
   
