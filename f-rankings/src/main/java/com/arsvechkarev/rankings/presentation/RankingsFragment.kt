@@ -2,7 +2,6 @@ package com.arsvechkarev.rankings.presentation
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.rankings.R
@@ -17,6 +16,7 @@ import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDr
 import com.arsvechkarev.views.drawables.GradientHeaderStub.Companion.createGradientHeaderDrawable
 import com.arsvechkarev.views.drawables.RankingsListLoadingStub
 import com.arsvechkarev.views.drawables.SelectedChipsLoadingStub
+import core.BaseFragment
 import core.HostActivity
 import core.extenstions.animateInvisible
 import core.extenstions.animateVisible
@@ -57,10 +57,10 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsRecyclerView
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRetryButton
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsSelectedChipsLoadingStub
 
-class RankingsFragment : Fragment(R.layout.fragment_rankings) {
+class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
-  private lateinit var viewModel: RankingsViewModel
   private lateinit var chipHelper: ChipHelper
+  private var viewModel: RankingsViewModel? = null
   private val adapter = RankingsAdapter()
   
   private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
@@ -77,9 +77,10 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    viewModel = RankingsDiInjector.provideViewModel(this)
-    viewModel.state.observe(this, Observer(::handleState))
-    viewModel.startLoadingData()
+    viewModel = RankingsDiInjector.provideViewModel(this).also { model ->
+      model.state.observe(this, Observer(::handleState))
+      model.startLoadingData()
+    }
     rankingsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     rankingsRecyclerView.adapter = adapter
     hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
@@ -87,32 +88,18 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
     setupBehavior()
     setupChips()
     setupDrawables()
-    println("fragment rankings = onViewCreated")
   }
   
-  override fun onStart() {
-    super.onStart()
-    println("fragment rankings = onStart")
-  }
-  
-  override fun onResume() {
-    super.onResume()
-    println("fragment rankings = onResume")
-  }
-  
-  override fun onStop() {
-    super.onStop()
-    println("fragment rankings = onStop")
-  }
-  
-  override fun onDestroy() {
-    super.onDestroy()
-    println("fragment rankings = onDestroy")
+  override fun onNetworkAvailable() {
+    val viewModel = viewModel ?: return
+    val value = viewModel.state.value ?: return
+    if (value !is Loaded && value !is Filtered) {
+      viewModel.startLoadingData()
+    }
   }
   
   override fun onDestroyView() {
     super.onDestroyView()
-    println("fragment rankings = onDestroyView")
     hostActivity.removeDrawerOpenCloseListener(drawerOpenCloseListener)
   }
   
@@ -167,7 +154,7 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
   
   private fun setupClickListeners() {
     rankingsIconDrawer.setOnClickListener { hostActivity.onDrawerIconClicked() }
-    rankingsRetryButton.setOnClickListener { viewModel.startLoadingData() }
+    rankingsRetryButton.setOnClickListener { viewModel!!.startLoadingData() }
     onClick(rankingsFabFilter, rankingsChipOptionType, rankingsChipWorldRegion, action = {
       rankingsBottomSheet.getBehavior<BottomSheetBehavior<*>>().show()
       rankingsHeaderLayout.getBehavior<HeaderBehavior<*>>().isScrollable = false
@@ -218,7 +205,7 @@ class RankingsFragment : Fragment(R.layout.fragment_rankings) {
       chipPercentByCountry, chipDeathRate)
     chipHelper = ChipHelper(groupOptionTypes, groupWorldRegions,
       onNewChipSelected = { optionType, worldRegion ->
-        viewModel.filter(optionType, worldRegion)
+        viewModel!!.filter(optionType, worldRegion)
       },
       onOptionTypeChipSelected = { chip ->
         rankingsChipOptionType.text = chip.text

@@ -3,10 +3,10 @@ package com.arsvechkarev.tips.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.tips.R
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior
+import core.BaseFragment
 import core.hostActivity
 import core.recycler.AdapterDelegateBuilder
 import core.recycler.createAdapter
@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.item_header.view.tipsTextHeader
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionImage
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionTitle
 
-class TipsFragment : Fragment(R.layout.fragment_tips) {
+class TipsFragment : BaseFragment(R.layout.fragment_tips) {
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     val behavior = (tipsBottomSheet.layoutParams as CoordinatorLayout.LayoutParams).behavior!!

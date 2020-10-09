@@ -280,11 +280,6 @@ class DrawerLayout @JvmOverloads constructor(
   
   private enum class DrawerState {
     OPENED, CLOSED;
-    
-    fun swap() = when (this) {
-      OPENED -> CLOSED
-      CLOSED -> OPENED
-    }
   }
   
   private companion object {

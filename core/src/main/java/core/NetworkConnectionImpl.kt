@@ -2,6 +2,7 @@ package core
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.CONNECTIVITY_SERVICE
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
@@ -13,9 +14,8 @@ class NetworkConnectionImpl(context: Context) : NetworkConnection, Loggable {
   
   override val logTag = "NetworkConnection"
   
-  private val connectivityManager =
-      context.getSystemService(
-        Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+  private val connectivityManager = context.getSystemService(
+    CONNECTIVITY_SERVICE) as ConnectivityManager
   
   private val latch = CountDownLatch(1)
   
@@ -36,7 +36,6 @@ class NetworkConnectionImpl(context: Context) : NetworkConnection, Loggable {
     }
   
   init {
-    connectivityManager.registerNetworkCallback(
-      NetworkRequest.Builder().build(), callback)
+    connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
   }
 }

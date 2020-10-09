@@ -2,7 +2,6 @@ package com.arsvechkarev.stats.presentation
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.stats.behaviors.ScrollableContentBehavior
@@ -12,6 +11,7 @@ import com.arsvechkarev.views.CoronavirusMainStatsView
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
 import com.arsvechkarev.views.drawables.StatsGraphLoadingStub
+import core.BaseFragment
 import core.HostActivity
 import core.extenstions.animateChildrenInvisible
 import core.extenstions.animateChildrenVisible
@@ -46,16 +46,16 @@ import kotlinx.android.synthetic.main.fragment_stats.statsViewConfirmed
 import kotlinx.android.synthetic.main.fragment_stats.statsViewDeaths
 import kotlinx.android.synthetic.main.fragment_stats.statsViewRecovered
 
-class StatsFragment : Fragment(R.layout.fragment_stats) {
+class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   
-  private lateinit var viewModel: StatsViewModel
+  private var viewModel: StatsViewModel? = null
   
   private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
-  
+    
     override fun onDrawerOpened() = toggleScrollingContent(false)
-  
+    
     override fun onDrawerClosed() {
-      val state = viewModel.state.value
+      val state = viewModel?.state?.value
       if (state is Loading || state is Failure) {
         toggleScrollingContent(false)
       } else {
@@ -72,32 +72,18 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
     hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
     initClickListeners()
     initLoadingStubs()
-    println("fragment stats = onViewCreated")
   }
   
-  override fun onStart() {
-    super.onStart()
-    println("fragment stats = onStart")
-  }
-  
-  override fun onResume() {
-    super.onResume()
-    println("fragment stats = onResume")
-  }
-  
-  override fun onStop() {
-    super.onStop()
-    println("fragment stats = onStop")
-  }
-  
-  override fun onDestroy() {
-    super.onDestroy()
-    println("fragment stats = onDestroy")
+  override fun onNetworkAvailable() {
+    val viewModel = viewModel ?: return
+    val value = viewModel.state.value ?: return
+    if (value !is LoadedWorldCasesInfo) {
+      viewModel.startLoadingData()
+    }
   }
   
   override fun onDestroyView() {
     super.onDestroyView()
-    println("fragment stats = onDestroyView")
     hostActivity.removeDrawerOpenCloseListener(drawerOpenCloseListener)
   }
   
@@ -196,7 +182,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
     statsIconDrawer.setOnClickListener { hostActivity.onDrawerIconClicked() }
     statsTotalCasesChart.onDailyCaseClicked { statsTotalCasesLabel.drawCase(it) }
     statsNewCasesChart.onDailyCaseClicked { statsNewCasesLabel.drawCase(it) }
-    statsRetryButton.setOnClickListener { viewModel.startLoadingData() }
+    statsRetryButton.setOnClickListener { viewModel!!.startLoadingData() }
   }
   
   private fun initLoadingStubs() {

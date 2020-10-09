@@ -1,14 +1,18 @@
 package com.arsvechkarev.coronavirusinfo
 
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
 import core.Application
+import core.BaseFragment
 import core.HostActivity
+import core.concurrency.AndroidThreader
 import kotlinx.android.synthetic.main.activity_main.drawerGroupLinearLayout
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.drawerTextMap
@@ -19,8 +23,8 @@ import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity(), HostActivity {
   
-  private val fragments = HashMap<KClass<*>, Fragment>()
-  private var currentFragment: Fragment? = null
+  private val fragments = HashMap<KClass<*>, BaseFragment>()
+  private var currentFragment: BaseFragment? = null
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -34,6 +38,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
     drawerTextMap.setOnClickListener(onDrawerItemClick)
     drawerTextTips.setOnClickListener(onDrawerItemClick)
     drawerTextRankings.setOnClickListener(onDrawerItemClick)
+    registerCallback()
   }
   
   override fun onDrawerIconClicked() {
@@ -56,6 +61,17 @@ class MainActivity : AppCompatActivity(), HostActivity {
     drawerLayout.removeOpenCloseListener(listener)
   }
   
+  private fun registerCallback() {
+    val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+    connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(),
+      object : ConnectivityManager.NetworkCallback() {
+    
+        override fun onAvailable(network: Network) {
+          AndroidThreader.onMainThread { currentFragment?.onNetworkAvailable() }
+        }
+      })
+  }
+  
   private fun handleOnDrawerItemClicked(view: View) {
     drawerGroupLinearLayout.onTextViewClicked(view)
     drawerLayout.close(andThen = {
@@ -67,7 +83,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
     })
   }
   
-  private fun goToFragment(fragmentClass: KClass<out Fragment>) {
+  private fun goToFragment(fragmentClass: KClass<out BaseFragment>) {
     if (currentFragment?.javaClass?.name == fragmentClass.java.name) {
       return
     }

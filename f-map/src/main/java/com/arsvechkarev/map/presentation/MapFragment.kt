@@ -2,13 +2,13 @@ package com.arsvechkarev.map.presentation
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromCache
 import com.arsvechkarev.map.presentation.MapScreenState.LoadedFromNetwork
+import core.BaseFragment
 import core.extenstions.animateInvisibleAndScale
 import core.extenstions.animateVisible
 import core.extenstions.animateVisibleAndScale
@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextRetry
 import kotlinx.android.synthetic.main.fragment_map.mapTextRetryUnknown
 import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
 
-class MapFragment : Fragment(R.layout.fragment_map) {
+class MapFragment : BaseFragment(R.layout.fragment_map) {
   
   private val mapDelegate = MapDelegate()
   private lateinit var viewModel: MapViewModel
