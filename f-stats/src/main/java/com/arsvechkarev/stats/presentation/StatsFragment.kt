@@ -51,10 +51,17 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   private lateinit var viewModel: StatsViewModel
   
   private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
-    
+  
     override fun onDrawerOpened() = toggleScrollingContent(false)
-    
-    override fun onDrawerClosed() = toggleScrollingContent(true)
+  
+    override fun onDrawerClosed() {
+      val state = viewModel.state.value
+      if (state is Loading || state is Failure) {
+        toggleScrollingContent(false)
+      } else {
+        toggleScrollingContent(true)
+      }
+    }
   }
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,6 +85,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
         renderLoading()
       }
       is LoadedWorldCasesInfo -> {
+        hostActivity.enableDrawer()
         toggleScrollingContent(enable = true)
         renderGeneralInfo(state.worldCasesInfo.generalInfo)
         renderCharts(state.worldCasesInfo)
@@ -90,6 +98,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   
   private fun renderLoading() {
     updateContentView(putLoading = true)
+    hostActivity.disableDrawer()
   }
   
   private fun renderCharts(info: WorldCasesInfo) {
@@ -117,6 +126,7 @@ class StatsFragment : Fragment(R.layout.fragment_stats) {
   }
   
   private fun renderFailure(reason: FailureReason) {
+    hostActivity.enableDrawer()
     updateContentView(putLoading = false)
     when (reason) {
       NO_CONNECTION -> {

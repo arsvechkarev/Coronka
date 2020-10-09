@@ -10,6 +10,7 @@ import android.widget.OverScroller
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ScrollingView
 import androidx.core.view.ViewCompat
+import com.arsvechkarev.views.DrawerLayout
 import core.INVALID_POINTER
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -51,13 +52,10 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
       MotionEvent.ACTION_DOWN -> {
         stopScroller(child)
         isBeingDragged = false
-        val x = event.x.toInt()
         val y = event.y.toInt()
-        if (parent.isPointInChildBounds(child, x, y)) {
-          lastMotionY = y
-          activePointerId = event.getPointerId(0)
-          ensureVelocityTracker()
-        }
+        lastMotionY = y
+        activePointerId = event.getPointerId(0)
+        ensureVelocityTracker()
       }
       MotionEvent.ACTION_MOVE -> {
         stopScroller(child)
@@ -73,17 +71,17 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
         val y = event.getY(pointerIndex).toInt()
         val yDiff = abs(y - lastMotionY)
         if (yDiff > touchSlop) {
+          findDrawerParent(parent).respondToTouches = false
           isBeingDragged = true
           lastMotionY = y
         }
       }
-      MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
+      MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+        findDrawerParent(parent).respondToTouches = true
         endTouch()
       }
     }
-    if (velocityTracker != null) {
-      velocityTracker!!.addMovement(event)
-    }
+    velocityTracker?.addMovement(event)
     return isBeingDragged
   }
   
@@ -92,20 +90,15 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
     when (event.actionMasked) {
       MotionEvent.ACTION_DOWN -> {
         stopScroller(child)
-        val x = event.x.toInt()
         val y = event.y.toInt()
-        if (parent.isPointInChildBounds(child, x, y)) {
-          lastMotionY = y
-          activePointerId = event.getPointerId(0)
-          ensureVelocityTracker()
-        } else {
-          return false
-        }
+        lastMotionY = y
+        activePointerId = event.getPointerId(0)
+        ensureVelocityTracker()
       }
       MotionEvent.ACTION_MOVE -> {
         val activePointerIndex = event.findPointerIndex(activePointerId)
         if (activePointerIndex == -1) {
-          return false
+          return true
         }
         val y = event.getY(activePointerIndex).toInt()
         var dy = y - lastMotionY
@@ -124,22 +117,31 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
         }
       }
       MotionEvent.ACTION_UP -> {
-        if (velocityTracker != null) {
-          velocityTracker!!.addMovement(event)
-          velocityTracker!!.computeCurrentVelocity(1000)
-          val velocityY = velocityTracker!!.getYVelocity(activePointerId)
-          fling(child, velocityY)
-        }
+        findDrawerParent(parent).respondToTouches = true
+        velocityTracker?.addMovement(event)
+        velocityTracker?.computeCurrentVelocity(1000)
+        val velocityY = velocityTracker?.getYVelocity(activePointerId) ?: return true
+        fling(child, velocityY)
         endTouch()
       }
       MotionEvent.ACTION_CANCEL -> {
+        findDrawerParent(parent).respondToTouches = true
         endTouch()
       }
     }
-    if (velocityTracker != null) {
-      velocityTracker!!.addMovement(event)
-    }
+    velocityTracker?.addMovement(event)
     return true
+  }
+  
+  private fun findDrawerParent(view: View): DrawerLayout {
+    var parent = view.parent
+    while (parent != null) {
+      if (parent is DrawerLayout) {
+        return parent
+      }
+      parent = parent.parent
+    }
+    throw IllegalStateException()
   }
   
   private fun stopScroller(child: V) {
@@ -184,10 +186,8 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
   private fun endTouch() {
     isBeingDragged = false
     activePointerId = INVALID_POINTER
-    if (velocityTracker != null) {
-      velocityTracker!!.recycle()
-      velocityTracker = null
-    }
+    velocityTracker?.recycle()
+    velocityTracker = null
   }
   
   private inner class FlingRunnable(val child: V) : Runnable {
