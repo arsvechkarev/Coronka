@@ -60,6 +60,6 @@ class MapViewModel(
     iso2ToLocations: Map<String, Location>,
     foundCountry: Country
   ) {
-    threader.onMainThread { _state.value = FoundCountry(countries, iso2ToLocations, foundCountry) }
+    _state.value = FoundCountry(countries, iso2ToLocations, foundCountry)
   }
 }

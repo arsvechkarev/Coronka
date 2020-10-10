@@ -21,6 +21,5 @@ dependencies {
   implementation dependencies.lifecycleExtensions
   implementation dependencies.coordinatorLayout
   implementation dependencies.googleMaps
-  implementation dependencies.googleMapsUtils
   implementation dependencies.rxJava
 }

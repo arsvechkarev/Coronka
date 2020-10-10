@@ -77,13 +77,15 @@ class DrawerLayout @JvmOverloads constructor(
     }
   }
   
-  fun close(andThen: () -> Unit = {}) {
+  fun close(notifyListeners: Boolean = true, andThen: () -> Unit = {}) {
     currentState = CLOSED
     post {
       drawerViewAnimator.duration = DEFAULT_DURATION
       drawerViewAnimator.setIntValues(drawerView.left, -slideRange)
       drawerViewAnimator.doOnEnd {
-        openCloseListeners.forEach { it.onDrawerClosed() }
+        if (notifyListeners) {
+          openCloseListeners.forEach { it.onDrawerClosed() }
+        }
         andThen()
       }
       drawerViewAnimator.start()
@@ -119,13 +121,13 @@ class DrawerLayout @JvmOverloads constructor(
         handleDownOutsideEvent(event)
         latestX = event.x
         initVelocityTrackerIfNeeded()
-        velocityTracker!!.addMovement(event)
+        velocityTracker?.addMovement(event)
       }
       ACTION_MOVE -> {
         val x = event.x.toInt()
         val xDiff = abs(latestX - x)
         if (xDiff > touchSlop * TOUCH_SLOP_MULTIPLIER) {
-          velocityTracker!!.addMovement(event)
+          velocityTracker?.addMovement(event)
           isBeingDragged = true
           latestX = event.x
         }
@@ -149,10 +151,10 @@ class DrawerLayout @JvmOverloads constructor(
       ACTION_DOWN -> {
         handleDownOutsideEvent(event)
         latestX = event.x
-        velocityTracker!!.addMovement(event)
+        velocityTracker?.addMovement(event)
       }
       ACTION_MOVE, ACTION_UP -> {
-        velocityTracker!!.addMovement(event)
+        velocityTracker?.addMovement(event)
         val distance = event.x - latestX
         var newLeft = drawerView.left + distance.toInt()
         if (newLeft >= 0) newLeft = 0

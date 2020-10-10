@@ -2,10 +2,9 @@ package com.arsvechkarev.map.presentation
 
 import android.content.Context
 import androidx.annotation.WorkerThread
-import androidx.fragment.app.FragmentManager
 import com.arsvechkarev.map.R
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.MapStyleOptions
 import core.Colors
 import core.concurrency.AndroidThreader
@@ -20,29 +19,34 @@ class MapDelegate {
   private val countriesDrawer = CountriesDrawer()
   private val threader = AndroidThreader
   
+  private lateinit var mapView: MapView
   private lateinit var context: Context
   private lateinit var onCountrySelected: (Country) -> Unit
   
   private var countriesMap = HashMap<String, Country>()
   
-  fun init(context: Context, manager: FragmentManager, onCountrySelected: (Country) -> Unit) {
+  fun init(
+    context: Context,
+    mapView: MapView,
+    onCountrySelected: (Country) -> Unit
+  ) {
     this.context = context
+    this.mapView = mapView
     this.onCountrySelected = onCountrySelected
-    val supportMapFragment = SupportMapFragment()
-    manager.beginTransaction()
-        .add(R.id.fragment_map_root, supportMapFragment)
-        .commit()
-    supportMapFragment.getMapAsync(::initMap)
+    mapView.getMapAsync(::initMap)
   }
   
   private fun initMap(map: GoogleMap) {
-    with(map) {
-      mapHolder.init(this)
-      setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style))
-      uiSettings.isMapToolbarEnabled = false
-      uiSettings.isRotateGesturesEnabled = false
-      uiSettings.isMyLocationButtonEnabled = false
-      setMaxZoomPreference(4f)
+    mapHolder.init(map)
+    threader.onBackground {
+      val loadRawResourceStyle = MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style)
+      threader.onMainThread {
+        map.setMapStyle(loadRawResourceStyle)
+        map.uiSettings.isMapToolbarEnabled = false
+        map.uiSettings.isRotateGesturesEnabled = false
+        map.uiSettings.isMyLocationButtonEnabled = false
+        map.setMaxZoomPreference(4f)
+      }
     }
   }
   

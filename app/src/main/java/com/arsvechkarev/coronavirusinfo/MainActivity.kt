@@ -46,20 +46,12 @@ class MainActivity : AppCompatActivity(), HostActivity {
     drawerLayout.open()
   }
   
-  override fun enableDrawer() {
+  override fun enableTouchesOnDrawer() {
     drawerLayout.respondToTouches = true
   }
   
-  override fun disableDrawer() {
+  override fun disableTouchesOnDrawer() {
     drawerLayout.respondToTouches = false
-  }
-  
-  override fun addDrawerOpenCloseListener(listener: HostActivity.DrawerOpenCloseListener) {
-    drawerLayout.addOpenCloseListener(listener)
-  }
-  
-  override fun removeDrawerOpenCloseListener(listener: HostActivity.DrawerOpenCloseListener) {
-    drawerLayout.removeOpenCloseListener(listener)
   }
   
   private fun registerCallback() {
@@ -93,6 +85,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
     fragments[fragmentClass] = fragment
     val transaction = supportFragmentManager.beginTransaction()
     if (currentFragment != null) {
+      drawerLayout.removeOpenCloseListener(currentFragment!!.drawerOpenCloseListener)
       transaction.hide(currentFragment!!)
       if (!fragment.isAdded) {
         transaction.add(R.id.fragment_container, fragment)
@@ -102,6 +95,8 @@ class MainActivity : AppCompatActivity(), HostActivity {
     } else {
       transaction.replace(R.id.fragment_container, fragment)
     }
+    drawerLayout.addOpenCloseListener(fragment.drawerOpenCloseListener)
+    transaction.runOnCommit { fragment.onAppearedOnScreen() }
     transaction.commit()
     currentFragment = fragment
   }

@@ -21,8 +21,8 @@ class MapHolder {
     }
     actions.add(action)
     initLatch.await()
-    for (function in actions) {
-      function(googleMap!!)
+    for (action in actions) {
+      action(googleMap!!)
     }
     actions.clear()
   }

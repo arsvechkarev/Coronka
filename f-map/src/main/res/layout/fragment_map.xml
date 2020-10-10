@@ -4,137 +4,115 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <FrameLayout
-    android:id="@+id/mapLayoutMain"
+  <com.google.android.gms.maps.MapView
+    android:id="@+id/mapView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?colorBackground">
+    android:background="?colorBackground"
+    android:visibility="invisible"/>
 
-    <FrameLayout
-      android:id="@+id/fragment_map_root"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:visibility="invisible"/>
+  <ImageView
+    android:id="@+id/mapIconDrawer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/icon_drawer_margin"
+    android:layout_marginTop="@dimen/icon_drawer_margin"
+    android:src="@drawable/ic_drawer"/>
 
-    <com.arsvechkarev.views.GradientHeaderView
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/map_gradient_header_height"
-      android:endColor="?colorGradientHeaderEnd"
-      android:startColor="?colorGradientHeaderStart">
+  <FrameLayout
+    android:id="@+id/mapLayoutFailure"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="invisible">
 
-      <ImageView
-        android:id="@+id/mapIconDrawer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/icon_drawer_margin"
-        android:layout_marginTop="@dimen/icon_drawer_margin"
-        android:src="@drawable/ic_drawer"/>
-
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Map"
-        android:textSize="@dimen/text_header"/>
-
-    </com.arsvechkarev.views.GradientHeaderView>
-
-    <FrameLayout
-      android:id="@+id/mapLayoutFailure"
+    <LinearLayout
+      android:id="@+id/mapLayoutNoConnection"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:gravity="center"
       android:orientation="vertical"
       android:visibility="invisible">
 
-      <LinearLayout
-        android:id="@+id/mapLayoutNoConnection"
+      <com.arsvechkarev.views.FontTextView
+        android:id="@+id/mapTextFailureReason"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/map_text_failure_m_top"
         android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="invisible">
+        android:textSize="@dimen/text_h3"/>
 
-        <com.arsvechkarev.views.FontTextView
-          android:id="@+id/mapTextFailureReason"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="@dimen/map_text_failure_m_top"
-          android:gravity="center"
-          android:textSize="@dimen/text_h3"/>
-
-        <com.arsvechkarev.views.noconnection.EarthView
-          android:id="@+id/mapEarthView"
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/map_earth_view_size"/>
-
-        <com.arsvechkarev.views.ClickableTextView
-          android:id="@+id/mapTextRetry"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/map_text_retry_m_top"
-          android:text="@string/text_retry"
-          android:textColor="?colorFailure"
-          android:textSize="@dimen/text_h4"
-          app:rippleColor="?colorFailureRipple"/>
-
-      </LinearLayout>
-
-      <LinearLayout
-        android:id="@+id/mapLayoutUnknownError"
+      <com.arsvechkarev.views.noconnection.EarthView
+        android:id="@+id/mapEarthView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="@dimen/map_earth_view_size"/>
 
-        <com.arsvechkarev.views.FontTextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:drawableStart="@drawable/ic_error"
-          android:drawablePadding="@dimen/map_text_unknown_drawable_padding"
-          android:gravity="center"
-          android:text="@string/text_unknown_error"
-          android:textSize="@dimen/text_h2"/>
+      <com.arsvechkarev.views.ClickableTextView
+        android:id="@+id/mapTextRetry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/map_text_retry_m_top"
+        android:text="@string/text_retry"
+        android:textColor="?colorFailure"
+        android:textSize="@dimen/text_h4"
+        app:rippleColor="?colorFailureRipple"/>
 
-        <com.arsvechkarev.views.ClickableTextView
-          android:id="@+id/mapTextRetryUnknown"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/map_text_retry_m_top"
-          android:text="@string/text_retry"
-          android:textColor="?colorFailure"
-          android:textSize="@dimen/text_h4"
-          app:rippleColor="?colorFailureRipple"/>
-
-      </LinearLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
     <LinearLayout
-      android:id="@+id/mapLayoutLoading"
+      android:id="@+id/mapLayoutUnknownError"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
+      android:layout_height="match_parent"
       android:gravity="center"
-      android:visibility="invisible">
-
-      <com.arsvechkarev.views.ProgressBar
-        android:layout_width="@dimen/progress_bar_size"
-        android:layout_height="@dimen/progress_bar_size"
-        android:layout_margin="@dimen/map_loading_layout_margin"
-        app:color="?colorAccent"/>
+      android:orientation="vertical">
 
       <com.arsvechkarev.views.FontTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/map_loading_layout_margin"
-        android:text="@string/text_loading_map"
-        android:textColor="?colorTextPrimary"
-        android:textSize="@dimen/text_h1"/>
+        android:drawableStart="@drawable/ic_error"
+        android:drawablePadding="@dimen/map_text_unknown_drawable_padding"
+        android:gravity="center"
+        android:text="@string/text_unknown_error"
+        android:textSize="@dimen/text_h2"/>
+
+      <com.arsvechkarev.views.ClickableTextView
+        android:id="@+id/mapTextRetryUnknown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/map_text_retry_m_top"
+        android:text="@string/text_retry"
+        android:textColor="?colorFailure"
+        android:textSize="@dimen/text_h4"
+        app:rippleColor="?colorFailureRipple"/>
 
     </LinearLayout>
 
   </FrameLayout>
+
+  <LinearLayout
+    android:id="@+id/mapLayoutLoading"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:visibility="invisible">
+
+    <com.arsvechkarev.views.ProgressBar
+      android:layout_width="@dimen/progress_bar_size"
+      android:layout_height="@dimen/progress_bar_size"
+      android:layout_margin="@dimen/map_loading_layout_margin"
+      app:color="?colorAccent"/>
+
+    <com.arsvechkarev.views.FontTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/map_loading_layout_margin"
+      android:text="@string/text_loading_map"
+      android:textColor="?colorTextPrimary"
+      android:textSize="@dimen/text_h1"/>
+
+  </LinearLayout>
 
   <LinearLayout
     android:id="@+id/mapLayoutCountryInfo"

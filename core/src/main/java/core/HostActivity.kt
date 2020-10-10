@@ -6,13 +6,9 @@ interface HostActivity {
   
   fun openDrawer()
   
-  fun enableDrawer()
+  fun enableTouchesOnDrawer()
   
-  fun disableDrawer()
-  
-  fun addDrawerOpenCloseListener(listener: DrawerOpenCloseListener)
-  
-  fun removeDrawerOpenCloseListener(listener: DrawerOpenCloseListener)
+  fun disableTouchesOnDrawer()
   
   interface DrawerOpenCloseListener {
     

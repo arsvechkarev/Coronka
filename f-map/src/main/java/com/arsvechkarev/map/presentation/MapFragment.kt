@@ -8,7 +8,6 @@ import com.arsvechkarev.map.di.MapModuleInjector
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.Loaded
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
-import core.BaseFragment
 import core.extenstions.animateInvisibleAndScale
 import core.extenstions.animateVisible
 import core.extenstions.animateVisibleAndScale
@@ -22,7 +21,6 @@ import core.state.Failure.FailureReason.NO_CONNECTION
 import core.state.Failure.FailureReason.TIMEOUT
 import core.state.Failure.FailureReason.UNKNOWN
 import core.state.Loading
-import kotlinx.android.synthetic.main.fragment_map.fragment_map_root
 import kotlinx.android.synthetic.main.fragment_map.mapEarthView
 import kotlinx.android.synthetic.main.fragment_map.mapIconDrawer
 import kotlinx.android.synthetic.main.fragment_map.mapLayoutCountryInfo
@@ -36,19 +34,23 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextRetry
 import kotlinx.android.synthetic.main.fragment_map.mapTextRetryUnknown
 import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
 
-class MapFragment : BaseFragment(R.layout.fragment_map) {
+class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   
   private val mapDelegate = MapDelegate()
   
   private var viewModel: MapViewModel? = null
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    mapDelegate.init(requireContext(), requireFragmentManager(), ::onCountrySelected)
+    mapDelegate.init(requireContext(), mapView, ::onCountrySelected)
     viewModel = MapModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(this::handleStateChanged))
       model.startLoadingData()
     }
     setupClickListeners()
+  }
+  
+  override fun onAppearedOnScreen() {
+    hostActivity.disableTouchesOnDrawer()
   }
   
   override fun onNetworkAvailable() {
@@ -59,6 +61,9 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
     }
   }
   
+  override fun onDrawerClosed() {
+    hostActivity.disableTouchesOnDrawer()
+  }
   
   private fun handleStateChanged(state: BaseScreenState) {
     when (state) {
@@ -75,7 +80,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
   }
   
   private fun renderLoadedFromNetwork(state: Loaded) {
-    fragment_map_root.animateVisible()
+    mapView.animateVisible()
     mapLayoutLoading.animateInvisibleAndScale()
     mapDelegate.drawCountries(state.countries)
   }
@@ -96,7 +101,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
   }
   
   private fun renderFailure(state: Failure) {
-    fragment_map_root.invisible()
+    mapView.invisible()
     mapLayoutUnknownError.invisible()
     mapLayoutNoConnection.invisible()
     when (state.reason) {
@@ -118,8 +123,11 @@ class MapFragment : BaseFragment(R.layout.fragment_map) {
   }
   
   private fun setupClickListeners() {
-    mapIconDrawer.setOnClickListener { hostActivity.openDrawer() }
     mapTextRetry.setOnClickListener { viewModel!!.startLoadingData() }
     mapTextRetryUnknown.setOnClickListener { viewModel!!.startLoadingData() }
+    mapIconDrawer.setOnClickListener {
+      hostActivity.openDrawer()
+      hostActivity.enableTouchesOnDrawer()
+    }
   }
 }

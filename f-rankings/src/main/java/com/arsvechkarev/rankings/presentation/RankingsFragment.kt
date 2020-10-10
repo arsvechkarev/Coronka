@@ -17,7 +17,6 @@ import com.arsvechkarev.views.drawables.GradientHeaderStub.Companion.createGradi
 import com.arsvechkarev.views.drawables.RankingsListLoadingStub
 import com.arsvechkarev.views.drawables.SelectedChipsLoadingStub
 import core.BaseFragment
-import core.HostActivity
 import core.extenstions.animateInvisible
 import core.extenstions.animateVisible
 import core.extenstions.heightWithMargins
@@ -62,19 +61,6 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   private var viewModel: RankingsViewModel? = null
   private val adapter = RankingsAdapter()
   
-  private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
-    
-    private fun toggleItems(enable: Boolean) {
-      rankingsHeaderLayout.asHeader.isScrollable = enable
-      rankingsRecyclerView.isEnabled = enable
-      rankingsFabFilter.isEnabled = enable
-    }
-    
-    override fun onDrawerOpened() = toggleItems(false)
-    
-    override fun onDrawerClosed() = toggleItems(true)
-  }
-  
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel = RankingsDiInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
@@ -82,7 +68,6 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     }
     rankingsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     rankingsRecyclerView.adapter = adapter
-    hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
     setupClickListeners()
     setupBehavior()
     setupChips()
@@ -97,10 +82,9 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     }
   }
   
-  override fun onDestroyView() {
-    super.onDestroyView()
-    hostActivity.removeDrawerOpenCloseListener(drawerOpenCloseListener)
-  }
+  override fun onDrawerOpened() = toggleItems(false)
+  
+  override fun onDrawerClosed() = toggleItems(true)
   
   private fun handleState(state: BaseScreenState) {
     when (state) {
@@ -151,6 +135,12 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     }
   }
   
+  private fun toggleItems(enable: Boolean) {
+    rankingsHeaderLayout.asHeader.isScrollable = enable
+    rankingsRecyclerView.isEnabled = enable
+    rankingsFabFilter.isEnabled = enable
+  }
+  
   private fun setupClickListeners() {
     rankingsIconDrawer.setOnClickListener { hostActivity.openDrawer() }
     rankingsRetryButton.setOnClickListener { viewModel!!.startLoadingData() }
@@ -158,13 +148,13 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
       rankingsBottomSheet.asBottomSheet.show()
       rankingsHeaderLayout.asHeader.isScrollable = false
       rankingsRecyclerView.isEnabled = false
-      hostActivity.disableDrawer()
+      hostActivity.disableTouchesOnDrawer()
     })
     val whenBottomSheetClosed = {
       rankingsBottomSheet.asBottomSheet.hide()
       rankingsHeaderLayout.asHeader.isScrollable = true
       rankingsRecyclerView.isEnabled = true
-      hostActivity.enableDrawer()
+      hostActivity.enableTouchesOnDrawer()
     }
     rankingsBottomSheetCross.setOnClickListener { whenBottomSheetClosed() }
     rankingsBottomSheet.asBottomSheet.onHide = { whenBottomSheetClosed() }

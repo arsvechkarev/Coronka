@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.tips.R
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior
 import core.BaseFragment
-import core.HostActivity
 import core.hostActivity
 import core.recycler.AdapterDelegateBuilder
 import core.recycler.createAdapter
@@ -18,27 +17,18 @@ import kotlinx.android.synthetic.main.fragment_tips.tipsTextAnswer
 import kotlinx.android.synthetic.main.fragment_tips.tipsTextTitle
 import kotlinx.android.synthetic.main.item_faq.view.tipsItemFaq
 import kotlinx.android.synthetic.main.item_header.view.tipsTextHeader
+import kotlinx.android.synthetic.main.item_main_header.tipsImageDrawer
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionImage
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionTitle
 
 class TipsFragment : BaseFragment(R.layout.fragment_tips) {
   
-  private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
-    
-    override fun onDrawerOpened() {
-      tipsRecyclerView.isEnabled = false
-    }
-    
-    override fun onDrawerClosed() {
-      tipsRecyclerView.isEnabled = true
-    }
-  }
-  
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     val behavior = (tipsBottomSheet.layoutParams as CoordinatorLayout.LayoutParams).behavior!!
     val bottomSheetBehavior = behavior as BottomSheetBehavior<View>
-    behavior.onHide = { hostActivity.enableDrawer() }
-    behavior.onShow = { hostActivity.disableDrawer() }
+    behavior.onHide = { hostActivity.enableTouchesOnDrawer() }
+    behavior.onShow = { hostActivity.disableTouchesOnDrawer() }
+    tipsImageDrawer.setOnClickListener { hostActivity.openDrawer() }
     tipsBottomSheetCross.setOnClickListener { bottomSheetBehavior.hide() }
     val adapter = createAdapter {
       delegate(MainHeader::class, mainHeaderLayout())
@@ -52,12 +42,14 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
     tipsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     tipsRecyclerView.adapter = adapter
     tipsRecyclerView.setHasFixedSize(true)
-    hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
   }
   
-  override fun onDestroyView() {
-    super.onDestroyView()
-    hostActivity.removeDrawerOpenCloseListener(drawerOpenCloseListener)
+  override fun onDrawerOpened() {
+    tipsRecyclerView.isEnabled = false
+  }
+  
+  override fun onDrawerClosed() {
+    tipsRecyclerView.isEnabled = true
   }
   
   private fun mainHeaderLayout(): AdapterDelegateBuilder<MainHeader>.() -> Unit = {

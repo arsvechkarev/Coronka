@@ -12,7 +12,6 @@ import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDr
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
 import com.arsvechkarev.views.drawables.StatsGraphLoadingStub
 import core.BaseFragment
-import core.HostActivity
 import core.extenstions.animateChildrenInvisible
 import core.extenstions.animateChildrenVisible
 import core.extenstions.animateInvisible
@@ -50,26 +49,11 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   
   private var viewModel: StatsViewModel? = null
   
-  private val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
-    
-    override fun onDrawerOpened() = toggleScrollingContent(false)
-    
-    override fun onDrawerClosed() {
-      val state = viewModel?.state?.value
-      if (state is Loading || state is Failure) {
-        toggleScrollingContent(false)
-      } else {
-        toggleScrollingContent(true)
-      }
-    }
-  }
-  
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel = StatsModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
     }
-    hostActivity.addDrawerOpenCloseListener(drawerOpenCloseListener)
     initClickListeners()
     initLoadingStubs()
   }
@@ -82,9 +66,15 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     }
   }
   
-  override fun onDestroyView() {
-    super.onDestroyView()
-    hostActivity.removeDrawerOpenCloseListener(drawerOpenCloseListener)
+  override fun onDrawerOpened() = toggleScrollingContent(false)
+  
+  override fun onDrawerClosed() {
+    val state = viewModel?.state?.value
+    if (state is Loading || state is Failure) {
+      toggleScrollingContent(false)
+    } else {
+      toggleScrollingContent(true)
+    }
   }
   
   private fun handleState(state: BaseScreenState) {
@@ -93,7 +83,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
         renderLoading()
       }
       is LoadedWorldCasesInfo -> {
-        hostActivity.enableDrawer()
+        hostActivity.enableTouchesOnDrawer()
         toggleScrollingContent(enable = true)
         renderGeneralInfo(state.worldCasesInfo.generalInfo)
         renderCharts(state.worldCasesInfo)
@@ -133,7 +123,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   }
   
   private fun renderFailure(reason: FailureReason) {
-    hostActivity.enableDrawer()
+    hostActivity.enableTouchesOnDrawer()
     updateContentView(putLoading = false)
     when (reason) {
       NO_CONNECTION -> {
@@ -172,8 +162,8 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   }
   
   private fun initClickListeners() {
-    val onDown = { hostActivity.disableDrawer() }
-    val onUp = { hostActivity.enableDrawer() }
+    val onDown = { hostActivity.disableTouchesOnDrawer() }
+    val onUp = { hostActivity.enableTouchesOnDrawer() }
     statsTotalCasesChart.onDown = onDown
     statsNewCasesChart.onDown = onDown
     statsTotalCasesChart.onUp = onUp
