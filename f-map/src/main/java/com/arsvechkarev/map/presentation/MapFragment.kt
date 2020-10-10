@@ -7,6 +7,8 @@ import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
 import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.Loaded
+import com.arsvechkarev.map.uils.BaseMapFragment
+import com.arsvechkarev.map.uils.MapHelper
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import core.extenstions.animateInvisibleAndScale
 import core.extenstions.animateVisible
@@ -36,7 +38,7 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
 
 class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   
-  private val mapDelegate = MapDelegate()
+  private val mapDelegate = MapHelper()
   
   private var viewModel: MapViewModel? = null
   
@@ -82,12 +84,12 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   private fun renderLoadedFromNetwork(state: Loaded) {
     mapView.animateVisible()
     mapLayoutLoading.animateInvisibleAndScale()
-    mapDelegate.drawCountries(state.countries)
+    mapDelegate.drawCountries(state.iso2ToCountryMap)
   }
   
   private fun renderFoundCountry(state: FoundCountry) {
     mapLayoutCountryInfo.asBottomSheet.show()
-    mapDelegate.drawCountries(state.countries)
+    mapDelegate.drawCountries(state.iso2ToCountryMap)
     mapTextViewCountryName.text = state.country.name
     mapStatsView.updateNumbers(
       state.country.confirmed,

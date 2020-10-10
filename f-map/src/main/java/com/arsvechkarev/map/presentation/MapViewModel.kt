@@ -8,10 +8,9 @@ import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
 import com.arsvechkarev.map.presentation.MapScreenState.Loaded
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
-import core.concurrency.AndroidThreader
 import core.concurrency.Schedulers
-import core.concurrency.Threader
 import core.model.Country
+import core.model.CountryOnMap
 import core.model.Location
 import core.model.TotalData
 import core.state.BaseScreenState
@@ -23,7 +22,6 @@ import io.reactivex.Observable
 class MapViewModel(
   private val allCountriesRepository: AllCountriesRepository,
   private val countriesMetaInfoRepository: CountriesMetaInfoRepository,
-  private val threader: Threader = AndroidThreader,
   private val schedulers: Schedulers = AndroidSchedulers
 ) : RxViewModel() {
   
@@ -47,19 +45,24 @@ class MapViewModel(
   
   fun showCountryInfo(country: Country) {
     when (val state = _state.value) {
-      is Loaded -> notifyFoundCountry(state.countries, state.iso2ToLocations, country)
-      is FoundCountry -> notifyFoundCountry(state.countries, state.iso2ToLocations, country)
+      is Loaded -> notifyFoundCountry(state.iso2ToCountryMap, country)
+      is FoundCountry -> notifyFoundCountry(state.iso2ToCountryMap, country)
     }
   }
   
-  private fun transformResult(pair: Pair<TotalData, Map<String, Location>>): BaseScreenState =
-      Loaded(pair.first.countries, pair.second)
+  private fun transformResult(pair: Pair<TotalData, Map<String, Location>>): BaseScreenState {
+    val map = HashMap<String, CountryOnMap>()
+    for (country in pair.first.countries) {
+      val location = pair.second[country.iso2] ?: continue
+      map[country.iso2] = CountryOnMap(country, location)
+    }
+    return Loaded(map)
+  }
   
   private fun notifyFoundCountry(
-    countries: List<Country>,
-    iso2ToLocations: Map<String, Location>,
-    foundCountry: Country
+    iso2ToLocations: Map<String, CountryOnMap>,
+    country: Country
   ) {
-    _state.value = FoundCountry(countries, iso2ToLocations, foundCountry)
+    _state.value = FoundCountry(iso2ToLocations, country)
   }
 }

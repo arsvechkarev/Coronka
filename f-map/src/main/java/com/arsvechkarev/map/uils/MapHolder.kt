@@ -1,4 +1,4 @@
-package com.arsvechkarev.map.presentation
+package com.arsvechkarev.map.uils
 
 import com.google.android.gms.maps.GoogleMap
 import java.util.concurrent.CountDownLatch
@@ -14,16 +14,14 @@ class MapHolder {
     initLatch.countDown()
   }
   
-  fun addAction(action: (GoogleMap) -> Unit) {
+  fun execute(action: (GoogleMap) -> Unit) {
     if (googleMap != null) {
       action(googleMap!!)
       return
     }
     actions.add(action)
     initLatch.await()
-    for (action in actions) {
-      action(googleMap!!)
-    }
+    actions.forEach { it(googleMap!!) }
     actions.clear()
   }
 }

@@ -13,8 +13,8 @@ class Country(
 )
 
 class CountryOnMap(
-  val iso2: String,
-  val color: Int
+  val country: Country,
+  val location: Location
 )
 
 data class DisplayableCountry(
