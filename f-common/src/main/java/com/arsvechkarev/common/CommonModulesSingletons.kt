@@ -1,11 +1,11 @@
 package com.arsvechkarev.common
 
 import android.content.Context
-import com.arsvechkarev.storage.Saver
+import com.arsvechkarev.storage.DatabaseImpl
+import com.arsvechkarev.storage.countries.CountriesMetaInfoHelper
 import core.NetworkConnection
 import core.NetworkConnectionImpl
 import core.RxNetworker
-import core.db.CountriesDao
 
 object CommonModulesSingletons {
   
@@ -17,10 +17,13 @@ object CommonModulesSingletons {
   lateinit var allCountriesRepository: AllCountriesRepository
     private set
   
+  lateinit var metaInfoRepository: CountriesMetaInfoRepository
+    private set
+  
   fun init(context: Context) {
     connection = NetworkConnectionImpl(context)
-    val saver = Saver(AllCountriesRepository.SAVER_FILENAME, context)
-    val sqLiteExecutor = CountriesSQLiteExecutor(CountriesDao())
-    allCountriesRepository = AllCountriesRepository(networker, saver, sqLiteExecutor)
+    allCountriesRepository = AllCountriesRepository(networker)
+    val database = DatabaseImpl(CountriesMetaInfoHelper.instance)
+    metaInfoRepository = CountriesMetaInfoRepository(database)
   }
 }

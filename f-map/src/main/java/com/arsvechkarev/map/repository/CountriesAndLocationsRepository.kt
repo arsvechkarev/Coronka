@@ -1,0 +1,3 @@
+package com.arsvechkarev.map.repository
+
+class CountriesAndLocationsRepository

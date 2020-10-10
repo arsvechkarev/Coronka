@@ -7,15 +7,11 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-abstract class AssetsDatabaseHelper(
+abstract class AssetsDatabase(
   private val context: Context,
   private val assetsName: String,
   version: Int
 ) : SQLiteOpenHelper(context, assetsName, null, version) {
-  
-  init {
-    createDatabaseIfNeeded()
-  }
   
   override fun onCreate(db: SQLiteDatabase) {
     // do nothing, because all necessary tables are already in the database from assets
@@ -25,7 +21,7 @@ abstract class AssetsDatabaseHelper(
   
   }
   
-  private fun createDatabaseIfNeeded() {
+  protected fun createDatabaseIfNeeded() {
     val dbFile: File = context.getDatabasePath(assetsName)
     if (!dbFile.exists()) {
       try {
@@ -42,7 +38,6 @@ abstract class AssetsDatabaseHelper(
     }
   }
   
-  @Throws(IOException::class)
   private fun copyDatabase(dbFile: File) {
     context.assets.open(assetsName).use { inputStream ->
       FileOutputStream(dbFile).use { outputStream ->
