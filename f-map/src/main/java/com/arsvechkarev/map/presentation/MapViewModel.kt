@@ -18,11 +18,13 @@ import core.state.Failure
 import core.state.Failure.Companion.asFailureReason
 import core.state.Loading
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 class MapViewModel(
   private val allCountriesRepository: AllCountriesRepository,
   private val countriesMetaInfoRepository: CountriesMetaInfoRepository,
-  private val schedulers: Schedulers = AndroidSchedulers
+  private val schedulers: Schedulers = AndroidSchedulers,
+  private val delay: Long = 1000
 ) : RxViewModel() {
   
   private val _state = MutableLiveData<BaseScreenState>()
@@ -35,10 +37,11 @@ class MapViewModel(
         allCountriesRepository.getData().subscribeOn(schedulers.io()),
         countriesMetaInfoRepository.getLocationsMap().subscribeOn(schedulers.io()),
         { map, countries -> Pair(map, countries) }
-      ).observeOn(schedulers.mainThread())
+      ).delay(delay, TimeUnit.MILLISECONDS, schedulers.computation(), true)
           .map(::transformResult)
           .onErrorReturn { Failure(it.asFailureReason()) }
           .startWith(Loading)
+          .observeOn(schedulers.mainThread())
           .subscribe(_state::setValue)
     }
   }

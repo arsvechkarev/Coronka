@@ -20,12 +20,15 @@
   <attr name="colorPercentByCountry" format="color"/>
   <attr name="colorDeathRate" format="color"/>
 
+  <attr name="colorMapWater" format="color"/>
+  <attr name="colorMapLandscape" format="color"/>
+  <attr name="colorMapCircleDefault" format="color"/>
+  <attr name="colorMapCircleStrokeDefault" format="color"/>
+  <attr name="colorMapCircleSelected" format="color"/>
+  <attr name="colorMapCircleStrokeSelected" format="color"/>
+
   <attr name="colorFailure" format="color"/>
   <attr name="colorFailureRipple" format="color"/>
-
-  <attr name="colorBottomNavigationDivider" format="color"/>
   <attr name="colorDivider" format="color"/>
-
-  <attr name="colorTextAccent" format="color"/>
-  <attr name="colorTextLinks" format="color"/>
+  <attr name="colorDividerDark" format="color"/>
 </resources>

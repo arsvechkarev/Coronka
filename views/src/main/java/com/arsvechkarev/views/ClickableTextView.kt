@@ -27,7 +27,7 @@ class ClickableTextView @JvmOverloads constructor(
     attributes.recycle()
     isClickable = true
     isFocusable = true
-    typeface = FontManager.rubik
+    typeface = FontManager.segoeUI
     val pHorizontal = context.resources.getDimension(
       R.dimen.clickable_text_view_p_horizontal).toInt()
     val pVertical = context.resources.getDimension(

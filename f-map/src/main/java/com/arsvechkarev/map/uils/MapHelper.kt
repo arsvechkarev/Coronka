@@ -27,20 +27,6 @@ class MapHelper(
     mapView.getMapAsync(::initMap)
   }
   
-  private fun initMap(map: GoogleMap) {
-    mapHolder.init(map)
-    threader.onBackground {
-      val loadRawResourceStyle = MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style)
-      threader.onMainThread {
-        map.setMapStyle(loadRawResourceStyle)
-        map.uiSettings.isMapToolbarEnabled = false
-        map.uiSettings.isRotateGesturesEnabled = false
-        map.uiSettings.isMyLocationButtonEnabled = false
-        map.setMaxZoomPreference(4f)
-      }
-    }
-  }
-  
   fun drawCountries(iso2ToCountryMap: Map<String, CountryOnMap>) {
     mapHolder.execute {
       countriesDrawer.draw(iso2ToCountryMap)
@@ -52,6 +38,26 @@ class MapHelper(
         currentCountry = newCountry
         onCountrySelected(newCountry.country)
         return@lb false
+      }
+    }
+  }
+  
+  fun toggleMap(enable: Boolean) {
+    mapHolder.execute {
+      uiSettings.setAllGesturesEnabled(enable)
+    }
+  }
+  
+  private fun initMap(map: GoogleMap) {
+    mapHolder.init(map)
+    threader.onBackground {
+      val loadRawResourceStyle = MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style)
+      threader.onMainThread {
+        map.setMapStyle(loadRawResourceStyle)
+        map.uiSettings.isMapToolbarEnabled = false
+        map.uiSettings.isRotateGesturesEnabled = false
+        map.uiSettings.isMyLocationButtonEnabled = false
+        map.setMaxZoomPreference(4f)
       }
     }
   }

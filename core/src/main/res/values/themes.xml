@@ -29,12 +29,18 @@
     <item name="colorPercentByCountry">@color/dark_percent_by_country</item>
     <item name="colorDeathRate">@color/dark_death_rate</item>
 
-    <item name="colorBottomNavigationDivider">@color/dark_bottom_navigation_divider</item>
-    <item name="colorDivider">@color/dark_divider</item>
+    <item name="colorMapWater">@color/dark_map_water</item>
+    <item name="colorMapLandscape">@color/dark_map_landscape</item>
+    <item name="colorMapCircleDefault">@color/dark_map_circle_default</item>
+    <item name="colorMapCircleStrokeDefault">@color/dark_map_circle_stroke_default</item>
+    <item name="colorMapCircleSelected">@color/dark_map_circle_selected</item>
+    <item name="colorMapCircleStrokeSelected">@color/dark_map_circle_stroke_selected</item>
 
-    <item name="colorTextAccent">@color/dark_text_accent</item>
-    <item name="colorTextLinks">@color/dark_links</item>
+    <item name="colorDivider">@color/dark_divider</item>
+    <item name="colorDividerDark">@color/dark_dark_divider</item>
+
     <item name="colorPrimary">?colorOverlay</item>
+    <item name="colorAccent">@color/dark_accent</item>
   </style>
 
   <style name="TextStyle" parent="@style/TextAppearance.AppCompat">

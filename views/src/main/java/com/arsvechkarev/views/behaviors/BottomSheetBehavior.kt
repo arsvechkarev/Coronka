@@ -49,8 +49,8 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
   var onShow: () -> Unit = {}
   
   fun show() {
-    if (currentState == SHOWN || slideAnimator.isRunning) return
     bottomSheet!!.post {
+      if (currentState == SHOWN || slideAnimator.isRunning) return@post
       currentState = SHOWN
       slideAnimator.duration = DURATION_SLIDE
       slideAnimator.setIntValues(bottomSheet!!.top, parentHeight - slideRange)
@@ -60,8 +60,8 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
   }
   
   fun hide() {
-    if (currentState == HIDDEN || slideAnimator.isRunning) return
     bottomSheet!!.post {
+      if (currentState == HIDDEN || slideAnimator.isRunning) return@post
       currentState = HIDDEN
       slideAnimator.duration = DURATION_SLIDE
       slideAnimator.setIntValues(bottomSheet!!.top, parentHeight)
@@ -161,32 +161,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
         }
       }
       ACTION_UP -> {
-        velocityTracker?.addMovement(event)
-        velocityTracker?.computeCurrentVelocity(1000)
-        val yVelocity = velocityTracker?.getYVelocity(activePointerId) ?: 0f
-        if (yVelocity / maxFlingVelocity > FLING_VELOCITY_THRESHOLD) {
-          currentState = HIDDEN
-          val timeInSeconds = abs((parentHeight - bottomSheet!!.top) / yVelocity)
-          slideAnimator.duration = (timeInSeconds * 1000).toLong()
-          slideAnimator.setIntValues(bottomSheet!!.top, parentHeight)
-          slideAnimator.doOnEnd(onHide)
-          slideAnimator.start()
-        } else {
-          val middlePoint = parentHeight - slideRange * 0.65
-          val endY = if (bottomSheet!!.top < middlePoint) {
-            currentState = SHOWN
-            slideAnimator.doOnEnd(onShow)
-            parentHeight - slideRange
-          } else {
-            currentState = HIDDEN
-            slideAnimator.doOnEnd(onHide)
-            parentHeight
-          }
-          slideAnimator.setIntValues(bottomSheet!!.top, endY)
-          slideAnimator.duration = DURATION_SLIDE
-          slideAnimator.start()
-        }
-        endTouch()
+        handleUpEvent(event)
       }
       ACTION_CANCEL -> {
         endTouch()
@@ -194,6 +169,35 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
     }
     velocityTracker?.addMovement(event)
     return true
+  }
+  
+  private fun handleUpEvent(event: MotionEvent) {
+    velocityTracker?.addMovement(event)
+    velocityTracker?.computeCurrentVelocity(1000)
+    val yVelocity = velocityTracker?.getYVelocity(activePointerId) ?: 0f
+    if (yVelocity / maxFlingVelocity > FLING_VELOCITY_THRESHOLD) {
+      currentState = HIDDEN
+      val timeInSeconds = abs((parentHeight - bottomSheet!!.top) / yVelocity)
+      slideAnimator.duration = (timeInSeconds * 1000).toLong()
+      slideAnimator.setIntValues(bottomSheet!!.top, parentHeight)
+      slideAnimator.doOnEnd(onHide)
+      slideAnimator.start()
+    } else {
+      val middlePoint = parentHeight - slideRange * 0.65
+      val endY = if (bottomSheet!!.top < middlePoint) {
+        currentState = SHOWN
+        slideAnimator.doOnEnd(onShow)
+        parentHeight - slideRange
+      } else {
+        currentState = HIDDEN
+        slideAnimator.doOnEnd(onHide)
+        parentHeight
+      }
+      slideAnimator.setIntValues(bottomSheet!!.top, endY)
+      slideAnimator.duration = DURATION_SLIDE
+      slideAnimator.start()
+    }
+    endTouch()
   }
   
   private fun updateDyOffset(dy: Int) {
@@ -209,10 +213,8 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
   private fun endTouch() {
     isBeingDragged = false
     activePointerId = INVALID_POINTER
-    if (velocityTracker != null) {
-      velocityTracker!!.recycle()
-      velocityTracker = null
-    }
+    velocityTracker?.recycle()
+    velocityTracker = null
   }
   
   companion object {

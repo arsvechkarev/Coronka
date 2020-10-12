@@ -20,6 +20,8 @@
   <color name="dark_percent_by_country">#FFDA1E</color>
   <color name="dark_death_rate">#007FFF</color>
 
+  <color name="dark_map_water">#171825</color>
+  <color name="dark_map_landscape">#313452</color>
   <color name="dark_map_circle_default">#F65858</color>
   <color name="dark_map_circle_stroke_default">#FF0000</color>
   <color name="dark_map_circle_selected">#007FFF</color>
@@ -27,8 +29,7 @@
 
   <color name="dark_failure">#E64545</color>
   <color name="dark_failure_ripple">#70E64545</color>
-  <color name="dark_bottom_navigation_divider">#000000</color>
   <color name="dark_divider">@color/dark_overlay</color>
-  <color name="dark_text_accent">#0D70D4</color>
-  <color name="dark_links">#0964DB</color>
+  <color name="dark_dark_divider">#000000</color>
+  <color name="dark_accent">#0D70D4</color>
 </resources>
