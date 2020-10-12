@@ -6,7 +6,7 @@
   <color name="dark_overlay_shine">#363853</color>
   <color name="dark_overlay_shine_light">#393B57</color>
   <color name="dark_overlay_accent">#4D516C</color>
-  <color name="dark_dialog">#363A55</color>
+  <color name="dark_dialog">#424665</color>
   <color name="dark_gradient_header_start">#2B2F4A</color>
   <color name="dark_gradient_header_end">#474B65</color>
   <color name="dark_ripple">#60FFFFFF</color>
@@ -19,6 +19,11 @@
   <color name="dark_deaths">#FF6F00</color>
   <color name="dark_percent_by_country">#FFDA1E</color>
   <color name="dark_death_rate">#007FFF</color>
+
+  <color name="dark_map_circle_default">#F65858</color>
+  <color name="dark_map_circle_stroke_default">#FF0000</color>
+  <color name="dark_map_circle_selected">#007FFF</color>
+  <color name="dark_map_circle_stroke_selected">#0155C1</color>
 
   <color name="dark_failure">#E64545</color>
   <color name="dark_failure_ripple">#70E64545</color>

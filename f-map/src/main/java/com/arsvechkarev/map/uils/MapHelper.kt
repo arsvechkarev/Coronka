@@ -10,27 +10,20 @@ import core.concurrency.AndroidThreader
 import core.model.Country
 import core.model.CountryOnMap
 
-class MapHelper {
+class MapHelper(
+  private val context: Context,
+  mapView: MapView,
+  private val onCountrySelected: (Country) -> Unit
+) {
   
   private val mapHolder = MapHolder()
-  private val countriesDrawer = CountriesDrawer()
+  private val countriesDrawer = CountriesDrawer(mapHolder, context)
   private val threader = AndroidThreader
   
-  private lateinit var mapView: MapView
-  private lateinit var context: Context
-  private lateinit var onCountrySelected: (Country) -> Unit
-  
-  private var currentCountry: Country? = null
+  private var currentCountry: CountryOnMap? = null
   private var currentMarker: Marker? = null
   
-  fun init(
-    context: Context,
-    mapView: MapView,
-    onCountrySelected: (Country) -> Unit
-  ) {
-    this.context = context
-    this.mapView = mapView
-    this.onCountrySelected = onCountrySelected
+  init {
     mapView.getMapAsync(::initMap)
   }
   
@@ -48,18 +41,17 @@ class MapHelper {
     }
   }
   
-  fun drawCountries(
-    iso2ToCountryMap: Map<String, CountryOnMap>
-  ) {
-    mapHolder.execute { map ->
-      countriesDrawer.draw(map, iso2ToCountryMap)
-      map.setOnMarkerClickListener { newMarker ->
-        val newCountry = iso2ToCountryMap[newMarker.tag]!!.country
-        countriesDrawer.drawSelection(newMarker, currentMarker, newCountry, currentCountry)
+  fun drawCountries(iso2ToCountryMap: Map<String, CountryOnMap>) {
+    mapHolder.execute {
+      countriesDrawer.draw(iso2ToCountryMap)
+      setOnMarkerClickListener lb@{ newMarker ->
+        val newCountry = iso2ToCountryMap.getValue(newMarker.tag as String)
+        if (currentCountry == newCountry) return@lb true
+        countriesDrawer.drawSelection(currentMarker, currentCountry, newMarker, newCountry)
         currentMarker = newMarker
         currentCountry = newCountry
-        onCountrySelected(newCountry)
-        return@setOnMarkerClickListener false
+        onCountrySelected(newCountry.country)
+        return@lb false
       }
     }
   }

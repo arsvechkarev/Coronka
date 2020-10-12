@@ -1,35 +1,54 @@
 package com.arsvechkarev.map.uils
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import com.google.android.gms.maps.GoogleMap
+import android.graphics.Paint.ANTI_ALIAS_FLAG
+import com.arsvechkarev.map.R
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import core.concurrency.AndroidThreader
+import core.concurrency.Threader
 import core.extenstions.iterate
-import core.model.Country
+import core.extenstions.retrieveColor
 import core.model.CountryOnMap
 import kotlin.math.max
+import kotlin.math.pow
 
-class CountriesDrawer {
+class CountriesDrawer(
+  private val mapHolder: MapHolder,
+  context: Context,
+  private val threader: Threader = AndroidThreader,
+) {
   
+  private val minBitmapSize: Float
+  private val maxBitmapSize: Float
+  private val defaultCircleColor: Int
+  private val defaultStrokeColor: Int
+  private val selectedCircleColor: Int
+  private val selectedStrokeColor: Int
   private val countriesToSizes = HashMap<Int, Int>()
-  
-  private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-  
-  private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    strokeWidth = 7f
+  private val circlePaint = Paint(ANTI_ALIAS_FLAG)
+  private val strokePaint = Paint(ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.STROKE
   }
   
-  private val tempCanvas = Canvas()
+  init {
+    val width = context.resources.displayMetrics.widthPixels
+    val height = context.resources.displayMetrics.heightPixels
+    defaultCircleColor = context.retrieveColor(R.color.dark_map_circle_default)
+    defaultStrokeColor = context.retrieveColor(R.color.dark_map_circle_stroke_default)
+    selectedCircleColor = context.retrieveColor(R.color.dark_map_circle_selected)
+    selectedStrokeColor = context.retrieveColor(R.color.dark_map_circle_stroke_selected)
+    maxBitmapSize = minOf(width, height) / 4f
+    minBitmapSize = maxBitmapSize / 4.5f
+    strokePaint.strokeWidth = minBitmapSize / 10
+  }
   
-  fun draw(
-    map: GoogleMap,
-    iso2ToCountryMap: Map<String, CountryOnMap>
-  ) {
+  fun draw(iso2ToCountryMap: Map<String, CountryOnMap>) {
     val maxCountryOnMap = iso2ToCountryMap.values.maxByOrNull { it.country.confirmed }!!
     iso2ToCountryMap.iterate { iso2, countryOnMap ->
       val location = countryOnMap.location
@@ -38,16 +57,24 @@ class CountriesDrawer {
       val options = MarkerOptions()
           .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
           .position(latLng)
-      val marker = map.addMarker(options)
-      marker.tag = iso2
+          .alpha(0.6f)
+      mapHolder.execute {
+        val marker = addMarker(options)
+        marker.tag = iso2
+      }
     }
   }
   
-  fun drawSelection(newMarker: Marker, oldMarker: Marker?, newCountry: Country, oldCountry: Country?) {
+  fun drawSelection(
+    oldMarker: Marker?,
+    oldCountry: CountryOnMap?,
+    newMarker: Marker,
+    newCountry: CountryOnMap
+  ) {
     if (oldMarker != null && oldCountry != null) {
-      drawMarker(oldMarker, oldCountry, DEFAULT_CIRCLE_COLOR, DEFAULT_STROKE_COLOR)
+      drawMarker(oldMarker, oldCountry, defaultCircleColor, defaultStrokeColor)
     }
-    drawMarker(newMarker, newCountry, SELECTED_CIRCLE_COLOR, SELECTED_STROKE_COLOR)
+    drawMarker(newMarker, newCountry, selectedCircleColor, selectedStrokeColor)
   }
   
   private fun createMarkerBitmap(
@@ -58,15 +85,20 @@ class CountriesDrawer {
       maxCountry.country.confirmed)
     countriesToSizes[countryOnMap.country.id] = bitmapSize
     val bitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888)
-    tempCanvas.setBitmap(bitmap)
-    drawCircle(tempCanvas, DEFAULT_CIRCLE_COLOR, DEFAULT_STROKE_COLOR)
+    val tempCanvas = Canvas(bitmap)
+    drawCircle(tempCanvas, defaultCircleColor, defaultStrokeColor)
     return bitmap
   }
   
-  private fun drawMarker(marker: Marker, country: Country, circleColor: Int, strokeColor: Int) {
-    val oldMarkerSize = countriesToSizes.getValue(country.id)
+  private fun drawMarker(
+    marker: Marker,
+    countryOnMap: CountryOnMap,
+    circleColor: Int,
+    strokeColor: Int
+  ) {
+    val oldMarkerSize = countriesToSizes.getValue(countryOnMap.country.id)
     val bitmap = Bitmap.createBitmap(oldMarkerSize, oldMarkerSize, Bitmap.Config.ARGB_8888)
-    tempCanvas.setBitmap(bitmap)
+    val tempCanvas = Canvas(bitmap)
     drawCircle(tempCanvas, circleColor, strokeColor)
     marker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap))
   }
@@ -82,18 +114,10 @@ class CountriesDrawer {
   }
   
   private fun transformCasesToSize(countryCases: Int, mostCases: Int): Int {
-    return (SIZE_COEFFICIENT * (countryCases.toFloat() / mostCases.toFloat()))
-        .coerceIn(MIN_BITMAP_SIZE, MAX_BITMAP_SIZE)
+    val fraction = countryCases.toFloat() / mostCases.toFloat()
+    val interpolatedFunction = -((1 - fraction).pow(2)) + 1
+    return (maxBitmapSize * 3f * interpolatedFunction)
+        .coerceIn(minBitmapSize, maxBitmapSize)
         .toInt()
-  }
-  
-  private companion object {
-    const val MAX_BITMAP_SIZE = 380f
-    const val MIN_BITMAP_SIZE = 90f
-    const val SIZE_COEFFICIENT = MAX_BITMAP_SIZE * 3
-    const val DEFAULT_CIRCLE_COLOR = 0xAAFF8CA1.toInt()
-    const val DEFAULT_STROKE_COLOR = 0x55FF0000
-    const val SELECTED_CIRCLE_COLOR = 0xE2004182.toInt()
-    const val SELECTED_STROKE_COLOR = 0xFF007FFF.toInt()
   }
 }

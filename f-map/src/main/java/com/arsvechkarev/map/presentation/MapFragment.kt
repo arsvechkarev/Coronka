@@ -38,12 +38,11 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
 
 class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   
-  private val mapDelegate = MapHelper()
-  
+  private lateinit var mapHelper: MapHelper
   private var viewModel: MapViewModel? = null
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    mapDelegate.init(requireContext(), mapView, ::onCountrySelected)
+    mapHelper = MapHelper(requireContext(), mapView, ::onCountrySelected)
     viewModel = MapModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(this::handleStateChanged))
       model.startLoadingData()
@@ -84,12 +83,11 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   private fun renderLoadedFromNetwork(state: Loaded) {
     mapView.animateVisible()
     mapLayoutLoading.animateInvisibleAndScale()
-    mapDelegate.drawCountries(state.iso2ToCountryMap)
+    mapHelper.drawCountries(state.iso2ToCountryMap)
   }
   
   private fun renderFoundCountry(state: FoundCountry) {
     mapLayoutCountryInfo.asBottomSheet.show()
-    mapDelegate.drawCountries(state.iso2ToCountryMap)
     mapTextViewCountryName.text = state.country.name
     mapStatsView.updateNumbers(
       state.country.confirmed,

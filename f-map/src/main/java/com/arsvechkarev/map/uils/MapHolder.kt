@@ -14,7 +14,7 @@ class MapHolder {
     initLatch.countDown()
   }
   
-  fun execute(action: (GoogleMap) -> Unit) {
+  fun execute(action: GoogleMap.() -> Unit) {
     if (googleMap != null) {
       action(googleMap!!)
       return

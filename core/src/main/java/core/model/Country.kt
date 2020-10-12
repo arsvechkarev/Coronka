@@ -2,7 +2,7 @@ package core.model
 
 import core.recycler.SortableDisplayableItem
 
-class Country(
+data class Country(
   val id: Int,
   val name: String,
   val slug: String,
@@ -12,7 +12,7 @@ class Country(
   val recovered: Int
 )
 
-class CountryOnMap(
+data class CountryOnMap(
   val country: Country,
   val location: Location
 )
