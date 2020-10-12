@@ -8,6 +8,7 @@ import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 
@@ -68,6 +69,20 @@ fun View.animateVisible(andThen: () -> Unit = {}) {
       .start()
 }
 
+fun View.animateInvisible(andThen: () -> Unit = {}) {
+  if (visibility == INVISIBLE) {
+    andThen()
+    return
+  }
+  animate().alpha(0f).setDuration(DURATION_DEFAULT)
+      .setInterpolator(AccelerateDecelerateInterpolator)
+      .withEndAction {
+        invisible()
+        andThen()
+      }
+      .start()
+}
+
 fun animateVisible(vararg views: View, andThen: () -> Unit = {}) {
   var andThenPosted = false
   for (view in views) {
@@ -80,16 +95,6 @@ fun animateVisible(vararg views: View, andThen: () -> Unit = {}) {
   }
 }
 
-fun View.animateInvisible(andThen: () -> Unit = {}) {
-  animate().alpha(0f).setDuration(DURATION_DEFAULT)
-      .setInterpolator(AccelerateDecelerateInterpolator)
-      .withEndAction {
-        invisible()
-        andThen()
-      }
-      .start()
-}
-
 fun animateInvisible(vararg views: View, andThen: () -> Unit = {}) {
   var andThenPosted = false
   for (view in views) {
@@ -100,40 +105,6 @@ fun animateInvisible(vararg views: View, andThen: () -> Unit = {}) {
       view.animateInvisible()
     }
   }
-}
-
-fun View.animateVisibleAndScale(andThen: () -> Unit = {}) {
-  isClickable = false
-  alpha = 0f
-  scaleX = 0.9f
-  scaleY = 0.9f
-  visible()
-  animate().alpha(1f)
-      .scaleX(1f)
-      .scaleY(1f)
-      .setDuration(DURATION_DEFAULT)
-      .setInterpolator(AccelerateDecelerateInterpolator)
-      .withEndAction {
-        isClickable = true
-        andThen()
-      }
-}
-
-
-fun View.animateInvisibleAndScale() {
-  isClickable = false
-  animate().alpha(0f)
-      .scaleX(1.2f)
-      .scaleY(1.2f)
-      .setDuration(DURATION_DEFAULT)
-      .setInterpolator(AccelerateDecelerateInterpolator)
-      .withEndAction {
-        invisible()
-        isClickable = true
-        scaleX = 1f
-        scaleY = 1f
-        alpha = 1f
-      }
 }
 
 fun View.animateColor(startColor: Int, endColor: Int, andThen: () -> Unit = {}) {

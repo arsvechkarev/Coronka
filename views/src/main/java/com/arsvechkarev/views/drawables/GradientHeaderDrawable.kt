@@ -7,15 +7,17 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PixelFormat
 import android.graphics.Rect
+import android.graphics.Region
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.views.R
+import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.getDimen
 import core.extenstions.retrieveColor
 
-class GradientHeaderStub(
+class GradientHeaderDrawable(
   private val startColor: Int,
   private val endColor: Int,
   private val curveSize: Float
@@ -23,6 +25,7 @@ class GradientHeaderStub(
   
   private val gradientPaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val gradientPath = Path()
+  private var yScaleCoefficient: Float = 0f
   
   override fun onBoundsChange(bounds: Rect) {
     val w = bounds.width()
@@ -33,16 +36,20 @@ class GradientHeaderStub(
     gradientPath.lineTo(w.f, h - curveSize)
     gradientPath.quadTo(w / 2f, h.f, 0f, h.f - curveSize)
     gradientPath.close()
-    
     gradientPaint.shader = LinearGradient(
       0f, h.f, w.f, 0f,
       intArrayOf(startColor, endColor), null,
       Shader.TileMode.CLAMP
     )
+    Region().apply {
+      setPath(gradientPath, Region(bounds))
+      yScaleCoefficient = h.f / this.bounds.height()
+    }
   }
   
-  override fun draw(canvas: Canvas) {
-    canvas.drawPath(gradientPath, gradientPaint)
+  override fun draw(canvas: Canvas) = canvas.execute {
+    scale(1f, yScaleCoefficient, 0f, bounds.height() / 2f)
+    drawPath(gradientPath, gradientPaint)
   }
   
   override fun setAlpha(alpha: Int) {
@@ -57,8 +64,8 @@ class GradientHeaderStub(
   
   companion object {
   
-    fun Fragment.createGradientHeaderDrawable(curveSizeRes: Int): GradientHeaderStub {
-      return GradientHeaderStub(
+    fun Fragment.createGradientHeaderDrawable(curveSizeRes: Int): GradientHeaderDrawable {
+      return GradientHeaderDrawable(
         requireContext().retrieveColor(R.color.dark_gradient_header_start),
         requireContext().retrieveColor(R.color.dark_gradient_header_end),
         requireContext().getDimen(curveSizeRes)

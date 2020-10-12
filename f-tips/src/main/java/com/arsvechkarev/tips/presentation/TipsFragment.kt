@@ -6,6 +6,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.tips.R
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior
+import com.arsvechkarev.views.drawables.GradientHeaderDrawable.Companion.createGradientHeaderDrawable
 import core.BaseFragment
 import core.hostActivity
 import core.recycler.AdapterDelegateBuilder
@@ -17,7 +18,8 @@ import kotlinx.android.synthetic.main.fragment_tips.tipsTextAnswer
 import kotlinx.android.synthetic.main.fragment_tips.tipsTextTitle
 import kotlinx.android.synthetic.main.item_faq.view.tipsItemFaq
 import kotlinx.android.synthetic.main.item_header.view.tipsTextHeader
-import kotlinx.android.synthetic.main.item_main_header.tipsImageDrawer
+import kotlinx.android.synthetic.main.item_main_header.view.tipsGradientHeaderView
+import kotlinx.android.synthetic.main.item_main_header.view.tipsImageDrawer
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionImage
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionTitle
 
@@ -28,7 +30,6 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
     val bottomSheetBehavior = behavior as BottomSheetBehavior<View>
     behavior.onHide = { hostActivity.enableTouchesOnDrawer() }
     behavior.onShow = { hostActivity.disableTouchesOnDrawer() }
-    tipsImageDrawer.setOnClickListener { hostActivity.openDrawer() }
     tipsBottomSheetCross.setOnClickListener { bottomSheetBehavior.hide() }
     val adapter = createAdapter {
       delegate(MainHeader::class, mainHeaderLayout())
@@ -55,6 +56,12 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
   private fun mainHeaderLayout(): AdapterDelegateBuilder<MainHeader>.() -> Unit = {
     data(MainHeader)
     layoutRes(R.layout.item_main_header)
+    onViewHolderInitialization { holder, _ ->
+      holder.itemView.tipsImageDrawer.setOnClickListener { hostActivity.openDrawer() }
+      holder.itemView.tipsGradientHeaderView.background = createGradientHeaderDrawable(
+        R.dimen.rankings_header_curve_size
+      )
+    }
   }
   
   private fun headerLayout(title: String): AdapterDelegateBuilder<Header>.() -> Unit = {
@@ -79,10 +86,10 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
       FAQItem(R.string.q5, R.string.a5)
     ))
     layoutRes(R.layout.item_faq)
-    onViewHolderInitialization { header, data ->
-      header.itemView.setOnClickListener {
+    onViewHolderInitialization { holder, data ->
+      holder.itemView.setOnClickListener {
         if (tipsRecyclerView.isEnabled) {
-          val item = data[header.adapterPosition - 2 /* 2 elements before faq item*/]
+          val item = data[holder.adapterPosition - 2 /* 2 elements before faq item*/]
           tipsTextTitle.text = getString(item.questionLayoutRes)
           tipsTextAnswer.text = getString(item.answerLayoutRes)
           behavior.show()

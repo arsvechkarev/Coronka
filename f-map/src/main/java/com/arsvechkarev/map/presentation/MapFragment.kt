@@ -10,9 +10,8 @@ import com.arsvechkarev.map.presentation.MapScreenState.Loaded
 import com.arsvechkarev.map.uils.BaseMapFragment
 import com.arsvechkarev.map.uils.MapHelper
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
-import core.extenstions.animateInvisibleAndScale
+import core.extenstions.animateInvisible
 import core.extenstions.animateVisible
-import core.extenstions.animateVisibleAndScale
 import core.extenstions.invisible
 import core.extenstions.visible
 import core.hostActivity
@@ -76,13 +75,13 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   }
   
   private fun renderLoading() {
-    mapLayoutFailure.animateInvisibleAndScale()
-    mapLayoutLoading.animateVisibleAndScale()
+    mapLayoutFailure.animateInvisible()
+    mapLayoutLoading.animateVisible()
   }
   
   private fun renderLoadedFromNetwork(state: Loaded) {
     mapView.animateVisible()
-    mapLayoutLoading.animateInvisibleAndScale()
+    mapLayoutLoading.animateInvisible()
     mapHelper.drawCountries(state.iso2ToCountryMap)
   }
   
@@ -118,8 +117,8 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
       UNKNOWN -> mapLayoutUnknownError.visible()
     }
     mapTextRetry.isClickable = false
-    mapLayoutFailure.animateVisibleAndScale(andThen = { mapTextRetry.isClickable = true })
-    mapLayoutLoading.animateInvisibleAndScale()
+    mapLayoutFailure.animateVisible(andThen = { mapTextRetry.isClickable = true })
+    mapLayoutLoading.animateInvisible()
   }
   
   private fun setupClickListeners() {

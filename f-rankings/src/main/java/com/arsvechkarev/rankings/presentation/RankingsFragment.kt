@@ -13,7 +13,7 @@ import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSh
 import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
 import com.arsvechkarev.views.drawables.BaseLoadingStub
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
-import com.arsvechkarev.views.drawables.GradientHeaderStub.Companion.createGradientHeaderDrawable
+import com.arsvechkarev.views.drawables.GradientHeaderDrawable.Companion.createGradientHeaderDrawable
 import com.arsvechkarev.views.drawables.RankingsListLoadingStub
 import com.arsvechkarev.views.drawables.SelectedChipsLoadingStub
 import core.BaseFragment

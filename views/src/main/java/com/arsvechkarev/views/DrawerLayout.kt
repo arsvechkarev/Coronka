@@ -106,7 +106,7 @@ class DrawerLayout @JvmOverloads constructor(
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    mainView.layout(0, 0, mainView.measuredWidth, mainView.measuredHeight)
+    mainView.layout(mainView.left, 0, mainView.measuredWidth, mainView.measuredHeight)
     val drawerLeft = when (currentState) {
       OPENED -> 0
       CLOSED -> -slideRange
