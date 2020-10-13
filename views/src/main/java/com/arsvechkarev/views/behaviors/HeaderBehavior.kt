@@ -54,7 +54,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
    */
   val minHeight: Int
     get() {
-      return ((viewOffsetHelper?.view?.height ?: 0) * slideRangeCoefficient).toInt()
+      return ((viewOffsetHelper?.view?.height ?: 0) * (1 - slideRangeCoefficient)).toInt()
     }
   
   /**

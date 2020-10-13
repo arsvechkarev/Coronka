@@ -58,9 +58,7 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
     layoutRes(R.layout.item_main_header)
     onInitViewHolder {
       itemView.tipsImageDrawer.setOnClickListener { hostActivity.openDrawer() }
-      itemView.tipsGradientHeaderView.background = createGradientHeaderDrawable(
-        R.dimen.rankings_header_curve_size
-      )
+      itemView.tipsGradientHeaderView.background = createGradientHeaderDrawable()
     }
   }
   

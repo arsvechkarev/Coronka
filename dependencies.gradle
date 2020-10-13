@@ -11,7 +11,9 @@ ext {
       recyclerView       : "androidx.recyclerview:recyclerview:1.1.0",
       rxJava             : "io.reactivex.rxjava2:rxjava:2.2.19",
       rxAndroid          : "io.reactivex.rxjava2:rxandroid:2.1.1",
-      mpAndroidChart     : "com.github.PhilJay:MPAndroidChart:v3.1.0"
+      mpAndroidChart     : "com.github.PhilJay:MPAndroidChart:v3.1.0",
+      glide              : "com.github.bumptech.glide:glide:4.11.0",
+      glideApt           : "com.github.bumptech.glide:compiler:4.11.0"
   ]
 
 

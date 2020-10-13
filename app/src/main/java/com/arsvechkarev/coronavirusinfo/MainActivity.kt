@@ -34,8 +34,8 @@ class MainActivity : AppCompatActivity(), HostActivity {
     Application.initDensities(resources)
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)
-    goToFragment(MapFragment::class)
-    drawerTextMap.isSelected = true
+    goToFragment(NewsFragment::class)
+    drawerTextNews.isSelected = true
     val onDrawerItemClick: (v: View) -> Unit = { handleOnDrawerItemClicked(it) }
     drawerTextStatistics.setOnClickListener(onDrawerItemClick)
     drawerTextNews.setOnClickListener(onDrawerItemClick)

@@ -3,23 +3,22 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:background="@android:color/holo_blue_bright"
   android:padding="16dp">
 
   <ImageView
-    android:id="@+id/newsItemImage"
+    android:id="@+id/newsItemWithPictureImage"
     android:layout_width="200dp"
     android:layout_height="200dp"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 
   <TextView
-    android:id="@+id/newsItemTitle"
+    android:id="@+id/newsItemWithPictureTitle"
     android:layout_width="0dp"
     android:layout_height="0dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toEndOf="@id/newsItemImage"
+    app:layout_constraintStart_toEndOf="@id/newsItemWithPictureImage"
     app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -64,11 +64,11 @@ class GradientHeaderDrawable(
   
   companion object {
   
-    fun Fragment.createGradientHeaderDrawable(curveSizeRes: Int): GradientHeaderDrawable {
+    fun Fragment.createGradientHeaderDrawable(): GradientHeaderDrawable {
       return GradientHeaderDrawable(
         requireContext().retrieveColor(R.color.dark_gradient_header_start),
         requireContext().retrieveColor(R.color.dark_gradient_header_end),
-        requireContext().getDimen(curveSizeRes)
+        requireContext().getDimen(R.dimen.gradient_header_curve_size)
       )
     }
   }

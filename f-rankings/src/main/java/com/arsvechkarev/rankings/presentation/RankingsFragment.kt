@@ -172,7 +172,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
       respondToHeaderTouches = false
       rankingsHeaderLayout.post {
         val height = calculateSelectedChipsHeight()
-        slideRangeCoefficient = height.toFloat() / rankingsHeaderLayout.height
+        slideRangeCoefficient = 1 - (height.toFloat() / rankingsHeaderLayout.height)
       }
     }
   }
@@ -204,8 +204,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   }
   
   private fun setupDrawables() {
-    rankingsHeaderGradientView.background =
-        createGradientHeaderDrawable(curveSizeRes = R.dimen.rankings_header_curve_size)
+    rankingsHeaderGradientView.background = createGradientHeaderDrawable()
     rankingsListLoadingStub.applyLoadingDrawable(RankingsListLoadingStub(requireContext()))
     rankingsSelectedChipsLoadingStub.applyLoadingDrawable(
       SelectedChipsLoadingStub(

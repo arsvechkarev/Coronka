@@ -15,8 +15,6 @@ class NewYorkTimesNewsRepository(
   private val url = "https://api.nytimes.com/svc/search/v2/" +
       "articlesearch.json?api-key=$nytApiKey&q=coronavirus&sort=newest"
   
-  //  private val url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=gA2D7DyFwI1iBKOgGaecnTS6b3tU9JgV&q=coronavirus&sort=newest"
-  
   fun getLatestNews(): Observable<List<DifferentiableItem>> {
     return rxNetworker.requestObservable(url)
         .map { transformJson(it) }
@@ -37,7 +35,7 @@ class NewYorkTimesNewsRepository(
       } else {
         val imagePath = optJSONObject.getString("url")
         val imageUrl = "https://static01.nyt.com/$imagePath"
-        news.add(NewsItemWithPicture(i, title, webUrl, imageUrl, publishedDate))
+        news.add(NewsItemWithPicture(i, title, webUrl, publishedDate, imageUrl))
       }
     }
     return news

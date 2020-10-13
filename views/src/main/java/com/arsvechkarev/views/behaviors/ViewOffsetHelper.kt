@@ -9,7 +9,7 @@ class ViewOffsetHelper(val view: View, private val slideRangeCoefficient: Float)
     private set
   
   val maxScrollingRange: Int
-    get() = (-view.height * (1 - slideRangeCoefficient)).toInt()
+    get() = (-view.height * slideRangeCoefficient).toInt()
   
   fun updateOffset(dy: Int): Int {
     val prefOffset = topAndBottomOffset

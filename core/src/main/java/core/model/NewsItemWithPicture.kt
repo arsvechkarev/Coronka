@@ -44,5 +44,5 @@ class NewsItemWithPicture(
   title: String,
   webUrl: String,
   publishedDate: String,
-  private val imageUrl: String,
+  val imageUrl: String,
 ) : BasicNewsItem(id, title, webUrl, publishedDate)
