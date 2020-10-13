@@ -6,7 +6,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.tips.R
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior
-import com.arsvechkarev.views.drawables.GradientHeaderDrawable.Companion.createGradientHeaderDrawable
+import com.arsvechkarev.views.drawables.createGradientHeaderDrawable
 import core.BaseFragment
 import core.hostActivity
 import core.recycler.StaticDelegateBuilder

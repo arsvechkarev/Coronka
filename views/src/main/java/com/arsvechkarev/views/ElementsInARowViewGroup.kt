@@ -10,8 +10,9 @@ import android.view.ViewGroup
  */
 class ElementsInARowViewGroup @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : ViewGroup(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : ViewGroup(context, attrs, defStyleAttr) {
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val width = MeasureSpec.getSize(widthMeasureSpec)

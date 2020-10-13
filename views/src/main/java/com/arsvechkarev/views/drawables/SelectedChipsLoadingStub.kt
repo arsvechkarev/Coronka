@@ -5,22 +5,23 @@ import android.graphics.Path
 import android.view.View.MeasureSpec
 import com.arsvechkarev.views.Chip
 import com.arsvechkarev.views.R
+import core.extenstions.dimen
 
 class SelectedChipsLoadingStub(
   context: Context,
   textSizeRes: Int,
   chipMarginRes: Int,
-) : BaseLoadingStub(context) {
+) : BaseLoadingStub() {
   
   private val worldwideChipWidth: Float
   private val confirmedChipWidth: Float
   private val chipHeight: Float
-  private val chipMargin = context.resources.getDimension(chipMarginRes)
-  private val dividerHeight = context.resources.getDimension(R.dimen.divider_height)
+  private val chipMargin = context.dimen(chipMarginRes)
+  private val dividerHeight = context.dimen(R.dimen.divider_height)
   
   init {
     val tempChip = Chip(context).apply {
-      setTextSize(context.resources.getDimension(textSizeRes))
+      setTextSize(context.dimen(textSizeRes))
       text = context.getString(R.string.text_worldwide)
     }
     val measureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)

@@ -7,25 +7,26 @@ import android.text.BoringLayout
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.ContextCompat
-import core.FontManager
 import core.extenstions.assertThat
 import core.extenstions.execute
 import core.extenstions.formattedMillions
+import core.viewbuilding.Colors
+import core.viewbuilding.Fonts
 
 class CoronavirusMainStatsView @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : View(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
   
   private val titlePaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-    typeface = FontManager.segoeUI
-    color = ContextCompat.getColor(context, R.color.dark_text_primary)
+    typeface = Fonts.SegoeUi
+    color = Colors.TextPrimary
   }
   
   private val numberTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-    typeface = FontManager.segoeUI
-    color = ContextCompat.getColor(context, R.color.dark_text_primary)
+    typeface = Fonts.SegoeUi
+    color = Colors.TextPrimary
   }
   
   private val title: String
@@ -74,7 +75,7 @@ class CoronavirusMainStatsView @JvmOverloads constructor(
     fun getTextSize(width: Int, text: String): Float {
       assertThat(width != 0) { "Width = 0, unable to calculate text size" }
       val paint = Paint().apply {
-        typeface = FontManager.segoeUI
+        typeface = Fonts.SegoeUi
       }
       return calculateTextSize(width, text, paint)
     }

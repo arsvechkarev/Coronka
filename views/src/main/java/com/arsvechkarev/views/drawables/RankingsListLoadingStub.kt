@@ -1,15 +1,14 @@
 package com.arsvechkarev.views.drawables
 
-import android.content.Context
 import android.graphics.Path
-import com.arsvechkarev.views.R
+import core.viewbuilding.TextSizes
 import kotlin.math.ceil
 import kotlin.random.Random
 
-class RankingsListLoadingStub(context: Context) : BaseLoadingStub(context) {
+class RankingsListLoadingStub : BaseLoadingStub() {
   
   override fun drawBackgroundWithPath(path: Path, width: Float, height: Float) {
-    val itemHeight = context.resources.getDimension(R.dimen.text_h4) * 1.5f
+    val itemHeight = TextSizes.H4 * 1.5f
     val itemMargin = itemHeight * 0.4f
     val itemCount = ceil(height / (itemHeight + itemMargin)).toInt()
     var top = itemMargin

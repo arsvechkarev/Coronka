@@ -3,7 +3,6 @@ package com.arsvechkarev.views
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.text.BoringLayout
 import android.text.Layout
@@ -14,8 +13,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import core.Application.numberFormatter
-import core.Colors
-import core.FontManager
 import core.extenstions.DURATION_MEDIUM
 import core.extenstions.cancelIfRunning
 import core.extenstions.dp
@@ -23,19 +20,22 @@ import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.i
 import core.extenstions.sp
+import core.viewbuilding.Colors
+import core.viewbuilding.Fonts
 
 class BigStatsView @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : View(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
   
   private val innerSidePadding: Float
   private val innerLinePadding: Float
   private val chartLineCornersRadius: Float
   private val minChartLinePercent = 0.04f
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = Color.WHITE
-    typeface = FontManager.segoeUI
+    color = Colors.TextPrimary
+    typeface = Fonts.SegoeUi
   }
   private val confirmedLabel: Layout
   
@@ -139,11 +139,11 @@ class BigStatsView @JvmOverloads constructor(
         paddingStart.f + confirmedLabel.width + innerSidePadding,
         paddingTop.f + (lineHeight / 2 - chartLineHeight / 2)
       )
-      drawLine(Colors.confirmedColor, confirmedLinePercent)
+      drawLine(Colors.Confirmed, confirmedLinePercent)
       translate(0f, lineHeight + innerLinePadding)
-      drawLine(Colors.recoveredColor, recoveredLinePercent)
+      drawLine(Colors.Recovered, recoveredLinePercent)
       translate(0f, lineHeight + innerLinePadding)
-      drawLine(Colors.deathsColor, deathsLinePercent)
+      drawLine(Colors.Deaths, deathsLinePercent)
     }
     canvas.execute {
       translate(width - paddingEnd.f - confirmedNumberLayout!!.width, paddingTop.f)

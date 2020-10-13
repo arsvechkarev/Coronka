@@ -9,18 +9,19 @@ import android.text.Layout
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import core.FontManager
 import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.sp
+import core.viewbuilding.Fonts
 
 class Chip @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : View(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
   
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-    typeface = FontManager.segoeUI
+    typeface = Fonts.SegoeUi
   }
   private val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.STROKE

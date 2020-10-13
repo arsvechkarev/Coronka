@@ -2,7 +2,7 @@ package com.arsvechkarev.rankings.list
 
 import com.arsvechkarev.rankings.R
 import com.arsvechkarev.views.StatsSmallView
-import core.extenstions.i
+import core.extenstions.assertThat
 import core.model.DisplayableCountry
 import core.recycler.BaseListAdapter
 import core.recycler.DifferentiableItem.AlwaysFalseCallback
@@ -11,22 +11,20 @@ import core.recycler.delegate
 class RankingsAdapter : BaseListAdapter(
   delegate<DisplayableCountry> {
     
-    view { parent ->
-      val textSize = parent.context.resources.getDimension(
-        R.dimen.rankings_small_stats_view_text_size)
-      
-      StatsSmallView(parent.context, textSize).apply {
-        val pSmall = context.resources.getDimension(R.dimen.rankings_small_stats_view_p_end).i
-        val pBig = context.resources.getDimension(R.dimen.rankings_small_stats_view_p_start).i
-        val pVertical = context.resources.getDimension(
-          R.dimen.rankings_small_stats_view_p_vertical).i
-        setPadding(pBig, pVertical, pSmall, pVertical)
+    buildView {
+      StatsSmallView(context).apply {
+        paddingsRes(
+          R.dimen.rankings_small_stats_view_p_start,
+          R.dimen.rankings_small_stats_view_p_vertical,
+          R.dimen.rankings_small_stats_view_p_end,
+          R.dimen.rankings_small_stats_view_p_vertical
+        )
       }
     }
     
     onBind { itemView, country ->
-      val statsSmallView = itemView as StatsSmallView
-      statsSmallView.updateData(country.number, country.name, country.amountString)
+      assertThat(itemView is StatsSmallView)
+      itemView.updateData(country.number, country.name, country.amountString)
     }
   },
   diffCallback = AlwaysFalseCallback

@@ -11,9 +11,10 @@ import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSh
 import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
 import com.arsvechkarev.views.drawables.BaseLoadingStub
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
-import com.arsvechkarev.views.drawables.GradientHeaderDrawable.Companion.createGradientHeaderDrawable
+import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.asLoadingStub
 import com.arsvechkarev.views.drawables.RankingsListLoadingStub
 import com.arsvechkarev.views.drawables.SelectedChipsLoadingStub
+import com.arsvechkarev.views.drawables.createGradientHeaderDrawable
 import core.BaseFragment
 import core.extenstions.animateInvisible
 import core.extenstions.animateVisible
@@ -142,12 +143,12 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   private fun setupClickListeners() {
     rankingsIconDrawer.setOnClickListener { hostActivity.openDrawer() }
     rankingsRetryButton.setOnClickListener { viewModel!!.startLoadingData() }
-    onClick(rankingsFabFilter, rankingsChipOptionType, rankingsChipWorldRegion, action = {
+    onClick(rankingsFabFilter, rankingsChipOptionType, rankingsChipWorldRegion) {
       rankingsBottomSheet.asBottomSheet.show()
       rankingsHeaderLayout.asHeader.isScrollable = false
       rankingsRecyclerView.isEnabled = false
       hostActivity.disableTouchesOnDrawer()
-    })
+    }
     val whenBottomSheetClosed = {
       rankingsBottomSheet.asBottomSheet.hide()
       rankingsHeaderLayout.asHeader.isScrollable = true
@@ -161,8 +162,8 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   private fun stopLoadingStubs() {
     animateInvisible(rankingsListLoadingStub, rankingsSelectedChipsLoadingStub,
       andThen = {
-        (rankingsListLoadingStub.background as BaseLoadingStub).stop()
-        (rankingsSelectedChipsLoadingStub.background as BaseLoadingStub).stop()
+        rankingsListLoadingStub.asLoadingStub.stop()
+        rankingsSelectedChipsLoadingStub.asLoadingStub.stop()
       }
     )
   }
@@ -205,7 +206,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
   private fun setupDrawables() {
     rankingsHeaderGradientView.background = createGradientHeaderDrawable()
-    rankingsListLoadingStub.applyLoadingDrawable(RankingsListLoadingStub(requireContext()))
+    rankingsListLoadingStub.applyLoadingDrawable(RankingsListLoadingStub())
     rankingsSelectedChipsLoadingStub.applyLoadingDrawable(
       SelectedChipsLoadingStub(
         requireContext(), R.dimen.rankings_chip_text_size, R.dimen.rankings_header_chip_margin

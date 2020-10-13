@@ -1,4 +1,4 @@
-package core
+package core.viewbuilding
 
 import android.content.Context
 import android.graphics.Typeface
@@ -7,26 +7,21 @@ import com.arsvechkarev.core.R
 import core.concurrency.AndroidThreader
 import java.util.concurrent.CountDownLatch
 
-object FontManager {
+object Fonts {
   
   private val initializationLatch = CountDownLatch(1)
   
-  var rubik: Typeface? = null
-    get() {
-      initializationLatch.await()
-      return field!!
-    }
+  private var segoeUi: Typeface? = null
   
-  var segoeUI: Typeface? = null
+  val SegoeUi: Typeface
     get() {
       initializationLatch.await()
-      return field!!
+      return segoeUi!!
     }
   
   fun init(context: Context) {
     AndroidThreader.onBackground {
-      rubik = Typeface.createFromAsset(context.assets, "rubik_medium.ttf")
-      segoeUI = ResourcesCompat.getFont(context, R.font.segoe_ui_bold)
+      segoeUi = ResourcesCompat.getFont(context, R.font.segoe_ui_bold)
       initializationLatch.countDown()
     }
   }

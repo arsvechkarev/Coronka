@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Path
 import com.arsvechkarev.views.R
 
-class StatsGraphLoadingStub(context: Context) : BaseLoadingStub(context) {
+class StatsGraphLoadingStub(context: Context) : BaseLoadingStub() {
   
   private val cornersRadius = context.resources.getDimension(
     R.dimen.bg_overlay_corners_small)

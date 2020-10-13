@@ -7,8 +7,9 @@ import android.widget.LinearLayout
 
 class DrawerGroupLinearLayout @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : LinearLayout(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : LinearLayout(context, attrs, defStyleAttr) {
   
   fun onTextViewClicked(textView: View) {
     for (i in 0 until childCount) {

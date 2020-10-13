@@ -30,8 +30,9 @@ import kotlin.math.hypot
 
 class DrawerLayout @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : ViewGroup(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : ViewGroup(context, attrs, defStyleAttr) {
   
   private lateinit var mainView: View
   private lateinit var drawerView: View

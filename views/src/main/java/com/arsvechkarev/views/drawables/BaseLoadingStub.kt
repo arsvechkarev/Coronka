@@ -1,6 +1,5 @@
 package com.arsvechkarev.views.drawables
 
-import android.content.Context
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.LinearGradient
@@ -14,16 +13,14 @@ import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
 import android.os.SystemClock
 import android.view.View
-import androidx.core.content.ContextCompat
-import com.arsvechkarev.views.R
 import core.extenstions.execute
 import core.extenstions.f
+import core.viewbuilding.Colors
 
 abstract class BaseLoadingStub(
-  protected val context: Context,
-  backgroundColorRes: Int = R.color.dark_overlay,
-  shineColorRes: Int = R.color.dark_overlay_shine,
-  shineColorLightRes: Int = R.color.dark_overlay_shine_light,
+  private val backgroundColor: Int = Colors.Overlay,
+  private val shineColor: Int = Colors.OverlayShine,
+  private val shineColorLight: Int = Colors.OverlayShineLight,
   private val durationMillis: Long = 1200
 ) : Drawable(), Animatable, Runnable {
   
@@ -33,9 +30,6 @@ abstract class BaseLoadingStub(
   private var shineDx = 0f
   private val shineRect = RectF()
   private val path = Path()
-  private val backgroundColor = ContextCompat.getColor(context, backgroundColorRes)
-  private val shineColor = ContextCompat.getColor(context, shineColorRes)
-  private val shineColorLight = ContextCompat.getColor(context, shineColorLightRes)
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = backgroundColor }
   
   private var shineXStart = 0f
@@ -45,7 +39,7 @@ abstract class BaseLoadingStub(
   
   override fun onBoundsChange(bounds: Rect) {
     val width = bounds.width().f
-    val height = bounds.height().f.coerceAtMost(context.resources.displayMetrics.heightPixels.f)
+    val height = bounds.height().f
     val shineWidth = width * 3
     shineXStart = -width * 3
     shineXEnd = width * 4
@@ -116,6 +110,9 @@ abstract class BaseLoadingStub(
   }
   
   companion object {
+  
+    val View.asLoadingStub: BaseLoadingStub
+      get() = background as BaseLoadingStub
   
     fun View.applyLoadingDrawable(drawable: BaseLoadingStub) {
       background = drawable.apply { post { start() } }

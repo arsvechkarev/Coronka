@@ -10,12 +10,10 @@ import android.graphics.Rect
 import android.graphics.Region
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
-import androidx.fragment.app.Fragment
-import com.arsvechkarev.views.R
 import core.extenstions.execute
 import core.extenstions.f
-import core.extenstions.getDimen
-import core.extenstions.retrieveColor
+import core.viewbuilding.Colors
+import core.viewbuilding.Dimens
 
 class GradientHeaderDrawable(
   private val startColor: Int,
@@ -62,14 +60,12 @@ class GradientHeaderDrawable(
   
   override fun getOpacity() = PixelFormat.OPAQUE
   
-  companion object {
-  
-    fun Fragment.createGradientHeaderDrawable(): GradientHeaderDrawable {
-      return GradientHeaderDrawable(
-        requireContext().retrieveColor(R.color.dark_gradient_header_start),
-        requireContext().retrieveColor(R.color.dark_gradient_header_end),
-        requireContext().getDimen(R.dimen.gradient_header_curve_size)
-      )
-    }
-  }
+}
+
+fun createGradientHeaderDrawable(): GradientHeaderDrawable {
+  return GradientHeaderDrawable(
+    Colors.GradientHeaderStart,
+    Colors.GradientHeaderEnd,
+    Dimens.GradientHeaderCurveSize
+  )
 }

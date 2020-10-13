@@ -8,8 +8,8 @@ import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
-import core.FontManager
 import core.extenstions.DURATION_DEFAULT
+import core.viewbuilding.Fonts
 
 class ClickableTextView @JvmOverloads constructor(
   context: Context,
@@ -27,7 +27,7 @@ class ClickableTextView @JvmOverloads constructor(
     attributes.recycle()
     isClickable = true
     isFocusable = true
-    typeface = FontManager.segoeUI
+    typeface = Fonts.SegoeUi
     val pHorizontal = context.resources.getDimension(
       R.dimen.clickable_text_view_p_horizontal).toInt()
     val pVertical = context.resources.getDimension(

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.news.R
 import com.arsvechkarev.news.di.NewsModuleInjector
 import com.arsvechkarev.news.list.NewsAdapter
-import com.arsvechkarev.views.drawables.GradientHeaderDrawable.Companion.createGradientHeaderDrawable
+import com.arsvechkarev.views.drawables.createGradientHeaderDrawable
 import core.BaseFragment
 import core.state.BaseScreenState
 import core.state.Failure

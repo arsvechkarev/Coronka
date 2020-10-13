@@ -1,3 +1,4 @@
+rootProject.name = "CoronavirusInfo"
 include ':app'
 include ':core'
 include ':f-rankings'
@@ -7,5 +8,4 @@ include ':f-map'
 include ':f-tips'
 include ':views'
 include ':storage'
-rootProject.name = "CoronavirusInfo"
 include ':f-news'

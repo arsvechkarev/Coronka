@@ -8,35 +8,36 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.core.content.ContextCompat
-import com.arsvechkarev.views.R
 import core.Application
-import core.FontManager
 import core.extenstions.DURATION_LONG
 import core.extenstions.TEMP_RECT
 import core.extenstions.f
 import core.model.DailyCase
+import core.viewbuilding.Colors
+import core.viewbuilding.Fonts
+import core.viewbuilding.TextSizes
 
 class DateAndNumberLabel @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : View(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
   
   private var dateTextHeight = 0
   private var numberTextHeight = 0
   
   private val dateTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     textAlign = Paint.Align.CENTER
-    color = ContextCompat.getColor(context, R.color.dark_text_primary)
-    typeface = FontManager.segoeUI
-    textSize = context.resources.getDimension(R.dimen.text_h4)
+    color = Colors.TextPrimary
+    typeface = Fonts.SegoeUi
+    textSize = TextSizes.H4
   }
   
   private val numberTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     textAlign = Paint.Align.CENTER
-    color = ContextCompat.getColor(context, R.color.dark_confirmed)
-    typeface = FontManager.segoeUI
-    textSize = context.resources.getDimension(R.dimen.text_h3)
+    color = Colors.Confirmed
+    typeface = Fonts.SegoeUi
+    textSize = TextSizes.H3
   }
   
   private val animator = ValueAnimator().apply {

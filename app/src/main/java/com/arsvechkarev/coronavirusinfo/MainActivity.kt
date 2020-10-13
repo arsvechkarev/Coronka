@@ -15,6 +15,7 @@ import core.Application
 import core.BaseFragment
 import core.HostActivity
 import core.concurrency.AndroidThreader
+import core.viewbuilding.Colors
 import kotlinx.android.synthetic.main.activity_main.drawerGroupLinearLayout
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.drawerTextMap
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Application.initDensities(resources)
+    Colors.init(this)
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)
     goToFragment(NewsFragment::class)

@@ -2,7 +2,7 @@ package com.arsvechkarev.common
 
 import android.content.Context
 import com.arsvechkarev.storage.DatabaseImpl
-import com.arsvechkarev.storage.countries.CountriesMetaInfoHelper
+import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseHelper
 import core.NetworkConnection
 import core.NetworkConnectionImpl
 import core.RxNetworker
@@ -23,7 +23,7 @@ object CommonModulesSingletons {
   fun init(context: Context) {
     connection = NetworkConnectionImpl(context)
     allCountriesRepository = AllCountriesRepository(networker)
-    val database = DatabaseImpl(CountriesMetaInfoHelper.instance)
+    val database = DatabaseImpl(CountriesMetaInfoDatabaseHelper.instance)
     metaInfoRepository = CountriesMetaInfoRepository(database)
   }
 }

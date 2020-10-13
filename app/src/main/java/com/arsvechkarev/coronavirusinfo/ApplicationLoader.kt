@@ -1,10 +1,11 @@
 package com.arsvechkarev.coronavirusinfo
 
 import com.arsvechkarev.common.CommonModulesSingletons
-import com.arsvechkarev.storage.countries.CountriesMetaInfoHelper
+import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseHelper
 import core.Application
-import core.Colors
-import core.FontManager
+import core.viewbuilding.Dimens
+import core.viewbuilding.Fonts
+import core.viewbuilding.TextSizes
 import android.app.Application as AndroidApp
 
 class ApplicationLoader : AndroidApp() {
@@ -12,9 +13,10 @@ class ApplicationLoader : AndroidApp() {
   override fun onCreate() {
     super.onCreate()
     Application.init(applicationContext)
-    CountriesMetaInfoHelper.init(applicationContext)
-    FontManager.init(applicationContext)
+    CountriesMetaInfoDatabaseHelper.init(applicationContext)
     CommonModulesSingletons.init(applicationContext)
-    Colors.init(applicationContext)
+    Fonts.init(applicationContext)
+    TextSizes.init(applicationContext)
+    Dimens.init(applicationContext)
   }
 }

@@ -3,25 +3,26 @@ package com.arsvechkarev.views
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.text.Layout
 import android.text.TextPaint
 import android.view.View
-import core.FontManager
 import core.extenstions.execute
 import core.extenstions.f
+import core.viewbuilding.Colors
+import core.viewbuilding.Fonts
+import core.viewbuilding.TextSizes
 
 @SuppressLint("ViewConstructor")
 class StatsSmallView(
   context: Context,
-  private val textSize: Float = context.resources.getDimension(R.dimen.text_h4),
-  private val color: Int = Color.WHITE
+  private val textSize: Float = TextSizes.H4,
+  private val color: Int = Colors.TextPrimary
 ) : View(context) {
   
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     color = this@StatsSmallView.color
-    typeface = FontManager.segoeUI
+    typeface = Fonts.SegoeUi
     this.textSize = this@StatsSmallView.textSize
   }
   

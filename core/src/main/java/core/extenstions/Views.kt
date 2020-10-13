@@ -1,9 +1,11 @@
 package core.extenstions
 
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 
@@ -38,6 +40,10 @@ inline fun <reified T : CoordinatorLayout.Behavior<*>> View.hasBehavior(): Boole
   return (layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? T != null
 }
 
+fun ViewGroup.addViews(vararg views: View) {
+  views.forEach { addView(it) }
+}
+
 inline fun ViewGroup.forEachChild(action: (child: View) -> Unit) {
   for (i in 0 until childCount) action(getChildAt(i))
 }
@@ -52,4 +58,9 @@ fun ViewGroup.animateChildrenInvisible() = forEachChild { it.animateInvisible() 
 
 fun onClick(vararg views: View, action: (View) -> Unit) {
   views.forEach { it.setOnClickListener(action) }
+}
+
+fun <T : TextView> T.textSize(size: Float): T {
+  setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
+  return this
 }

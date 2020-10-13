@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import core.extenstions.inflate
+import core.viewbuilding.ViewBuilder
 import kotlin.reflect.KClass
 
 inline fun <reified T : DifferentiableItem> delegate(
@@ -23,7 +24,8 @@ inline fun <reified T : DisplayableItem> delegate(
 open class DelegateBuilder<T> {
   
   private var _layoutRes: Int = -1
-  private var _view: ((parent: View) -> View)? = null
+  private var _simpleViewBuilder: ((parent: View) -> View)? = null
+  private var _viewBuilder: (ViewBuilder.(View) -> View)? = null
   private var _viewHolderInitializer: (DslDelegateViewHolder<T>.() -> Unit) = { }
   private var _onBind: (View, T) -> Unit = { _, _ -> }
   
@@ -32,7 +34,11 @@ open class DelegateBuilder<T> {
   }
   
   fun view(builder: (parent: View) -> View) {
-    _view = builder
+    _simpleViewBuilder = builder
+  }
+  
+  fun buildView(builder: ViewBuilder.(View) -> View) {
+    _viewBuilder = builder
   }
   
   fun onInitViewHolder(function: DslDelegateViewHolder<T>.() -> Unit) {
@@ -48,8 +54,12 @@ open class DelegateBuilder<T> {
       _layoutRes != -1 -> {
         parent.inflate(_layoutRes)
       }
-      _view != null -> {
-        _view!!.invoke(parent)
+      _simpleViewBuilder != null -> {
+        _simpleViewBuilder!!.invoke(parent)
+      }
+      _viewBuilder != null -> {
+        val builder = ViewBuilder(parent.context)
+        _viewBuilder!!.invoke(builder, parent)
       }
       else -> throw IllegalArgumentException("Cannot create view holder")
     }

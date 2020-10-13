@@ -7,8 +7,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_UP
-import androidx.core.content.ContextCompat
-import com.arsvechkarev.views.R
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarEntry
@@ -20,9 +18,13 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import core.extenstions.toFormattedShortString
 import core.model.DailyCase
+import core.viewbuilding.Colors
 
-class DailyCasesChart(context: Context, attrs: AttributeSet) : LineChart(context, attrs),
-  OnChartValueSelectedListener {
+class DailyCasesChart @JvmOverloads constructor(
+  context: Context,
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : LineChart(context, attrs), OnChartValueSelectedListener {
   
   private var dailyCaseListener: (dailyCase: DailyCase) -> Unit = { _ -> }
   private var dailyCases: List<DailyCase>? = null
@@ -36,13 +38,13 @@ class DailyCasesChart(context: Context, attrs: AttributeSet) : LineChart(context
       valueFormatter = DateAxisFormatter()
       setDrawGridLines(false)
       setLabelCount(4, true)
-      textColor = ContextCompat.getColor(context, R.color.dark_text_primary)
+      textColor = Colors.TextPrimary
       position = XAxisPosition.BOTTOM
     }
     axisRight.apply {
       axisMinimum = 0f
       setDrawGridLines(false)
-      textColor = ContextCompat.getColor(context, R.color.dark_text_primary)
+      textColor = Colors.TextPrimary
       valueFormatter = YAxisFormatter()
     }
     axisLeft.apply {
@@ -62,7 +64,7 @@ class DailyCasesChart(context: Context, attrs: AttributeSet) : LineChart(context
     val lineDataSet = LineDataSet(entries, "")
     lineDataSet.apply {
       setDrawCircles(false)
-      this.color = ContextCompat.getColor(context, R.color.dark_confirmed)
+      this.color = Colors.Confirmed
       setDrawFilled(true)
       highLightColor = Color.WHITE
       val gradient = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,

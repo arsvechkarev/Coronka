@@ -16,4 +16,5 @@ dependencies {
   implementation dependencies.recyclerView
   implementation dependencies.rxJava
   implementation dependencies.rxAndroid
+  implementation dependencies.glide
 }
