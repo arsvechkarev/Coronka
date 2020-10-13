@@ -7,19 +7,21 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlin.reflect.KClass
 
 abstract class BaseAdapter(
-  private val delegates: List<AdapterDelegate>
+  private val delegates: List<AdapterDelegate<out DisplayableItem>>
 ) : RecyclerView.Adapter<ViewHolder>() {
   
   protected var data: List<DisplayableItem> = ArrayList()
   
-  private val classesMap = HashMap<KClass<*>, Int>()
-  private val delegatesSparseArray = SparseArrayCompat<AdapterDelegate>()
+  private val classesToViewTypes = HashMap<KClass<*>, Int>()
+  private val delegatesSparseArray = SparseArrayCompat<AdapterDelegate<out DisplayableItem>>()
   
-  constructor(vararg delegates: AdapterDelegate) : this(delegates.toList())
+  constructor(
+    delegate: AdapterDelegate<out DisplayableItem>,
+  ) : this(listOf(delegate))
   
   init {
     delegates.forEachIndexed { i, delegate ->
-      classesMap[delegate.modelClass] = i
+      classesToViewTypes[delegate.modelClass] = i
       delegatesSparseArray.put(i, delegate)
     }
   }
@@ -34,18 +36,19 @@ abstract class BaseAdapter(
   }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    return delegatesSparseArray[viewType]?.onCreateViewHolder(parent)
-        ?: error("No delegate for view type $viewType")
+    val delegate = delegatesSparseArray[viewType] ?: error("No delegate for view type $viewType")
+    return delegate.onCreateViewHolder(parent)
   }
   
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val adapterDelegate = delegatesSparseArray[getItemViewType(position)]
         ?: error("No delegate for position $position")
-    adapterDelegate.onBindViewHolder(holder, data[position])
+    adapterDelegate.onBindViewHolderRaw(holder, data[position])
   }
   
   override fun getItemViewType(position: Int): Int {
-    return classesMap[data[position]::class] ?: error("Can't find delegate for position: $position")
+    return classesToViewTypes[data[position]::class] ?: error(
+      "Can't find delegate for position: $position")
   }
   
   override fun getItemCount(): Int {

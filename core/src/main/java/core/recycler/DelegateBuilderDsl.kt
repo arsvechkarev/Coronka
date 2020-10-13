@@ -8,12 +8,19 @@ import kotlin.reflect.KClass
 
 inline fun <reified T : DifferentiableItem> delegate(
   block: DelegateBuilder<T>.() -> Unit
+): DslListAdapterDelegate<T> {
+  val builder = DelegateBuilder<T>().apply(block)
+  return DslListAdapterDelegate(T::class, builder)
+}
+
+inline fun <reified T : DisplayableItem> delegate(
+  block: DelegateBuilder<T>.() -> Unit
 ): DslAdapterDelegate<T> {
   val builder = DelegateBuilder<T>().apply(block)
   return DslAdapterDelegate(T::class, builder)
 }
 
-class DelegateBuilder<T> {
+open class DelegateBuilder<T> {
   
   private var _layoutRes: Int = -1
   private var _view: ((parent: View) -> View)? = null
@@ -50,10 +57,25 @@ class DelegateBuilder<T> {
   }
 }
 
-class DslAdapterDelegate<T : DifferentiableItem>(
+class DslListAdapterDelegate<T : DifferentiableItem>(
   klass: KClass<T>,
   private val delegateBuilder: DelegateBuilder<T>
 ) : ListAdapterDelegate<T>(klass) {
+  
+  override fun onCreateViewHolder(parent: ViewGroup): DelegateViewHolder<T> {
+    return delegateBuilder.createViewHolder(parent)
+  }
+  
+  override fun onBindViewHolder(holder: DelegateViewHolder<T>, item: T) {
+    (holder as DslDelegateViewHolder)._item = item
+    holder.bind(item)
+  }
+}
+
+class DslAdapterDelegate<T : DisplayableItem>(
+  klass: KClass<T>,
+  private val delegateBuilder: DelegateBuilder<T>
+) : AdapterDelegate<T>(klass) {
   
   override fun onCreateViewHolder(parent: ViewGroup): DelegateViewHolder<T> {
     return delegateBuilder.createViewHolder(parent)

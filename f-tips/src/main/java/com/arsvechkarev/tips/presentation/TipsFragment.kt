@@ -9,8 +9,8 @@ import com.arsvechkarev.views.behaviors.BottomSheetBehavior
 import com.arsvechkarev.views.drawables.GradientHeaderDrawable.Companion.createGradientHeaderDrawable
 import core.BaseFragment
 import core.hostActivity
-import core.recycler.AdapterDelegateBuilder
-import core.recycler.createAdapter
+import core.recycler.StaticDelegateBuilder
+import core.recycler.adapter
 import kotlinx.android.synthetic.main.fragment_tips.tipsBottomSheet
 import kotlinx.android.synthetic.main.fragment_tips.tipsBottomSheetCross
 import kotlinx.android.synthetic.main.fragment_tips.tipsRecyclerView
@@ -31,7 +31,7 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
     behavior.onHide = { hostActivity.enableTouchesOnDrawer() }
     behavior.onShow = { hostActivity.disableTouchesOnDrawer() }
     tipsBottomSheetCross.setOnClickListener { bottomSheetBehavior.hide() }
-    val adapter = createAdapter {
+    val adapter = adapter {
       delegate(MainHeader::class, mainHeaderLayout())
       delegate(Header::class, headerLayout(getString(R.string.text_faq)))
       delegate(FAQItem::class, faqItemLayout(behavior))
@@ -53,31 +53,31 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
     tipsRecyclerView.isEnabled = true
   }
   
-  private fun mainHeaderLayout(): AdapterDelegateBuilder<MainHeader>.() -> Unit = {
+  private fun mainHeaderLayout(): StaticDelegateBuilder<MainHeader>.() -> Unit = {
     data(MainHeader)
     layoutRes(R.layout.item_main_header)
-    onViewHolderInitialization { holder, _ ->
-      holder.itemView.tipsImageDrawer.setOnClickListener { hostActivity.openDrawer() }
-      holder.itemView.tipsGradientHeaderView.background = createGradientHeaderDrawable(
+    onInitViewHolder {
+      itemView.tipsImageDrawer.setOnClickListener { hostActivity.openDrawer() }
+      itemView.tipsGradientHeaderView.background = createGradientHeaderDrawable(
         R.dimen.rankings_header_curve_size
       )
     }
   }
   
-  private fun headerLayout(title: String): AdapterDelegateBuilder<Header>.() -> Unit = {
+  private fun headerLayout(title: String): StaticDelegateBuilder<Header>.() -> Unit = {
     data(Header(title))
     layoutRes(R.layout.item_header)
-    onBindViewHolder { view, item ->
+    onBind { view, item ->
       view.tipsTextHeader.text = item.title
     }
   }
   
-  private fun symptomsLayout(): AdapterDelegateBuilder<SymptomsLayout>.() -> Unit = {
+  private fun symptomsLayout(): StaticDelegateBuilder<SymptomsLayout>.() -> Unit = {
     data(SymptomsLayout)
     layoutRes(R.layout.item_symptoms)
   }
   
-  private fun faqItemLayout(behavior: BottomSheetBehavior<*>): AdapterDelegateBuilder<FAQItem>.() -> Unit = {
+  private fun faqItemLayout(behavior: BottomSheetBehavior<*>): StaticDelegateBuilder<FAQItem>.() -> Unit = {
     data(listOf(
       FAQItem(R.string.q1, R.string.a1),
       FAQItem(R.string.q2, R.string.a2),
@@ -86,22 +86,21 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
       FAQItem(R.string.q5, R.string.a5)
     ))
     layoutRes(R.layout.item_faq)
-    onViewHolderInitialization { holder, data ->
-      holder.itemView.setOnClickListener {
+    onInitViewHolder {
+      itemView.setOnClickListener {
         if (tipsRecyclerView.isEnabled) {
-          val item = data[holder.adapterPosition - 2 /* 2 elements before faq item*/]
           tipsTextTitle.text = getString(item.questionLayoutRes)
           tipsTextAnswer.text = getString(item.answerLayoutRes)
           behavior.show()
         }
       }
     }
-    onBindViewHolder { view, faqItem ->
-      view.tipsItemFaq.text = getString(faqItem.questionLayoutRes)
+    onBind { view, item ->
+      view.tipsItemFaq.text = getString(item.questionLayoutRes)
     }
   }
   
-  private fun preventionsLayout(): AdapterDelegateBuilder<PreventionItem>.() -> Unit = {
+  private fun preventionsLayout(): StaticDelegateBuilder<PreventionItem>.() -> Unit = {
     data(listOf(
       PreventionItem(R.drawable.image_no_touch, getString(R.string.text_prevention_no_touch)),
       PreventionItem(R.drawable.image_protection, getString(R.string.text_prevention_protection)),
@@ -110,9 +109,9 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
         getString(R.string.text_prevention_social_distancing))
     ))
     layoutRes(R.layout.item_prevention)
-    onBindViewHolder { view, preventionItem ->
-      view.tipsItemPreventionImage.setImageResource(preventionItem.imageRes)
-      view.tipsItemPreventionTitle.text = preventionItem.title
+    onBind { view, item ->
+      view.tipsItemPreventionImage.setImageResource(item.imageRes)
+      view.tipsItemPreventionTitle.text = item.title
     }
   }
 }

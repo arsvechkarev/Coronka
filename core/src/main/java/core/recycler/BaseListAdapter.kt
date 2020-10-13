@@ -24,9 +24,7 @@ abstract class BaseListAdapter(
   ) : this(listOf(delegate), diffCallback)
   
   init {
-    val function: (Int) -> DifferentiableItem = { index -> data[index] }
     delegates.forEachIndexed { i, delegate ->
-      delegate.itemProvider = function
       classesToViewTypes[delegate.modelClass] = i
       delegatesSparseArray.put(i, delegate)
     }
