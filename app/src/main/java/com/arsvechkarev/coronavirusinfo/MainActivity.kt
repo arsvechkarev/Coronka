@@ -15,6 +15,7 @@ import core.Application
 import core.BaseFragment
 import core.HostActivity
 import core.concurrency.AndroidThreader
+import core.extenstions.connectivityManager
 import core.viewbuilding.Colors
 import kotlinx.android.synthetic.main.activity_main.drawerGroupLinearLayout
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
@@ -30,6 +31,13 @@ class MainActivity : AppCompatActivity(), HostActivity {
   private val fragments = HashMap<KClass<*>, BaseFragment>()
   private var currentFragment: BaseFragment? = null
   
+  private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+    
+    override fun onAvailable(network: Network) {
+      AndroidThreader.onMainThread { currentFragment?.onNetworkAvailable() }
+    }
+  }
+  
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Application.initDensities(resources)
@@ -44,7 +52,16 @@ class MainActivity : AppCompatActivity(), HostActivity {
     drawerTextMap.setOnClickListener(onDrawerItemClick)
     drawerTextTips.setOnClickListener(onDrawerItemClick)
     drawerTextRankings.setOnClickListener(onDrawerItemClick)
-    registerCallback()
+  }
+  
+  override fun onStart() {
+    super.onStart()
+    connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), networkCallback)
+  }
+  
+  override fun onStop() {
+    super.onStop()
+    connectivityManager.unregisterNetworkCallback(networkCallback)
   }
   
   override fun openDrawer() {
@@ -57,17 +74,6 @@ class MainActivity : AppCompatActivity(), HostActivity {
   
   override fun disableTouchesOnDrawer() {
     drawerLayout.respondToTouches = false
-  }
-  
-  private fun registerCallback() {
-    val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-    connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(),
-      object : ConnectivityManager.NetworkCallback() {
-    
-        override fun onAvailable(network: Network) {
-          AndroidThreader.onMainThread { currentFragment?.onNetworkAvailable() }
-        }
-      })
   }
   
   private fun handleOnDrawerItemClicked(view: View) {

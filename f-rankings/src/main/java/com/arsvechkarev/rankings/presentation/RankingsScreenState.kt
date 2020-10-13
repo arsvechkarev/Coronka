@@ -1,9 +1,9 @@
 package com.arsvechkarev.rankings.presentation
 
+import core.BaseScreenState
 import core.model.OptionType
 import core.model.WorldRegion
 import core.recycler.DifferentiableItem
-import core.state.BaseScreenState
 
 class FilteredCountries(
   val list: List<DifferentiableItem>

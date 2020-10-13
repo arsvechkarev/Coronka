@@ -11,6 +11,13 @@ import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDr
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
 import com.arsvechkarev.views.drawables.StatsGraphLoadingStub
 import core.BaseFragment
+import core.BaseScreenState
+import core.Failure
+import core.Failure.FailureReason
+import core.Failure.FailureReason.NO_CONNECTION
+import core.Failure.FailureReason.TIMEOUT
+import core.Failure.FailureReason.UNKNOWN
+import core.Loading
 import core.extenstions.animateChildrenInvisible
 import core.extenstions.animateChildrenVisible
 import core.extenstions.animateInvisible
@@ -19,13 +26,6 @@ import core.extenstions.getBehavior
 import core.hostActivity
 import core.model.GeneralInfo
 import core.model.WorldCasesInfo
-import core.state.BaseScreenState
-import core.state.Failure
-import core.state.Failure.FailureReason
-import core.state.Failure.FailureReason.NO_CONNECTION
-import core.state.Failure.FailureReason.TIMEOUT
-import core.state.Failure.FailureReason.UNKNOWN
-import core.state.Loading
 import kotlinx.android.synthetic.main.fragment_stats.statsContentView
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorLayout
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorMessage

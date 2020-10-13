@@ -2,16 +2,17 @@ package com.arsvechkarev.rankings.presentation
 
 import com.arsvechkarev.common.AllCountriesRepository
 import com.arsvechkarev.common.CountriesMetaInfoRepository
+import core.BaseScreenState
+import core.Failure
+import core.Failure.Companion.asFailureReason
+import core.Loading
+import core.MIN_NETWORK_DELAY
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
 import core.model.OptionType
 import core.model.TotalData
 import core.model.WorldRegion
-import core.state.BaseScreenState
-import core.state.Failure
-import core.state.Failure.Companion.asFailureReason
-import core.state.Loading
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -19,7 +20,7 @@ class RankingsViewModel(
   private val allCountriesRepository: AllCountriesRepository,
   private val metaInfoRepository: CountriesMetaInfoRepository,
   private val schedulers: Schedulers = AndroidSchedulers,
-  private val delayMilliseconds: Long = 1000
+  private val delay: Long = MIN_NETWORK_DELAY
 ) : RxViewModel() {
   
   private lateinit var countriesFilterer: CountriesFilterer
@@ -28,7 +29,7 @@ class RankingsViewModel(
     rxCall {
       allCountriesRepository.getData()
           .subscribeOn(schedulers.io())
-          .delay(delayMilliseconds, TimeUnit.MILLISECONDS, schedulers.computation(), true)
+          .delay(delay, TimeUnit.MILLISECONDS, schedulers.computation(), true)
           .map(::transformToScreenState)
           .onErrorReturn { Failure(it.asFailureReason()) }
           .startWith(Loading)

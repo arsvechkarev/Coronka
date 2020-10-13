@@ -10,9 +10,9 @@ import com.arsvechkarev.news.di.NewsModuleInjector
 import com.arsvechkarev.news.list.NewsAdapter
 import com.arsvechkarev.views.drawables.createGradientHeaderDrawable
 import core.BaseFragment
-import core.state.BaseScreenState
-import core.state.Failure
-import core.state.Loading
+import core.BaseScreenState
+import core.Failure
+import core.Loading
 import kotlinx.android.synthetic.main.fragment_news.newsGradientHeaderView
 import kotlinx.android.synthetic.main.fragment_news.newsRecyclerView
 

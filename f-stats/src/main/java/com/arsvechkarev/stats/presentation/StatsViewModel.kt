@@ -2,16 +2,17 @@ package com.arsvechkarev.stats.presentation
 
 import com.arsvechkarev.common.GeneralInfoRepository
 import com.arsvechkarev.common.WorldCasesInfoRepository
+import core.BaseScreenState
+import core.Failure
+import core.Failure.Companion.asFailureReason
+import core.Loading
+import core.MIN_NETWORK_DELAY
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
 import core.extenstions.assertThat
 import core.model.DailyCase
 import core.model.WorldCasesInfo
-import core.state.BaseScreenState
-import core.state.Failure
-import core.state.Failure.Companion.asFailureReason
-import core.state.Loading
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -19,7 +20,7 @@ class StatsViewModel(
   private val generalInfoRepository: GeneralInfoRepository,
   private val worldCasesInfoRepository: WorldCasesInfoRepository,
   private val schedulers: Schedulers = AndroidSchedulers,
-  private val delayMilliseconds: Long = 1000
+  private val delay: Long = MIN_NETWORK_DELAY
 ) : RxViewModel() {
   
   fun startLoadingData() {
@@ -33,7 +34,7 @@ class StatsViewModel(
         { info, cases -> WorldCasesInfo(info, cases.first, cases.second) }
       )
           .subscribeOn(schedulers.io())
-          .delay(delayMilliseconds, TimeUnit.MILLISECONDS, schedulers.computation(), true)
+          .delay(delay, TimeUnit.MILLISECONDS, schedulers.computation(), true)
           .map(::mapToWorldCasesInfo)
           .onErrorReturn { e -> Failure(e.asFailureReason()) }
           .startWith(Loading)

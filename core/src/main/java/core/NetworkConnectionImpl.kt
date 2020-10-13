@@ -2,10 +2,10 @@ package core
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Context.CONNECTIVITY_SERVICE
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
+import core.extenstions.connectivityManager
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -13,9 +13,6 @@ import java.util.concurrent.TimeUnit
 class NetworkConnectionImpl(context: Context) : NetworkConnection, Loggable {
   
   override val logTag = "NetworkConnection"
-  
-  private val connectivityManager = context.getSystemService(
-    CONNECTIVITY_SERVICE) as ConnectivityManager
   
   private val latch = CountDownLatch(1)
   
@@ -36,6 +33,6 @@ class NetworkConnectionImpl(context: Context) : NetworkConnection, Loggable {
     }
   
   init {
-    connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
+    context.connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
   }
 }

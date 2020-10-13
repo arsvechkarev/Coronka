@@ -24,8 +24,6 @@
   <string name="text_deaths">Deaths</string>
   <string name="text_death_rate">Death rate</string>
   <string name="text_percent_in_country">Percent in country</string>
-  <string name="text_death_rate_explanation">Death rate is calculated by dividing confirmed cases by deaths</string>
-  <string name="text_got_it_all_caps">GOT IT</string>
 
   <string name="text_no_connection">No connection</string>
   <string name="text_timeout">Too slow connection</string>
@@ -56,7 +54,4 @@
   <string name="text_fever">Fever</string>
   <string name="text_cough">Cough</string>
   <string name="title_rankings">Rankings</string>
-  <string name="text_place">Place</string>
-  <string name="text_country">Country</string>
-  <string name="text_number_of_people">Number of people</string>
 </resources>

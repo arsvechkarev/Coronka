@@ -3,7 +3,6 @@ package core
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import core.state.BaseScreenState
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 

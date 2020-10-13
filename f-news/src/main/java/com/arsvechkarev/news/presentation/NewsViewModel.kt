@@ -1,16 +1,17 @@
 package com.arsvechkarev.news.presentation
 
 import com.arsvechkarev.common.NewYorkTimesNewsRepository
+import core.BaseScreenState
+import core.MIN_NETWORK_DELAY
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
 import core.recycler.DifferentiableItem
-import core.state.BaseScreenState
 
 class NewsViewModel(
   private val newsRepository: NewYorkTimesNewsRepository,
   private val schedulers: Schedulers = AndroidSchedulers,
-  private val delayMilliseconds: Long = 1000
+  private val delay: Long = MIN_NETWORK_DELAY
 ) : RxViewModel() {
   
   fun startLoadingData() {
