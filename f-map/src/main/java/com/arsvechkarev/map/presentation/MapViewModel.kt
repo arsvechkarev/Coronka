@@ -1,11 +1,7 @@
 package com.arsvechkarev.map.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.arsvechkarev.common.AllCountriesRepository
 import com.arsvechkarev.common.CountriesMetaInfoRepository
-import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
-import com.arsvechkarev.map.presentation.MapScreenState.Loaded
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
@@ -27,10 +23,6 @@ class MapViewModel(
   private val delay: Long = 1000
 ) : RxViewModel() {
   
-  private val _state = MutableLiveData<BaseScreenState>()
-  val state: LiveData<BaseScreenState>
-    get() = _state
-  
   fun startLoadingData() {
     rxCall {
       Observable.zip(
@@ -48,7 +40,7 @@ class MapViewModel(
   
   fun showCountryInfo(country: Country) {
     when (val state = _state.value) {
-      is Loaded -> notifyFoundCountry(state.iso2ToCountryMap, country)
+      is LoadedCountries -> notifyFoundCountry(state.iso2ToCountryMap, country)
       is FoundCountry -> notifyFoundCountry(state.iso2ToCountryMap, country)
     }
   }
@@ -59,7 +51,7 @@ class MapViewModel(
       val location = pair.second[country.iso2] ?: continue
       map[country.iso2] = CountryOnMap(country, location)
     }
-    return Loaded(map)
+    return LoadedCountries(map)
   }
   
   private fun notifyFoundCountry(

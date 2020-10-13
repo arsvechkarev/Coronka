@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.arsvechkarev.map.presentation.MapFragment
+import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
@@ -17,6 +18,7 @@ import core.concurrency.AndroidThreader
 import kotlinx.android.synthetic.main.activity_main.drawerGroupLinearLayout
 import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.android.synthetic.main.activity_main.drawerTextMap
+import kotlinx.android.synthetic.main.activity_main.drawerTextNews
 import kotlinx.android.synthetic.main.activity_main.drawerTextRankings
 import kotlinx.android.synthetic.main.activity_main.drawerTextStatistics
 import kotlinx.android.synthetic.main.activity_main.drawerTextTips
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
     drawerTextMap.isSelected = true
     val onDrawerItemClick: (v: View) -> Unit = { handleOnDrawerItemClicked(it) }
     drawerTextStatistics.setOnClickListener(onDrawerItemClick)
+    drawerTextNews.setOnClickListener(onDrawerItemClick)
     drawerTextMap.setOnClickListener(onDrawerItemClick)
     drawerTextTips.setOnClickListener(onDrawerItemClick)
     drawerTextRankings.setOnClickListener(onDrawerItemClick)
@@ -70,6 +73,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
     drawerLayout.close(andThen = {
       when (view) {
         drawerTextStatistics -> goToFragment(StatsFragment::class)
+        drawerTextNews -> goToFragment(NewsFragment::class)
         drawerTextMap -> goToFragment(MapFragment::class)
         drawerTextTips -> goToFragment(TipsFragment::class)
         drawerTextRankings -> goToFragment(RankingsFragment::class)

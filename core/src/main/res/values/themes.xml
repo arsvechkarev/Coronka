@@ -2,7 +2,9 @@
 <resources>
 
   <style name="AppTheme" parent="Theme.AppCompat">
+    <item name="colorPrimary">?colorOverlay</item>
     <item name="android:textViewStyle">@style/TextStyle</item>
+    <item name="android:windowBackground">?colorBackground</item>
   </style>
 
   <style name="AppTheme.Dark">
@@ -39,7 +41,6 @@
     <item name="colorDivider">@color/dark_divider</item>
     <item name="colorDividerDark">@color/dark_dark_divider</item>
 
-    <item name="colorPrimary">?colorOverlay</item>
     <item name="colorAccent">@color/dark_accent</item>
   </style>
 

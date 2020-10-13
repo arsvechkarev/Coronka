@@ -1,10 +1,7 @@
 package com.arsvechkarev.stats.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.arsvechkarev.common.GeneralInfoRepository
 import com.arsvechkarev.common.WorldCasesInfoRepository
-import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedWorldCasesInfo
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
@@ -25,10 +22,6 @@ class StatsViewModel(
   private val delayMilliseconds: Long = 1000
 ) : RxViewModel() {
   
-  private val _state = MutableLiveData<BaseScreenState>()
-  val state: LiveData<BaseScreenState>
-    get() = _state
-  
   fun startLoadingData() {
     rxCall {
       Observable.zip(
@@ -41,10 +34,10 @@ class StatsViewModel(
       )
           .subscribeOn(schedulers.io())
           .delay(delayMilliseconds, TimeUnit.MILLISECONDS, schedulers.computation(), true)
-          .observeOn(schedulers.mainThread())
           .map(::mapToWorldCasesInfo)
           .onErrorReturn { e -> Failure(e.asFailureReason()) }
           .startWith(Loading)
+          .observeOn(schedulers.mainThread())
           .subscribe(_state::setValue)
     }
   }

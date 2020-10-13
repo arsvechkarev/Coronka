@@ -10,15 +10,15 @@ import com.arsvechkarev.common.CountriesMetaInfoRepository
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.rankings.presentation.RankingsViewModel
 
-object RankingsDiInjector {
+object RankingsModuleInjector {
   
   fun provideViewModel(fragment: RankingsFragment): RankingsViewModel {
-    val factory = statsViewModelFactory(allCountriesRepository, metaInfoRepository)
+    val factory = rankingsViewModelFactory(allCountriesRepository, metaInfoRepository)
     return ViewModelProviders.of(fragment, factory).get(RankingsViewModel::class.java)
   }
   
   @Suppress("UNCHECKED_CAST")
-  fun statsViewModelFactory(
+  fun rankingsViewModelFactory(
     allCountriesRepository: AllCountriesRepository,
     metaInfoRepository: CountriesMetaInfoRepository
   ) = object : ViewModelProvider.Factory {

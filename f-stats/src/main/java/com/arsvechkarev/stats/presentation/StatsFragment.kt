@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.stats.behaviors.ScrollableContentBehavior
 import com.arsvechkarev.stats.di.StatsModuleInjector
-import com.arsvechkarev.stats.presentation.StatsScreenState.LoadedWorldCasesInfo
 import com.arsvechkarev.views.CoronavirusMainStatsView
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub

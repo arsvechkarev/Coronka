@@ -9,19 +9,25 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlin.reflect.KClass
 
 abstract class BaseListAdapter(
-  private val delegates: List<ListAdapterDelegate>,
-  diffCallback: ItemCallback<SortableDisplayableItem>
-) :
-  ListAdapter<SortableDisplayableItem, ViewHolder>(diffCallback) {
+  private val delegates: List<ListAdapterDelegate<out DifferentiableItem>>,
+  diffCallback: ItemCallback<DifferentiableItem> = DifferentiableItem.DiffCallBack()
+) : ListAdapter<DifferentiableItem, ViewHolder>(diffCallback) {
   
-  protected var data: List<SortableDisplayableItem> = ArrayList()
+  protected var data: List<DifferentiableItem> = ArrayList()
   
-  private val classesMap = HashMap<KClass<*>, Int>()
-  private val delegatesSparseArray = SparseArrayCompat<ListAdapterDelegate>()
+  private val classesToViewTypes = HashMap<KClass<*>, Int>()
+  private val delegatesSparseArray = SparseArrayCompat<ListAdapterDelegate<out DifferentiableItem>>()
+  
+  constructor(
+    delegate: ListAdapterDelegate<out DifferentiableItem>,
+    diffCallback: ItemCallback<DifferentiableItem> = DifferentiableItem.DiffCallBack()
+  ) : this(listOf(delegate), diffCallback)
   
   init {
+    val function: (Int) -> DifferentiableItem = { index -> data[index] }
     delegates.forEachIndexed { i, delegate ->
-      classesMap[delegate.modelClass] = i
+      delegate.itemProvider = function
+      classesToViewTypes[delegate.modelClass] = i
       delegatesSparseArray.put(i, delegate)
     }
   }
@@ -31,26 +37,27 @@ abstract class BaseListAdapter(
   }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    return delegatesSparseArray[viewType]?.onCreateViewHolder(parent)
-        ?: error("No delegate for view type $viewType")
+    val delegate = delegatesSparseArray[viewType] ?: error("No delegate for view type $viewType")
+    return delegate.onCreateViewHolder(parent)
   }
   
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val adapterDelegate = delegatesSparseArray[getItemViewType(position)]
         ?: error("No delegate for position $position")
-    adapterDelegate.onBindViewHolder(holder, data[position])
+    adapterDelegate.onBindViewHolderRaw(holder, data[position])
   }
   
   override fun getItemViewType(position: Int): Int {
-    return classesMap[data[position]::class] ?: error("Can't find delegate for position: $position")
+    return classesToViewTypes[data[position]::class] ?: error(
+      "Can't find delegate for position: $position")
   }
   
-  override fun submitList(list: List<SortableDisplayableItem>?) {
+  override fun submitList(list: List<DifferentiableItem>?) {
     data = list ?: ArrayList()
     super.submitList(list)
   }
   
-  override fun submitList(list: List<SortableDisplayableItem>?, commitCallback: Runnable?) {
+  override fun submitList(list: List<DifferentiableItem>?, commitCallback: Runnable?) {
     data = list ?: ArrayList()
     super.submitList(list, commitCallback)
   }

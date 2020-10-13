@@ -5,8 +5,6 @@ import android.view.View
 import androidx.lifecycle.Observer
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
-import com.arsvechkarev.map.presentation.MapScreenState.FoundCountry
-import com.arsvechkarev.map.presentation.MapScreenState.Loaded
 import com.arsvechkarev.map.uils.BaseMapFragment
 import com.arsvechkarev.map.uils.MapHelper
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
@@ -56,7 +54,7 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   override fun onNetworkAvailable() {
     val viewModel = viewModel ?: return
     val value = viewModel.state.value ?: return
-    if (value !is Loading && value !is FoundCountry && value !is Loaded) {
+    if (value !is Loading && value !is FoundCountry && value !is LoadedCountries) {
       viewModel.startLoadingData()
     }
   }
@@ -68,7 +66,7 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   private fun handleStateChanged(state: BaseScreenState) {
     when (state) {
       is Loading -> renderLoading()
-      is Loaded -> renderLoadedFromNetwork(state)
+      is LoadedCountries -> renderLoadedFromNetwork(state)
       is FoundCountry -> renderFoundCountry(state)
       is Failure -> renderFailure(state)
     }
@@ -80,7 +78,7 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
     mapLayoutLoading.animateVisible()
   }
   
-  private fun renderLoadedFromNetwork(state: Loaded) {
+  private fun renderLoadedFromNetwork(state: LoadedCountries) {
     mapLayoutLoading.animateInvisible()
     mapHelper.toggleMap(enable = true)
     mapHelper.drawCountries(state.iso2ToCountryMap)

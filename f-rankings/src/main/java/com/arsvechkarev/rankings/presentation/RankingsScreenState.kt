@@ -2,18 +2,15 @@ package com.arsvechkarev.rankings.presentation
 
 import core.model.OptionType
 import core.model.WorldRegion
-import core.recycler.SortableDisplayableItem
+import core.recycler.DifferentiableItem
 import core.state.BaseScreenState
 
-sealed class RankingsScreenState : BaseScreenState() {
-  
-  class Filtered(
-    val list: List<SortableDisplayableItem>
-  ) : RankingsScreenState()
-  
-  class Loaded(
-    val list: List<SortableDisplayableItem>,
-    val optionType: OptionType,
-    val worldRegion: WorldRegion
-  ) : RankingsScreenState()
-}
+class FilteredCountries(
+  val list: List<DifferentiableItem>
+) : BaseScreenState()
+
+class LoadedCountries(
+  val list: List<DifferentiableItem>,
+  val optionType: OptionType,
+  val worldRegion: WorldRegion
+) : BaseScreenState()

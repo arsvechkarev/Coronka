@@ -33,68 +33,44 @@
 
     <TextView
       android:id="@+id/drawerTextStatistics"
+      style="@style/DrawerMenuItem"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="24dp"
-      android:background="@drawable/bg_drawer_item"
       android:drawableStart="@drawable/ic_statistics"
-      android:drawablePadding="20dp"
-      android:fontFamily="@font/segoe_ui_bold"
-      android:gravity="center|start"
-      android:paddingHorizontal="16dp"
-      android:paddingVertical="8dp"
-      android:text="Statistics"
-      android:textColor="?colorTextPrimary"
-      android:textSize="20sp"
-      android:textStyle="bold"/>
+      android:text="Statistics"/>
+
+    <TextView
+      android:id="@+id/drawerTextNews"
+      style="@style/DrawerMenuItem"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:drawableStart="@drawable/ic_newspaper"
+      android:text="News"/>
 
     <TextView
       android:id="@+id/drawerTextMap"
+      style="@style/DrawerMenuItem"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@drawable/bg_drawer_item"
       android:drawableStart="@drawable/ic_map"
-      android:drawablePadding="20dp"
-      android:fontFamily="@font/segoe_ui_bold"
-      android:gravity="center|start"
-      android:paddingHorizontal="16dp"
-      android:paddingVertical="8dp"
-      android:text="Map"
-      android:textColor="?colorTextPrimary"
-      android:textSize="20sp"
-      android:textStyle="bold"/>
+      android:text="Map"/>
 
     <TextView
       android:id="@+id/drawerTextTips"
+      style="@style/DrawerMenuItem"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@drawable/bg_drawer_item"
       android:drawableStart="@drawable/ic_tips"
-      android:drawablePadding="20dp"
-      android:fontFamily="@font/segoe_ui_bold"
-      android:gravity="center|start"
-      android:paddingHorizontal="16dp"
-      android:paddingVertical="8dp"
-      android:text="Tips"
-      android:textColor="?colorTextPrimary"
-      android:textSize="20sp"
-      android:textStyle="bold"/>
+      android:text="Tips"/>
 
     <TextView
       android:id="@+id/drawerTextRankings"
+      style="@style/DrawerMenuItem"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@drawable/bg_drawer_item"
       android:drawableStart="@drawable/ic_rankings"
-      android:drawablePadding="20dp"
-      android:fontFamily="@font/segoe_ui_bold"
-      android:gravity="center|start"
-      android:paddingHorizontal="16dp"
-      android:paddingVertical="8dp"
-      android:text="Rankings"
-      android:textColor="?colorTextPrimary"
-      android:textSize="20sp"
-      android:textStyle="bold"/>
+      android:text="Rankings"/>
 
   </com.arsvechkarev.views.DrawerGroupLinearLayout>
 

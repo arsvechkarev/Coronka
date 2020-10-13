@@ -5,10 +5,8 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.rankings.R
-import com.arsvechkarev.rankings.di.RankingsDiInjector
+import com.arsvechkarev.rankings.di.RankingsModuleInjector
 import com.arsvechkarev.rankings.list.RankingsAdapter
-import com.arsvechkarev.rankings.presentation.RankingsScreenState.Filtered
-import com.arsvechkarev.rankings.presentation.RankingsScreenState.Loaded
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
 import com.arsvechkarev.views.drawables.BaseLoadingStub
@@ -62,7 +60,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   private val adapter = RankingsAdapter()
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    viewModel = RankingsDiInjector.provideViewModel(this).also { model ->
+    viewModel = RankingsModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
     }
@@ -77,7 +75,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   override fun onNetworkAvailable() {
     val viewModel = viewModel ?: return
     val value = viewModel.state.value ?: return
-    if (value !is Loaded && value !is Filtered) {
+    if (value !is LoadedCountries && value !is FilteredCountries) {
       viewModel.startLoadingData()
     }
   }
@@ -89,8 +87,8 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   private fun handleState(state: BaseScreenState) {
     when (state) {
       is Loading -> renderLoading()
-      is Loaded -> renderLoaded(state)
-      is Filtered -> renderFiltered(state)
+      is LoadedCountries -> renderLoaded(state)
+      is FilteredCountries -> renderFiltered(state)
       is Failure -> renderFailure(state.reason)
     }
   }
@@ -104,7 +102,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     animateVisible(rankingsListLoadingStub, rankingsSelectedChipsLoadingStub)
   }
   
-  private fun renderLoaded(state: Loaded) {
+  private fun renderLoaded(state: LoadedCountries) {
     rankingsFabFilter.isEnabled = true
     stopLoadingStubs()
     animateVisible(rankingsRecyclerView, rankingsChipWorldRegion,
@@ -112,7 +110,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     adapter.submitList(state.list)
   }
   
-  private fun renderFiltered(state: Filtered) {
+  private fun renderFiltered(state: FilteredCountries) {
     rankingsFabFilter.isEnabled = true
     rankingsHeaderLayout.asHeader.animateScrollToTop(andThen = {
       adapter.submitList(state.list)

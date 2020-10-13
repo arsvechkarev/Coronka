@@ -4,11 +4,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.reflect.KClass
 
-abstract class ListAdapterDelegate(val modelClass: KClass<out SortableDisplayableItem>) {
+abstract class ListAdapterDelegate<T : DifferentiableItem>(
+  val modelClass: KClass<T>
+) {
   
-  abstract fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
+  var itemProvider: ((Int) -> DifferentiableItem)? = null
   
-  abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: SortableDisplayableItem)
+  internal fun onBindViewHolderRaw(holder: RecyclerView.ViewHolder, item: DifferentiableItem) {
+    onBindViewHolder(holder as DelegateViewHolder<T>, item as T)
+  }
+  
+  abstract fun onCreateViewHolder(parent: ViewGroup): DelegateViewHolder<T>
+  
+  abstract fun onBindViewHolder(holder: DelegateViewHolder<T>, item: T)
   
   open fun onAttachedToRecyclerView(recyclerView: RecyclerView) {}
   

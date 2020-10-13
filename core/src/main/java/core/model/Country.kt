@@ -1,7 +1,13 @@
 package core.model
 
-import core.recycler.SortableDisplayableItem
+import core.recycler.DifferentiableItem
 
+/**
+ * Basic country information
+ *
+ * @param slug Country name in lowercase, like "germany", "france", ect.
+ * @param iso2 Country ISO code, like "US", "FR", "UK", etc
+ */
 data class Country(
   val id: Int,
   val name: String,
@@ -12,16 +18,25 @@ data class Country(
   val recovered: Int
 )
 
+/** Country to be displayed on a map */
 data class CountryOnMap(
   val country: Country,
   val location: Location
 )
 
+/** Country with meta information: population and world region  */
+data class CountryMetaInfo(
+  val iso2: String,
+  val population: Int,
+  val worldRegion: String
+)
+
+/** Country for displaying in a list */
 data class DisplayableCountry(
   val name: String,
   val amount: Number,
   val amountString: String
-) : SortableDisplayableItem, Comparable<DisplayableCountry> {
+) : DifferentiableItem, Comparable<DisplayableCountry> {
   
   var number: Int = 0
   

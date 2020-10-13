@@ -8,7 +8,7 @@ import core.model.CountryMetaInfo
 import core.model.DisplayableCountry
 import core.model.OptionType
 import core.model.WorldRegion
-import core.recycler.SortableDisplayableItem
+import core.recycler.DifferentiableItem
 
 class CountriesFilterer(
   private val countries: List<Country>,
@@ -16,7 +16,7 @@ class CountriesFilterer(
 ) {
   
   private val regionsToCountries = HashMap<String, MutableList<Country>>()
-  private val cache = HashMap<Pair<OptionType, WorldRegion>, List<SortableDisplayableItem>>()
+  private val cache = HashMap<Pair<OptionType, WorldRegion>, List<DifferentiableItem>>()
   
   init {
     metaInfoList.forEach { metaInfo ->
@@ -32,7 +32,7 @@ class CountriesFilterer(
   fun filter(
     optionType: OptionType,
     worldRegion: WorldRegion,
-  ): List<SortableDisplayableItem> {
+  ): List<DifferentiableItem> {
     val cachedList = cache[Pair(optionType, worldRegion)]
     if (cachedList != null) {
       return cachedList
@@ -52,11 +52,11 @@ class CountriesFilterer(
   private fun filterCountries(
     optionType: OptionType,
     worldRegion: WorldRegion
-  ): MutableList<SortableDisplayableItem> {
+  ): MutableList<DifferentiableItem> {
     if (optionType == OptionType.PERCENT_BY_COUNTRY) {
       return performPercentByCountryFiltering(worldRegion)
     }
-    val items = ArrayList<SortableDisplayableItem>()
+    val items = ArrayList<DifferentiableItem>()
     val list = if (worldRegion == WorldRegion.WORLDWIDE) {
       countries
     } else {
@@ -81,8 +81,8 @@ class CountriesFilterer(
   
   private fun performPercentByCountryFiltering(
     worldRegion: WorldRegion
-  ): MutableList<SortableDisplayableItem> {
-    val items = ArrayList<SortableDisplayableItem>()
+  ): MutableList<DifferentiableItem> {
+    val items = ArrayList<DifferentiableItem>()
     val list = if (worldRegion == WorldRegion.WORLDWIDE) {
       countries
     } else {

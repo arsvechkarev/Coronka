@@ -1,7 +1,5 @@
 package com.arsvechkarev.rankings.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.arsvechkarev.common.AllCountriesRepository
 import com.arsvechkarev.common.CountriesMetaInfoRepository
 import core.RxViewModel
@@ -26,10 +24,6 @@ class RankingsViewModel(
   
   private lateinit var countriesFilterer: CountriesFilterer
   
-  private val _state = MutableLiveData<BaseScreenState>()
-  val state: LiveData<BaseScreenState>
-    get() = _state
-  
   fun startLoadingData() {
     rxCall {
       allCountriesRepository.getData()
@@ -51,7 +45,7 @@ class RankingsViewModel(
           .subscribeOn(schedulers.computation())
           .observeOn(schedulers.mainThread())
           .subscribe { list ->
-            _state.value = RankingsScreenState.Filtered(list)
+            _state.value = FilteredCountries(list)
           }
     }
   }
@@ -62,6 +56,6 @@ class RankingsViewModel(
     val worldRegion = WorldRegion.WORLDWIDE
     val optionType = OptionType.CONFIRMED
     val data = countriesFilterer.filter(optionType, worldRegion)
-    return RankingsScreenState.Loaded(data, optionType, worldRegion)
+    return LoadedCountries(data, optionType, worldRegion)
   }
 }

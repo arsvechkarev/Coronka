@@ -8,3 +8,4 @@ include ':f-tips'
 include ':views'
 include ':storage'
 rootProject.name = "CoronavirusInfo"
+include ':f-news'

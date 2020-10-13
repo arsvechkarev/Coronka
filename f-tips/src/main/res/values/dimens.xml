@@ -7,7 +7,7 @@
   <dimen name="tips_item_faq_p_start">20dp</dimen>
   <dimen name="tips_item_faq_p_end">12dp</dimen>
 
-  <dimen name="tips_item_main_header_height">170dp</dimen>
+  <dimen name="tips_item_main_header_height">120dp</dimen>
 
   <dimen name="tips_item_header_m_start">16dp</dimen>
   <dimen name="tips_item_header_m_top">32dp</dimen>

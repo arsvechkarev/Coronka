@@ -29,6 +29,7 @@ dependencies {
   implementation project(':views')
   implementation project(':f-common')
   implementation project(':f-stats')
+  implementation project(':f-news')
   implementation project(':f-map')
   implementation project(':f-tips')
   implementation project(':f-rankings')

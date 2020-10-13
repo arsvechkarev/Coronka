@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="DrawerMenuItem">
+    <item name="android:background">@drawable/bg_drawer_item</item>
+    <item name="android:drawablePadding">20dp</item>
+    <item name="android:fontFamily">@font/segoe_ui_bold</item>
+    <item name="android:gravity">center|start</item>
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:textSize">20sp</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:paddingStart">16dp</item>
+    <item name="android:paddingTop">8dp</item>
+    <item name="android:paddingEnd">16dp</item>
+    <item name="android:paddingBottom">8dp</item>
+  </style>
+</resources>
