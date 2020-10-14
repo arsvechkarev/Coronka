@@ -20,12 +20,12 @@ class CoronavirusMainStatsView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
   
   private val titlePaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-    typeface = Fonts.SegoeUi
+    typeface = Fonts.SegoeUiBold
     color = Colors.TextPrimary
   }
   
   private val numberTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-    typeface = Fonts.SegoeUi
+    typeface = Fonts.SegoeUiBold
     color = Colors.TextPrimary
   }
   
@@ -75,7 +75,7 @@ class CoronavirusMainStatsView @JvmOverloads constructor(
     fun getTextSize(width: Int, text: String): Float {
       assertThat(width != 0) { "Width = 0, unable to calculate text size" }
       val paint = Paint().apply {
-        typeface = Fonts.SegoeUi
+        typeface = Fonts.SegoeUiBold
       }
       return calculateTextSize(width, text, paint)
     }

@@ -9,6 +9,7 @@ import android.text.Layout
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import core.extenstions.dimen
 import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.sp
@@ -21,11 +22,11 @@ class Chip @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
   
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-    typeface = Fonts.SegoeUi
+    typeface = Fonts.SegoeUiBold
   }
   private val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.STROKE
-    strokeWidth = context.resources.getDimension(R.dimen.chip_stroke_size)
+    strokeWidth = context.dimen(R.dimen.chip_stroke_size)
   }
   
   private val rect = RectF()

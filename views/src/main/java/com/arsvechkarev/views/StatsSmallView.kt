@@ -22,7 +22,7 @@ class StatsSmallView(
   
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     color = this@StatsSmallView.color
-    typeface = Fonts.SegoeUi
+    typeface = Fonts.SegoeUiBold
     this.textSize = this@StatsSmallView.textSize
   }
   

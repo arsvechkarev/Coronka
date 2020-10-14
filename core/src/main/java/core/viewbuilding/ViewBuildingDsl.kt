@@ -22,12 +22,14 @@ fun Context.buildViews(builder: (ViewBuilder) -> Unit) {
 
 class ViewBuilder(val context: Context) {
   
-  fun textView(
+  // "Any" added just to make call invocation yellow
+  fun Any.textView(
     width: Size = WrapContent,
     height: Size = WrapContent,
     style: TextView.() -> Unit = {}
   ): TextView {
     return TextView(context).apply(style).apply {
+      this.lineHeight
       layoutParams = context.createLayoutParams(width, height)
     }
   }
@@ -35,6 +37,13 @@ class ViewBuilder(val context: Context) {
   fun <T : View> T.withSize(width: Size, height: Size): T {
     layoutParams = context.createLayoutParams(width, height)
     return this
+  }
+  
+  fun <T : TextView> T.withStyle(
+    base: TextView.() -> Unit,
+    block: TextView.() -> Unit = {}
+  ): T {
+    return apply(base).apply(block)
   }
   
   fun View.paddingsRes(

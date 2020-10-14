@@ -9,7 +9,6 @@ import com.arsvechkarev.rankings.di.RankingsModuleInjector
 import com.arsvechkarev.rankings.list.RankingsAdapter
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
-import com.arsvechkarev.views.drawables.BaseLoadingStub
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.asLoadingStub
 import com.arsvechkarev.views.drawables.RankingsListLoadingStub
@@ -98,8 +97,8 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     rankingsFabFilter.isEnabled = false
     animateInvisible(rankingsErrorLayout, rankingsChipWorldRegion, rankingsChipOptionType,
       rankingsDivider, rankingsRecyclerView)
-    (rankingsListLoadingStub.background as BaseLoadingStub).start()
-    (rankingsSelectedChipsLoadingStub.background as BaseLoadingStub).start()
+    rankingsListLoadingStub.asLoadingStub.start()
+    rankingsSelectedChipsLoadingStub.asLoadingStub.start()
     animateVisible(rankingsListLoadingStub, rankingsSelectedChipsLoadingStub)
   }
   

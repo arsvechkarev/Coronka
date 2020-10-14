@@ -35,7 +35,7 @@ class BigStatsView @JvmOverloads constructor(
   private val minChartLinePercent = 0.04f
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     color = Colors.TextPrimary
-    typeface = Fonts.SegoeUi
+    typeface = Fonts.SegoeUiBold
   }
   private val confirmedLabel: Layout
   

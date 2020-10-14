@@ -6,7 +6,6 @@ import android.widget.TextView
 import core.extenstions.addViews
 import core.viewbuilding.atMost
 import core.viewbuilding.exactly
-import core.viewbuilding.getMinimumSize
 import core.viewbuilding.layoutWithLeftTop
 import core.viewbuilding.size
 
@@ -14,50 +13,54 @@ import core.viewbuilding.size
 class NewsItemView(
   image: RoundedCornersImage,
   textTitle: TextView,
+  textDescription: TextView,
   textTime: TextView
 ) : FrameLayout(image.context) {
   
-  val image: RoundedCornersImage
-    get() = getChildAt(0) as RoundedCornersImage
-  
-  val textTitle: TextView
-    get() = getChildAt(1) as TextView
-  
-  val textTime: TextView
-    get() = getChildAt(2) as TextView
+  val image get() = getChildAt(0) as RoundedCornersImage
+  val textTitle get() = getChildAt(1) as TextView
+  val textDescription get() = getChildAt(2) as TextView
+  val textTime get() = getChildAt(3) as TextView
   
   init {
-    addViews(image, textTitle, textTime)
+    addViews(image, textTitle, textDescription, textTime)
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val width = widthMeasureSpec.size
-    val minSize = getMinimumSize(widthMeasureSpec, heightMeasureSpec)
-    val padding = paddingForMinSize(minSize)
-    val imageSize = imageSizeForMinSize(minSize)
-    val itemHeight = imageSize + padding * 2
+    val padding = getOuterPadding(width)
+    val imageSize = getImageSize(width)
+    val imageHeight = imageSize + padding * 2
     image.measure(exactly(imageSize), exactly(imageSize))
-    val textSizeLeft = width - imageSize - padding * 4
-    textTime.measure(atMost(textSizeLeft), atMost(imageSize))
-    textTitle.measure(
-      exactly(textSizeLeft),
-      atMost(itemHeight - padding - textTime.measuredHeight)
-    )
-    setMeasuredDimension(widthMeasureSpec, resolveSize(itemHeight, heightMeasureSpec))
+    val spaceLeftForText = width - imageSize - padding * 4
+    textTime.measure(atMost(spaceLeftForText), atMost(imageHeight))
+    textTitle.measure(exactly(spaceLeftForText), atMost(imageHeight))
+    textDescription.measure(exactly(spaceLeftForText), atMost(imageHeight))
+    val textsHeight = textTime.measuredHeight + textTitle.measuredHeight +
+        textDescription.measuredHeight + getTextPadding(width) * 4
+    val resultHeight = maxOf(imageHeight, textsHeight)
+    setMeasuredDimension(widthMeasureSpec, resolveSize(resultHeight, heightMeasureSpec))
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    val minSize = minOf(width, height)
-    val padding = paddingForMinSize(minSize)
-    image.layoutWithLeftTop(padding, padding)
-    textTitle.layoutWithLeftTop(
-      image.right + padding,
-      height / 2 - (textTitle.measuredHeight + textTime.measuredHeight + padding) / 2
-    )
-    textTime.layoutWithLeftTop(image.right + padding, textTitle.bottom + padding)
+    val padding = getOuterPadding(width)
+    val textPadding = getTextPadding(width)
+    val imageSize = getImageSize(width)
+    val imageTop = height / 2 - imageSize / 2
+    image.layout(padding, imageTop, padding + imageSize, imageTop + imageSize)
+    val textsHeight = textTime.measuredHeight + textTitle.measuredHeight +
+        textDescription.measuredHeight + getTextPadding(width) * 2
+    val textTop = height / 2 - textsHeight / 2
+    val textLeft = image.right + padding
+    textTitle.layoutWithLeftTop(textLeft, textTop)
+    textDescription.layoutWithLeftTop(textLeft, textTitle.bottom + textPadding)
+    textTime.layoutWithLeftTop(textLeft, textDescription.bottom + textPadding)
   }
   
-  private fun imageSizeForMinSize(minSize: Int) = minSize / 3
-  
-  private fun paddingForMinSize(minSize: Int) = minSize / 14
+  companion object {
+    
+    private fun getImageSize(size: Int) = (size / 3.8f).toInt()
+    private fun getOuterPadding(size: Int) = size / 22
+    private fun getTextPadding(size: Int) = size / 40
+  }
 }

@@ -16,8 +16,12 @@ class RoundedCornersImage @JvmOverloads constructor(
   
   private val path = Path()
   
+  init {
+    scaleType = ScaleType.CENTER_CROP
+  }
+  
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    val radius = minOf(w, h) / 10f
+    val radius = minOf(w, h) / 20f
     path.addRoundRect(0f, 0f, w.f, h.f, radius, radius, Path.Direction.CW)
   }
   

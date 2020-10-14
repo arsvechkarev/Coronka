@@ -11,6 +11,7 @@ import core.recycler.DifferentiableItem
 open class BasicNewsItem(
   override val id: Int,
   val title: String,
+  val description: String,
   val webUrl: String,
   val publishedDate: String
 ) : DifferentiableItem {
@@ -42,7 +43,8 @@ open class BasicNewsItem(
 class NewsItemWithPicture(
   override val id: Int,
   title: String,
+  description: String,
   webUrl: String,
   publishedDate: String,
   val imageUrl: String,
-) : BasicNewsItem(id, title, webUrl, publishedDate)
+) : BasicNewsItem(id, title, description, webUrl, publishedDate)

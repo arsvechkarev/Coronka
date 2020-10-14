@@ -10,8 +10,8 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import core.Application
 import core.extenstions.DURATION_LONG
-import core.extenstions.TEMP_RECT
 import core.extenstions.f
+import core.extenstions.getTextHeight
 import core.model.DailyCase
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
@@ -29,14 +29,14 @@ class DateAndNumberLabel @JvmOverloads constructor(
   private val dateTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     textAlign = Paint.Align.CENTER
     color = Colors.TextPrimary
-    typeface = Fonts.SegoeUi
+    typeface = Fonts.SegoeUiBold
     textSize = TextSizes.H4
   }
   
   private val numberTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     textAlign = Paint.Align.CENTER
     color = Colors.Confirmed
-    typeface = Fonts.SegoeUi
+    typeface = Fonts.SegoeUiBold
     textSize = TextSizes.H3
   }
   
@@ -77,12 +77,10 @@ class DateAndNumberLabel @JvmOverloads constructor(
     // Measuring with blank data
     val stubNumber = "000 000 000"
     val stubDate = "Aug 99"
-    numberTextPaint.getTextBounds(stubNumber, 0, stubNumber.length, TEMP_RECT)
-    numberTextHeight = TEMP_RECT.height()
-    var height = TEMP_RECT.height()
-    dateTextPaint.getTextBounds(stubDate, 0, stubDate.length, TEMP_RECT)
-    dateTextHeight = TEMP_RECT.height()
-    height += TEMP_RECT.height()
+    numberTextHeight = numberTextPaint.getTextHeight(stubNumber)
+    var height = numberTextHeight
+    dateTextHeight = dateTextPaint.getTextHeight(stubDate)
+    height += dateTextHeight
     height = (height * 1.5).toInt()
     setMeasuredDimension(
       resolveSize(numberTextPaint.measureText(stubNumber).toInt(), widthMeasureSpec),

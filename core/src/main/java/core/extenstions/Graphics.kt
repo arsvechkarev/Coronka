@@ -2,11 +2,18 @@ package core.extenstions
 
 import android.graphics.Canvas
 import android.graphics.Rect
+import android.text.TextPaint
 import androidx.annotation.ColorInt
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
 val TEMP_RECT = Rect()
+
+fun TextPaint.getTextHeight(text: String): Int {
+  TEMP_RECT.setEmpty()
+  getTextBounds(text, 0, text.length, TEMP_RECT)
+  return TEMP_RECT.height()
+}
 
 inline fun Canvas.execute(action: Canvas.() -> Unit) {
   val count = save()

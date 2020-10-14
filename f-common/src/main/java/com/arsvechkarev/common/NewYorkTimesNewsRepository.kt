@@ -25,14 +25,15 @@ class NewYorkTimesNewsRepository(
     val array = outerObject.getJSONObject("response").getJSONArray("docs")
     for (i in 0 until array.length()) {
       val item = array.getJSONObject(i)
+      val description = item.getString("abstract")
+      val title = item.getJSONObject("headline").getString("main")
       val webUrl = item.getString("web_url")
-      val title = item.getString("abstract")
       val publishedDate = item.getString("pub_date")
       val optJSONObject = item.getJSONArray("multimedia").optJSONObject(0)
       if (optJSONObject != null) {
         val imagePath = optJSONObject.getString("url")
         val imageUrl = "https://static01.nyt.com/$imagePath"
-        news.add(NewsItemWithPicture(i, title, webUrl, publishedDate, imageUrl))
+        news.add(NewsItemWithPicture(i, title, description, webUrl, publishedDate, imageUrl))
       }
     }
     return news
