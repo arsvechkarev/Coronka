@@ -38,7 +38,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="24dp"
       android:drawableStart="@drawable/ic_statistics"
-      android:text="Statistics"/>
+      android:text="@string/label_stats"/>
 
     <TextView
       android:id="@+id/drawerTextNews"
@@ -46,7 +46,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:drawableStart="@drawable/ic_newspaper"
-      android:text="News"/>
+      android:text="@string/label_news"/>
 
     <TextView
       android:id="@+id/drawerTextMap"
@@ -54,7 +54,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:drawableStart="@drawable/ic_map"
-      android:text="Map"/>
+      android:text="@string/label_map"/>
 
     <TextView
       android:id="@+id/drawerTextTips"
@@ -62,7 +62,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:drawableStart="@drawable/ic_tips"
-      android:text="Tips"/>
+      android:text="@string/label_tips"/>
 
     <TextView
       android:id="@+id/drawerTextRankings"
@@ -70,7 +70,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:drawableStart="@drawable/ic_rankings"
-      android:text="Rankings"/>
+      android:text="@string/label_rankings"/>
 
   </com.arsvechkarev.views.DrawerGroupLinearLayout>
 

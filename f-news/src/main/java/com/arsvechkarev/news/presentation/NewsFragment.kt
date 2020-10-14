@@ -13,7 +13,9 @@ import core.BaseFragment
 import core.BaseScreenState
 import core.Failure
 import core.Loading
+import core.hostActivity
 import kotlinx.android.synthetic.main.fragment_news.newsGradientHeaderView
+import kotlinx.android.synthetic.main.fragment_news.newsImageDrawer
 import kotlinx.android.synthetic.main.fragment_news.newsRecyclerView
 
 class NewsFragment : BaseFragment(R.layout.fragment_news) {
@@ -29,6 +31,7 @@ class NewsFragment : BaseFragment(R.layout.fragment_news) {
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
     }
+    newsImageDrawer.setOnClickListener { hostActivity.openDrawer() }
     newsRecyclerView.adapter = adapter
     newsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     newsRecyclerView.addItemDecoration(

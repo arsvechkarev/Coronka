@@ -17,4 +17,5 @@ dependencies {
   implementation dependencies.rxJava
   implementation dependencies.rxAndroid
   implementation dependencies.glide
+  implementation dependencies.threeTenAbp
 }

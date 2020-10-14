@@ -36,6 +36,7 @@ dependencies {
   implementation dependencies.recyclerView
   implementation dependencies.rxJava
   implementation dependencies.mpAndroidChart
+  implementation dependencies.threeTenAbp
   implementation dependencies.glide
   kapt dependencies.glideApt
 }

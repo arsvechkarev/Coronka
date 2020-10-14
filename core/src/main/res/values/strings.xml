@@ -3,8 +3,21 @@
   <string name="app_name">CoronavirusInfo</string>
 
   <string name="label_map">Map</string>
-  <string name="label_stats">Stats</string>
+  <string name="label_stats">Statistics</string>
   <string name="label_faq">FAQ</string>
+  <string name="label_tips">Tips</string>
+  <string name="label_news">News</string>
+  <string name="label_rankings">Rankings</string>
+
+  <string name="time_full_date">%1$d.%2$d.%3$d</string>
+  <string name="time_minute_ago">%1$d minute ago</string>
+  <string name="time_minutes_ago">%1$d minutes ago</string>
+  <string name="time_hour_ago">%1$d hour ago</string>
+  <string name="time_hours_ago">%1$d hours ago</string>
+  <string name="time_hour_minute_ago">%1$d hour ago %2$d minute ago</string>
+  <string name="time_hour_minutes_ago">%1$d hour ago %2$d minutes ago</string>
+  <string name="time_hours_minute_ago">%1$d hours ago %2$d minute ago</string>
+  <string name="time_hours_minutes_ago">%1$d hours ago %2$d minutes ago</string>
 
   <string name="number_thousands">%1$d K</string>
   <string name="number_millions">%1$d M</string>
@@ -18,6 +31,7 @@
   <string name="text_north_america">North america</string>
   <string name="text_south_america">South america</string>
 
+  <string name="text_filters">Filters</string>
   <string name="text_loading_map">Loading map…</string>
   <string name="text_confirmed">Confirmed</string>
   <string name="text_recovered">Recovered</string>

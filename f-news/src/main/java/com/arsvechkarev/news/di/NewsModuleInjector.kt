@@ -8,11 +8,14 @@ import com.arsvechkarev.common.NewYorkTimesNewsRepository
 import com.arsvechkarev.news.BuildConfig
 import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.news.presentation.NewsViewModel
+import core.datetime.EnglishTimeFormatter
 
 object NewsModuleInjector {
   
   fun provideViewModel(fragment: NewsFragment): NewsViewModel {
-    val newYorkTimesNewsRepository = NewYorkTimesNewsRepository(networker, BuildConfig.NYT_API_KEY)
+    val newYorkTimesNewsRepository = NewYorkTimesNewsRepository(
+      networker, EnglishTimeFormatter(), BuildConfig.NYT_API_KEY
+    )
     val factory = newsViewModelFactory(newYorkTimesNewsRepository)
     return ViewModelProviders.of(fragment, factory).get(NewsViewModel::class.java)
   }

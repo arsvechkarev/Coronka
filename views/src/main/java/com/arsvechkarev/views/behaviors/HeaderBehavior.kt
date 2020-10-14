@@ -66,6 +66,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   var slideRangeCoefficient = 1f
     set(value) {
       assertThat(value in 0f..1f) { "Range should be in range 0..1" }
+      viewOffsetHelper?.slideRangeCoefficient = value
       field = value
     }
   
@@ -95,7 +96,9 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   override fun onLayoutChild(parent: CoordinatorLayout,
                              child: V, layoutDirection: Int): Boolean {
     offsetFromPreviousLayout = viewOffsetHelper?.topAndBottomOffset ?: 0
-    viewOffsetHelper = ViewOffsetHelper(child, slideRangeCoefficient)
+    if (viewOffsetHelper == null) {
+      viewOffsetHelper = ViewOffsetHelper(child, slideRangeCoefficient)
+    }
     parent.onLayoutChild(child, layoutDirection)
     ViewCompat.offsetTopAndBottom(child, offsetFromPreviousLayout)
     return true

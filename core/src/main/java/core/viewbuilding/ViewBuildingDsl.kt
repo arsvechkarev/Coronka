@@ -40,10 +40,10 @@ class ViewBuilder(val context: Context) {
   }
   
   fun <T : TextView> T.withStyle(
-    base: TextView.() -> Unit,
+    style: TextView.() -> Unit,
     block: TextView.() -> Unit = {}
   ): T {
-    return apply(base).apply(block)
+    return apply(style).apply(block)
   }
   
   fun View.paddingsRes(

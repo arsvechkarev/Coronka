@@ -1,10 +1,10 @@
 package com.arsvechkarev.common
 
 import com.arsvechkarev.storage.Saver
-import core.DateTime
 import core.Loggable
 import core.MAX_CACHE_MINUTES
 import core.RxNetworker
+import core.datetime.MillisDateTime
 import core.log
 import core.model.GeneralInfo
 import io.reactivex.Observable
@@ -53,7 +53,7 @@ class GeneralInfoRepository(
   
   private fun loadToCache(generalInfo: GeneralInfo) {
     saver.execute {
-      putLong(GENERAL_INFO_LAST_UPDATE_TIME, DateTime.current().millis)
+      putLong(GENERAL_INFO_LAST_UPDATE_TIME, MillisDateTime.current().millis)
       putInt(CONFIRMED, generalInfo.confirmed)
       putInt(DEATHS, generalInfo.deaths)
       putInt(RECOVERED, generalInfo.recovered)

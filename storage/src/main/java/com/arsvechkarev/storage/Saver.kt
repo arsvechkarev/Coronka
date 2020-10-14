@@ -3,7 +3,7 @@ package com.arsvechkarev.storage
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import core.DateTime
+import core.datetime.MillisDateTime
 import core.extenstions.assertThat
 import java.util.concurrent.TimeUnit
 
@@ -35,8 +35,8 @@ class Saver(filename: String, context: Context) {
   }
   
   private fun cacheIsValid(key: String, maxMinutesInCache: Int): Boolean {
-    val cacheDate = DateTime.ofMillis(sharedPrefs.getLong(key, Long.MAX_VALUE))
+    val cacheDate = MillisDateTime.ofMillis(sharedPrefs.getLong(key, Long.MAX_VALUE))
     assertThat(cacheDate.millis != Long.MAX_VALUE) { "No date in cache with key $key" }
-    return cacheDate.differenceWith(DateTime.current(), TimeUnit.MINUTES) < maxMinutesInCache
+    return cacheDate.differenceWith(MillisDateTime.current(), TimeUnit.MINUTES) < maxMinutesInCache
   }
 }

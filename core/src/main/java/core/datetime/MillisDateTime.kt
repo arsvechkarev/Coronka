@@ -1,8 +1,6 @@
-package core
+package core.datetime
 
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
@@ -10,7 +8,7 @@ import kotlin.math.abs
  * Represents date and time with milliseconds since epoch and allows for calculating difference
  * between two instances
  */
-class DateTime(
+class MillisDateTime(
   val millis: Long
 ) {
   
@@ -19,21 +17,16 @@ class DateTime(
    *
    * Note: the difference is absolute
    */
-  fun differenceWith(other: DateTime, timeUnit: TimeUnit): Long {
+  fun differenceWith(other: MillisDateTime, timeUnit: TimeUnit): Long {
     return timeUnit.convert(abs(millis - other.millis), TimeUnit.MILLISECONDS)
   }
   
   companion object {
-    
-    fun current(): DateTime {
-      return DateTime(Date().time)
+  
+    fun current(): MillisDateTime {
+      return MillisDateTime(Date().time)
     }
   
-    fun ofMillis(millis: Long) = DateTime(millis)
-    
-    fun ofPattern(pattern: String, value: String): DateTime {
-      val formatter = SimpleDateFormat(pattern, Locale.US)
-      return DateTime(formatter.parse(value)!!.time)
-    }
+    fun ofMillis(millis: Long) = MillisDateTime(millis)
   }
 }

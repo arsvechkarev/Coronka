@@ -41,6 +41,7 @@ dependencies {
   implementation dependencies.appCompat
   implementation dependencies.constraintLayout
   implementation dependencies.coordinatorLayout
+  implementation dependencies.threeTenAbp
   implementation dependencies.rxJava
 
   def testDependencies = rootProject.ext.testDependencies

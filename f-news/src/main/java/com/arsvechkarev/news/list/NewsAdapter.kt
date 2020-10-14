@@ -19,12 +19,12 @@ class NewsAdapter(
 ) : BaseListAdapter(
   delegate<NewsItemWithPicture> {
     buildView fn@{
-      val textTitle = textView().withStyle(base = NewsTextView) {
+      val textTitle = textView().withStyle(style = NewsTextView) {
         typeface = Fonts.SegoeUiBold
         maxLines = 3
       }
-      val textDescription = textView().withStyle(base = NewsTextView) {
-        maxLines = 1
+      val textDescription = textView().withStyle(style = NewsTextView) {
+        maxLines = 2
       }
       val textTime = textView().apply { setTextColor(Colors.TextSecondary) }
       val image = RoundedCornersImage(context)

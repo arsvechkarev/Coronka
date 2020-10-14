@@ -1,6 +1,7 @@
 package com.arsvechkarev.common
 
 import core.RxNetworker
+import core.datetime.TimeFormatter
 import core.model.NewsItemWithPicture
 import core.recycler.DifferentiableItem
 import io.reactivex.Observable
@@ -8,6 +9,7 @@ import org.json.JSONObject
 
 class NewYorkTimesNewsRepository(
   private val rxNetworker: RxNetworker,
+  private val formatter: TimeFormatter,
   nytApiKey: String
 ) {
   
@@ -25,10 +27,10 @@ class NewYorkTimesNewsRepository(
     val array = outerObject.getJSONObject("response").getJSONArray("docs")
     for (i in 0 until array.length()) {
       val item = array.getJSONObject(i)
-      val description = item.getString("abstract")
       val title = item.getJSONObject("headline").getString("main")
+      val description = item.getString("lead_paragraph")
       val webUrl = item.getString("web_url")
-      val publishedDate = item.getString("pub_date")
+      val publishedDate = formatter.formatPublishedDate(item.getString("pub_date"))
       val optJSONObject = item.getJSONArray("multimedia").optJSONObject(0)
       if (optJSONObject != null) {
         val imagePath = optJSONObject.getString("url")

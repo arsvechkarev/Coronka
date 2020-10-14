@@ -28,11 +28,12 @@ class NewsItemView(
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val width = widthMeasureSpec.size
-    val padding = getOuterPadding(width)
+    val imagePadding = getImagePadding(width)
+    val verticalPadding = getVerticalPadding(width)
     val imageSize = getImageSize(width)
-    val imageHeight = imageSize + padding * 2
+    val imageHeight = imageSize + verticalPadding * 2
     image.measure(exactly(imageSize), exactly(imageSize))
-    val spaceLeftForText = width - imageSize - padding * 4
+    val spaceLeftForText = width - imageSize - imagePadding * 4
     textTime.measure(atMost(spaceLeftForText), atMost(imageHeight))
     textTitle.measure(exactly(spaceLeftForText), atMost(imageHeight))
     textDescription.measure(exactly(spaceLeftForText), atMost(imageHeight))
@@ -43,24 +44,25 @@ class NewsItemView(
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    val padding = getOuterPadding(width)
+    val imagePadding = getImagePadding(width)
     val textPadding = getTextPadding(width)
     val imageSize = getImageSize(width)
     val imageTop = height / 2 - imageSize / 2
-    image.layout(padding, imageTop, padding + imageSize, imageTop + imageSize)
+    image.layout(imagePadding, imageTop, imagePadding + imageSize, imageTop + imageSize)
     val textsHeight = textTime.measuredHeight + textTitle.measuredHeight +
         textDescription.measuredHeight + getTextPadding(width) * 2
     val textTop = height / 2 - textsHeight / 2
-    val textLeft = image.right + padding
+    val textLeft = image.right + imagePadding
     textTitle.layoutWithLeftTop(textLeft, textTop)
     textDescription.layoutWithLeftTop(textLeft, textTitle.bottom + textPadding)
     textTime.layoutWithLeftTop(textLeft, textDescription.bottom + textPadding)
   }
   
   companion object {
-    
-    private fun getImageSize(size: Int) = (size / 3.8f).toInt()
-    private fun getOuterPadding(size: Int) = size / 22
-    private fun getTextPadding(size: Int) = size / 40
+  
+    private fun getImageSize(size: Int) = (size / 3.2f).toInt()
+    private fun getImagePadding(size: Int) = size / 22
+    private fun getVerticalPadding(size: Int) = size / 18
+    private fun getTextPadding(size: Int) = size / 33
   }
 }
