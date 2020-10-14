@@ -4,6 +4,7 @@ ext {
   applicationDependencies = [
       kotlin             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
       appCompat          : "androidx.appcompat:appcompat:1.1.0",
+      timber             : "com.jakewharton.timber:timber:4.7.1",
       constraintLayout   : "androidx.constraintlayout:constraintlayout:1.1.0",
       coordinatorLayout  : "androidx.coordinatorlayout:coordinatorlayout:1.1.0",
       lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:2.1.0",
@@ -14,7 +15,7 @@ ext {
       mpAndroidChart     : "com.github.PhilJay:MPAndroidChart:v3.1.0",
       glide              : "com.github.bumptech.glide:glide:4.11.0",
       glideApt           : "com.github.bumptech.glide:compiler:4.11.0",
-      threeTenAbp        : "com.jakewharton.threetenabp:threetenabp:1.2.4"
+      threeTenAbp        : "com.jakewharton.threetenabp:threetenabp:1.2.4",
   ]
 
 

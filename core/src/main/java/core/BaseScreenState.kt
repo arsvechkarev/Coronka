@@ -16,7 +16,11 @@ class Failure(val reason: FailureReason) : BaseScreenState() {
   enum class FailureReason { NO_CONNECTION, TIMEOUT, UNKNOWN }
   
   companion object {
-    
+  
+    fun of(throwable: Throwable): Failure {
+      return Failure(throwable.asFailureReason())
+    }
+  
     fun Throwable.asFailureReason() = when (this) {
       is TimeoutException -> FailureReason.TIMEOUT
       is UnknownHostException -> FailureReason.NO_CONNECTION

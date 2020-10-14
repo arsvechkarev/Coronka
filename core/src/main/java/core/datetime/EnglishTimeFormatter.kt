@@ -5,9 +5,17 @@ class EnglishTimeFormatter : TimeFormatter {
   override fun formatPublishedDate(stringDate: String): String {
     val date = DateTime.of(stringDate)
     val now = DateTime.now()
-    return if (date.dayOfYear != now.dayOfYear) {
-      // If the date is not today, return full date
-      "${date.year}.${date.monthValue}.${date.dayOfMonth}"
+    return if (date.dayOfYear < now.dayOfYear) {
+      val diff = now.dayOfYear - date.dayOfYear
+      when {
+        diff == 1 -> "${now.hour + (24 - date.hour)} hours ago"
+        diff < 7 -> "$diff days ago"
+        diff < 14 -> "1 week ago"
+        diff < 21 -> "2 week ago"
+        diff < 28 -> "3 week ago"
+        diff < 365 -> "${date.dayOfMonth} ${date.monthName}"
+        else -> "${date.monthValue}/${date.dayOfMonth}/${date.year}"
+      }
     } else {
       when {
         date.hour < now.hour -> {

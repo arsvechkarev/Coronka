@@ -8,6 +8,7 @@ import org.threeten.bp.format.DateTimeFormatter
 interface DateTime {
   
   val year: Int
+  val monthName: String
   val monthValue: Int
   val dayOfMonth: Int
   val dayOfYear: Int

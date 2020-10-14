@@ -2,6 +2,7 @@ package com.arsvechkarev.news.presentation
 
 import com.arsvechkarev.common.NewYorkTimesNewsRepository
 import core.BaseScreenState
+import core.Failure
 import core.MIN_NETWORK_DELAY
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
@@ -20,6 +21,10 @@ class NewsViewModel(
           .subscribeOn(schedulers.io())
           .map(::transformToScreenState)
           .observeOn(schedulers.mainThread())
+          .onErrorReturn {
+            it.printStackTrace()
+            Failure.of(it)
+          }
           .subscribe(_state::setValue)
     }
   }
