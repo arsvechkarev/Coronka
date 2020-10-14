@@ -34,7 +34,7 @@ class NewYorkTimesNewsRepository(
       val webUrl = item.getString("web_url")
       val date = item.getString("pub_date")
       val formattedDate = formatter.formatPublishedDate(date)
-      val multimediaItem = item.getJSONArray("multimedia").optJSONObject(10)
+      val multimediaItem = item.getJSONArray("multimedia").optJSONObject(0)
       if (multimediaItem != null) {
         val imagePath = multimediaItem.getString("url")
         val imageUrl = "https://static01.nyt.com/$imagePath"

@@ -48,7 +48,7 @@
       android:layout_margin="@dimen/tips_bottom_sheet_text_margin"
       android:fontFamily="@font/segoe_ui"
       android:textColor="?colorTextPrimary"
-      android:textSize="@dimen/text_h4"
+      android:textSize="@dimen/text_h5"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"

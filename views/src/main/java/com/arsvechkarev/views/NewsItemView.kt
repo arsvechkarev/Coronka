@@ -1,23 +1,25 @@
 package com.arsvechkarev.views
 
 import android.annotation.SuppressLint
-import android.widget.FrameLayout
+import android.view.ViewGroup
 import android.widget.TextView
 import core.extenstions.addViews
+import core.extenstions.isOrientationPortrait
 import core.viewbuilding.atMost
 import core.viewbuilding.exactly
+import core.viewbuilding.getMinimumSize
 import core.viewbuilding.layoutWithLeftTop
 import core.viewbuilding.size
 
-@SuppressLint("ViewConstructor")
+@SuppressLint("ViewConstructor") // Created through code
 class NewsItemView(
-  image: RoundedCornersImage,
+  image: NewsItemImage,
   textTitle: TextView,
   textDescription: TextView,
   textTime: TextView
-) : FrameLayout(image.context) {
+) : ViewGroup(image.context) {
   
-  val image get() = getChildAt(0) as RoundedCornersImage
+  val image get() = getChildAt(0) as NewsItemImage
   val textTitle get() = getChildAt(1) as TextView
   val textDescription get() = getChildAt(2) as TextView
   val textTime get() = getChildAt(3) as TextView
@@ -27,13 +29,14 @@ class NewsItemView(
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    val minSize = getMinimumSize(widthMeasureSpec, heightMeasureSpec)
     val width = widthMeasureSpec.size
-    val imagePadding = getImagePadding(width)
+    val imagePadding = getImagePadding(minSize)
     val verticalPadding = getVerticalPadding(width)
     val imageSize = getImageSize(width)
     val imageHeight = imageSize + verticalPadding * 2
     image.measure(exactly(imageSize), exactly(imageSize))
-    val spaceLeftForText = width - imageSize - imagePadding * 4
+    val spaceLeftForText = width - imageSize - imagePadding * 3
     textTime.measure(atMost(spaceLeftForText), atMost(imageHeight))
     textTitle.measure(exactly(spaceLeftForText), atMost(imageHeight))
     textDescription.measure(exactly(spaceLeftForText), atMost(imageHeight))
@@ -60,9 +63,24 @@ class NewsItemView(
   
   companion object {
   
-    private fun getImageSize(size: Int) = (size / 3.2f).toInt()
-    private fun getImagePadding(size: Int) = size / 22
-    private fun getVerticalPadding(size: Int) = size / 18
-    private fun getTextPadding(size: Int) = size / 33
+    fun getImageSize(minSize: Int): Int {
+      if (isOrientationPortrait) {
+        return (minSize / 3.2f).toInt()
+      } else {
+        return (minSize / 4.5f).toInt()
+      }
+    }
+  
+    fun getImagePadding(size: Int): Int {
+      if (isOrientationPortrait) {
+        return size / 22
+      } else {
+        return size / 32
+      }
+    }
+  
+    fun getVerticalPadding(size: Int) = size / 18
+  
+    fun getTextPadding(size: Int) = size / 33
   }
 }

@@ -5,10 +5,17 @@
   android:layout_height="match_parent"
   android:clipChildren="false">
 
+  <View
+    android:id="@+id/newsLoadingStub"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="com.arsvechkarev.views.behaviors.ViewUnderHeaderBehavior"/>
+
   <com.arsvechkarev.views.CustomRecyclerView
     android:id="@+id/newsRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="invisible"
     app:layout_behavior="com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior"/>
 
   <androidx.constraintlayout.widget.ConstraintLayout
