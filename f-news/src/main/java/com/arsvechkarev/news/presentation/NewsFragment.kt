@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_news.newsGradientHeaderView
 import kotlinx.android.synthetic.main.fragment_news.newsImageDrawer
 import kotlinx.android.synthetic.main.fragment_news.newsLoadingStub
 import kotlinx.android.synthetic.main.fragment_news.newsRecyclerView
+import timber.log.Timber
 import viewdsl.animateInvisible
 import viewdsl.animateVisible
 
@@ -94,6 +95,7 @@ class NewsFragment : BaseFragment(R.layout.fragment_news) {
   
   private fun renderFailure(state: Failure) {
     newsLoadingStub.animateInvisible()
+    Timber.e(state.throwable, "Error")
   }
   
   private fun initClickListeners() {

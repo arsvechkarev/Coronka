@@ -11,7 +11,7 @@ fun atMost(size: Int): Int {
   return View.MeasureSpec.makeMeasureSpec(size, View.MeasureSpec.AT_MOST)
 }
 
-fun unspecified(size: Int = Int.MAX_VALUE / 2): Int {
+fun unspecified(size: Int = 0): Int {
   return View.MeasureSpec.makeMeasureSpec(size, UNSPECIFIED)
 }
 

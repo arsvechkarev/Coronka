@@ -33,7 +33,7 @@ class RankingsViewModel(
           .onErrorReturn(::Failure)
           .startWith(Loading())
           .observeOn(schedulers.mainThread())
-          .subscribe(_state::setValue)
+          .smartSubscribe(_state::setValue)
     }
   }
   
@@ -44,9 +44,7 @@ class RankingsViewModel(
       }
           .subscribeOn(schedulers.computation())
           .observeOn(schedulers.mainThread())
-          .subscribe { list ->
-            _state.value = FilteredCountries(list)
-          }
+          .smartSubscribe { list -> _state.value = FilteredCountries(list) }
     }
   }
   

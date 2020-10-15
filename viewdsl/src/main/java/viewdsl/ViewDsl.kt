@@ -19,6 +19,29 @@ fun View.gone() {
   visibility = View.GONE
 }
 
+fun <T : View> T.size(
+  width: Int,
+  height: Int,
+  margins: Margins = Margins()
+): T {
+  size(Size.IntValue(width), Size.IntValue(height), margins)
+  return this
+}
+
+fun <T : View> T.size(
+  width: Size,
+  height: Size,
+  margins: Margins = Margins()
+): T {
+  if (layoutParams == null) {
+    layoutParams = context.createLayoutParams(width, height, margins)
+  } else {
+    layoutParams.width = context.determineSize(width)
+    layoutParams.height = context.determineSize(height)
+  }
+  return this
+}
+
 fun View.margins(
   left: Int = 0,
   top: Int = 0,

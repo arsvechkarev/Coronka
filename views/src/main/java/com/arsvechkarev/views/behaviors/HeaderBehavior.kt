@@ -58,12 +58,17 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
     }
   
   /**
+   * Calculates [slideRangeCoefficient] when ready
+   */
+  var calculateSlideRangeCoefficient: () -> Float = { 1f }
+  
+  /**
    * Determines how much slide range should be squashed compared to header height
    *
    * Example: if header height is 400 and slideRangeCoefficient is 0.8, total range
    * would be 400 * 0.8 = 320
    */
-  var slideRangeCoefficient = 1f
+  private var slideRangeCoefficient = 1f
     set(value) {
       assertThat(value in 0f..1f) { "Range should be in range 0..1" }
       viewOffsetHelper?.slideRangeCoefficient = value
@@ -97,6 +102,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
                              child: V, layoutDirection: Int): Boolean {
     offsetFromPreviousLayout = viewOffsetHelper?.topAndBottomOffset ?: 0
     if (viewOffsetHelper == null) {
+      val slideRangeCoefficient = calculateSlideRangeCoefficient.invoke()
       viewOffsetHelper = ViewOffsetHelper(child, slideRangeCoefficient)
     }
     parent.onLayoutChild(child, layoutDirection)

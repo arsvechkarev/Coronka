@@ -38,7 +38,7 @@ class StatsViewModel(
           .onErrorReturn(::Failure)
           .startWith(Loading())
           .observeOn(schedulers.mainThread())
-          .subscribe(_state::setValue)
+          .smartSubscribe(_state::setValue)
     }
   }
   

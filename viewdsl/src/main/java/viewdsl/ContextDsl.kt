@@ -11,6 +11,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
 import java.util.Locale
 
+fun dimen(dimenRes: Int) = ContextHolder.context.dimen(dimenRes)
+
 val isOrientationPortrait: Boolean
   get() = ContextHolder.context.resources.configuration.orientation ==
       Configuration.ORIENTATION_PORTRAIT

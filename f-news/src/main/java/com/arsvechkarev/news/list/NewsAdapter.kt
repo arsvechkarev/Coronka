@@ -23,8 +23,8 @@ class NewsAdapter(
   
   fun changeLoadingToError() {
     val itemView = lastHolderItemView()
-    itemView.childWithTag(ProgressBar).invisible()
-    itemView.childWithTag(FailureLayout).visible()
+    itemView?.childWithTag(ProgressBar)?.invisible()
+    itemView?.childWithTag(FailureLayout)?.visible()
   }
   
   fun addLoadingItem(item: LoadingNextPage) {
@@ -36,8 +36,8 @@ class NewsAdapter(
     onRetryItemClicked = null
   }
   
-  private fun lastHolderItemView(): View {
-    return recyclerView!!.findViewHolderForAdapterPosition(data.lastIndex)!!.itemView
+  private fun lastHolderItemView(): View? {
+    return recyclerView?.findViewHolderForAdapterPosition(data.lastIndex)?.itemView
   }
   
   companion object {

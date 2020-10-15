@@ -7,19 +7,25 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import viewdsl.Size.Companion.WrapContent
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
 fun View.layoutWithLeftTop(left: Int, top: Int) {
   layout(left, top, left + measuredWidth, top + measuredHeight)
 }
 
-@ExperimentalContracts
 fun Context.buildViews(builder: (ViewBuilder) -> Unit) {
-  contract { callsInPlace(builder, InvocationKind.EXACTLY_ONCE) }
   ViewBuilder(this).apply(builder)
+}
+
+inline fun <reified T : View> Fragment.view(
+  width: Size = WrapContent,
+  height: Size = WrapContent,
+  crossinline style: T.() -> Unit = {},
+  crossinline block: T.() -> Unit = {}
+): T {
+  val builder = ViewBuilder(requireContext())
+  return builder.view<T>(width, height, style, block)
 }
 
 class ViewBuilder(val context: Context) {
@@ -52,29 +58,6 @@ class ViewBuilder(val context: Context) {
     block: ImageView.() -> Unit = {}
   ) = ImageView(context).size(width, height).apply(style).apply(block)
   
-  fun <T : View> T.size(
-    width: Int,
-    height: Int,
-    margins: Margins = Margins()
-  ): T {
-    size(Size.IntValue(width), Size.IntValue(height), margins)
-    return this
-  }
-  
-  fun <T : View> T.size(
-    width: Size,
-    height: Size,
-    margins: Margins = Margins()
-  ): T {
-    if (layoutParams == null) {
-      layoutParams = context.createLayoutParams(width, height, margins)
-    } else {
-      layoutParams.width = context.determineSize(width)
-      layoutParams.height = context.determineSize(height)
-    }
-    return this
-  }
-  
   inline fun <reified T : View> LinearLayout.child(
     width: Size = WrapContent,
     height: Size = WrapContent,
@@ -82,6 +65,22 @@ class ViewBuilder(val context: Context) {
     block: T.() -> Unit
   ): T {
     return child<T, LinearLayout.LayoutParams>(width, height, style, block)
+  }
+  
+  inline fun <reified T : View> view(
+    width: Size = WrapContent,
+    height: Size = WrapContent,
+    style: T.() -> Unit = {},
+    block: T.() -> Unit,
+  ): T {
+    val viewGroupParams = ViewGroup.LayoutParams(
+      context.determineSize(width),
+      context.determineSize(height)
+    )
+    val viewConstrictor = T::class.java.getDeclaredConstructor(Context::class.java)
+    val instance = viewConstrictor.newInstance(context)
+    instance.layoutParams = viewGroupParams
+    return instance.apply(style).apply(block)
   }
   
   inline fun <reified T : View> FrameLayout.child(
@@ -110,6 +109,4 @@ class ViewBuilder(val context: Context) {
     addView(child, params)
     return child.apply(style).apply(block)
   }
-  
-  fun dimen(dimenRes: Int) = context.resources.getDimension(dimenRes)
 }

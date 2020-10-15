@@ -33,6 +33,7 @@ import viewdsl.orientation
 import viewdsl.padding
 import viewdsl.paddingHorizontal
 import viewdsl.paddingVertical
+import viewdsl.size
 import viewdsl.tag
 import viewdsl.text
 import viewdsl.textColor

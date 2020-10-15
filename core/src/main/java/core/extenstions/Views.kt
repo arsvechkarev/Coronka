@@ -12,5 +12,5 @@ operator fun View.contains(ev: MotionEvent): Boolean {
 
 fun View.heightWithMargins(): Int {
   val params = layoutParams as ViewGroup.MarginLayoutParams
-  return height + params.topMargin + params.bottomMargin
+  return measuredHeight + params.topMargin + params.bottomMargin
 }

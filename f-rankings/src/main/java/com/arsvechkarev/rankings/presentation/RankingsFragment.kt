@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.rankings.R
 import com.arsvechkarev.rankings.di.RankingsModuleInjector
 import com.arsvechkarev.rankings.list.RankingsAdapter
+import com.arsvechkarev.views.Chip
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
@@ -49,9 +50,14 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsListLoadingStub
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRecyclerView
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRetryButton
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsSelectedChipsLoadingStub
+import viewdsl.Size.Companion.WrapContent
 import viewdsl.animateInvisible
 import viewdsl.animateVisible
+import viewdsl.dimen
+import viewdsl.margins
 import viewdsl.onClick
+import viewdsl.unspecified
+import viewdsl.view
 
 class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
@@ -170,15 +176,19 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   private fun setupBehavior() {
     rankingsHeaderLayout.asHeader.apply {
       respondToHeaderTouches = false
-      rankingsHeaderLayout.post {
-        val height = calculateSelectedChipsHeight()
-        slideRangeCoefficient = 1 - (height.toFloat() / rankingsHeaderLayout.height)
+      calculateSlideRangeCoefficient = l@{
+        val chipMargin = dimen(R.dimen.rankings_header_chip_margin).toInt()
+        val dividerMargin = dimen(R.dimen.rankings_divider_m_top).toInt()
+        val dividerHeight = dimen(R.dimen.divider_height).toInt()
+        val headerHeight = dimen(R.dimen.rankings_header_height).toInt()
+        val textChip = view<Chip>(WrapContent, WrapContent) {
+          margins(top = chipMargin, bottom = chipMargin)
+        }
+        textChip.measure(unspecified(), unspecified())
+        val height = textChip.heightWithMargins() + dividerHeight + dividerMargin
+        return@l 1 - (height.toFloat() / (headerHeight + height))
       }
     }
-  }
-  
-  private fun calculateSelectedChipsHeight(): Int {
-    return rankingsChipOptionType.heightWithMargins() + rankingsDivider.heightWithMargins()
   }
   
   private fun setupChips() {
