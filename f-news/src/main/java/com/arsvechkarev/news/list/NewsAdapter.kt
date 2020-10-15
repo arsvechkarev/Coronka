@@ -1,47 +1,49 @@
 package com.arsvechkarev.news.list
 
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import com.arsvechkarev.news.presentation.LoadingNextPage
 import com.arsvechkarev.news.presentation.NewsFragment
-import com.arsvechkarev.views.NewsItemImage
-import com.arsvechkarev.views.NewsItemView
-import com.bumptech.glide.Glide
-import core.extenstions.assertThat
 import core.model.BasicNewsItem
-import core.model.NewsItemWithPicture
-import core.recycler.BaseListAdapter
-import core.recycler.delegate
-import core.viewbuilding.Colors
-import core.viewbuilding.Fonts
-import core.viewbuilding.Styles.NewsTextView
+import core.recycler.ListAdapter
+import viewdsl.childWithTag
+import viewdsl.invisible
+import viewdsl.visible
 
 class NewsAdapter(
   fragment: NewsFragment,
-  onNewsItemClicked: (BasicNewsItem) -> Unit
-) : BaseListAdapter(
+  private var onNewsItemClicked: ((BasicNewsItem) -> Unit)? = null,
+  onReadyToLoadNextPage: () -> Unit,
+  private var onRetryItemClicked: (() -> Unit)? = null
+) : ListAdapter(
+  newsItemDelegate(fragment) { onNewsItemClicked?.invoke(it) },
+  loadingNextPageDelegate { onRetryItemClicked?.invoke() },
+  onReadyToLoadNextPage = onReadyToLoadNextPage
+) {
   
-  delegate<NewsItemWithPicture> {
-    buildView fn@{
-      val textTitle = textView().withStyle(NewsTextView) {
-        typeface = Fonts.SegoeUiBold
-        maxLines = 3
-      }
-      val textDescription = textView().withStyle(NewsTextView) {
-        maxLines = 2
-      }
-      val textTime = textView().apply { setTextColor(Colors.TextSecondary) }
-      val image = NewsItemImage(context)
-      return@fn NewsItemView(image, textTitle, textDescription, textTime)
-    }
-    onInitViewHolder {
-      itemView.setOnClickListener { onNewsItemClicked(item) }
-    }
-    onBind { itemView, element ->
-      assertThat(itemView is NewsItemView)
-      itemView.textTitle.text = element.title
-      itemView.textDescription.text = element.description
-      itemView.textTime.text = element.publishedDate
-      Glide.with(fragment)
-          .load(element.imageUrl)
-          .into(itemView.image)
-    }
+  fun changeLoadingToError() {
+    val itemView = lastHolderItemView()
+    itemView.childWithTag(ProgressBar).invisible()
+    itemView.childWithTag(FailureLayout).visible()
   }
-)
+  
+  fun addLoadingItem(item: LoadingNextPage) {
+    if (data.last() != item) addItem(item)
+  }
+  
+  override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    onNewsItemClicked = null
+    onRetryItemClicked = null
+  }
+  
+  private fun lastHolderItemView(): View {
+    return recyclerView!!.findViewHolderForAdapterPosition(data.lastIndex)!!.itemView
+  }
+  
+  companion object {
+    
+    const val FailureLayout = "FailureLayout"
+    const val ProgressBar = "ProgressBar"
+    const val ClickableTextView = "ClickableTextView"
+  }
+}

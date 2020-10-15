@@ -18,13 +18,13 @@ import android.view.ViewGroup
 import com.arsvechkarev.views.DrawerLayout.DrawerState.CLOSED
 import com.arsvechkarev.views.DrawerLayout.DrawerState.OPENED
 import core.HostActivity.DrawerOpenCloseListener
-import core.extenstions.AccelerateDecelerateInterpolator
 import core.extenstions.assertThat
-import core.extenstions.cancelIfRunning
-import core.extenstions.doOnEnd
 import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.withAlpha
+import viewdsl.AccelerateDecelerateInterpolator
+import viewdsl.cancelIfRunning
+import viewdsl.doOnEnd
 import kotlin.math.abs
 import kotlin.math.hypot
 

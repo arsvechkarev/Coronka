@@ -15,11 +15,11 @@ import android.widget.OverScroller
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ScrollingView
 import androidx.core.view.ViewCompat
-import core.extenstions.AccelerateDecelerateInterpolator
-import core.extenstions.DURATION_SHORT
 import core.extenstions.assertThat
-import core.extenstions.doOnEnd
-import core.extenstions.getBehavior
+import viewdsl.AccelerateDecelerateInterpolator
+import viewdsl.DURATION_SHORT
+import viewdsl.doOnEnd
+import viewdsl.getBehavior
 import kotlin.math.abs
 import kotlin.math.roundToInt
 

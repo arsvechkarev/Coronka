@@ -4,7 +4,6 @@ import com.arsvechkarev.common.GeneralInfoRepository
 import com.arsvechkarev.common.WorldCasesInfoRepository
 import core.BaseScreenState
 import core.Failure
-import core.Failure.Companion.asFailureReason
 import core.Loading
 import core.MIN_NETWORK_DELAY
 import core.RxViewModel
@@ -36,8 +35,8 @@ class StatsViewModel(
           .subscribeOn(schedulers.io())
           .delay(delay, TimeUnit.MILLISECONDS, schedulers.computation(), true)
           .map(::mapToWorldCasesInfo)
-          .onErrorReturn { e -> Failure(e.asFailureReason()) }
-          .startWith(Loading)
+          .onErrorReturn(::Failure)
+          .startWith(Loading())
           .observeOn(schedulers.mainThread())
           .subscribe(_state::setValue)
     }

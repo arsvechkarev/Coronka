@@ -3,13 +3,13 @@ package com.arsvechkarev.views
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import android.widget.TextView
-import core.extenstions.addViews
-import core.extenstions.isOrientationPortrait
-import core.viewbuilding.atMost
-import core.viewbuilding.exactly
-import core.viewbuilding.getMinimumSize
-import core.viewbuilding.layoutWithLeftTop
-import core.viewbuilding.size
+import viewdsl.addViews
+import viewdsl.atMost
+import viewdsl.exactly
+import viewdsl.getMinimumSize
+import viewdsl.isOrientationPortrait
+import viewdsl.layoutWithLeftTop
+import viewdsl.size
 
 @SuppressLint("ViewConstructor") // Created through code
 class NewsItemView(

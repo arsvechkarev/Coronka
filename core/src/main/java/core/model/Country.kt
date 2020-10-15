@@ -40,7 +40,7 @@ data class DisplayableCountry(
   
   var number: Int = 0
   
-  override val id = number
+  override val id = number.toString()
   
   override fun compareTo(other: DisplayableCountry): Int {
     return amount.toFloat().compareTo(other.amount.toFloat())

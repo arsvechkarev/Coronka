@@ -18,11 +18,6 @@ import core.Failure.FailureReason.NO_CONNECTION
 import core.Failure.FailureReason.TIMEOUT
 import core.Failure.FailureReason.UNKNOWN
 import core.Loading
-import core.extenstions.animateChildrenInvisible
-import core.extenstions.animateChildrenVisible
-import core.extenstions.animateInvisible
-import core.extenstions.animateVisible
-import core.extenstions.getBehavior
 import core.hostActivity
 import core.model.GeneralInfo
 import core.model.WorldCasesInfo
@@ -43,6 +38,11 @@ import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesLoadingStub
 import kotlinx.android.synthetic.main.fragment_stats.statsViewConfirmed
 import kotlinx.android.synthetic.main.fragment_stats.statsViewDeaths
 import kotlinx.android.synthetic.main.fragment_stats.statsViewRecovered
+import viewdsl.animateChildrenInvisible
+import viewdsl.animateChildrenVisible
+import viewdsl.animateInvisible
+import viewdsl.animateVisible
+import viewdsl.getBehavior
 
 class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   

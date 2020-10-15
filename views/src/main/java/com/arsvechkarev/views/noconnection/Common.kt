@@ -2,8 +2,8 @@ package com.arsvechkarev.views.noconnection
 
 import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
-import core.extenstions.DURATION_LONG
-import core.extenstions.DURATION_MEDIUM
+import viewdsl.DURATION_LONG
+import viewdsl.DURATION_MEDIUM
 
 fun createWifiAnimator(onUpdate: ValueAnimator.(Int) -> Unit): ValueAnimator {
   return ValueAnimator.ofInt(0, 255).apply {

@@ -10,14 +10,14 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.widget.FrameLayout
-import core.extenstions.DURATION_DEFAULT
-import core.extenstions.animateColor
 import core.extenstions.assertThat
 import core.extenstions.contains
-import core.extenstions.doOnEnd
-import core.extenstions.gone
-import core.extenstions.invisible
-import core.extenstions.visible
+import viewdsl.DURATION_DEFAULT
+import viewdsl.animateColor
+import viewdsl.doOnEnd
+import viewdsl.gone
+import viewdsl.invisible
+import viewdsl.visible
 
 class SimpleDialog @JvmOverloads constructor(
   context: Context,
@@ -33,6 +33,7 @@ class SimpleDialog @JvmOverloads constructor(
   }
   
   override fun onFinishInflate() {
+    super.onFinishInflate()
     assertThat(childCount == 1) { "Only one child for dialog is allowed" }
     dialogView = getChildAt(0)
     invisible()

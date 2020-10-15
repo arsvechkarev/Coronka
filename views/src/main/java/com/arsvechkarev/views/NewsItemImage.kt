@@ -8,9 +8,9 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import com.arsvechkarev.views.drawables.BaseLoadingStub
 import com.arsvechkarev.views.drawables.NewsItemImageLoadingStub
-import core.extenstions.AccelerateDecelerateInterpolator
-import core.extenstions.DURATION_DEFAULT
-import core.extenstions.doOnEnd
+import viewdsl.AccelerateDecelerateInterpolator
+import viewdsl.DURATION_DEFAULT
+import viewdsl.doOnEnd
 
 class NewsItemImage @JvmOverloads constructor(
   context: Context,

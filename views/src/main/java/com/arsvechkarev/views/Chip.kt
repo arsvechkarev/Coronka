@@ -9,11 +9,11 @@ import android.text.Layout
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import core.extenstions.dimen
 import core.extenstions.execute
 import core.extenstions.f
-import core.extenstions.sp
 import core.viewbuilding.Fonts
+import core.viewbuilding.TextSizes
+import viewdsl.dimen
 
 class Chip @JvmOverloads constructor(
   context: Context,
@@ -59,7 +59,7 @@ class Chip @JvmOverloads constructor(
     val attributes = context.obtainStyledAttributes(attrs, R.styleable.Chip, 0, 0)
     colorFill = attributes.getColor(R.styleable.Chip_colorFill, Color.WHITE)
     colorSecondary = attributes.getColor(R.styleable.Chip_colorSecondary, Color.BLACK)
-    textPaint.textSize = attributes.getDimension(R.styleable.Chip_android_textSize, 16.sp)
+    textPaint.textSize = attributes.getDimension(R.styleable.Chip_android_textSize, TextSizes.H5)
     textLayout = boringLayoutOf(textPaint, attributes.getText(R.styleable.Chip_android_text) ?: "")
     rectPaint.color = colorFill
     attributes.recycle()

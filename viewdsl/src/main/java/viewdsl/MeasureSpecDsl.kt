@@ -1,8 +1,7 @@
-package core.viewbuilding
+package viewdsl
 
 import android.view.View
 import android.view.View.MeasureSpec.UNSPECIFIED
-import core.extenstions.assertThat
 
 fun exactly(size: Int): Int {
   return View.MeasureSpec.makeMeasureSpec(size, View.MeasureSpec.EXACTLY)
@@ -22,7 +21,7 @@ fun getMinimumSize(widthSpec: Int, heightSpec: Int): Int {
   val height = heightSpec.size
   if (width == 0 || height == 0) {
     if (heightSpec.mode == UNSPECIFIED) {
-      assertThat(width > 0)
+      require(width > 0)
       return width
     }
   }

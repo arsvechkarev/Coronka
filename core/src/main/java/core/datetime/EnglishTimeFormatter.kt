@@ -9,11 +9,10 @@ class EnglishTimeFormatter : TimeFormatter {
       val diff = now.dayOfYear - date.dayOfYear
       when {
         diff == 1 -> "${now.hour + (24 - date.hour)} hours ago"
-        diff < 7 -> "$diff days ago"
-        diff < 14 -> "1 week ago"
-        diff < 21 -> "2 week ago"
-        diff < 28 -> "3 week ago"
-        diff < 365 -> "${date.dayOfMonth} ${date.monthName}"
+        diff < 14 -> "$diff days ago"
+        diff < 21 -> "2 weeks ago"
+        diff < 28 -> "3 weeks ago"
+        diff < 365 -> "${date.monthName} ${date.dayOfMonth}"
         else -> "${date.monthValue}/${date.dayOfMonth}/${date.year}"
       }
     } else {

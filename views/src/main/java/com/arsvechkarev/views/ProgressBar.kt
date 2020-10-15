@@ -9,10 +9,10 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
-import core.extenstions.cancelIfRunning
-import core.extenstions.dpInt
 import core.extenstions.execute
 import core.extenstions.f
+import viewdsl.Ints.dp
+import viewdsl.cancelIfRunning
 
 class ProgressBar @JvmOverloads constructor(
   context: Context,
@@ -22,7 +22,7 @@ class ProgressBar @JvmOverloads constructor(
   
   private val innerStartedAngle = 50f
   private val outerStartedAngle = 120f
-  private val minSize = 32.dpInt
+  private val minSize = 32.dp
   private val sweepAngle = 260f
   private val trackWidth: Float
   
@@ -49,6 +49,10 @@ class ProgressBar @JvmOverloads constructor(
     trackWidth = attributes.getDimension(R.styleable.ProgressBar_trackWidth, -1f)
     paint.color = attributes.getColor(R.styleable.ProgressBar_color, Color.BLACK)
     attributes.recycle()
+  }
+  
+  fun setColor(color: Int) {
+    paint.color = color
   }
   
   override fun onAttachedToWindow() {

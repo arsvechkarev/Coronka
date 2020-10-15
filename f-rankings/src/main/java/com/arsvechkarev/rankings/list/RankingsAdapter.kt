@@ -4,13 +4,13 @@ import com.arsvechkarev.rankings.R
 import com.arsvechkarev.views.StatsSmallView
 import core.extenstions.assertThat
 import core.model.DisplayableCountry
-import core.recycler.BaseListAdapter
-import core.recycler.DifferentiableItem.AlwaysFalseCallback
+import core.recycler.CallbackType
+import core.recycler.ListAdapter
 import core.recycler.delegate
+import viewdsl.paddingsRes
 
-class RankingsAdapter : BaseListAdapter(
+class RankingsAdapter : ListAdapter(
   delegate<DisplayableCountry> {
-    
     buildView {
       StatsSmallView(context).apply {
         paddingsRes(
@@ -21,11 +21,10 @@ class RankingsAdapter : BaseListAdapter(
         )
       }
     }
-    
     onBind { itemView, country ->
       assertThat(itemView is StatsSmallView)
       itemView.updateData(country.number, country.name, country.amountString)
     }
   },
-  diffCallback = AlwaysFalseCallback
+  callbackType = CallbackType.ALWAYS_FALSE
 )

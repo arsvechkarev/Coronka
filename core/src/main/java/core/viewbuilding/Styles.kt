@@ -2,14 +2,21 @@ package core.viewbuilding
 
 import android.text.TextUtils
 import android.widget.TextView
-import core.extenstions.textSize
+import viewdsl.font
+import viewdsl.textColor
+import viewdsl.textSize
 
 object Styles {
   
   val BaseTextView: TextView.() -> Unit = {
     textSize(TextSizes.H5)
-    setTextColor(Colors.TextPrimary)
-    typeface = Fonts.SegoeUi
+    textColor(Colors.TextPrimary)
+    font(Fonts.SegoeUi)
+  }
+  
+  val BoldTextView: TextView.() -> Unit = {
+    apply(BaseTextView)
+    font(Fonts.SegoeUiBold)
   }
   
   val NewsTextView: TextView.() -> Unit = {

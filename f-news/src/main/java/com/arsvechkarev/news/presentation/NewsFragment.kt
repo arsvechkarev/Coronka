@@ -1,5 +1,7 @@
 package com.arsvechkarev.news.presentation
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -15,21 +17,31 @@ import core.BaseFragment
 import core.BaseScreenState
 import core.Failure
 import core.Loading
-import core.extenstions.animateInvisible
-import core.extenstions.animateVisible
 import core.hostActivity
 import kotlinx.android.synthetic.main.fragment_news.newsGradientHeaderView
 import kotlinx.android.synthetic.main.fragment_news.newsImageDrawer
 import kotlinx.android.synthetic.main.fragment_news.newsLoadingStub
 import kotlinx.android.synthetic.main.fragment_news.newsRecyclerView
+import viewdsl.animateInvisible
+import viewdsl.animateVisible
 
 class NewsFragment : BaseFragment(R.layout.fragment_news) {
   
   private var viewModel: NewsViewModel? = null
   
-  private val newsAdapter = NewsAdapter(this, onNewsItemClicked = {
-  
-  })
+  private val newsAdapter = NewsAdapter(this,
+    onNewsItemClicked = { newsItem ->
+      val intent = Intent(Intent.ACTION_VIEW)
+      intent.data = Uri.parse(newsItem.webUrl)
+      startActivity(intent)
+    },
+    onReadyToLoadNextPage = {
+      viewModel?.tryLoadNextPage()
+    },
+    onRetryItemClicked = {
+      viewModel?.tryLoadNextPage()
+    }
+  )
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel = NewsModuleInjector.provideViewModel(this).also { model ->
@@ -48,10 +60,17 @@ class NewsFragment : BaseFragment(R.layout.fragment_news) {
   
   private fun handleState(state: BaseScreenState) {
     when (state) {
+      is LoadingNextPage -> renderLoadingNextPage(state)
       is Loading -> renderLoading()
       is LoadedNews -> renderLoadedNews(state)
+      is LoadedNextPage -> renderLoadedNextPage(state)
+      is FailureLoadingNextPage -> renderFailureLoadingNextPage()
       is Failure -> renderFailure(state)
     }
+  }
+  
+  private fun renderLoadingNextPage(state: LoadingNextPage) {
+    newsAdapter.addLoadingItem(state)
   }
   
   private fun renderLoading() {
@@ -65,8 +84,16 @@ class NewsFragment : BaseFragment(R.layout.fragment_news) {
     newsAdapter.submitList(state.news)
   }
   
-  private fun renderFailure(state: Failure) {
+  private fun renderLoadedNextPage(state: LoadedNextPage) {
+    newsAdapter.removeLastAndAdd(state.news)
+  }
   
+  private fun renderFailureLoadingNextPage() {
+    newsAdapter.changeLoadingToError()
+  }
+  
+  private fun renderFailure(state: Failure) {
+    newsLoadingStub.animateInvisible()
   }
   
   private fun initClickListeners() {

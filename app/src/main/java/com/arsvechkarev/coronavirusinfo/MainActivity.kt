@@ -11,7 +11,6 @@ import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
-import core.Application
 import core.BaseFragment
 import core.HostActivity
 import core.concurrency.AndroidThreader
@@ -24,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_main.drawerTextNews
 import kotlinx.android.synthetic.main.activity_main.drawerTextRankings
 import kotlinx.android.synthetic.main.activity_main.drawerTextStatistics
 import kotlinx.android.synthetic.main.activity_main.drawerTextTips
+import viewdsl.Densities
 import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity(), HostActivity {
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
   
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Application.initDensities(resources)
+    Densities.init(resources)
     Colors.init(this)
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)

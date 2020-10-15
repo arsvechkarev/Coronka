@@ -5,10 +5,10 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import com.arsvechkarev.views.R
-import core.extenstions.cancelIfRunning
-import core.extenstions.dpInt
 import core.extenstions.execute
 import core.extenstions.i
+import viewdsl.Ints.dp
+import viewdsl.cancelIfRunning
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sqrt
@@ -19,8 +19,8 @@ class EarthView @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
   
-  private var itemSize = 40.dpInt
-  private var itemsMargin = 8.dpInt
+  private var itemSize = 40.dp
+  private var itemsMargin = 8.dp
   private val wifi = context.getDrawable(R.drawable.ic_wifi_full)!!
   private val earth = context.getDrawable(R.drawable.ic_planet_earth)!!
   

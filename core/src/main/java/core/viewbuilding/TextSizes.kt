@@ -2,7 +2,7 @@ package core.viewbuilding
 
 import android.content.Context
 import com.arsvechkarev.core.R
-import core.extenstions.dimen
+import viewdsl.dimen
 
 object TextSizes {
   

@@ -13,15 +13,15 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import core.Application.numberFormatter
-import core.extenstions.DURATION_MEDIUM
-import core.extenstions.cancelIfRunning
-import core.extenstions.dp
 import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.i
-import core.extenstions.sp
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
+import core.viewbuilding.TextSizes
+import viewdsl.DURATION_MEDIUM
+import viewdsl.Floats.dp
+import viewdsl.cancelIfRunning
 
 class BigStatsView @JvmOverloads constructor(
   context: Context,
@@ -72,7 +72,8 @@ class BigStatsView @JvmOverloads constructor(
     chartLineHeight = attributes.getDimension(R.styleable.BigStatsView_lineHeight, 6.dp)
     chartLineCornersRadius = attributes
         .getDimension(R.styleable.BigStatsView_lineCornersRadius, 4.dp)
-    textPaint.textSize = attributes.getDimension(R.styleable.BigStatsView_android_textSize, 20.sp)
+    textPaint.textSize = attributes.getDimension(R.styleable.BigStatsView_android_textSize,
+      TextSizes.H3)
     val labelConfirmed = resources.getString(R.string.text_confirmed)
     val labelRecovered = resources.getString(R.string.text_recovered)
     val labelDeaths = resources.getString(R.string.text_deaths)

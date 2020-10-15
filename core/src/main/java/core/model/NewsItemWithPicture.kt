@@ -9,7 +9,7 @@ import core.recycler.DifferentiableItem
  * @param publishedDate Date when the article was published, i.e "2020-10-12T18:51:03+0000"
  */
 open class BasicNewsItem(
-  override val id: Int,
+  override val id: String,
   val title: String,
   val description: String,
   val webUrl: String,
@@ -29,8 +29,9 @@ open class BasicNewsItem(
   }
   
   override fun hashCode(): Int {
-    var result = id
+    var result = id.hashCode()
     result = 31 * result + title.hashCode()
+    result = 31 * result + description.hashCode()
     result = 31 * result + webUrl.hashCode()
     result = 31 * result + publishedDate.hashCode()
     return result
@@ -41,7 +42,7 @@ open class BasicNewsItem(
  * @param imageUrl Image url for the article
  */
 class NewsItemWithPicture(
-  override val id: Int,
+  override val id: String,
   title: String,
   description: String,
   webUrl: String,

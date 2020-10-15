@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.arsvechkarev.views.R
 import core.extenstions.assertThat
-import core.extenstions.cancelIfRunning
+import viewdsl.cancelIfRunning
 
 class NoConnectionView @JvmOverloads constructor(
   context: Context,

@@ -14,10 +14,6 @@ import core.Failure.FailureReason.NO_CONNECTION
 import core.Failure.FailureReason.TIMEOUT
 import core.Failure.FailureReason.UNKNOWN
 import core.Loading
-import core.extenstions.animateInvisible
-import core.extenstions.animateVisible
-import core.extenstions.invisible
-import core.extenstions.visible
 import core.hostActivity
 import core.model.Country
 import kotlinx.android.synthetic.main.fragment_map.mapEarthView
@@ -32,6 +28,10 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextFailureReason
 import kotlinx.android.synthetic.main.fragment_map.mapTextRetry
 import kotlinx.android.synthetic.main.fragment_map.mapTextRetryUnknown
 import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
+import viewdsl.animateInvisible
+import viewdsl.animateVisible
+import viewdsl.invisible
+import viewdsl.visible
 
 class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   

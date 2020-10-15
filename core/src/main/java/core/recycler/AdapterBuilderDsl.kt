@@ -25,7 +25,7 @@ class AdapterBuilder {
   }
   
   internal fun build(): RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    val adapter = object : BaseAdapter(delegates) {}
+    val adapter = object : Adapter(delegates) {}
     adapter.submitList(data)
     return adapter
   }

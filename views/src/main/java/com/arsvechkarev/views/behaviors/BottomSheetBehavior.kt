@@ -15,8 +15,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.HIDDEN
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.SHOWN
 import core.INVALID_POINTER
-import core.extenstions.doOnEnd
-import core.extenstions.getBehavior
+import viewdsl.doOnEnd
+import viewdsl.getBehavior
 import kotlin.math.abs
 
 class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :

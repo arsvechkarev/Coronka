@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Path
 import com.arsvechkarev.views.ElementsInARowViewGroup
 import com.arsvechkarev.views.R
-import core.extenstions.dimen
 import core.extenstions.i
+import viewdsl.dimen
 
 class MainStatsInfoLoadingStub(context: Context) : BaseLoadingStub() {
   

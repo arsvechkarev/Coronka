@@ -20,6 +20,7 @@
             <option value="$PROJECT_DIR$/f-stats" />
             <option value="$PROJECT_DIR$/f-tips" />
             <option value="$PROJECT_DIR$/storage" />
+            <option value="$PROJECT_DIR$/viewdsl" />
             <option value="$PROJECT_DIR$/views" />
           </set>
         </option>

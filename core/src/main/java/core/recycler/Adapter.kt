@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlin.reflect.KClass
 
-abstract class BaseAdapter(
+abstract class Adapter(
   private val delegates: List<AdapterDelegate<out DisplayableItem>>
 ) : RecyclerView.Adapter<ViewHolder>() {
   

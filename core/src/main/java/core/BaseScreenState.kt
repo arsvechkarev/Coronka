@@ -9,29 +9,24 @@ import java.util.concurrent.TimeoutException
  */
 abstract class BaseScreenState
 
-object Loading : BaseScreenState()
+open class Loading : BaseScreenState()
 
-class Failure(val reason: FailureReason) : BaseScreenState() {
+open class Failure(
+  val throwable: Throwable
+) : BaseScreenState() {
+  
+  val reason: FailureReason = when (throwable) {
+    is TimeoutException -> FailureReason.TIMEOUT
+    is UnknownHostException -> FailureReason.NO_CONNECTION
+    is ExecutionException -> {
+      when (throwable.cause) {
+        is TimeoutException -> FailureReason.TIMEOUT
+        is UnknownHostException -> FailureReason.NO_CONNECTION
+        else -> FailureReason.UNKNOWN
+      }
+    }
+    else -> FailureReason.UNKNOWN
+  }
   
   enum class FailureReason { NO_CONNECTION, TIMEOUT, UNKNOWN }
-  
-  companion object {
-  
-    fun of(throwable: Throwable): Failure {
-      return Failure(throwable.asFailureReason())
-    }
-  
-    fun Throwable.asFailureReason() = when (this) {
-      is TimeoutException -> FailureReason.TIMEOUT
-      is UnknownHostException -> FailureReason.NO_CONNECTION
-      is ExecutionException -> {
-        when (cause) {
-          is TimeoutException -> FailureReason.TIMEOUT
-          is UnknownHostException -> FailureReason.NO_CONNECTION
-          else -> FailureReason.UNKNOWN
-        }
-      }
-      else -> FailureReason.UNKNOWN
-    }
-  }
 }

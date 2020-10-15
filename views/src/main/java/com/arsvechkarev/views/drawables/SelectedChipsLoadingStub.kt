@@ -5,7 +5,7 @@ import android.graphics.Path
 import android.view.View.MeasureSpec
 import com.arsvechkarev.views.Chip
 import com.arsvechkarev.views.R
-import core.extenstions.dimen
+import viewdsl.dimen
 
 class SelectedChipsLoadingStub(
   context: Context,

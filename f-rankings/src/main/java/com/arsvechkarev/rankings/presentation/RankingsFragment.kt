@@ -19,10 +19,7 @@ import core.BaseScreenState
 import core.Failure
 import core.Failure.FailureReason
 import core.Loading
-import core.extenstions.animateInvisible
-import core.extenstions.animateVisible
 import core.extenstions.heightWithMargins
-import core.extenstions.onClick
 import core.hostActivity
 import kotlinx.android.synthetic.main.fragment_rankings.chipAfrica
 import kotlinx.android.synthetic.main.fragment_rankings.chipAsia
@@ -52,6 +49,9 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsListLoadingStub
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRecyclerView
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRetryButton
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsSelectedChipsLoadingStub
+import viewdsl.animateInvisible
+import viewdsl.animateVisible
+import viewdsl.onClick
 
 class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   

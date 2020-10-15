@@ -6,7 +6,7 @@ import android.view.View
 import android.view.View.MeasureSpec
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
-import core.extenstions.hasBehavior
+import viewdsl.hasBehavior
 
 class ScrollingRecyclerBehavior<V : View>(context: Context, attrs: AttributeSet) :
   CoordinatorLayout.Behavior<V>() {

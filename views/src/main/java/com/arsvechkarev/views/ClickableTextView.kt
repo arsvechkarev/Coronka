@@ -8,8 +8,9 @@ import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
-import core.extenstions.DURATION_DEFAULT
+import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
+import viewdsl.DURATION_DEFAULT
 
 class ClickableTextView @JvmOverloads constructor(
   context: Context,
@@ -22,7 +23,7 @@ class ClickableTextView @JvmOverloads constructor(
       R.styleable.ClickableTextView,
       defStyleAttr, 0)
     val rippleColor = attributes.getColor(
-      R.styleable.ClickableTextView_rippleColor, Color.WHITE)
+      R.styleable.ClickableTextView_rippleColor, Colors.FailureRipple)
     setRipple(rippleColor)
     attributes.recycle()
     isClickable = true

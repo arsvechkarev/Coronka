@@ -4,7 +4,6 @@ import com.arsvechkarev.common.AllCountriesRepository
 import com.arsvechkarev.common.CountriesMetaInfoRepository
 import core.BaseScreenState
 import core.Failure
-import core.Failure.Companion.asFailureReason
 import core.Loading
 import core.MIN_NETWORK_DELAY
 import core.RxViewModel
@@ -32,8 +31,8 @@ class MapViewModel(
         { map, countries -> Pair(map, countries) }
       ).delay(delay, TimeUnit.MILLISECONDS, schedulers.computation(), true)
           .map(::transformResult)
-          .onErrorReturn { Failure(it.asFailureReason()) }
-          .startWith(Loading)
+          .onErrorReturn(::Failure)
+          .startWith(Loading())
           .observeOn(schedulers.mainThread())
           .subscribe(_state::setValue)
     }
