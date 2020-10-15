@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.stats.behaviors.ScrollableContentBehavior
 import com.arsvechkarev.stats.di.StatsModuleInjector
-import com.arsvechkarev.views.CoronavirusMainStatsView
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
 import com.arsvechkarev.views.drawables.StatsGraphLoadingStub
@@ -24,6 +23,7 @@ import core.model.WorldCasesInfo
 import kotlinx.android.synthetic.main.fragment_stats.statsContentView
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorLayout
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorMessage
+import kotlinx.android.synthetic.main.fragment_stats.statsGeneralStatsView
 import kotlinx.android.synthetic.main.fragment_stats.statsIconDrawer
 import kotlinx.android.synthetic.main.fragment_stats.statsImageFailure
 import kotlinx.android.synthetic.main.fragment_stats.statsMainInfoLoadingStub
@@ -35,9 +35,6 @@ import kotlinx.android.synthetic.main.fragment_stats.statsScrollingContentView
 import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesChart
 import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesLabel
 import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesLoadingStub
-import kotlinx.android.synthetic.main.fragment_stats.statsViewConfirmed
-import kotlinx.android.synthetic.main.fragment_stats.statsViewDeaths
-import kotlinx.android.synthetic.main.fragment_stats.statsViewRecovered
 import viewdsl.animateChildrenInvisible
 import viewdsl.animateChildrenVisible
 import viewdsl.animateInvisible
@@ -107,18 +104,8 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   }
   
   private fun renderGeneralInfo(generalInfo: GeneralInfo) {
-    view!!.post {
-      statsViewConfirmed.animateVisible(andThen = { statsMainInfoLoadingStub.background = null })
-      statsViewRecovered.animateVisible()
-      statsViewDeaths.animateVisible()
-      val confirmedTextSize = getTextSize(generalInfo.confirmed)
-      val recoveredTextSize = getTextSize(generalInfo.confirmed)
-      val deathsTextSize = getTextSize(generalInfo.confirmed)
-      val textSize = minOf(confirmedTextSize, recoveredTextSize, deathsTextSize)
-      statsViewConfirmed.prepareNumber(generalInfo.confirmed, textSize)
-      statsViewRecovered.prepareNumber(generalInfo.recovered, textSize)
-      statsViewDeaths.prepareNumber(generalInfo.deaths, textSize)
-    }
+    statsGeneralStatsView.updateNumbers(generalInfo)
+    statsGeneralStatsView.animateVisible(andThen = { statsMainInfoLoadingStub.background = null })
   }
   
   private fun renderFailure(reason: FailureReason) {
@@ -153,11 +140,6 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     statsScrollingContentView.isEnabled = enable
     statsNewCasesChart.isEnabled = enable
     statsTotalCasesChart.isEnabled = enable
-  }
-  
-  private fun getTextSize(number: Int): Float {
-    return CoronavirusMainStatsView.getTextSize(statsViewConfirmed.width,
-      CoronavirusMainStatsView.getTextForNumber(requireContext(), number))
   }
   
   private fun initClickListeners() {

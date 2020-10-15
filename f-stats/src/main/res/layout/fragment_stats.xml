@@ -59,8 +59,7 @@
       android:background="@drawable/bg_stats_content"
       android:orientation="vertical">
 
-      <com.arsvechkarev.views.ElementsInARowViewGroup
-        android:id="@+id/statsMainInfoElements"
+      <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/stats_three_elements_layout_m_horizontal"
@@ -71,31 +70,12 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
 
-        <com.arsvechkarev.views.CoronavirusMainStatsView
-          android:id="@+id/statsViewConfirmed"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:background="@drawable/bg_stats_confirmed"
-          android:title="@string/text_confirmed"
-          android:visibility="invisible"/>
+        <com.arsvechkarev.views.GeneralStatsView
+          android:id="@+id/statsGeneralStatsView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
 
-        <com.arsvechkarev.views.CoronavirusMainStatsView
-          android:id="@+id/statsViewRecovered"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:background="@drawable/bg_stats_recovered"
-          android:title="@string/text_recovered"
-          android:visibility="invisible"/>
-
-        <com.arsvechkarev.views.CoronavirusMainStatsView
-          android:id="@+id/statsViewDeaths"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:background="@drawable/bg_stats_deaths"
-          android:title="@string/text_deaths"
-          android:visibility="invisible"/>
-
-      </com.arsvechkarev.views.ElementsInARowViewGroup>
+      </FrameLayout>
 
       <TextView
         android:id="@+id/statsTitleTotalCases"

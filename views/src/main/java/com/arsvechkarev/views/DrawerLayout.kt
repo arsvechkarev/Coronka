@@ -34,8 +34,8 @@ class DrawerLayout @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
   
-  private lateinit var mainView: View
-  private lateinit var drawerView: View
+  private val mainView: View get() = getChildAt(0)
+  private val drawerView: View get() = getChildAt(1)
   
   private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
   private val maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
@@ -96,9 +96,7 @@ class DrawerLayout @JvmOverloads constructor(
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val widthSize = MeasureSpec.getSize(widthMeasureSpec)
     assertThat(childCount == 2) { "Layout must have exactly 2 children" }
-    mainView = getChildAt(0)
     mainView.measure(widthMeasureSpec, heightMeasureSpec)
-    drawerView = getChildAt(1)
     slideRange = (widthSize * SLIDE_RANGE_COEFFICIENT).toInt()
         .coerceAtMost(widthSize)
     val widthSpec = MeasureSpec.makeMeasureSpec(slideRange, MeasureSpec.EXACTLY)
@@ -119,10 +117,10 @@ class DrawerLayout @JvmOverloads constructor(
     if (!respondToTouches) return false
     when (event.action) {
       ACTION_DOWN -> {
-        handleDownOutsideEvent(event)
         latestX = event.x
         initVelocityTrackerIfNeeded()
         velocityTracker?.addMovement(event)
+        if (handleDownOutsideEvent(event)) return true
       }
       ACTION_MOVE -> {
         val x = event.x.toInt()
@@ -136,6 +134,7 @@ class DrawerLayout @JvmOverloads constructor(
       ACTION_UP, ACTION_CANCEL -> {
         if (outsideOnDrawerDown) {
           handleUpOutsideEvent(event)
+          return true
         }
         recycleVelocityTracker()
         isBeingDragged = false
@@ -150,9 +149,9 @@ class DrawerLayout @JvmOverloads constructor(
     initVelocityTrackerIfNeeded()
     when (event.action) {
       ACTION_DOWN -> {
-        handleDownOutsideEvent(event)
         latestX = event.x
         velocityTracker?.addMovement(event)
+        if (handleDownOutsideEvent(event)) return true
       }
       ACTION_MOVE, ACTION_UP -> {
         velocityTracker?.addMovement(event)
@@ -165,6 +164,7 @@ class DrawerLayout @JvmOverloads constructor(
         if (event.action == ACTION_UP) {
           if (outsideOnDrawerDown) {
             handleUpOutsideEvent(event)
+            return true
           }
           handleUpEvent()
         }
@@ -173,12 +173,14 @@ class DrawerLayout @JvmOverloads constructor(
     return true
   }
   
-  private fun handleDownOutsideEvent(event: MotionEvent) {
+  private fun handleDownOutsideEvent(event: MotionEvent): Boolean {
     if (currentState == OPENED && event.x > drawerView.right) {
       outsideOnDrawerDownX = event.x
       outsideOnDrawerDownY = event.y
       outsideOnDrawerDown = true
+      return true
     }
+    return false
   }
   
   private fun handleUpOutsideEvent(event: MotionEvent) {

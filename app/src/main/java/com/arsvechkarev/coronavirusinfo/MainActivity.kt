@@ -44,14 +44,16 @@ class MainActivity : AppCompatActivity(), HostActivity {
     Colors.init(this)
     supportActionBar?.hide()
     setContentView(R.layout.activity_main)
-    goToFragment(NewsFragment::class)
-    drawerTextNews.isSelected = true
     val onDrawerItemClick: (v: View) -> Unit = { handleOnDrawerItemClicked(it) }
     drawerTextStatistics.setOnClickListener(onDrawerItemClick)
     drawerTextNews.setOnClickListener(onDrawerItemClick)
     drawerTextMap.setOnClickListener(onDrawerItemClick)
     drawerTextTips.setOnClickListener(onDrawerItemClick)
     drawerTextRankings.setOnClickListener(onDrawerItemClick)
+    drawerTextNews.isSelected = true
+    if (savedInstanceState == null) {
+      goToFragment(StatsFragment::class)
+    }
   }
   
   override fun onStart() {
