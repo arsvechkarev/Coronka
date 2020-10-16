@@ -54,7 +54,10 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
    */
   val minHeight: Int
     get() {
-      return ((viewOffsetHelper?.view?.height ?: 0) * (1 - slideRangeCoefficient)).toInt()
+      if (slideRangeCoefficient == 1f) {
+        slideRangeCoefficient = calculateSlideRangeCoefficient()
+      }
+      return ((viewOffsetHelper?.view?.height ?: 0) * (1f - slideRangeCoefficient)).toInt()
     }
   
   /**
@@ -68,7 +71,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
    * Example: if header height is 400 and slideRangeCoefficient is 0.8, total range
    * would be 400 * 0.8 = 320
    */
-  private var slideRangeCoefficient = 1f
+  var slideRangeCoefficient = 1f
     set(value) {
       assertThat(value in 0f..1f) { "Range should be in range 0..1" }
       viewOffsetHelper?.slideRangeCoefficient = value
@@ -96,6 +99,10 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
     } else {
       andThen()
     }
+  }
+  
+  fun getView(): View? {
+    return viewOffsetHelper?.view
   }
   
   override fun onLayoutChild(parent: CoordinatorLayout,
