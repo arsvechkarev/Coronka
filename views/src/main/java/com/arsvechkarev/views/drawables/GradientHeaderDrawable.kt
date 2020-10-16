@@ -16,9 +16,9 @@ import core.viewbuilding.Colors
 import core.viewbuilding.Dimens
 
 class GradientHeaderDrawable(
-  private val startColor: Int,
-  private val endColor: Int,
-  private val curveSize: Float
+  private val startColor: Int = Colors.GradientHeaderStart,
+  private val endColor: Int = Colors.GradientHeaderEnd,
+  private val curveSize: Float = Dimens.GradientHeaderCurveSize,
 ) : Drawable() {
   
   private val gradientPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -59,13 +59,4 @@ class GradientHeaderDrawable(
   }
   
   override fun getOpacity() = PixelFormat.OPAQUE
-  
-}
-
-fun createGradientHeaderDrawable(): GradientHeaderDrawable {
-  return GradientHeaderDrawable(
-    Colors.GradientHeaderStart,
-    Colors.GradientHeaderEnd,
-    Dimens.GradientHeaderCurveSize
-  )
 }

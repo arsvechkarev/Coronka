@@ -50,9 +50,9 @@ class MainActivity : AppCompatActivity(), HostActivity {
     drawerTextMap.setOnClickListener(onDrawerItemClick)
     drawerTextTips.setOnClickListener(onDrawerItemClick)
     drawerTextRankings.setOnClickListener(onDrawerItemClick)
-    drawerTextStatistics.isSelected = true
+    drawerTextNews.isSelected = true
     if (savedInstanceState == null) {
-      goToFragment(RankingsFragment::class)
+      goToFragment(NewsFragment::class)
     }
   }
   

@@ -52,6 +52,6 @@ fun Context.createLayoutParams(
 fun Context.determineSize(size: Size) = when (size) {
   Size.MATCH_PARENT -> ViewGroup.LayoutParams.MATCH_PARENT
   Size.WRAP_PARENT -> ViewGroup.LayoutParams.WRAP_CONTENT
-  is Size.IntValue -> size.size
+  is Size.IntSize -> size.size
   is Size.Dimen -> resources.getDimension(size.dimenRes).toInt()
 }

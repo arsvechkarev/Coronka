@@ -1,11 +1,13 @@
 package viewdsl
 
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.DimenRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.Fragment
 
 fun View.visible() {
   visibility = View.VISIBLE
@@ -24,7 +26,7 @@ fun <T : View> T.size(
   height: Int,
   margins: Margins = Margins()
 ): T {
-  size(Size.IntValue(width), Size.IntValue(height), margins)
+  size(Size.IntSize(width), Size.IntSize(height), margins)
   return this
 }
 
@@ -40,21 +42,6 @@ fun <T : View> T.size(
     layoutParams.height = context.determineSize(height)
   }
   return this
-}
-
-fun View.margins(
-  left: Int = 0,
-  top: Int = 0,
-  right: Int = 0,
-  bottom: Int = 0
-) {
-  if (layoutParams is MarginLayoutParams) {
-    (layoutParams as MarginLayoutParams).setMargins(left, top, right, bottom)
-  } else {
-    val params = MarginLayoutParams(layoutParams)
-    params.setMargins(left, top, right, bottom)
-    layoutParams = params
-  }
 }
 
 fun View.layoutGravity(gravity: Int) {
@@ -74,18 +61,36 @@ fun View.layoutGravity(gravity: Int) {
   }
 }
 
-fun View.paddingsRes(
-  @DimenRes left: Int,
-  @DimenRes top: Int,
-  @DimenRes right: Int,
-  @DimenRes bottom: Int
+fun View.margins(value: Int) {
+  margins(value, value, value, value)
+}
+
+fun View.marginVertical(value: Int) {
+  margins(0, value, 0, value)
+}
+
+fun View.marginHorizontal(value: Int) {
+  margins(value, 0, value, 0)
+}
+
+fun View.margins(
+  left: Int = 0,
+  top: Int = 0,
+  right: Int = 0,
+  bottom: Int = 0
 ) {
-  setPadding(
-    context.resources.getDimension(left).toInt(),
-    context.resources.getDimension(top).toInt(),
-    context.resources.getDimension(right).toInt(),
-    context.resources.getDimension(bottom).toInt()
-  )
+  if (layoutParams is MarginLayoutParams) {
+    val params = layoutParams as MarginLayoutParams
+    if (isLayoutLeftToRight) {
+      params.setMargins(left, top, right, bottom)
+    } else {
+      params.setMargins(right, top, left, bottom)
+    }
+  } else {
+    val params = MarginLayoutParams(layoutParams)
+    params.setMargins(left, top, right, bottom)
+    layoutParams = params
+  }
 }
 
 fun View.padding(value: Int) {
@@ -98,6 +103,23 @@ fun View.paddingVertical(value: Int) {
 
 fun View.paddingHorizontal(value: Int) {
   setPadding(value, paddingTop, value, paddingBottom)
+}
+
+fun View.paddingsRes(
+  @DimenRes left: Int,
+  @DimenRes top: Int,
+  @DimenRes right: Int,
+  @DimenRes bottom: Int
+) {
+  val paddingLeft = context.resources.getDimension(left).toInt()
+  val paddingTop = context.resources.getDimension(top).toInt()
+  val paddingRight = context.resources.getDimension(right).toInt()
+  val paddingBottom = context.resources.getDimension(bottom).toInt()
+  if (isLayoutLeftToRight) {
+    setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
+  } else {
+    setPadding(paddingRight, paddingTop, paddingLeft, paddingBottom)
+  }
 }
 
 fun View.paddings(
@@ -121,8 +143,21 @@ fun View.tag(tag: String) {
   this.tag = tag
 }
 
+fun View.background(drawable: Drawable) {
+  background = drawable
+}
+
 fun <T : View> T.childWithTag(tag: String): T {
   return findViewWithTag(tag)
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T : View> Fragment.withTag(tag: String): T {
+  return requireView().childWithTag(tag) as T
+}
+
+fun View.behavior(behavior: CoordinatorLayout.Behavior<*>) {
+  (layoutParams as CoordinatorLayout.LayoutParams).behavior = behavior
 }
 
 inline fun <reified T : CoordinatorLayout.Behavior<*>> View.getBehavior(): T {

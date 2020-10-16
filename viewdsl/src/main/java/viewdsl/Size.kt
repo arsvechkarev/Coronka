@@ -4,7 +4,7 @@ sealed class Size {
   
   object MATCH_PARENT : Size()
   object WRAP_PARENT : Size()
-  class IntValue(val size: Int) : Size()
+  class IntSize(val size: Int) : Size()
   class Dimen(val dimenRes: Int) : Size()
   
   companion object {

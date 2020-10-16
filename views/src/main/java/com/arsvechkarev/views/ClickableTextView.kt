@@ -25,6 +25,7 @@ class ClickableTextView @JvmOverloads constructor(
     val rippleColor = attributes.getColor(
       R.styleable.ClickableTextView_rippleColor, Colors.FailureRipple)
     setRipple(rippleColor)
+    setTextColor(Colors.Failure)
     attributes.recycle()
     isClickable = true
     isFocusable = true

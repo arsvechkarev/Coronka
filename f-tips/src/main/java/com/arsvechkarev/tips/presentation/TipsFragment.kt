@@ -6,7 +6,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.tips.R
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior
-import com.arsvechkarev.views.drawables.createGradientHeaderDrawable
+import com.arsvechkarev.views.drawables.GradientHeaderDrawable
 import core.BaseFragment
 import core.hostActivity
 import core.recycler.StaticDelegateBuilder
@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.item_main_header.view.tipsGradientHeaderVi
 import kotlinx.android.synthetic.main.item_main_header.view.tipsImageDrawer
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionImage
 import kotlinx.android.synthetic.main.item_prevention.view.tipsItemPreventionTitle
+import viewdsl.background
 
 class TipsFragment : BaseFragment(R.layout.fragment_tips) {
   
@@ -58,7 +59,7 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
     layoutRes(R.layout.item_main_header)
     onInitViewHolder {
       itemView.tipsImageDrawer.setOnClickListener { hostActivity.openDrawer() }
-      itemView.tipsGradientHeaderView.background = createGradientHeaderDrawable()
+      itemView.tipsGradientHeaderView.background(GradientHeaderDrawable())
     }
   }
   

@@ -6,21 +6,31 @@ import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import viewdsl.hasBehavior
 
-class ViewUnderHeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
-  CoordinatorLayout.Behavior<V>() {
+class ViewUnderHeaderBehavior(
+  context: Context? = null,
+  attrs: AttributeSet? = null
+) : CoordinatorLayout.Behavior<View>() {
   
-  override fun layoutDependsOn(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
-    return dependency.hasBehavior<HeaderBehavior<*>>()
+  override fun layoutDependsOn(
+    parent: CoordinatorLayout,
+    child: View,
+    dependency: View
+  ): Boolean {
+    return dependency.hasBehavior<HeaderBehavior>()
   }
   
-  override fun onDependentViewChanged(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
+  override fun onDependentViewChanged(
+    parent: CoordinatorLayout,
+    child: View,
+    dependency: View
+  ): Boolean {
     child.top = dependency.bottom
     return true
   }
   
   override fun onMeasureChild(
     parent: CoordinatorLayout,
-    child: V,
+    child: View,
     parentWidthMeasureSpec: Int,
     widthUsed: Int,
     parentHeightMeasureSpec: Int,
@@ -33,7 +43,11 @@ class ViewUnderHeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
     return true
   }
   
-  override fun onLayoutChild(parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
+  override fun onLayoutChild(
+    parent: CoordinatorLayout,
+    child: View,
+    layoutDirection: Int
+  ): Boolean {
     val top = findHeader(parent).bottom
     child.layout(0, top, parent.width, parent.height)
     return true
@@ -42,7 +56,7 @@ class ViewUnderHeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   private fun findHeader(parent: CoordinatorLayout): View {
     repeat(parent.childCount) {
       val child = parent.getChildAt(it)
-      if (child.hasBehavior<HeaderBehavior<*>>()) {
+      if (child.hasBehavior<HeaderBehavior>()) {
         return child
       }
     }

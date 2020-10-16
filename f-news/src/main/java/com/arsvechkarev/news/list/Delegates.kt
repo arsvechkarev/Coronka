@@ -18,9 +18,13 @@ import core.recycler.delegate
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 import core.viewbuilding.Styles
+import core.viewbuilding.Styles.BoldTextView
+import core.viewbuilding.Styles.RetryTextView
 import core.viewbuilding.TextSizes
 import viewdsl.Ints.dp
-import viewdsl.Size
+import viewdsl.Size.Companion.MatchParent
+import viewdsl.Size.Companion.WrapContent
+import viewdsl.Size.IntSize
 import viewdsl.childWithTag
 import viewdsl.font
 import viewdsl.gravity
@@ -31,12 +35,9 @@ import viewdsl.margins
 import viewdsl.onClick
 import viewdsl.orientation
 import viewdsl.padding
-import viewdsl.paddingHorizontal
-import viewdsl.paddingVertical
-import viewdsl.size
+import viewdsl.rippleBackground
 import viewdsl.tag
 import viewdsl.text
-import viewdsl.textColor
 import viewdsl.textSize
 import viewdsl.visible
 
@@ -54,7 +55,9 @@ fun newsItemDelegate(
     }
     val textTime = TextView().apply { setTextColor(Colors.TextSecondary) }
     val image = NewsItemImage(context)
-    return@fn NewsItemView(image, textTitle, textDescription, textTime)
+    return@fn NewsItemView(image, textTitle, textDescription, textTime).apply {
+      rippleBackground(Colors.Ripple)
+    }
   }
   onInitViewHolder {
     itemView.setOnClickListener { onNewsItemClicked.invoke(item) }
@@ -72,34 +75,30 @@ fun newsItemDelegate(
 
 fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNextPage> {
   buildView {
-    FrameLayout(Size.MatchParent, Size.WrapContent) {
+    FrameLayout(MatchParent, WrapContent) {
       padding(12.dp)
-      child<LinearLayout>(Size.WrapContent, Size.WrapContent) {
+      child<LinearLayout>(WrapContent, WrapContent) {
         invisible()
         tag(NewsAdapter.FailureLayout)
         orientation(LinearLayout.HORIZONTAL)
         layoutGravity(Gravity.CENTER)
         gravity(Gravity.CENTER)
-        child<ImageView>(Size.WrapContent, Size.WrapContent) {
+        child<ImageView>(WrapContent, WrapContent) {
           image(R.drawable.ic_error)
           padding(16.dp)
         }
-        child<TextView>(Size.WrapContent, Size.WrapContent, style = Styles.BoldTextView) {
+        child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
           text(R.string.text_unknown_error)
         }
-        child<ClickableTextView>(Size.WrapContent, Size.WrapContent, style = Styles.BoldTextView) {
+        child<ClickableTextView>(WrapContent, WrapContent, style = RetryTextView) {
           tag(NewsAdapter.ClickableTextView)
           text(R.string.text_retry)
           margins(left = 16.dp)
-          paddingVertical(8.dp)
-          paddingHorizontal(12.dp)
-          textColor(Colors.Failure)
           textSize(TextSizes.H4)
         }
       }
-      child<ProgressBar> {
+      child<ProgressBar>(IntSize(40.dp), IntSize(40.dp)) {
         tag(NewsAdapter.ProgressBar)
-        size(width = 40.dp, height = 40.dp)
         layoutGravity(Gravity.CENTER)
         setColor(Colors.Accent)
       }

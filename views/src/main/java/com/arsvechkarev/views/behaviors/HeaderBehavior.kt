@@ -26,8 +26,8 @@ import kotlin.math.roundToInt
 /**
  * Behavior for header view in coordinator layout
  */
-class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
-  CoordinatorLayout.Behavior<V>() {
+class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
+  CoordinatorLayout.Behavior<View>() {
   
   private val scroller = OverScroller(context)
   private var touchSlop = ViewConfiguration.get(context).scaledTouchSlop
@@ -106,7 +106,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   }
   
   override fun onLayoutChild(parent: CoordinatorLayout,
-                             child: V, layoutDirection: Int): Boolean {
+                             child: View, layoutDirection: Int): Boolean {
     offsetFromPreviousLayout = viewOffsetHelper?.topAndBottomOffset ?: 0
     if (viewOffsetHelper == null) {
       val slideRangeCoefficient = calculateSlideRangeCoefficient.invoke()
@@ -118,7 +118,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   }
   
   override fun onInterceptTouchEvent(parent: CoordinatorLayout,
-                                     child: V, event: MotionEvent): Boolean {
+                                     child: View, event: MotionEvent): Boolean {
     if (!allowScrolling || !respondToHeaderTouches) return false
     if (event.action == ACTION_MOVE && isBeingDragged) {
       return true
@@ -160,7 +160,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   }
   
   override fun onTouchEvent(parent: CoordinatorLayout,
-                            child: V, event: MotionEvent): Boolean {
+                            child: View, event: MotionEvent): Boolean {
     if (!allowScrolling || !respondToHeaderTouches) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {
@@ -213,7 +213,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   
   override fun onStartNestedScroll(
     coordinatorLayout: CoordinatorLayout,
-    child: V,
+    child: View,
     directTargetChild: View,
     target: View,
     axes: Int,
@@ -225,7 +225,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   
   override fun onNestedPreScroll(
     coordinatorLayout: CoordinatorLayout,
-    child: V,
+    child: View,
     target: View,
     dx: Int,
     dy: Int,
@@ -240,7 +240,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   
   override fun onNestedScroll(
     coordinatorLayout: CoordinatorLayout,
-    child: V,
+    child: View,
     target: View,
     dxConsumed: Int,
     dyConsumed: Int,
@@ -259,7 +259,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   }
   
   private fun fling(
-    child: V,
+    child: View,
     velocityY: Float) {
     if (flingRunnable != null) {
       child.removeCallbacks(flingRunnable)
@@ -296,7 +296,7 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   
   private val allowScrolling get() = !scrollAnimator.isRunning && isScrollable
   
-  private inner class FlingRunnable(val child: V) : Runnable {
+  private inner class FlingRunnable(val child: View) : Runnable {
     
     override fun run() {
       if (scroller.computeScrollOffset()) {
@@ -308,8 +308,8 @@ class HeaderBehavior<V : View>(context: Context, attrs: AttributeSet) :
   
   companion object {
     private const val INVALID_POINTER = -1
-    
-    val View.asHeader: HeaderBehavior<*>
+  
+    val View.asHeader: HeaderBehavior
       get() = getBehavior()
   }
 }

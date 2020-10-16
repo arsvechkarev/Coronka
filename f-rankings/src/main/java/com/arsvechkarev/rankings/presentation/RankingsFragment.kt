@@ -12,9 +12,9 @@ import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSh
 import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.asLoadingStub
+import com.arsvechkarev.views.drawables.GradientHeaderDrawable
 import com.arsvechkarev.views.drawables.RankingsListLoadingStub
 import com.arsvechkarev.views.drawables.SelectedChipsLoadingStub
-import com.arsvechkarev.views.drawables.createGradientHeaderDrawable
 import core.BaseFragment
 import core.BaseScreenState
 import core.Failure
@@ -53,6 +53,7 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsSelectedChipsLoa
 import viewdsl.Size.Companion.WrapContent
 import viewdsl.animateInvisible
 import viewdsl.animateVisible
+import viewdsl.background
 import viewdsl.dimen
 import viewdsl.margins
 import viewdsl.onClick
@@ -214,7 +215,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   }
   
   private fun setupDrawables() {
-    rankingsHeaderGradientView.background = createGradientHeaderDrawable()
+    rankingsHeaderGradientView.background(GradientHeaderDrawable())
     rankingsListLoadingStub.applyLoadingDrawable(RankingsListLoadingStub())
     rankingsSelectedChipsLoadingStub.applyLoadingDrawable(
       SelectedChipsLoadingStub(

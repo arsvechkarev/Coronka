@@ -4,9 +4,9 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import viewdsl.Size.Companion.WrapContent
 
@@ -14,8 +14,9 @@ fun View.layoutWithLeftTop(left: Int, top: Int) {
   layout(left, top, left + measuredWidth, top + measuredHeight)
 }
 
-fun Context.buildViews(builder: (ViewBuilder) -> Unit) {
-  ViewBuilder(this).apply(builder)
+inline fun <reified T : View> Fragment.buildView(builder: ViewBuilder.() -> T): T {
+  val viewBuilder = ViewBuilder(requireContext())
+  return builder(viewBuilder)
 }
 
 inline fun <reified T : View> Fragment.view(
@@ -51,25 +52,16 @@ class ViewBuilder(val context: Context) {
     block: FrameLayout.() -> Unit = {}
   ) = FrameLayout(context).size(width, height).apply(style).apply(block)
   
-  fun Any.ImageView(
-    width: Size = WrapContent,
-    height: Size = WrapContent,
-    style: ImageView.() -> Unit = {},
-    block: ImageView.() -> Unit = {}
-  ) = ImageView(context).size(width, height).apply(style).apply(block)
-  
-  inline fun <reified T : View> LinearLayout.child(
-    width: Size = WrapContent,
-    height: Size = WrapContent,
-    style: T.() -> Unit = {},
-    block: T.() -> Unit
-  ): T {
-    return child<T, LinearLayout.LayoutParams>(width, height, style, block)
-  }
+  fun Any.CoordinatorLayout(
+    width: Size,
+    height: Size,
+    style: CoordinatorLayout.() -> Unit = {},
+    block: CoordinatorLayout.() -> Unit = {}
+  ) = CoordinatorLayout(context).size(width, height).apply(style).apply(block)
   
   inline fun <reified T : View> view(
-    width: Size = WrapContent,
-    height: Size = WrapContent,
+    width: Size,
+    height: Size,
     style: T.() -> Unit = {},
     block: T.() -> Unit,
   ): T {
@@ -83,9 +75,27 @@ class ViewBuilder(val context: Context) {
     return instance.apply(style).apply(block)
   }
   
+  inline fun <reified T : View> LinearLayout.child(
+    width: Size,
+    height: Size,
+    style: T.() -> Unit = {},
+    block: T.() -> Unit
+  ): T {
+    return child<T, LinearLayout.LayoutParams>(width, height, style, block)
+  }
+  
+  inline fun <reified T : View> CoordinatorLayout.child(
+    width: Size,
+    height: Size,
+    style: T.() -> Unit = {},
+    block: T.() -> Unit,
+  ): T {
+    return child<T, CoordinatorLayout.LayoutParams>(width, height, style, block)
+  }
+  
   inline fun <reified T : View> FrameLayout.child(
-    width: Size = WrapContent,
-    height: Size = WrapContent,
+    width: Size,
+    height: Size,
     style: T.() -> Unit = {},
     block: T.() -> Unit,
   ): T {
@@ -93,8 +103,8 @@ class ViewBuilder(val context: Context) {
   }
   
   inline fun <reified T : View, reified P : ViewGroup.LayoutParams> ViewGroup.child(
-    width: Size = WrapContent,
-    height: Size = WrapContent,
+    width: Size,
+    height: Size,
     style: T.() -> Unit = {},
     block: T.() -> Unit
   ): T {

@@ -5,6 +5,7 @@ package viewdsl
 import android.graphics.Typeface
 import android.util.TypedValue
 import android.widget.TextView
+import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
@@ -20,6 +21,10 @@ fun TextView.drawableStart(@DrawableRes drawableRes: Int) {
 
 inline fun TextView.textSize(size: Float) {
   setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
+}
+
+inline fun TextView.textSize(@DimenRes dimenRes: Int) {
+  textSize = context.dimen(dimenRes)
 }
 
 inline fun TextView.text(@StringRes resId: Int) {
@@ -42,3 +47,6 @@ inline fun TextView.font(font: Typeface) {
   typeface = font
 }
 
+inline fun TextView.gravity(gravity: Int) {
+  this.gravity = gravity
+}
