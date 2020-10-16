@@ -10,8 +10,8 @@ import com.arsvechkarev.rankings.list.RankingsAdapter
 import com.arsvechkarev.views.Chip
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
-import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.asLoadingStub
+import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.setLoadingDrawable
 import com.arsvechkarev.views.drawables.GradientHeaderDrawable
 import com.arsvechkarev.views.drawables.RankingsListLoadingStub
 import com.arsvechkarev.views.drawables.SelectedChipsLoadingStub
@@ -216,8 +216,8 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
   private fun setupDrawables() {
     rankingsHeaderGradientView.background(GradientHeaderDrawable())
-    rankingsListLoadingStub.applyLoadingDrawable(RankingsListLoadingStub())
-    rankingsSelectedChipsLoadingStub.applyLoadingDrawable(
+    rankingsListLoadingStub.setLoadingDrawable(RankingsListLoadingStub())
+    rankingsSelectedChipsLoadingStub.setLoadingDrawable(
       SelectedChipsLoadingStub(
         requireContext(), R.dimen.rankings_chip_text_size, R.dimen.rankings_header_chip_margin
       )

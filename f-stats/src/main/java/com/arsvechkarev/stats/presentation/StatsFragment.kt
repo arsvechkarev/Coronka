@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.stats.behaviors.ScrollableContentBehavior
 import com.arsvechkarev.stats.di.StatsModuleInjector
-import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
+import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.setLoadingDrawable
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
 import com.arsvechkarev.views.drawables.StatsGraphLoadingStub
 import core.BaseFragment
@@ -156,8 +156,8 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   }
   
   private fun initLoadingStubs() {
-    statsMainInfoLoadingStub.applyLoadingDrawable(MainStatsInfoLoadingStub(requireContext()))
-    statsTotalCasesLoadingStub.applyLoadingDrawable(StatsGraphLoadingStub(requireContext()))
-    statsNewCasesLoadingStub.applyLoadingDrawable(StatsGraphLoadingStub(requireContext()))
+    statsMainInfoLoadingStub.setLoadingDrawable(MainStatsInfoLoadingStub(requireContext()))
+    statsTotalCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
+    statsNewCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
   }
 }

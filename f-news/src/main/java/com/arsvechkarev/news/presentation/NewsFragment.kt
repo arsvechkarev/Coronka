@@ -20,14 +20,18 @@ import com.arsvechkarev.views.ClickableTextView
 import com.arsvechkarev.views.behaviors.HeaderBehavior
 import com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior
 import com.arsvechkarev.views.behaviors.ViewUnderHeaderBehavior
-import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.applyLoadingDrawable
+import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.setLoadingDrawable
 import com.arsvechkarev.views.drawables.GradientHeaderDrawable
 import com.arsvechkarev.views.drawables.NewsListLoadingStub
 import core.BaseFragment
 import core.BaseScreenState
 import core.Failure
+import core.Failure.FailureReason.NO_CONNECTION
+import core.Failure.FailureReason.TIMEOUT
+import core.Failure.FailureReason.UNKNOWN
 import core.Loading
 import core.hostActivity
+import core.viewbuilding.Styles.BoldTextView
 import core.viewbuilding.Styles.HeaderTextView
 import core.viewbuilding.Styles.RetryTextView
 import core.viewbuilding.TextSizes
@@ -74,22 +78,22 @@ class NewsFragment : BaseFragment() {
   override fun buildLayout() = buildView {
     CoordinatorLayout(MatchParent, MatchParent) {
       child<View>(MatchParent, MatchParent) {
-        tag(NewsLoadingLayout)
+        tag(LoadingLayout)
         behavior(ViewUnderHeaderBehavior())
-        applyLoadingDrawable(NewsListLoadingStub())
+        setLoadingDrawable(NewsListLoadingStub())
       }
       child<LinearLayout>(MatchParent, MatchParent) {
-        tag(NewsErrorLayout)
+        tag(ErrorLayout)
         invisible()
         gravity(CENTER)
         orientation(LinearLayout.VERTICAL)
         behavior(ViewUnderHeaderBehavior())
-        child<TextView>(WrapContent, WrapContent) {
-          tag(TextErrorMessage)
+        child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
+          tag(ErrorMessage)
           textSize(TextSizes.H3)
         }
         child<ImageView>(IntSize(120.dp), IntSize(120.dp)) {
-          tag(NewsImageFailure)
+          tag(ImageFailure)
           marginVertical(24.dp)
           image(R.drawable.image_unknown_error)
         }
@@ -100,7 +104,7 @@ class NewsFragment : BaseFragment() {
         }
       }
       child<RecyclerView>(MatchParent, MatchParent) {
-        tag(NewsRecyclerView)
+        tag(RecyclerView)
         invisible()
         behavior(ScrollingRecyclerBehavior())
         adapter = newsAdapter
@@ -148,13 +152,13 @@ class NewsFragment : BaseFragment() {
   }
   
   private fun renderLoading() {
-    view(NewsLoadingLayout).animateVisible()
-    animateInvisible(view(NewsRecyclerView), view(NewsErrorLayout))
+    view(LoadingLayout).animateVisible()
+    animateInvisible(view(RecyclerView), view(ErrorLayout))
   }
   
   private fun renderLoadedNews(state: LoadedNews) {
-    view(NewsLoadingLayout).animateInvisible()
-    view(NewsRecyclerView).animateVisible()
+    view(LoadingLayout).animateInvisible()
+    view(RecyclerView).animateVisible()
     newsAdapter.submitList(state.news)
   }
   
@@ -168,15 +172,25 @@ class NewsFragment : BaseFragment() {
   
   private fun renderFailure(state: Failure) {
     Timber.e(state.throwable, "Error")
-    view(NewsLoadingLayout).animateInvisible()
-    view(NewsErrorLayout).animateVisible()
+    view(LoadingLayout).animateInvisible()
+    view(ErrorLayout).animateVisible()
+    when (state.reason) {
+      NO_CONNECTION -> {
+        imageView(ImageFailure).image(R.drawable.image_no_connection)
+        textView(ErrorMessage).text(R.string.text_no_connection)
+      }
+      TIMEOUT, UNKNOWN -> {
+        imageView(ImageFailure).image(R.drawable.image_unknown_error)
+        textView(ErrorMessage).text(R.string.text_unknown_error)
+      }
+    }
   }
   
   private companion object {
-    const val NewsLoadingLayout = "NewsLoadingLayout"
-    const val NewsErrorLayout = "NewsErrorLayout"
-    const val NewsRecyclerView = "NewsRecyclerView"
-    const val NewsImageFailure = "NewsImageFailure"
-    const val TextErrorMessage = "TextErrorMessage"
+    const val LoadingLayout = "NewsLoadingLayout"
+    const val ErrorLayout = "NewsErrorLayout"
+    const val RecyclerView = "NewsRecyclerView"
+    const val ImageFailure = "NewsImageFailure"
+    const val ErrorMessage = "TextErrorMessage"
   }
 }

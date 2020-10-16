@@ -21,3 +21,7 @@ fun View.rippleBackground(ripple: Int) {
   isFocusable = true
   background(RippleDrawable(ColorStateList.valueOf(ripple), background, mask))
 }
+
+fun View.clearDrawable() {
+  background = null
+}

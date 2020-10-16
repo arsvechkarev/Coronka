@@ -111,10 +111,9 @@ abstract class BaseLoadingStub(
   
   companion object {
   
-    val View.asLoadingStub: BaseLoadingStub
-      get() = background as BaseLoadingStub
+    val View.asLoadingStub get() = background as BaseLoadingStub
   
-    fun View.applyLoadingDrawable(drawable: BaseLoadingStub) {
+    fun View.setLoadingDrawable(drawable: BaseLoadingStub) {
       background = drawable.apply { post { start() } }
     }
   }

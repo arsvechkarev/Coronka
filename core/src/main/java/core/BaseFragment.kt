@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import viewdsl.childWithTag
 
@@ -43,6 +45,14 @@ abstract class BaseFragment(
       viewsCache[tag] = requireView().childWithTag(tag)
     }
     return viewsCache.getValue(tag)
+  }
+  
+  fun imageView(tag: String): ImageView {
+    return viewAs<ImageView>(tag)
+  }
+  
+  fun textView(tag: String): TextView {
+    return viewAs<TextView>(tag)
   }
   
   @Suppress("UNCHECKED_CAST")
