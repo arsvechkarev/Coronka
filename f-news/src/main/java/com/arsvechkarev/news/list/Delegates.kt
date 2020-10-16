@@ -16,6 +16,7 @@ import core.extenstions.assertThat
 import core.model.NewsItemWithPicture
 import core.recycler.delegate
 import core.viewbuilding.Colors
+import core.viewbuilding.Dimens.ProgressBarSize
 import core.viewbuilding.Fonts
 import core.viewbuilding.Styles
 import core.viewbuilding.Styles.BoldTextView
@@ -24,7 +25,6 @@ import core.viewbuilding.TextSizes
 import viewdsl.Ints.dp
 import viewdsl.Size.Companion.MatchParent
 import viewdsl.Size.Companion.WrapContent
-import viewdsl.Size.IntSize
 import viewdsl.childWithTag
 import viewdsl.font
 import viewdsl.gravity
@@ -97,7 +97,7 @@ fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNe
           textSize(TextSizes.H4)
         }
       }
-      child<ProgressBar>(IntSize(40.dp), IntSize(40.dp)) {
+      child<ProgressBar>(ProgressBarSize, ProgressBarSize) {
         tag(NewsAdapter.ProgressBar)
         layoutGravity(Gravity.CENTER)
         setColor(Colors.Accent)

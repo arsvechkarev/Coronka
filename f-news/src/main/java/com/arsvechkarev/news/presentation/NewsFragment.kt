@@ -31,12 +31,15 @@ import core.Failure.FailureReason.TIMEOUT
 import core.Failure.FailureReason.UNKNOWN
 import core.Loading
 import core.hostActivity
+import core.viewbuilding.Dimens.ErrorLayoutImageHeight
+import core.viewbuilding.Dimens.ErrorLayoutImageMargin
+import core.viewbuilding.Dimens.GradientHeaderHeight
+import core.viewbuilding.Dimens.ImageDrawerMargin
 import core.viewbuilding.Styles.BoldTextView
 import core.viewbuilding.Styles.HeaderTextView
 import core.viewbuilding.Styles.RetryTextView
 import core.viewbuilding.TextSizes
 import timber.log.Timber
-import viewdsl.Ints.dp
 import viewdsl.Size.Companion.MatchParent
 import viewdsl.Size.Companion.WrapContent
 import viewdsl.Size.IntSize
@@ -59,22 +62,6 @@ import viewdsl.textSize
 
 class NewsFragment : BaseFragment() {
   
-  private var viewModel: NewsViewModel? = null
-  
-  private val newsAdapter = NewsAdapter(this,
-    onNewsItemClicked = { newsItem ->
-      val intent = Intent(Intent.ACTION_VIEW)
-      intent.data = Uri.parse(newsItem.webUrl)
-      startActivity(intent)
-    },
-    onReadyToLoadNextPage = {
-      viewModel?.tryLoadNextPage()
-    },
-    onRetryItemClicked = {
-      viewModel?.tryLoadNextPage()
-    }
-  )
-  
   override fun buildLayout() = buildView {
     CoordinatorLayout(MatchParent, MatchParent) {
       child<View>(MatchParent, MatchParent) {
@@ -92,9 +79,9 @@ class NewsFragment : BaseFragment() {
           tag(ErrorMessage)
           textSize(TextSizes.H3)
         }
-        child<ImageView>(IntSize(120.dp), IntSize(120.dp)) {
+        child<ImageView>(ErrorLayoutImageHeight, ErrorLayoutImageHeight) {
           tag(ImageFailure)
-          marginVertical(24.dp)
+          marginVertical(ErrorLayoutImageMargin)
           image(R.drawable.image_unknown_error)
         }
         child<ClickableTextView>(WrapContent, WrapContent, style = RetryTextView) {
@@ -111,7 +98,7 @@ class NewsFragment : BaseFragment() {
         layoutManager = LinearLayoutManager(context)
         addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
       }
-      child<FrameLayout>(MatchParent, IntSize(120.dp)) {
+      child<FrameLayout>(MatchParent, IntSize(GradientHeaderHeight)) {
         behavior(HeaderBehavior(context))
         child<View>(MatchParent, MatchParent) {
           background(GradientHeaderDrawable())
@@ -121,13 +108,29 @@ class NewsFragment : BaseFragment() {
           layoutGravity(CENTER)
         }
         child<ImageView>(WrapContent, WrapContent) {
-          margins(left = 16.dp, top = 16.dp)
+          margins(left = ImageDrawerMargin, top = ImageDrawerMargin)
           image(R.drawable.ic_drawer)
           onClick { hostActivity.openDrawer() }
         }
       }
     }
   }
+  
+  private var viewModel: NewsViewModel? = null
+  
+  private val newsAdapter = NewsAdapter(this,
+    onNewsItemClicked = { newsItem ->
+      val intent = Intent(Intent.ACTION_VIEW)
+      intent.data = Uri.parse(newsItem.webUrl)
+      startActivity(intent)
+    },
+    onReadyToLoadNextPage = {
+      viewModel?.tryLoadNextPage()
+    },
+    onRetryItemClicked = {
+      viewModel?.tryLoadNextPage()
+    }
+  )
   
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel = NewsModuleInjector.provideViewModel(this).also { model ->

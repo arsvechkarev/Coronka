@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import viewdsl.Size.Companion.WrapContent
+import viewdsl.Size.IntSize
 
 fun View.layoutWithLeftTop(left: Int, top: Int) {
   layout(left, top, left + measuredWidth, top + measuredHeight)
@@ -80,27 +81,42 @@ class ViewBuilder(val context: Context) {
     height: Size,
     style: T.() -> Unit = {},
     block: T.() -> Unit
-  ): T {
-    return child<T, LinearLayout.LayoutParams>(width, height, style, block)
-  }
+  ) = child<T, LinearLayout.LayoutParams>(width, height, style, block)
+  
+  inline fun <reified T : View> LinearLayout.child(
+    width: Int,
+    height: Int,
+    style: T.() -> Unit = {},
+    block: T.() -> Unit
+  ) = child<T, LinearLayout.LayoutParams>(IntSize(width), IntSize(height), style, block)
   
   inline fun <reified T : View> CoordinatorLayout.child(
     width: Size,
     height: Size,
     style: T.() -> Unit = {},
     block: T.() -> Unit,
-  ): T {
-    return child<T, CoordinatorLayout.LayoutParams>(width, height, style, block)
-  }
+  ) = child<T, CoordinatorLayout.LayoutParams>(width, height, style, block)
+  
+  inline fun <reified T : View> CoordinatorLayout.child(
+    width: Int,
+    height: Int,
+    style: T.() -> Unit = {},
+    block: T.() -> Unit,
+  ) = child<T, CoordinatorLayout.LayoutParams>(IntSize(width), IntSize(height), style, block)
   
   inline fun <reified T : View> FrameLayout.child(
     width: Size,
     height: Size,
     style: T.() -> Unit = {},
     block: T.() -> Unit,
-  ): T {
-    return child<T, FrameLayout.LayoutParams>(width, height, style, block)
-  }
+  ) = child<T, FrameLayout.LayoutParams>(width, height, style, block)
+  
+  inline fun <reified T : View> FrameLayout.child(
+    width: Int,
+    height: Int,
+    style: T.() -> Unit = {},
+    block: T.() -> Unit,
+  ) = child<T, FrameLayout.LayoutParams>(IntSize(width), IntSize(height), style, block)
   
   inline fun <reified T : View, reified P : ViewGroup.LayoutParams> ViewGroup.child(
     width: Size,

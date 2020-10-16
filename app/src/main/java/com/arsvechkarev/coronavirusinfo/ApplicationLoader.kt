@@ -4,7 +4,6 @@ import com.arsvechkarev.common.CommonModulesSingletons
 import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseHelper
 import com.jakewharton.threetenabp.AndroidThreeTen
 import core.viewbuilding.Fonts
-import core.viewbuilding.TextSizes
 import timber.log.Timber
 import viewdsl.ContextHolder
 import android.app.Application as AndroidApp
@@ -18,7 +17,6 @@ class ApplicationLoader : AndroidApp() {
     CountriesMetaInfoDatabaseHelper.init(applicationContext)
     CommonModulesSingletons.init(applicationContext)
     Fonts.init(applicationContext)
-    TextSizes.init(applicationContext)
     AndroidThreeTen.init(applicationContext)
   }
 }

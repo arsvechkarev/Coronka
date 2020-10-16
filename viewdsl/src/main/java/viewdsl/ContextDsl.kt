@@ -8,10 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.annotation.DimenRes
 import java.util.Locale
 
-fun dimen(dimenRes: Int) = ContextHolder.context.dimen(dimenRes)
+fun dimen(dimenRes: Int) = ContextHolder.context.resources.getDimension(dimenRes)
 
 val isOrientationPortrait: Boolean
   get() = ContextHolder.context.resources.configuration.orientation ==
@@ -26,10 +25,6 @@ fun Context.getAttrColor(@AttrRes resId: Int): Int {
   val resolved = theme.resolveAttribute(resId, typedValue, true)
   require(resolved) { "Attribute cannot be resolved" }
   return typedValue.data
-}
-
-fun Context.dimen(@DimenRes resId: Int): Float {
-  return resources.getDimension(resId)
 }
 
 fun Context.createLayoutParams(

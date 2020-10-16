@@ -16,12 +16,12 @@ class SelectedChipsLoadingStub(
   private val worldwideChipWidth: Float
   private val confirmedChipWidth: Float
   private val chipHeight: Float
-  private val chipMargin = context.dimen(chipMarginRes)
-  private val dividerHeight = context.dimen(R.dimen.divider_height)
+  private val chipMargin = dimen(chipMarginRes)
+  private val dividerHeight = dimen(R.dimen.divider_height)
   
   init {
     val tempChip = Chip(context).apply {
-      setTextSize(context.dimen(textSizeRes))
+      setTextSize(dimen(textSizeRes))
       text = context.getString(R.string.text_worldwide)
     }
     val measureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)

@@ -26,7 +26,7 @@ class Chip @JvmOverloads constructor(
   }
   private val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.STROKE
-    strokeWidth = context.dimen(R.dimen.chip_stroke_size)
+    strokeWidth = dimen(R.dimen.chip_stroke_size)
   }
   
   private val rect = RectF()

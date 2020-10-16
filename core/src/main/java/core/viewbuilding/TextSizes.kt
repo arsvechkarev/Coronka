@@ -1,6 +1,5 @@
 package core.viewbuilding
 
-import android.content.Context
 import com.arsvechkarev.core.R
 import viewdsl.dimen
 
@@ -16,13 +15,13 @@ object TextSizes {
   val H5: Float get() = textSizes[5]
   val Header: Float get() = textSizes[6]
   
-  fun init(context: Context) {
-    textSizes[0] = context.dimen(R.dimen.text_h0)
-    textSizes[1] = context.dimen(R.dimen.text_h1)
-    textSizes[2] = context.dimen(R.dimen.text_h2)
-    textSizes[3] = context.dimen(R.dimen.text_h3)
-    textSizes[4] = context.dimen(R.dimen.text_h4)
-    textSizes[5] = context.dimen(R.dimen.text_h5)
-    textSizes[6] = context.dimen(R.dimen.text_header)
+  init {
+    textSizes[0] = dimen(R.dimen.text_h0)
+    textSizes[1] = dimen(R.dimen.text_h1)
+    textSizes[2] = dimen(R.dimen.text_h2)
+    textSizes[3] = dimen(R.dimen.text_h3)
+    textSizes[4] = dimen(R.dimen.text_h4)
+    textSizes[5] = dimen(R.dimen.text_h5)
+    textSizes[6] = dimen(R.dimen.text_header)
   }
 }

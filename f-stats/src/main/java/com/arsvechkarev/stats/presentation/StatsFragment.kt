@@ -156,7 +156,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   }
   
   private fun initLoadingStubs() {
-    statsMainInfoLoadingStub.setLoadingDrawable(MainStatsInfoLoadingStub(requireContext()))
+    statsMainInfoLoadingStub.setLoadingDrawable(MainStatsInfoLoadingStub())
     statsTotalCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
     statsNewCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
   }

@@ -24,7 +24,7 @@ inline fun TextView.textSize(size: Float) {
 }
 
 inline fun TextView.textSize(@DimenRes dimenRes: Int) {
-  textSize = context.dimen(dimenRes)
+  textSize = dimen(dimenRes)
 }
 
 inline fun TextView.text(@StringRes resId: Int) {
