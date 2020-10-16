@@ -187,6 +187,7 @@ class NewsFragment : BaseFragment() {
   }
   
   private companion object {
+  
     const val LoadingLayout = "NewsLoadingLayout"
     const val ErrorLayout = "NewsErrorLayout"
     const val RecyclerView = "NewsRecyclerView"
