@@ -104,7 +104,7 @@ class NewsFragment : BaseFragment() {
           background(GradientHeaderDrawable())
         }
         child<TextView>(WrapContent, WrapContent, style = HeaderTextView) {
-          text(R.string.title_tips)
+          text(R.string.label_news)
           layoutGravity(CENTER)
         }
         child<ImageView>(WrapContent, WrapContent) {

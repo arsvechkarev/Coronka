@@ -101,15 +101,13 @@ class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
     }
   }
   
-  fun getView(): View? {
-    return viewOffsetHelper?.view
-  }
-  
   override fun onLayoutChild(parent: CoordinatorLayout,
                              child: View, layoutDirection: Int): Boolean {
     offsetFromPreviousLayout = viewOffsetHelper?.topAndBottomOffset ?: 0
     if (viewOffsetHelper == null) {
-      val slideRangeCoefficient = calculateSlideRangeCoefficient.invoke()
+      if (slideRangeCoefficient == 1f) {
+        slideRangeCoefficient = calculateSlideRangeCoefficient()
+      }
       viewOffsetHelper = ViewOffsetHelper(child, slideRangeCoefficient)
     }
     parent.onLayoutChild(child, layoutDirection)
