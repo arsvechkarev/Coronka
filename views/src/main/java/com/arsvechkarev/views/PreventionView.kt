@@ -2,6 +2,7 @@ package com.arsvechkarev.views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
@@ -74,10 +75,15 @@ class PreventionView(
     }
   }
   
+  override fun onConfigurationChanged(newConfig: Configuration?) {
+    super.onConfigurationChanged(newConfig)
+    textLayout = null
+  }
+  
   companion object {
     
     fun getCornersRadius(width: Int, height: Int): Float {
-      return minOf(width, height) / 18f
+      return minOf(width, height) / 5f
     }
   }
 }
