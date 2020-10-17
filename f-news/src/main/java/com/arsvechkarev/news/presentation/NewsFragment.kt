@@ -69,6 +69,14 @@ class NewsFragment : BaseFragment() {
         behavior(ViewUnderHeaderBehavior())
         setLoadingDrawable(NewsListLoadingStub())
       }
+      child<RecyclerView>(MatchParent, MatchParent) {
+        tag(RecyclerView)
+        invisible()
+        behavior(ScrollingRecyclerBehavior())
+        adapter = newsAdapter
+        layoutManager = LinearLayoutManager(context)
+        addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+      }
       child<LinearLayout>(MatchParent, MatchParent) {
         tag(ErrorLayout)
         invisible()
@@ -94,14 +102,6 @@ class NewsFragment : BaseFragment() {
           tag(ButtonRetry)
           onClick { viewModel?.startLoadingData() }
         }
-      }
-      child<RecyclerView>(MatchParent, MatchParent) {
-        tag(RecyclerView)
-        invisible()
-        behavior(ScrollingRecyclerBehavior())
-        adapter = newsAdapter
-        layoutManager = LinearLayoutManager(context)
-        addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
       }
       child<FrameLayout>(MatchParent, IntSize(GradientHeaderHeight)) {
         behavior(HeaderBehavior(context))

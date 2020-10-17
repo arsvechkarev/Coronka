@@ -191,10 +191,10 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
       ).apply {
         size(MatchParent, WrapContent)
         margins(
-          PreventionsLayoutHorizontalMargin,
-          PreventionsLayoutVerticalMargin,
-          PreventionsLayoutHorizontalMargin,
-          PreventionsLayoutVerticalMargin
+          start = PreventionsLayoutHorizontalMargin,
+          top = PreventionsLayoutVerticalMargin,
+          end = PreventionsLayoutHorizontalMargin,
+          bottom = PreventionsLayoutVerticalMargin
         )
       }
     }

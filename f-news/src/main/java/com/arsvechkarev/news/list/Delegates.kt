@@ -10,7 +10,6 @@ import com.arsvechkarev.news.presentation.LoadingNextPage
 import com.arsvechkarev.views.NewsItemImage
 import com.arsvechkarev.views.NewsItemView
 import com.arsvechkarev.views.ProgressBar
-import com.arsvechkarev.views.RetryButton
 import com.bumptech.glide.Glide
 import core.extenstions.assertThat
 import core.model.NewsItemWithPicture
@@ -36,6 +35,7 @@ import viewdsl.padding
 import viewdsl.rippleBackground
 import viewdsl.tag
 import viewdsl.text
+import viewdsl.textColor
 import viewdsl.visible
 
 fun newsItemDelegate(
@@ -85,10 +85,12 @@ fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNe
           padding(16.dp)
         }
         child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
-          text(R.string.text_unknown_error)
+          text(R.string.text_unknown_error_short)
         }
-        child<RetryButton>(WrapContent, WrapContent) {
+        child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
           tag(NewsAdapter.RetryButton)
+          text(R.string.text_retry_short)
+          textColor(Colors.Failure)
           margins(start = 16.dp)
         }
       }
