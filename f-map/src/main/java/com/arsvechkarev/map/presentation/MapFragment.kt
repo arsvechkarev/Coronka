@@ -16,6 +16,7 @@ import core.hostActivity
 import core.model.Country
 import kotlinx.android.synthetic.main.fragment_map.mapEarthView
 import kotlinx.android.synthetic.main.fragment_map.mapIconDrawer
+import kotlinx.android.synthetic.main.fragment_map.mapImageFailure
 import kotlinx.android.synthetic.main.fragment_map.mapLayoutCountryInfo
 import kotlinx.android.synthetic.main.fragment_map.mapLayoutFailure
 import kotlinx.android.synthetic.main.fragment_map.mapLayoutLoading
@@ -28,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextRetryUnknown
 import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
 import viewdsl.animateInvisible
 import viewdsl.animateVisible
+import viewdsl.gone
 import viewdsl.invisible
 import viewdsl.text
 import viewdsl.visible
@@ -56,6 +58,16 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
     if (value !is Loading && value !is FoundCountry && value !is LoadedCountries) {
       viewModel.startLoadingData()
     }
+  }
+  
+  override fun onOrientationBecameLandscape() {
+    mapEarthView.gone()
+    mapImageFailure.gone()
+  }
+  
+  override fun onOrientationBecamePortrait() {
+    mapEarthView.visible()
+    mapImageFailure.visible()
   }
   
   override fun onDrawerClosed() {

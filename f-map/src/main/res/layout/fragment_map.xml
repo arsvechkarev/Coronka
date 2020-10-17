@@ -66,6 +66,7 @@
       android:orientation="vertical">
 
       <ImageView
+        android:id="@+id/mapImageFailure"
         android:layout_width="@dimen/error_layout_image_height"
         android:layout_height="@dimen/error_layout_image_height"
         android:layout_margin="@dimen/error_layout_text_margin"

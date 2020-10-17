@@ -38,6 +38,8 @@ import viewdsl.animateChildrenVisible
 import viewdsl.animateInvisible
 import viewdsl.animateVisible
 import viewdsl.getBehavior
+import viewdsl.gone
+import viewdsl.visible
 
 class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   
@@ -69,6 +71,14 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     } else {
       toggleScrollingContent(true)
     }
+  }
+  
+  override fun onOrientationBecameLandscape() {
+    statsImageFailure.gone()
+  }
+  
+  override fun onOrientationBecamePortrait() {
+    statsImageFailure.visible()
   }
   
   private fun handleState(state: BaseScreenState) {

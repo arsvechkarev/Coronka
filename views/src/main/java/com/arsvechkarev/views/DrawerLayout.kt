@@ -95,10 +95,13 @@ class DrawerLayout @JvmOverloads constructor(
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+    val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+    val minSize = minOf(widthSize, heightSize)
+    val maxSize = maxOf(widthSize, heightSize)
     assertThat(childCount == 2) { "Layout must have exactly 2 children" }
     mainView.measure(widthMeasureSpec, heightMeasureSpec)
-    slideRange = (widthSize * SLIDE_RANGE_COEFFICIENT).toInt()
-        .coerceAtMost(widthSize)
+    slideRange = (minSize * SLIDE_RANGE_COEFFICIENT).toInt()
+        .coerceAtMost(maxSize)
     val widthSpec = MeasureSpec.makeMeasureSpec(slideRange, MeasureSpec.EXACTLY)
     drawerView.measure(widthSpec, heightMeasureSpec)
     setMeasuredDimension(widthMeasureSpec, heightMeasureSpec)
