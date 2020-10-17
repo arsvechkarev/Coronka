@@ -5,21 +5,20 @@ import com.arsvechkarev.common.WorldCasesInfoRepository
 import core.BaseScreenState
 import core.Failure
 import core.Loading
-import core.MIN_NETWORK_DELAY
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
 import core.extenstions.assertThat
+import core.extenstions.withNetworkDelay
+import core.extenstions.withRequestTimeout
 import core.model.DailyCase
 import core.model.WorldCasesInfo
 import io.reactivex.Observable
-import java.util.concurrent.TimeUnit
 
 class StatsViewModel(
   private val generalInfoRepository: GeneralInfoRepository,
   private val worldCasesInfoRepository: WorldCasesInfoRepository,
-  private val schedulers: Schedulers = AndroidSchedulers,
-  private val delay: Long = MIN_NETWORK_DELAY
+  private val schedulers: Schedulers = AndroidSchedulers
 ) : RxViewModel() {
   
   fun startLoadingData() {
@@ -31,9 +30,9 @@ class StatsViewModel(
             .map { totalCases -> Pair(totalCases, totalCases.toNewDailyCases()) }
             .subscribeOn(schedulers.io()),
         { info, cases -> WorldCasesInfo(info, cases.first, cases.second) }
-      )
-          .subscribeOn(schedulers.io())
-          .delay(delay, TimeUnit.MILLISECONDS, schedulers.computation(), true)
+      ).subscribeOn(schedulers.io())
+          .withNetworkDelay(schedulers)
+          .withRequestTimeout()
           .map(::mapToWorldCasesInfo)
           .onErrorReturn(::Failure)
           .startWith(Loading())

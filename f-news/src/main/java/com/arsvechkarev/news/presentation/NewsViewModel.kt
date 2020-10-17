@@ -4,17 +4,16 @@ import com.arsvechkarev.common.NewYorkTimesNewsRepository
 import core.BaseScreenState
 import core.Failure
 import core.Loading
-import core.MIN_NETWORK_DELAY
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
+import core.extenstions.withNetworkDelay
+import core.extenstions.withRequestTimeout
 import core.recycler.DifferentiableItem
-import java.util.concurrent.TimeUnit.MILLISECONDS
 
 class NewsViewModel(
   private val newsRepository: NewYorkTimesNewsRepository,
-  private val schedulers: Schedulers = AndroidSchedulers,
-  private val delay: Long = MIN_NETWORK_DELAY
+  private val schedulers: Schedulers = AndroidSchedulers
 ) : RxViewModel() {
   
   private var currentPage = 0
@@ -24,13 +23,12 @@ class NewsViewModel(
       newsRepository.getLatestNews(currentPage)
           .subscribeOn(schedulers.io())
           .map(::transformToLoadedNews)
-          .delay(delay, MILLISECONDS, schedulers.computation(), true)
+          .withNetworkDelay(schedulers)
+          .withRequestTimeout()
           .observeOn(schedulers.mainThread())
           .startWith(Loading())
           .onErrorReturn(::Failure)
-          .smartSubscribe { state ->
-            _state.setValue(state)
-          }
+          .smartSubscribe(_state::setValue)
     }
   }
   
@@ -40,7 +38,8 @@ class NewsViewModel(
       newsRepository.getLatestNews(++currentPage)
           .subscribeOn(schedulers.io())
           .map(::transformToLoadedNextPage)
-          .delay(delay, MILLISECONDS, schedulers.computation(), true)
+          .withNetworkDelay(schedulers)
+          .withRequestTimeout()
           .observeOn(schedulers.mainThread())
           .startWith(LoadingNextPage)
           .onErrorReturn { e ->
