@@ -29,8 +29,9 @@ class ScrollingRecyclerBehavior(context: Context? = null, attrs: AttributeSet? =
     parentHeightMeasureSpec: Int,
     heightUsed: Int
   ): Boolean {
+    val heightSize = MeasureSpec.getSize(parentHeightMeasureSpec)
     val header = findHeader(parent).asHeader
-    val height = parent.height - header.minHeight
+    val height = heightSize - header.minHeight
     val heightSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
     parent.onMeasureChild(child, parentWidthMeasureSpec, widthUsed, heightSpec,
       heightUsed)

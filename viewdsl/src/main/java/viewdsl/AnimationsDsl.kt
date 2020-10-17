@@ -25,15 +25,6 @@ fun Animator.cancelIfRunning() {
   }
 }
 
-fun Animator.doOnStart(block: () -> Unit) {
-  addListener(object : AnimatorListenerAdapter() {
-    override fun onAnimationStart(animation: Animator?) {
-      block()
-      removeListener(this)
-    }
-  })
-}
-
 fun Animator.doOnEnd(block: () -> Unit) {
   addListener(object : AnimatorListenerAdapter() {
     override fun onAnimationEnd(animation: Animator?) {

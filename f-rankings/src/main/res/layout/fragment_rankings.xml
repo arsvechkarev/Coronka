@@ -8,8 +8,6 @@
     android:id="@+id/rankingsRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingBottom="@dimen/rankings_recycler_padding_bottom"
     android:visibility="invisible"
     app:layout_behavior="com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior"/>
 
@@ -141,7 +139,8 @@
     android:clickable="true"
     android:focusable="true"
     android:padding="@dimen/rankings_header_fab_padding"
-    android:src="@drawable/ic_filter"/>
+    android:src="@drawable/ic_filter"
+    app:layout_behavior="com.arsvechkarev.views.behaviors.HidingButtonBehavior"/>
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/rankingsBottomSheet"

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArraySet
 
 abstract class RxViewModel : ViewModel() {
@@ -15,26 +14,21 @@ abstract class RxViewModel : ViewModel() {
   val state: LiveData<BaseScreenState>
     get() = _state
   
-  private val compositeDisposable = CompositeDisposable()
+  protected val compositeDisposable = CompositeDisposable()
   
-  private val loadingNow = CopyOnWriteArraySet<String>()
-  
-  private val cachedData = ConcurrentHashMap<String, Any>()
+  protected val loadingNowList = CopyOnWriteArraySet<String>()
   
   protected fun <T> Observable<T>.smartSubscribe(onNext: (T) -> Unit): Disposable? {
     return smartSubscribe(DEFAULT_LOADING_CONSTANT, onNext)
   }
   
-  protected fun <T> Observable<T>.smartSubscribe(
+  protected open fun <T> Observable<T>.smartSubscribe(
     loadingConstant: String,
     onNext: (T) -> Unit
   ): Disposable? {
     return subscribe { state ->
       if (state !is Loading) {
-        loadingNow.remove(loadingConstant)
-        if (state !is Failure) {
-          cachedData[loadingConstant] = state!!
-        }
+        loadingNowList.remove(loadingConstant)
       }
       onNext(state)
     }
@@ -44,13 +38,9 @@ abstract class RxViewModel : ViewModel() {
     rxCall(DEFAULT_LOADING_CONSTANT, onSubscribe)
   }
   
-  protected fun rxCall(loadingConstant: String, onSubscribe: () -> Disposable?) {
-    if (loadingNow.contains(loadingConstant)) return
-    if (cachedData.containsKey(loadingConstant)) {
-      _state.value = cachedData[loadingConstant] as BaseScreenState
-      return
-    }
-    loadingNow.add(loadingConstant)
+  protected open fun rxCall(loadingConstant: String, onSubscribe: () -> Disposable?) {
+    if (loadingNowList.contains(loadingConstant)) return
+    loadingNowList.add(loadingConstant)
     val disposable = onSubscribe()
     if (disposable != null) {
       compositeDisposable.add(disposable)

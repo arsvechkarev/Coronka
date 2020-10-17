@@ -2,6 +2,7 @@ package com.arsvechkarev.views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.text.Layout
@@ -14,16 +15,16 @@ import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
 
 @SuppressLint("ViewConstructor")
-class StatsSmallView(
+class SmallStatsView(
   context: Context,
   private val textSize: Float = TextSizes.H4,
-  private val color: Int = Colors.TextPrimary
+  private val textColor: Int = Colors.TextPrimary
 ) : View(context) {
   
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-    color = this@StatsSmallView.color
+    color = textColor
     typeface = Fonts.SegoeUiBold
-    this.textSize = this@StatsSmallView.textSize
+    textSize = this@SmallStatsView.textSize
   }
   
   private lateinit var text: String
@@ -47,12 +48,19 @@ class StatsSmallView(
       resolveSize(measuredHeight.toInt(), heightMeasureSpec))
   }
   
+  override fun onConfigurationChanged(newConfig: Configuration?) {
+    super.onConfigurationChanged(newConfig)
+    requestLayout()
+  }
+  
   override fun onDraw(canvas: Canvas) {
     if (numberLayout == null || amountLayout == null) {
       return
     }
-    textLayout = boringLayoutOf(textPaint, text,
-      (width - numberLayoutMaxWidth - amountLayout!!.width) * 0.85f)
+    if (textLayout == null) {
+      textLayout = boringLayoutOf(textPaint, text,
+        (width - numberLayoutMaxWidth - amountLayout!!.width) * 0.85f)
+    }
     val numberLayout = numberLayout!!
     val textLayout = textLayout!!
     val amountLayout = amountLayout!!

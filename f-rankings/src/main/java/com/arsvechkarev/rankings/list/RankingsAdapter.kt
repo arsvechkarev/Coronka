@@ -1,7 +1,7 @@
 package com.arsvechkarev.rankings.list
 
 import com.arsvechkarev.rankings.R
-import com.arsvechkarev.views.StatsSmallView
+import com.arsvechkarev.views.SmallStatsView
 import core.extenstions.assertThat
 import core.model.DisplayableCountry
 import core.recycler.CallbackType
@@ -12,7 +12,7 @@ import viewdsl.paddingsRes
 class RankingsAdapter : ListAdapter(
   delegate<DisplayableCountry> {
     buildView {
-      StatsSmallView(context).apply {
+      SmallStatsView(context).apply {
         paddingsRes(
           R.dimen.rankings_small_stats_view_p_start,
           R.dimen.rankings_small_stats_view_p_vertical,
@@ -22,7 +22,7 @@ class RankingsAdapter : ListAdapter(
       }
     }
     onBind { itemView, country ->
-      assertThat(itemView is StatsSmallView)
+      assertThat(itemView is SmallStatsView)
       itemView.updateData(country.number, country.name, country.amountString)
     }
   },

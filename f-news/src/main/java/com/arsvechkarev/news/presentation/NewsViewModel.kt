@@ -28,7 +28,9 @@ class NewsViewModel(
           .observeOn(schedulers.mainThread())
           .startWith(Loading())
           .onErrorReturn(::Failure)
-          .smartSubscribe(_state::setValue)
+          .smartSubscribe { state ->
+            _state.setValue(state)
+          }
     }
   }
   
