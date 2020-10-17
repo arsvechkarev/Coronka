@@ -6,7 +6,7 @@ import com.arsvechkarev.news.presentation.LoadingNextPage
 import com.arsvechkarev.news.presentation.NewsFragment
 import core.model.BasicNewsItem
 import core.recycler.ListAdapter
-import viewdsl.childWithTag
+import viewdsl.childView
 import viewdsl.invisible
 import viewdsl.visible
 
@@ -23,8 +23,8 @@ class NewsAdapter(
   
   fun changeLoadingToError() {
     val itemView = lastHolderItemView()
-    itemView?.childWithTag(ProgressBar)?.invisible()
-    itemView?.childWithTag(FailureLayout)?.visible()
+    itemView?.childView(ProgressBar)?.invisible()
+    itemView?.childView(FailureLayout)?.visible()
   }
   
   fun addLoadingItem(item: LoadingNextPage) {

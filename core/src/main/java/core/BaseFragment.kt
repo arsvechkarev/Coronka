@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import viewdsl.childWithTag
+import viewdsl.childView
 
 abstract class BaseFragment(
   private val layoutResId: Int = 0
@@ -65,7 +65,7 @@ abstract class BaseFragment(
   @Suppress("UNCHECKED_CAST")
   fun view(tag: String): View {
     if (viewsCache[tag] == null) {
-      viewsCache[tag] = requireView().childWithTag(tag)
+      viewsCache[tag] = requireView().childView(tag)
     }
     return viewsCache.getValue(tag)
   }
@@ -81,7 +81,7 @@ abstract class BaseFragment(
   @Suppress("UNCHECKED_CAST")
   fun <T : View> viewAs(tag: String): T {
     if (viewsCache[tag] == null) {
-      viewsCache[tag] = requireView().childWithTag(tag) as T
+      viewsCache[tag] = requireView().childView(tag) as T
     }
     return viewsCache.getValue(tag) as T
   }

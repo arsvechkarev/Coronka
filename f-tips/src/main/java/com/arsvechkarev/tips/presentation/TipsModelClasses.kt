@@ -2,18 +2,18 @@ package com.arsvechkarev.tips.presentation
 
 import core.recycler.DisplayableItem
 
-object MainHeader : DisplayableItem
+object MainItem : DisplayableItem
 
-class Header(val title: String) : DisplayableItem
+class HeaderItem(val title: String) : DisplayableItem
 
 class FAQItem(
   val questionLayoutRes: Int,
   val answerLayoutRes: Int
 ) : DisplayableItem
 
-object SymptomsLayout : DisplayableItem
+object SymptomsItem : DisplayableItem
 
 class PreventionItem(
   val imageRes: Int,
-  val title: String
+  val textRes: Int
 ) : DisplayableItem

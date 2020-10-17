@@ -5,7 +5,29 @@ import android.graphics.Color
 import android.graphics.drawable.RippleDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
+import android.graphics.drawable.shapes.RoundRectShape
 import android.view.View
+
+fun View.rippleBackground(
+  rippleColor: Int,
+  backgroundColor: Int,
+  cornerRadius: Float
+) {
+  val outerRadii = floatArrayOf(cornerRadius, cornerRadius, cornerRadius,
+    cornerRadius, cornerRadius, cornerRadius, cornerRadius, cornerRadius)
+  val roundRectShape = RoundRectShape(outerRadii, null, null)
+  val backgroundRect = ShapeDrawable().apply {
+    shape = roundRectShape
+    paint.color = backgroundColor
+  }
+  val maskRect = ShapeDrawable().apply {
+    shape = roundRectShape
+    paint.color = rippleColor
+  }
+  isClickable = true
+  isFocusable = true
+  background(RippleDrawable(ColorStateList.valueOf(rippleColor), backgroundRect, maskRect))
+}
 
 fun View.rippleBackground(ripple: Int) {
   val rectShape = RectShape()

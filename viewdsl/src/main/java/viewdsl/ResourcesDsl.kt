@@ -9,6 +9,3 @@ object Floats {
 object Ints {
   val Int.dp: Int get() = (Densities.density * this).toInt()
 }
-
-val Int.f get() = toFloat()
-val Float.i get() = toInt()

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/tipsTextHeader"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:layout_marginStart="@dimen/tips_item_header_m_start"
-  android:layout_marginTop="@dimen/tips_item_header_m_top"
-  android:layout_marginBottom="@dimen/tips_item_header_m_bottom"
-  android:textSize="@dimen/text_h2"/>

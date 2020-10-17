@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
     drawerTextRankings.setOnClickListener(onDrawerItemClick)
     drawerTextNews.isSelected = true
     if (savedInstanceState == null) {
-      goToFragment(MapFragment::class)
+      goToFragment(TipsFragment::class)
     }
   }
   

@@ -25,6 +25,7 @@ import core.extenstions.withAlpha
 import viewdsl.AccelerateDecelerateInterpolator
 import viewdsl.cancelIfRunning
 import viewdsl.doOnEnd
+import viewdsl.isOrientationPortrait
 import kotlin.math.abs
 import kotlin.math.hypot
 
@@ -95,16 +96,21 @@ class DrawerLayout @JvmOverloads constructor(
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-    val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-    val minSize = minOf(widthSize, heightSize)
-    val maxSize = maxOf(widthSize, heightSize)
     assertThat(childCount == 2) { "Layout must have exactly 2 children" }
     mainView.measure(widthMeasureSpec, heightMeasureSpec)
-    slideRange = (minSize * SLIDE_RANGE_COEFFICIENT).toInt()
-        .coerceAtMost(maxSize)
+    slideRange = computeSlideRange(widthSize)
     val widthSpec = MeasureSpec.makeMeasureSpec(slideRange, MeasureSpec.EXACTLY)
     drawerView.measure(widthSpec, heightMeasureSpec)
     setMeasuredDimension(widthMeasureSpec, heightMeasureSpec)
+  }
+  
+  private fun computeSlideRange(width: Int): Int {
+    val coefficient = if (isOrientationPortrait) {
+      PORTRAIT_SLIDE_RANGE_COEFFICIENT
+    } else {
+      LANDSCAPE_SLIDE_RANGE_COEFFICIENT
+    }
+    return (width * coefficient).toInt().coerceAtMost(width)
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -135,8 +141,7 @@ class DrawerLayout @JvmOverloads constructor(
         }
       }
       ACTION_UP, ACTION_CANCEL -> {
-        if (outsideOnDrawerDown) {
-          handleUpOutsideEvent(event)
+        if (outsideOnDrawerDown && handleUpOutsideEvent(event)) {
           return true
         }
         recycleVelocityTracker()
@@ -165,8 +170,7 @@ class DrawerLayout @JvmOverloads constructor(
         latestX = event.x
         invalidate()
         if (event.action == ACTION_UP) {
-          if (outsideOnDrawerDown) {
-            handleUpOutsideEvent(event)
+          if (outsideOnDrawerDown && handleUpOutsideEvent(event)) {
             return true
           }
           handleUpEvent()
@@ -186,13 +190,15 @@ class DrawerLayout @JvmOverloads constructor(
     return false
   }
   
-  private fun handleUpOutsideEvent(event: MotionEvent) {
+  private fun handleUpOutsideEvent(event: MotionEvent): Boolean {
     outsideOnDrawerDown = false
     val xDist = abs(event.x - outsideOnDrawerDownX)
     val yDist = abs(event.y - outsideOnDrawerDownY)
     if (hypot(xDist, yDist) < touchSlop) {
       close()
+      return true
     }
+    return false
   }
   
   private fun handleUpEvent() {
@@ -293,9 +299,10 @@ class DrawerLayout @JvmOverloads constructor(
   private companion object {
     const val PARALLAX_COEFFICIENT = 0.3f
     const val SHADOW_ALPHA_COEFFICIENT = 0.7f
-    const val SLIDE_RANGE_COEFFICIENT = 0.75f
+    const val PORTRAIT_SLIDE_RANGE_COEFFICIENT = 0.75f
+    const val LANDSCAPE_SLIDE_RANGE_COEFFICIENT = 0.5f
     const val FLING_VELOCITY_THRESHOLD = 0.18f
-    
+  
     const val DEFAULT_DURATION = 250L
     const val TOUCH_SLOP_MULTIPLIER = 2
   }

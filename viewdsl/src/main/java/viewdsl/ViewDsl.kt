@@ -4,10 +4,12 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.Fragment
 
 fun View.visible() {
   visibility = View.VISIBLE
@@ -73,62 +75,80 @@ fun View.marginHorizontal(value: Int) {
   margins(value, 0, value, 0)
 }
 
+fun View.marginsRes(
+  @DimenRes start: Int = 0,
+  @DimenRes top: Int = 0,
+  @DimenRes end: Int = 0,
+  @DimenRes bottom: Int = 0) {
+  margins(
+    if (start == 0) 0 else dimen(start).toInt(),
+    if (top == 0) 0 else dimen(top).toInt(),
+    if (end == 0) 0 else dimen(end).toInt(),
+    if (bottom == 0) 0 else dimen(bottom).toInt()
+  )
+}
+
 fun View.margins(
-  left: Int = 0,
+  start: Int = 0,
   top: Int = 0,
-  right: Int = 0,
+  end: Int = 0,
   bottom: Int = 0
 ) {
   if (layoutParams is MarginLayoutParams) {
     val params = layoutParams as MarginLayoutParams
     if (isLayoutLeftToRight) {
-      params.setMargins(left, top, right, bottom)
+      params.setMargins(start, top, end, bottom)
     } else {
-      params.setMargins(right, top, left, bottom)
+      params.setMargins(end, top, start, bottom)
     }
   } else {
     val params = MarginLayoutParams(layoutParams)
-    params.setMargins(left, top, right, bottom)
+    if (isLayoutLeftToRight) {
+      params.setMargins(start, top, end, bottom)
+    } else {
+      params.setMargins(end, top, start, bottom)
+    }
     layoutParams = params
   }
 }
 
 fun View.padding(value: Int) {
-  setPadding(value, value, value, value)
+  paddings(value, value, value, value)
 }
 
 fun View.paddingVertical(value: Int) {
-  setPadding(paddingLeft, value, paddingRight, value)
+  paddings(paddingStart, value, paddingEnd, value)
 }
 
 fun View.paddingHorizontal(value: Int) {
-  setPadding(value, paddingTop, value, paddingBottom)
+  paddings(value, paddingTop, value, paddingBottom)
 }
 
 fun View.paddingsRes(
-  @DimenRes left: Int,
-  @DimenRes top: Int,
-  @DimenRes right: Int,
-  @DimenRes bottom: Int
+  @DimenRes start: Int = 0,
+  @DimenRes top: Int = 0,
+  @DimenRes end: Int = 0,
+  @DimenRes bottom: Int = 0
 ) {
-  val paddingLeft = context.resources.getDimension(left).toInt()
-  val paddingTop = context.resources.getDimension(top).toInt()
-  val paddingRight = context.resources.getDimension(right).toInt()
-  val paddingBottom = context.resources.getDimension(bottom).toInt()
-  if (isLayoutLeftToRight) {
-    setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
-  } else {
-    setPadding(paddingRight, paddingTop, paddingLeft, paddingBottom)
-  }
+  paddings(
+    if (start == 0) 0 else dimen(start).toInt(),
+    if (start == 0) 0 else dimen(top).toInt(),
+    if (start == 0) 0 else dimen(end).toInt(),
+    if (start == 0) 0 else dimen(bottom).toInt()
+  )
 }
 
 fun View.paddings(
-  left: Int = 0,
+  start: Int = 0,
   top: Int = 0,
-  right: Int = 0,
+  end: Int = 0,
   bottom: Int = 0
 ) {
-  setPadding(left, top, right, bottom)
+  if (isLayoutLeftToRight) {
+    setPadding(start, top, end, bottom)
+  } else {
+    setPadding(end, top, start, bottom)
+  }
 }
 
 fun onClick(vararg views: View, action: (View) -> Unit) {
@@ -147,13 +167,8 @@ fun View.background(drawable: Drawable) {
   background = drawable
 }
 
-fun <T : View> T.childWithTag(tag: String): T {
-  return findViewWithTag(tag)
-}
-
-@Suppress("UNCHECKED_CAST")
-fun <T : View> Fragment.withTag(tag: String): T {
-  return requireView().childWithTag(tag) as T
+fun View.background(@DrawableRes drawableRes: Int) {
+  background = context.getDrawable(drawableRes)
 }
 
 fun View.behavior(behavior: CoordinatorLayout.Behavior<*>) {
@@ -166,4 +181,16 @@ inline fun <reified T : CoordinatorLayout.Behavior<*>> View.getBehavior(): T {
 
 inline fun <reified T : CoordinatorLayout.Behavior<*>> View.hasBehavior(): Boolean {
   return (layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? T != null
+}
+
+fun View.childView(tag: String): View {
+  return findViewWithTag(tag)
+}
+
+fun View.childTextView(tag: String): TextView {
+  return findViewWithTag(tag) as TextView
+}
+
+fun View.childImageView(tag: String): ImageView {
+  return findViewWithTag(tag) as ImageView
 }

@@ -23,7 +23,7 @@ import core.viewbuilding.Styles.BoldTextView
 import viewdsl.Ints.dp
 import viewdsl.Size.Companion.MatchParent
 import viewdsl.Size.Companion.WrapContent
-import viewdsl.childWithTag
+import viewdsl.childView
 import viewdsl.font
 import viewdsl.gravity
 import viewdsl.image
@@ -89,7 +89,7 @@ fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNe
         }
         child<RetryButton>(WrapContent, WrapContent) {
           tag(NewsAdapter.RetryButton)
-          margins(left = 16.dp)
+          margins(start = 16.dp)
         }
       }
       child<ProgressBar>(ProgressBarSize, ProgressBarSize) {
@@ -100,10 +100,10 @@ fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNe
     }
   }
   onInitViewHolder {
-    itemView.childWithTag(NewsAdapter.RetryButton).onClick {
+    itemView.childView(NewsAdapter.RetryButton).onClick {
       onRetryItemClicked.invoke()
-      itemView.childWithTag(NewsAdapter.ProgressBar).visible()
-      itemView.childWithTag(NewsAdapter.FailureLayout).invisible()
+      itemView.childView(NewsAdapter.ProgressBar).visible()
+      itemView.childView(NewsAdapter.FailureLayout).invisible()
     }
   }
 }

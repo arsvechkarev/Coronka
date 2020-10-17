@@ -84,8 +84,8 @@ class NewsFragment : BaseFragment() {
           tag(ErrorMessage)
           gravity(CENTER)
           paddings(
-            left = ErrorLayoutTextPadding,
-            right = ErrorLayoutTextPadding,
+            start = ErrorLayoutTextPadding,
+            end = ErrorLayoutTextPadding,
             bottom = ErrorLayoutTextPadding
           )
           textSize(TextSizes.H2)
@@ -113,7 +113,7 @@ class NewsFragment : BaseFragment() {
           layoutGravity(CENTER)
         }
         child<ImageView>(WrapContent, WrapContent) {
-          margins(left = ImageDrawerMargin, top = ImageDrawerMargin)
+          margins(start = ImageDrawerMargin, top = ImageDrawerMargin)
           image(R.drawable.ic_drawer)
           onClick { hostActivity.openDrawer() }
         }

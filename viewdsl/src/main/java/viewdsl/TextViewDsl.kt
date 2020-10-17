@@ -9,13 +9,20 @@ import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
-fun TextView.drawableStart(@DrawableRes drawableRes: Int) {
-  val drawable = context.getDrawable(drawableRes)
-  val arr = compoundDrawables
+fun TextView.drawables(
+  @DrawableRes start: Int = 0,
+  @DrawableRes top: Int = 0,
+  @DrawableRes end: Int = 0,
+  @DrawableRes bottom: Int = 0
+) {
+  val drawableStart = if (start != 0) context.getDrawable(start) else null
+  val drawableTop = if (top != 0) context.getDrawable(top) else null
+  val drawableEnd = if (end != 0) context.getDrawable(end) else null
+  val drawableBottom = if (bottom != 0) context.getDrawable(bottom) else null
   if (isLayoutLeftToRight) {
-    setCompoundDrawablesWithIntrinsicBounds(drawable, arr[1], arr[2], arr[3])
+    setCompoundDrawablesWithIntrinsicBounds(drawableStart, drawableTop, drawableEnd, drawableBottom)
   } else {
-    setCompoundDrawablesWithIntrinsicBounds(arr[0], arr[1], drawable, arr[3])
+    setCompoundDrawablesWithIntrinsicBounds(drawableEnd, drawableTop, drawableStart, drawableBottom)
   }
 }
 

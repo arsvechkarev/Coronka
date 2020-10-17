@@ -2,12 +2,14 @@ package core.extenstions
 
 import android.graphics.Canvas
 import android.graphics.Rect
+import android.graphics.RectF
 import android.text.TextPaint
 import androidx.annotation.ColorInt
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
 val TEMP_RECT = Rect()
+val TEMP_RECT_F = RectF()
 
 fun TextPaint.getTextHeight(text: String): Int {
   TEMP_RECT.setEmpty()
