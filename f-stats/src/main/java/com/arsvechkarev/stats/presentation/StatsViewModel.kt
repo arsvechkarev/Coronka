@@ -30,8 +30,7 @@ class StatsViewModel(
             .map { totalCases -> Pair(totalCases, totalCases.toNewDailyCases()) }
             .subscribeOn(schedulers.io()),
         { info, cases -> WorldCasesInfo(info, cases.first, cases.second) }
-      ).subscribeOn(schedulers.io())
-          .withNetworkDelay(schedulers)
+      ).withNetworkDelay(schedulers)
           .withRequestTimeout()
           .map(::mapToWorldCasesInfo)
           .onErrorReturn(::Failure)

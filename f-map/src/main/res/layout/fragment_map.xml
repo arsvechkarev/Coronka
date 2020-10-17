@@ -38,25 +38,23 @@
         android:id="@+id/mapTextFailureReason"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/error_layout_text_margin"
+        android:layout_marginEnd="@dimen/error_layout_text_margin"
         android:layout_marginBottom="@dimen/map_text_failure_m_top"
         android:fontFamily="@font/segoe_ui_bold"
         android:gravity="center"
-        android:textSize="@dimen/text_h3"/>
+        android:textSize="@dimen/text_h2"/>
 
       <com.arsvechkarev.views.noconnection.EarthView
         android:id="@+id/mapEarthView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/map_earth_view_size"/>
 
-      <com.arsvechkarev.views.ClickableTextView
+      <com.arsvechkarev.views.RetryButton
         android:id="@+id/mapTextRetry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/map_text_retry_m_top"
-        android:text="@string/text_retry"
-        android:textColor="?colorFailure"
-        android:textSize="@dimen/text_h4"
-        app:rippleColor="?colorFailureRipple"/>
+        android:layout_marginTop="@dimen/map_text_retry_m_top"/>
 
     </LinearLayout>
 
@@ -67,25 +65,26 @@
       android:gravity="center"
       android:orientation="vertical">
 
+      <ImageView
+        android:layout_width="@dimen/error_layout_image_height"
+        android:layout_height="@dimen/error_layout_image_height"
+        android:layout_margin="@dimen/error_layout_text_margin"
+        android:layout_marginBottom="@dimen/error_layout_text_margin"
+        android:src="@drawable/image_unknown_error"/>
+
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_error"
-        android:drawablePadding="@dimen/map_text_unknown_drawable_padding"
         android:fontFamily="@font/segoe_ui_bold"
         android:gravity="center"
         android:text="@string/text_unknown_error"
         android:textSize="@dimen/text_h2"/>
 
-      <com.arsvechkarev.views.ClickableTextView
+      <com.arsvechkarev.views.RetryButton
         android:id="@+id/mapTextRetryUnknown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/map_text_retry_m_top"
-        android:text="@string/text_retry"
-        android:textColor="?colorFailure"
-        android:textSize="@dimen/text_h4"
-        app:rippleColor="?colorFailureRipple"/>
+        android:layout_marginTop="@dimen/map_text_retry_m_top"/>
 
     </LinearLayout>
 

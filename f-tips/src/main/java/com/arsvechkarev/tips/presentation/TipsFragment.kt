@@ -1,6 +1,5 @@
 package com.arsvechkarev.tips.presentation
 
-import android.os.Bundle
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +25,7 @@ import viewdsl.background
 
 class TipsFragment : BaseFragment(R.layout.fragment_tips) {
   
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onInit() {
     val behavior = (tipsBottomSheet.layoutParams as CoordinatorLayout.LayoutParams).behavior!!
     val bottomSheetBehavior = behavior as BottomSheetBehavior<View>
     behavior.onHide = { hostActivity.enableTouchesOnDrawer() }

@@ -7,10 +7,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.news.R
 import com.arsvechkarev.news.presentation.LoadingNextPage
-import com.arsvechkarev.views.ClickableTextView
 import com.arsvechkarev.views.NewsItemImage
 import com.arsvechkarev.views.NewsItemView
 import com.arsvechkarev.views.ProgressBar
+import com.arsvechkarev.views.RetryButton
 import com.bumptech.glide.Glide
 import core.extenstions.assertThat
 import core.model.NewsItemWithPicture
@@ -20,8 +20,6 @@ import core.viewbuilding.Dimens.ProgressBarSize
 import core.viewbuilding.Fonts
 import core.viewbuilding.Styles
 import core.viewbuilding.Styles.BoldTextView
-import core.viewbuilding.Styles.RetryTextView
-import core.viewbuilding.TextSizes
 import viewdsl.Ints.dp
 import viewdsl.Size.Companion.MatchParent
 import viewdsl.Size.Companion.WrapContent
@@ -38,7 +36,6 @@ import viewdsl.padding
 import viewdsl.rippleBackground
 import viewdsl.tag
 import viewdsl.text
-import viewdsl.textSize
 import viewdsl.visible
 
 fun newsItemDelegate(
@@ -90,11 +87,9 @@ fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNe
         child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
           text(R.string.text_unknown_error)
         }
-        child<ClickableTextView>(WrapContent, WrapContent, style = RetryTextView) {
-          tag(NewsAdapter.ClickableTextView)
-          text(R.string.text_retry)
+        child<RetryButton>(WrapContent, WrapContent) {
+          tag(NewsAdapter.RetryButton)
           margins(left = 16.dp)
-          textSize(TextSizes.H4)
         }
       }
       child<ProgressBar>(ProgressBarSize, ProgressBarSize) {
@@ -105,7 +100,7 @@ fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNe
     }
   }
   onInitViewHolder {
-    itemView.childWithTag(NewsAdapter.ClickableTextView).onClick {
+    itemView.childWithTag(NewsAdapter.RetryButton).onClick {
       onRetryItemClicked.invoke()
       itemView.childWithTag(NewsAdapter.ProgressBar).visible()
       itemView.childWithTag(NewsAdapter.FailureLayout).invisible()

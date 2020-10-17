@@ -1,7 +1,5 @@
 package com.arsvechkarev.map.presentation
 
-import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
@@ -31,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
 import viewdsl.animateInvisible
 import viewdsl.animateVisible
 import viewdsl.invisible
+import viewdsl.text
 import viewdsl.visible
 
 class MapFragment : BaseMapFragment(R.layout.fragment_map) {
@@ -38,7 +37,7 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   private lateinit var mapHelper: MapHelper
   private var viewModel: MapViewModel? = null
   
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onInit() {
     mapHelper = MapHelper(requireContext(), mapView, ::onCountrySelected)
     viewModel = MapModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(this::handleStateChanged))
@@ -101,16 +100,19 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
     mapLayoutNoConnection.invisible()
     when (state.reason) {
       NO_CONNECTION -> {
-        mapTextFailureReason.text = getString(R.string.text_no_connection)
+        mapTextFailureReason.text(R.string.text_no_connection)
         mapLayoutNoConnection.visible()
         mapEarthView.animateWifi()
       }
       TIMEOUT -> {
-        mapTextFailureReason.text = getString(R.string.text_timeout)
+        mapTextFailureReason.text(R.string.text_timeout)
         mapLayoutNoConnection.visible()
         mapEarthView.animateWifi()
       }
-      UNKNOWN -> mapLayoutUnknownError.visible()
+      UNKNOWN -> {
+        mapTextFailureReason.text(R.string.text_unknown_error)
+        mapLayoutUnknownError.visible()
+      }
     }
     mapTextRetry.isClickable = false
     mapLayoutFailure.animateVisible(andThen = { mapTextRetry.isClickable = true })

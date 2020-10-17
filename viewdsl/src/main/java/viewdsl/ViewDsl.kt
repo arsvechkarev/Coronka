@@ -61,7 +61,7 @@ fun View.layoutGravity(gravity: Int) {
   }
 }
 
-fun View.margins(value: Int) {
+fun View.margin(value: Int) {
   margins(value, value, value, value)
 }
 

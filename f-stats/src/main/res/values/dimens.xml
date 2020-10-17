@@ -17,7 +17,4 @@
   <dimen name="stats_chart_height">300dp</dimen>
   <dimen name="stats_chart_layout_margin">24dp</dimen>
   <dimen name="stats_chart_margin">16dp</dimen>
-
-  <dimen name="stats_error_image_size">100dp</dimen>
-  <dimen name="stats_error_image_margin">32dp</dimen>
 </resources>

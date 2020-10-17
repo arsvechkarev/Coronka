@@ -1,7 +1,6 @@
 package core
 
 import java.net.UnknownHostException
-import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeoutException
 
 /**
@@ -18,13 +17,6 @@ open class Failure(
   val reason: FailureReason = when (throwable) {
     is TimeoutException -> FailureReason.TIMEOUT
     is UnknownHostException -> FailureReason.NO_CONNECTION
-    is ExecutionException -> {
-      when (throwable.cause) {
-        is TimeoutException -> FailureReason.TIMEOUT
-        is UnknownHostException -> FailureReason.NO_CONNECTION
-        else -> FailureReason.UNKNOWN
-      }
-    }
     else -> FailureReason.UNKNOWN
   }
   

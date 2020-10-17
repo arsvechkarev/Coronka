@@ -9,7 +9,7 @@
   <color name="dark_dialog">#424665</color>
   <color name="dark_gradient_header_start">#2B2F4A</color>
   <color name="dark_gradient_header_end">#474B65</color>
-  <color name="dark_ripple">#60FFFFFF</color>
+  <color name="dark_ripple">#C6FFFFFF</color>
   <color name="dark_icon_default">#FFFFFF</color>
   <color name="dark_text_primary">#FFFFFF</color>
   <color name="dark_text_secondary">#9DA6B8</color>

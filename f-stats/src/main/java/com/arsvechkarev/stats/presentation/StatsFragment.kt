@@ -1,7 +1,5 @@
 package com.arsvechkarev.stats.presentation
 
-import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.stats.behaviors.ScrollableContentBehavior
@@ -45,7 +43,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   
   private var viewModel: StatsViewModel? = null
   
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onInit() {
     viewModel = StatsModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
@@ -116,7 +114,11 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
         statsImageFailure.setImageResource(R.drawable.image_no_connection)
         statsErrorMessage.setText(R.string.text_no_connection)
       }
-      TIMEOUT, UNKNOWN -> {
+      TIMEOUT -> {
+        statsImageFailure.setImageResource(R.drawable.image_unknown_error)
+        statsErrorMessage.setText(R.string.text_timeout)
+      }
+      UNKNOWN -> {
         statsImageFailure.setImageResource(R.drawable.image_unknown_error)
         statsErrorMessage.setText(R.string.text_unknown_error)
       }

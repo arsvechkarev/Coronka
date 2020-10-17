@@ -2,7 +2,6 @@ package com.arsvechkarev.news.presentation
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.view.Gravity.CENTER
 import android.view.View
 import android.widget.FrameLayout
@@ -16,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.news.R
 import com.arsvechkarev.news.di.NewsModuleInjector
 import com.arsvechkarev.news.list.NewsAdapter
-import com.arsvechkarev.views.ClickableTextView
+import com.arsvechkarev.views.RetryButton
 import com.arsvechkarev.views.behaviors.HeaderBehavior
 import com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior
 import com.arsvechkarev.views.behaviors.ViewUnderHeaderBehavior
@@ -31,13 +30,12 @@ import core.Failure.FailureReason.TIMEOUT
 import core.Failure.FailureReason.UNKNOWN
 import core.Loading
 import core.hostActivity
-import core.viewbuilding.Dimens.ErrorLayoutImageHeight
-import core.viewbuilding.Dimens.ErrorLayoutImageMargin
+import core.viewbuilding.Dimens.ErrorLayoutImageSize
+import core.viewbuilding.Dimens.ErrorLayoutTextPadding
 import core.viewbuilding.Dimens.GradientHeaderHeight
 import core.viewbuilding.Dimens.ImageDrawerMargin
 import core.viewbuilding.Styles.BoldTextView
 import core.viewbuilding.Styles.HeaderTextView
-import core.viewbuilding.Styles.RetryTextView
 import core.viewbuilding.TextSizes
 import timber.log.Timber
 import viewdsl.Size.Companion.MatchParent
@@ -48,17 +46,19 @@ import viewdsl.animateVisible
 import viewdsl.background
 import viewdsl.behavior
 import viewdsl.buildView
+import viewdsl.gone
 import viewdsl.gravity
 import viewdsl.image
 import viewdsl.invisible
 import viewdsl.layoutGravity
-import viewdsl.marginVertical
 import viewdsl.margins
 import viewdsl.onClick
 import viewdsl.orientation
+import viewdsl.paddings
 import viewdsl.tag
 import viewdsl.text
 import viewdsl.textSize
+import viewdsl.visible
 
 class NewsFragment : BaseFragment() {
   
@@ -75,18 +75,23 @@ class NewsFragment : BaseFragment() {
         gravity(CENTER)
         orientation(LinearLayout.VERTICAL)
         behavior(ViewUnderHeaderBehavior())
+        child<ImageView>(ErrorLayoutImageSize, ErrorLayoutImageSize) {
+          tag(ImageFailure)
+          image(R.drawable.image_unknown_error)
+          margins(bottom = ErrorLayoutTextPadding)
+        }
         child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
           tag(ErrorMessage)
-          textSize(TextSizes.H3)
+          gravity(CENTER)
+          paddings(
+            left = ErrorLayoutTextPadding,
+            right = ErrorLayoutTextPadding,
+            bottom = ErrorLayoutTextPadding
+          )
+          textSize(TextSizes.H2)
         }
-        child<ImageView>(ErrorLayoutImageHeight, ErrorLayoutImageHeight) {
-          tag(ImageFailure)
-          marginVertical(ErrorLayoutImageMargin)
-          image(R.drawable.image_unknown_error)
-        }
-        child<ClickableTextView>(WrapContent, WrapContent, style = RetryTextView) {
-          text(R.string.text_retry)
-          textSize(TextSizes.H3)
+        child<RetryButton>(WrapContent, WrapContent) {
+          tag(ButtonRetry)
           onClick { viewModel?.startLoadingData() }
         }
       }
@@ -132,11 +137,19 @@ class NewsFragment : BaseFragment() {
     }
   )
   
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onInit() {
     viewModel = NewsModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
     }
+  }
+  
+  override fun onOrientationBecameLandscape() {
+    view(ImageFailure).gone()
+  }
+  
+  override fun onOrientationBecamePortrait() {
+    view(ImageFailure).visible()
   }
   
   private fun handleState(state: BaseScreenState) {
@@ -182,7 +195,11 @@ class NewsFragment : BaseFragment() {
         imageView(ImageFailure).image(R.drawable.image_no_connection)
         textView(ErrorMessage).text(R.string.text_no_connection)
       }
-      TIMEOUT, UNKNOWN -> {
+      TIMEOUT -> {
+        imageView(ImageFailure).image(R.drawable.image_unknown_error)
+        textView(ErrorMessage).text(R.string.text_timeout)
+      }
+      UNKNOWN -> {
         imageView(ImageFailure).image(R.drawable.image_unknown_error)
         textView(ErrorMessage).text(R.string.text_unknown_error)
       }
@@ -196,5 +213,6 @@ class NewsFragment : BaseFragment() {
     const val RecyclerView = "NewsRecyclerView"
     const val ImageFailure = "NewsImageFailure"
     const val ErrorMessage = "TextErrorMessage"
+    const val ButtonRetry = "ButtonRetry"
   }
 }

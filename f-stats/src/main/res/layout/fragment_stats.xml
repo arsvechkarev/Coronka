@@ -164,27 +164,28 @@
     android:orientation="vertical"
     android:visibility="invisible">
 
+    <ImageView
+      android:id="@+id/statsImageFailure"
+      android:layout_width="@dimen/error_layout_image_height"
+      android:layout_height="@dimen/error_layout_image_height"
+      android:layout_margin="@dimen/error_layout_text_margin"
+      android:layout_marginBottom="@dimen/error_layout_text_margin"
+      android:src="@drawable/image_unknown_error"/>
+
     <TextView
       android:id="@+id/statsErrorMessage"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textSize="@dimen/text_h3"/>
+      android:layout_marginStart="@dimen/error_layout_text_margin"
+      android:layout_marginEnd="@dimen/error_layout_text_margin"
+      android:layout_marginBottom="@dimen/error_layout_text_margin"
+      android:gravity="center"
+      android:textSize="@dimen/text_h2"/>
 
-    <ImageView
-      android:id="@+id/statsImageFailure"
-      android:layout_width="@dimen/stats_error_image_size"
-      android:layout_height="@dimen/stats_error_image_size"
-      android:layout_margin="@dimen/stats_error_image_margin"
-      android:src="@drawable/image_unknown_error"/>
-
-    <com.arsvechkarev.views.ClickableTextView
+    <com.arsvechkarev.views.RetryButton
       android:id="@+id/statsRetryButton"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/text_retry"
-      android:textColor="?colorFailure"
-      android:textSize="@dimen/text_h3"
-      app:rippleColor="?colorFailureRipple"/>
+      android:layout_height="wrap_content"/>
 
   </LinearLayout>
 

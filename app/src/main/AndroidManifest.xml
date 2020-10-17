@@ -16,7 +16,7 @@
       android:value="@string/google_maps_key"/>
 
     <activity android:name=".MainActivity"
-      android:configChanges="orientation">
+      android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
 

@@ -1,7 +1,5 @@
 package com.arsvechkarev.rankings.presentation
 
-import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.rankings.R
@@ -19,6 +17,9 @@ import core.BaseFragment
 import core.BaseScreenState
 import core.Failure
 import core.Failure.FailureReason
+import core.Failure.FailureReason.NO_CONNECTION
+import core.Failure.FailureReason.TIMEOUT
+import core.Failure.FailureReason.UNKNOWN
 import core.Loading
 import core.extenstions.heightWithMargins
 import core.hostActivity
@@ -55,10 +56,12 @@ import viewdsl.animateInvisible
 import viewdsl.animateVisible
 import viewdsl.background
 import viewdsl.dimen
+import viewdsl.gone
 import viewdsl.margins
 import viewdsl.onClick
 import viewdsl.unspecified
 import viewdsl.view
+import viewdsl.visible
 
 class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
@@ -66,7 +69,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   private var viewModel: RankingsViewModel? = null
   private val adapter = RankingsAdapter()
   
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onInit() {
     viewModel = RankingsModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
@@ -91,6 +94,14 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
   override fun onDrawerClosed() = toggleItems(true)
   
+  override fun onOrientationBecameLandscape() {
+    rankingsImageFailure.gone()
+  }
+  
+  override fun onOrientationBecamePortrait() {
+    rankingsImageFailure.visible()
+  }
+  
   private fun handleState(state: BaseScreenState) {
     when (state) {
       is Loading -> renderLoading()
@@ -101,7 +112,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   }
   
   private fun renderLoading() {
-    rankingsFabFilter.isEnabled = false
+    rankingsFabFilter.isClickable = false
     animateInvisible(rankingsErrorLayout, rankingsChipWorldRegion, rankingsChipOptionType,
       rankingsDivider, rankingsRecyclerView)
     rankingsListLoadingStub.asLoadingStub.start()
@@ -110,7 +121,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   }
   
   private fun renderLoaded(state: LoadedCountries) {
-    rankingsFabFilter.isEnabled = true
+    rankingsFabFilter.isClickable = true
     stopLoadingStubs()
     animateVisible(rankingsRecyclerView, rankingsChipWorldRegion,
       rankingsChipOptionType, rankingsDivider)
@@ -118,22 +129,26 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   }
   
   private fun renderFiltered(state: FilteredCountries) {
-    rankingsFabFilter.isEnabled = true
+    rankingsFabFilter.isClickable = true
     rankingsHeaderLayout.asHeader.animateScrollToTop(andThen = {
       adapter.submitList(state.list)
     })
   }
   
   private fun renderFailure(reason: FailureReason) {
-    rankingsFabFilter.isEnabled = false
+    rankingsFabFilter.isClickable = false
     stopLoadingStubs()
     rankingsErrorLayout.animateVisible()
     when (reason) {
-      FailureReason.NO_CONNECTION -> {
+      NO_CONNECTION -> {
         rankingsImageFailure.setImageResource(R.drawable.image_no_connection)
         rankingsErrorMessage.setText(R.string.text_no_connection)
       }
-      FailureReason.TIMEOUT, FailureReason.UNKNOWN -> {
+      TIMEOUT -> {
+        rankingsImageFailure.setImageResource(R.drawable.image_unknown_error)
+        rankingsErrorMessage.setText(R.string.text_timeout)
+      }
+      UNKNOWN -> {
         rankingsImageFailure.setImageResource(R.drawable.image_unknown_error)
         rankingsErrorMessage.setText(R.string.text_unknown_error)
       }

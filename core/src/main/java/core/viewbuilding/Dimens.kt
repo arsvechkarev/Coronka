@@ -12,8 +12,8 @@ object Dimens {
   val DividerHeight: Float get() = textSizes[1]
   
   val GradientHeaderHeight get() = 120.dp
-  val ErrorLayoutImageHeight get() = 120.dp
-  val ErrorLayoutImageMargin get() = 24.dp
+  val ErrorLayoutImageSize get() = 90.dp
+  val ErrorLayoutTextPadding get() = 32.dp
   val ImageDrawerMargin get() = 16.dp
   val ProgressBarSize get() = 40.dp
   

@@ -44,6 +44,6 @@ class NewsAdapter(
     
     const val FailureLayout = "FailureLayout"
     const val ProgressBar = "ProgressBar"
-    const val ClickableTextView = "ClickableTextView"
+    const val RetryButton = "ClickableTextView"
   }
 }
