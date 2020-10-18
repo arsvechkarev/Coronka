@@ -4,7 +4,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ScrollingView
 
-class StatsContentViewOffsetHelper<V>(val view: V) where V : View, V : ScrollingView {
+class StatsContentViewOffsetHelper<V>(
+  private val view: V,
+  parentHeight: Int
+) where V : View, V : ScrollingView {
   
   private var maxTop = 0
   private var parentHeight = 0
@@ -17,7 +20,7 @@ class StatsContentViewOffsetHelper<V>(val view: V) where V : View, V : Scrolling
   var maxScrollerY = 0
     private set
   
-  fun onViewLayout(parentHeight: Int) {
+  init {
     this.parentHeight = parentHeight
     layoutTop = view.top
     layoutBottom = view.bottom

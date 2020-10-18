@@ -10,7 +10,7 @@ import com.arsvechkarev.news.presentation.LoadingNextPage
 import com.arsvechkarev.views.NewsItemImage
 import com.arsvechkarev.views.NewsItemView
 import com.arsvechkarev.views.ProgressBar
-import com.bumptech.glide.Glide
+import core.ImageLoader
 import core.extenstions.assertThat
 import core.model.NewsItemWithPicture
 import core.recycler.delegate
@@ -40,6 +40,7 @@ import viewdsl.visible
 
 fun newsItemDelegate(
   fragment: Fragment,
+  imageLoader: ImageLoader,
   onNewsItemClicked: (NewsItemWithPicture) -> Unit
 ) = delegate<NewsItemWithPicture> {
   buildView fn@{
@@ -64,9 +65,7 @@ fun newsItemDelegate(
     itemView.textTitle.text = element.title
     itemView.textDescription.text = element.description
     itemView.textTime.text = element.publishedDate
-    Glide.with(fragment)
-        .load(element.imageUrl)
-        .into(itemView.image)
+    imageLoader.load(fragment, element.imageUrl, itemView.image)
   }
 }
 

@@ -35,10 +35,7 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
   
   override fun onLayoutChild(parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
     parent.onLayoutChild(child, layoutDirection)
-    if (statsContentViewOffsetHelper == null) {
-      statsContentViewOffsetHelper = StatsContentViewOffsetHelper(child)
-    }
-    statsContentViewOffsetHelper!!.onViewLayout(parent.height)
+    statsContentViewOffsetHelper = StatsContentViewOffsetHelper(child, parent.height)
     return true
   }
   
