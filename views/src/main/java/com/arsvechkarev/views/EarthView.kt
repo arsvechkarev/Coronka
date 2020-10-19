@@ -1,12 +1,13 @@
-package com.arsvechkarev.views.noconnection
+package com.arsvechkarev.views
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
-import com.arsvechkarev.views.R
 import core.extenstions.execute
 import core.extenstions.i
+import viewdsl.DURATION_MEDIUM
 import viewdsl.Ints.dp
 import viewdsl.cancelIfRunning
 import kotlin.math.PI
@@ -24,12 +25,18 @@ class EarthView @JvmOverloads constructor(
   private val wifi = context.getDrawable(R.drawable.ic_wifi_full)!!
   private val earth = context.getDrawable(R.drawable.ic_planet_earth)!!
   
-  private val wifiAnimator = createWifiAnimator { alpha ->
-    wifi.alpha = alpha
-    invalidate()
+  private val wifiAnimator = ValueAnimator().apply {
+    duration = DURATION_MEDIUM
+    repeatMode = ValueAnimator.REVERSE
+    repeatCount = 4
+    addUpdateListener {
+      wifi.alpha = it.animatedValue as Int
+      invalidate()
+    }
   }
   
   fun animateWifi() {
+    wifiAnimator.setIntValues(0, 255)
     wifiAnimator.start()
   }
   

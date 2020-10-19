@@ -45,7 +45,7 @@
         android:gravity="center"
         android:textSize="@dimen/text_h2"/>
 
-      <com.arsvechkarev.views.noconnection.EarthView
+      <com.arsvechkarev.views.EarthView
         android:id="@+id/mapEarthView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/map_earth_view_size"/>
