@@ -140,6 +140,7 @@ class DrawerLayout @JvmOverloads constructor(
         val x = event.x.toInt()
         val xDiff = abs(latestX - x)
         if (xDiff > touchSlop * TOUCH_SLOP_MULTIPLIER) {
+          isHoldingFinger = true
           velocityTracker?.addMovement(event)
           isBeingDragged = true
           latestX = event.x

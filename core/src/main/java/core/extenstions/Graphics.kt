@@ -11,7 +11,7 @@ import kotlin.math.roundToInt
 val TEMP_RECT = Rect()
 val TEMP_RECT_F = RectF()
 
-fun TextPaint.getTextHeight(text: String): Int {
+fun TextPaint.getTextHeight(text: String = "A"): Int {
   TEMP_RECT.setEmpty()
   getTextBounds(text, 0, text.length, TEMP_RECT)
   return TEMP_RECT.height()

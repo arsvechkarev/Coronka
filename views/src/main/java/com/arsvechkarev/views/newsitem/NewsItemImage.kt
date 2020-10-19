@@ -1,4 +1,4 @@
-package com.arsvechkarev.views
+package com.arsvechkarev.views.newsitem
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import com.arsvechkarev.views.RoundedCornersImage
 import core.viewbuilding.Colors
 import viewdsl.AccelerateDecelerateInterpolator
 import viewdsl.DURATION_DEFAULT

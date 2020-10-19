@@ -28,6 +28,7 @@ open class DelegateBuilder<T> {
   private var _viewBuilder: (ViewBuilder.(View) -> View)? = null
   private var _viewHolderInitializer: (DslDelegateViewHolder<T>.() -> Unit) = { }
   private var _onBind: (View, T) -> Unit = { _, _ -> }
+  private var _onRecycled: ((itemView: View) -> Unit)? = null
   
   fun layoutRes(@LayoutRes res: Int) {
     _layoutRes = res
@@ -49,6 +50,10 @@ open class DelegateBuilder<T> {
     _onBind = function
   }
   
+  fun onRecycled(function: (itemView: View) -> Unit) {
+    _onRecycled = function
+  }
+  
   internal fun createViewHolder(parent: ViewGroup): DslDelegateViewHolder<T> {
     val view = when {
       _layoutRes != -1 -> {
@@ -63,7 +68,7 @@ open class DelegateBuilder<T> {
       }
       else -> throw IllegalArgumentException("Cannot create view holder")
     }
-    return DslDelegateViewHolder(view, _onBind).apply(_viewHolderInitializer)
+    return DslDelegateViewHolder(view, _onBind, _onRecycled).apply(_viewHolderInitializer)
   }
 }
 
@@ -99,7 +104,8 @@ class DslAdapterDelegate<T : DisplayableItem>(
 
 class DslDelegateViewHolder<T>(
   itemView: View,
-  private val onBindFunction: (View, T) -> Unit
+  private val onBindFunction: (View, T) -> Unit,
+  private val _onRecycled: ((itemView: View) -> Unit)?
 ) : DelegateViewHolder<T>(itemView) {
   
   internal var _item: Any? = null
@@ -113,4 +119,8 @@ class DslDelegateViewHolder<T>(
     }
   
   override fun bind(item: T) = onBindFunction(itemView, item)
+  
+  override fun onViewRecycled() {
+    _onRecycled?.invoke(itemView)
+  }
 }

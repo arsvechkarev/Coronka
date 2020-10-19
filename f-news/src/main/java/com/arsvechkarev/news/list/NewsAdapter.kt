@@ -4,8 +4,8 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.news.presentation.LoadingNextPage
 import com.arsvechkarev.news.presentation.NewsFragment
-import core.GlideImageLoader
-import core.ImageLoader
+import core.imageloading.GlideImageLoader
+import core.imageloading.ImageLoader
 import core.model.BasicNewsItem
 import core.recycler.ListAdapter
 import viewdsl.childView
@@ -14,7 +14,7 @@ import viewdsl.visible
 
 class NewsAdapter(
   fragment: NewsFragment,
-  private val imageLoader: ImageLoader = GlideImageLoader,
+  imageLoader: ImageLoader = GlideImageLoader,
   private var onNewsItemClicked: ((BasicNewsItem) -> Unit)? = null,
   onReadyToLoadNextPage: () -> Unit,
   private var onRetryItemClicked: (() -> Unit)? = null

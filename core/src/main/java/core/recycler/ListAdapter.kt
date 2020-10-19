@@ -107,6 +107,10 @@ abstract class ListAdapter(
     return data.size
   }
   
+  override fun onViewRecycled(holder: ViewHolder) {
+    (holder as? DelegateViewHolder<*>)?.onViewRecycled()
+  }
+  
   override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
     delegates.forEach { it.onDetachedFromRecyclerView(recyclerView) }
     onReadyToLoadNextPage = null

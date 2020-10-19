@@ -1,8 +1,8 @@
 package com.arsvechkarev.views.drawables
 
 import android.graphics.Path
-import com.arsvechkarev.views.NewsItemView
 import com.arsvechkarev.views.RoundedCornersImage
+import com.arsvechkarev.views.newsitem.NewsItemsUtils
 import core.extenstions.randomFloat
 import core.viewbuilding.Dimens
 import core.viewbuilding.TextSizes
@@ -11,8 +11,8 @@ import kotlin.math.ceil
 class NewsListLoadingStub : BaseLoadingStub() {
   
   override fun drawBackgroundWithPath(path: Path, width: Float, height: Float) {
-    val imageSize = NewsItemView.getImageSize(width.toInt())
-    val imageMargin = NewsItemView.getImagePadding(width.toInt()).toFloat()
+    val imageSize = NewsItemsUtils.getImageSize(width.toInt())
+    val imageMargin = NewsItemsUtils.getImagePadding(width.toInt()).toFloat()
     val imageCount = ceil(height / (imageSize + imageMargin)).toInt()
     var top = imageMargin
     val cornersRadius = RoundedCornersImage.getCornerRadius(imageSize)

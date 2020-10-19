@@ -18,4 +18,5 @@ dependencies {
   implementation dependencies.coordinatorLayout
   implementation dependencies.mpAndroidChart
   implementation dependencies.googleMaps
+  implementation dependencies.glide
 }

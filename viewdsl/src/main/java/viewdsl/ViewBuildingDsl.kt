@@ -15,9 +15,13 @@ fun View.layoutWithLeftTop(left: Int, top: Int) {
   layout(left, top, left + measuredWidth, top + measuredHeight)
 }
 
-inline fun <reified T : View> Fragment.buildView(builder: ViewBuilder.() -> T): T {
-  val viewBuilder = ViewBuilder(requireContext())
+inline fun <reified T : View> Context.buildView(builder: ViewBuilder.() -> T): T {
+  val viewBuilder = ViewBuilder(this)
   return builder(viewBuilder)
+}
+
+inline fun <reified T : View> Fragment.buildView(builder: ViewBuilder.() -> T): T {
+  return requireContext().buildView(builder)
 }
 
 inline fun <reified T : View> Fragment.view(

@@ -31,6 +31,7 @@ class RetryButton @JvmOverloads constructor(
     textSize = TextSizes.H3
     textAlign = Paint.Align.CENTER
   }
+  
   private val textLayout = boringLayoutOf(textPaint, context.getText(R.string.text_retry))
   
   init {
