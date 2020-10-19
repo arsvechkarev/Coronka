@@ -6,11 +6,9 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import com.arsvechkarev.views.drawables.BaseLoadingStub
-import com.arsvechkarev.views.drawables.NewsItemImageLoadingStub
+import core.viewbuilding.Colors
 import viewdsl.AccelerateDecelerateInterpolator
 import viewdsl.DURATION_DEFAULT
-import viewdsl.doOnEnd
 
 class NewsItemImage @JvmOverloads constructor(
   context: Context,
@@ -19,7 +17,6 @@ class NewsItemImage @JvmOverloads constructor(
 ) : RoundedCornersImage(context, attrs, defStyleAttr) {
   
   private var isLoadedNewsImage = false
-  private val stubDrawable: BaseLoadingStub = NewsItemImageLoadingStub()
   
   private val alphaAnimator = ValueAnimator().apply {
     setFloatValues(0f, 1f)
@@ -33,27 +30,18 @@ class NewsItemImage @JvmOverloads constructor(
   
   init {
     scaleType = ScaleType.CENTER_CROP
-    post { stubDrawable.start() }
-  }
-  
-  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    super.onSizeChanged(w, h, oldw, oldh)
-    stubDrawable.setBounds(0, 0, w, h)
   }
   
   override fun setImageDrawable(drawable: Drawable?) {
     if (getDrawable() == null && !isLoadedNewsImage && drawable is BitmapDrawable) {
       // Drawable from network is loaded, start animation
       isLoadedNewsImage = true
-      alphaAnimator.doOnEnd { stubDrawable.stop() }
       alphaAnimator.start()
-      stubDrawable.start()
     }
     super.setImageDrawable(drawable)
   }
   
-  override fun onDraw(canvas: Canvas) {
-    stubDrawable.draw(canvas)
-    super.onDraw(canvas)
+  override fun drawClipped(canvas: Canvas) {
+    canvas.drawColor(Colors.Overlay)
   }
 }

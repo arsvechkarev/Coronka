@@ -97,13 +97,13 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   
   private fun renderFoundCountry(state: FoundCountry) {
     mapHelper.toggleMap(enable = true)
-    mapLayoutCountryInfo.asBottomSheet.show()
     mapTextViewCountryName.text = state.country.name
     mapStatsView.updateNumbers(
       state.country.confirmed,
       state.country.recovered,
       state.country.deaths
     )
+    requireView().post { mapLayoutCountryInfo.asBottomSheet.show() }
   }
   
   private fun renderFailure(state: Failure) {

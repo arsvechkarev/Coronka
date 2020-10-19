@@ -37,10 +37,11 @@ class DrawerLayout @JvmOverloads constructor(
   
   private val mainView: View get() = getChildAt(0)
   private val drawerView: View get() = getChildAt(1)
-  
   private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+  
   private val maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
   
+  private var isHoldingFinger = false
   private var currentState = CLOSED
   private var isBeingDragged = false
   private var outsideOnDrawerDown = false
@@ -115,9 +116,13 @@ class DrawerLayout @JvmOverloads constructor(
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     mainView.layout(mainView.left, 0, mainView.measuredWidth, mainView.measuredHeight)
-    val drawerLeft = when (currentState) {
+    slideRange = computeSlideRange(r - l)
+    var drawerLeft = when (currentState) {
       OPENED -> 0
       CLOSED -> -slideRange
+    }
+    if (isHoldingFinger) {
+      drawerLeft = drawerView.left
     }
     drawerView.layout(drawerLeft, 0, drawerLeft + drawerView.measuredWidth, height)
   }
@@ -157,6 +162,7 @@ class DrawerLayout @JvmOverloads constructor(
     initVelocityTrackerIfNeeded()
     when (event.action) {
       ACTION_DOWN -> {
+        isHoldingFinger = true
         latestX = event.x
         velocityTracker?.addMovement(event)
         if (handleDownOutsideEvent(event)) return true
@@ -170,6 +176,7 @@ class DrawerLayout @JvmOverloads constructor(
         latestX = event.x
         invalidate()
         if (event.action == ACTION_UP) {
+          isHoldingFinger = false
           if (outsideOnDrawerDown && handleUpOutsideEvent(event)) {
             return true
           }
@@ -297,6 +304,7 @@ class DrawerLayout @JvmOverloads constructor(
   }
   
   private companion object {
+  
     const val PARALLAX_COEFFICIENT = 0.3f
     const val SHADOW_ALPHA_COEFFICIENT = 0.7f
     const val PORTRAIT_SLIDE_RANGE_COEFFICIENT = 0.75f

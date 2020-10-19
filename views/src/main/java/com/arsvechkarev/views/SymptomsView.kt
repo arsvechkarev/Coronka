@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.text.TextPaint
-import android.util.AttributeSet
 import android.view.View
 import core.extenstions.TEMP_RECT
 import core.extenstions.TEMP_RECT_F
@@ -15,11 +14,7 @@ import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
 
-class SymptomsView @JvmOverloads constructor(
-  context: Context,
-  attrs: AttributeSet? = null,
-  defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+class SymptomsView(context: Context) : View(context) {
   
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     color = Colors.TextPrimary

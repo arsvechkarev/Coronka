@@ -26,9 +26,12 @@ open class RoundedCornersImage @JvmOverloads constructor(
   override fun onDraw(canvas: Canvas) {
     canvas.execute {
       clipPath(path)
+      drawClipped(canvas)
       super.onDraw(canvas)
     }
   }
+  
+  open fun drawClipped(canvas: Canvas) = Unit
   
   companion object {
     

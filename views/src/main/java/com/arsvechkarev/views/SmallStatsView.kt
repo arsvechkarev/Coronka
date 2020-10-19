@@ -27,7 +27,7 @@ class SmallStatsView(
     textSize = this@SmallStatsView.textSize
   }
   
-  private lateinit var text: String
+  private var text: String? = null
   private var textLayout: Layout? = null
   private var numberLayout: Layout? = null
   private var amountLayout: Layout? = null
@@ -35,6 +35,7 @@ class SmallStatsView(
   
   fun updateData(rankNumber: Int, text: String, amount: String) {
     this.text = text
+    textLayout = null
     numberLayout = boringLayoutOf(textPaint, "$rankNumber.")
     numberLayoutMaxWidth = textPaint.measureText(RANK_TEXT_FOR_MEASURE)
     amountLayout = boringLayoutOf(textPaint, amount)
@@ -54,11 +55,11 @@ class SmallStatsView(
   }
   
   override fun onDraw(canvas: Canvas) {
-    if (numberLayout == null || amountLayout == null) {
+    if (numberLayout == null || amountLayout == null || text == null) {
       return
     }
     if (textLayout == null) {
-      textLayout = boringLayoutOf(textPaint, text,
+      textLayout = boringLayoutOf(textPaint, text!!,
         (width - numberLayoutMaxWidth - amountLayout!!.width) * 0.85f)
     }
     val numberLayout = numberLayout!!
@@ -77,7 +78,7 @@ class SmallStatsView(
   }
   
   companion object {
+  
     const val RANK_TEXT_FOR_MEASURE = "000.000"
-    const val NUMBER_TEXT_FOR_MEASURE = "000,000,000"
   }
 }
