@@ -144,6 +144,12 @@ class NewsFragment : BaseFragment() {
     }
   }
   
+  override fun onNetworkAvailable() {
+    if (viewModel != null && viewModel?.state?.value is Failure) {
+      viewModel!!.startLoadingData()
+    }
+  }
+  
   override fun onOrientationBecameLandscape() {
     view(ImageFailure).gone()
   }
