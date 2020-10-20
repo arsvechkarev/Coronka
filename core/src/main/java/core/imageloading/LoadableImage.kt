@@ -1,8 +1,10 @@
 package core.imageloading
 
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
 
 interface LoadableImage {
   
-  fun onImageLoaded(image: Drawable)
+  fun onBitmapLoaded(bitmap: Bitmap)
+  
+  fun onClearImage()
 }

@@ -1,6 +1,7 @@
 package com.arsvechkarev.news.list
 
 import android.graphics.Paint
+import android.os.Build
 import android.text.TextPaint
 import android.view.Gravity
 import android.view.View
@@ -113,7 +114,7 @@ fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNe
 }
 
 private fun buildNewsLayout(viewBuilder: ViewBuilder): View {
-  if (false) {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
     val titlePaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
       typeface = Fonts.SegoeUiBold
       textSize = TextSizes.H5

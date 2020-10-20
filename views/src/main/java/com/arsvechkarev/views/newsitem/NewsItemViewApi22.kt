@@ -1,7 +1,7 @@
 package com.arsvechkarev.views.newsitem
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
 import android.view.ViewGroup
 import android.widget.TextView
 import viewdsl.addViews
@@ -66,7 +66,11 @@ class NewsItemViewApi22(
     textPublishedDate.text(publishedDate)
   }
   
-  override fun onImageLoaded(image: Drawable) {
-    this.image.setImageDrawable(image)
+  override fun onBitmapLoaded(bitmap: Bitmap) {
+    image.setImageBitmap(bitmap)
+  }
+  
+  override fun onClearImage() {
+    image.setImageDrawable(null)
   }
 }

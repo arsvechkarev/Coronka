@@ -23,4 +23,6 @@ object NewsItemsUtils {
   fun getVerticalPadding(width: Int) = width / 18
   
   fun getTextPadding(width: Int) = width / 33
+  
+  fun getCornerRadius(imageSize: Int) = imageSize / 20f
 }
