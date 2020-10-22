@@ -5,7 +5,7 @@ import viewdsl.dimen
 
 object TextSizes {
   
-  private val textSizes = FloatArray(7) { 0f }
+  private val textSizes = FloatArray(8) { 0f }
   
   val H0: Float get() = textSizes[0]
   val H1: Float get() = textSizes[1]
@@ -14,6 +14,7 @@ object TextSizes {
   val H4: Float get() = textSizes[4]
   val H5: Float get() = textSizes[5]
   val Header: Float get() = textSizes[6]
+  val MainTitle: Float get() = textSizes[7]
   
   init {
     textSizes[0] = dimen(R.dimen.text_h0)
@@ -23,5 +24,6 @@ object TextSizes {
     textSizes[4] = dimen(R.dimen.text_h4)
     textSizes[5] = dimen(R.dimen.text_h5)
     textSizes[6] = dimen(R.dimen.text_header)
+    textSizes[7] = dimen(R.dimen.text_main_title)
   }
 }

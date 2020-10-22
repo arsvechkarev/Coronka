@@ -15,6 +15,7 @@ dependencies {
 
   api dependencies.timber
 
+  implementation platform(dependencies.firebasePlatform)
   implementation dependencies.kotlin
   implementation dependencies.appCompat
   implementation dependencies.coordinatorLayout
@@ -23,4 +24,6 @@ dependencies {
   implementation dependencies.rxAndroid
   implementation dependencies.glide
   implementation dependencies.threeTenAbp
+  implementation dependencies.firebaseAuth
+  implementation dependencies.googleServicesAuth
 }

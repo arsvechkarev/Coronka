@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -49,14 +50,13 @@ fun <T : View> T.size(
 fun View.layoutGravity(gravity: Int) {
   when (parent as View) {
     is FrameLayout -> {
-      val params = FrameLayout.LayoutParams(layoutParams)
-      params.gravity = gravity
-      layoutParams = params
+      (layoutParams as FrameLayout.LayoutParams).gravity = gravity
     }
     is LinearLayout -> {
-      val params = LinearLayout.LayoutParams(layoutParams)
-      params.gravity = gravity
-      layoutParams = params
+      (layoutParams as LinearLayout.LayoutParams).gravity = gravity
+    }
+    is CoordinatorLayout -> {
+      (layoutParams as CoordinatorLayout.LayoutParams).gravity = gravity
     }
     else -> throw IllegalStateException("Unable to set gravity to " +
         "parent ${this.parent as View}")
@@ -165,6 +165,10 @@ fun View.tag(tag: String) {
 
 fun View.background(drawable: Drawable) {
   background = drawable
+}
+
+fun View.backgroundColor(@ColorInt color: Int) {
+  setBackgroundColor(color)
 }
 
 fun View.background(@DrawableRes drawableRes: Int) {

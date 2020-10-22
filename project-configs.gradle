@@ -1,6 +1,6 @@
 ext {
   compileSdkVersion = 29
-  applicationId = 'com.arsvechkarev.coronavirusinfo'
+  applicationId = 'com.arsvechkarev.coronka'
   minSdkVersion = 21
   targetSdkVersion = 29
   versionCode = 1

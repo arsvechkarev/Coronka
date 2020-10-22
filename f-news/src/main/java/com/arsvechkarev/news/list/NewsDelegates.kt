@@ -31,7 +31,6 @@ import viewdsl.Ints.dp
 import viewdsl.Size.Companion.MatchParent
 import viewdsl.Size.Companion.WrapContent
 import viewdsl.ViewBuilder
-import viewdsl.buildView
 import viewdsl.childView
 import viewdsl.font
 import viewdsl.gravity
@@ -47,6 +46,7 @@ import viewdsl.tag
 import viewdsl.text
 import viewdsl.textColor
 import viewdsl.visible
+import viewdsl.withViewBuilder
 
 fun newsItemDelegate(
   fragment: Fragment,
@@ -132,7 +132,7 @@ private fun buildNewsLayout(viewBuilder: ViewBuilder): View {
     }
     return NewsItemViewApi23Plus(viewBuilder.context, titlePaint, descriptionPaint, datePaint)
   } else {
-    return viewBuilder.context.buildView {
+    return viewBuilder.context.withViewBuilder {
       val textTitle = viewBuilder.TextView(style = Styles.NewsTextView) {
         font(Fonts.SegoeUiBold)
         maxLines = 3

@@ -148,7 +148,7 @@ class TipsFragment : BaseFragment(R.layout.fragment_tips) {
         rippleBackground(
           rippleColor = Colors.Ripple,
           backgroundColor = Colors.Overlay,
-          cornerRadius = FAQItemCornersRadius.toFloat()
+          cornerRadius = FAQItemCornersRadius
         )
         paddings(
           start = FAQItemPaddingStart,

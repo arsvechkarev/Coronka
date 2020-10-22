@@ -6,7 +6,7 @@ import viewdsl.getAttrColor
 
 object Colors {
   
-  private val colors = IntArray(29) { 0 }
+  private val colors = IntArray(31) { 0 }
   
   val Background get() = colors[0]
   val BackgroundLight get() = colors[1]
@@ -40,6 +40,8 @@ object Colors {
   val Divider get() = colors[26]
   val DividerDark get() = colors[27]
   val Accent get() = colors[28]
+  val AccentDarker get() = colors[29]
+  val Disabled get() = colors[30]
   
   fun init(context: Context) {
     colors[0] = context.getAttrColor(R.attr.colorBackground)
@@ -71,5 +73,7 @@ object Colors {
     colors[26] = context.getAttrColor(R.attr.colorDivider)
     colors[27] = context.getAttrColor(R.attr.colorDividerDark)
     colors[28] = context.getAttrColor(R.attr.colorAccent)
+    colors[29] = context.getAttrColor(R.attr.colorAccentDarker)
+    colors[30] = context.getAttrColor(R.attr.colorDisabled)
   }
 }

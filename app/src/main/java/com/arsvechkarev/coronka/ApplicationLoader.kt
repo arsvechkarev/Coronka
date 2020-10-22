@@ -1,4 +1,4 @@
-package com.arsvechkarev.coronavirusinfo
+package com.arsvechkarev.coronka
 
 import com.arsvechkarev.common.CommonModulesSingletons
 import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseHelper

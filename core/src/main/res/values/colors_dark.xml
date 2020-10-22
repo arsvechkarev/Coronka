@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="dark_background">#1F2030</color>
+  <color name="dark_background">#1C1D2C</color>
   <color name="dark_background_light">@color/dark_overlay</color>
-  <color name="dark_overlay">#32344E</color>
+  <color name="dark_overlay">#2F314A</color>
   <color name="dark_overlay_shine">#363853</color>
   <color name="dark_overlay_shine_light">#393B57</color>
   <color name="dark_overlay_accent">#4D516C</color>
@@ -20,7 +20,7 @@
   <color name="dark_percent_by_country">#FFDA1E</color>
   <color name="dark_death_rate">#007FFF</color>
 
-  <color name="dark_map_water">#171825</color>
+  <color name="dark_map_water">#151622</color>
   <color name="dark_map_landscape">#313452</color>
   <color name="dark_map_circle_default">#F65858</color>
   <color name="dark_map_circle_stroke_default">#FF0000</color>
@@ -31,5 +31,7 @@
   <color name="dark_failure_ripple">#70E64545</color>
   <color name="dark_divider">@color/dark_overlay</color>
   <color name="dark_dark_divider">#000000</color>
-  <color name="dark_accent">#0D70D4</color>
+  <color name="dark_accent">#C33C2F</color>
+  <color name="dark_accent_darker">#E16F65</color>
+  <color name="dark_disabled">#787878</color>
 </resources>

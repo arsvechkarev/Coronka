@@ -45,7 +45,6 @@ import viewdsl.animateInvisible
 import viewdsl.animateVisible
 import viewdsl.background
 import viewdsl.behavior
-import viewdsl.buildView
 import viewdsl.gone
 import viewdsl.gravity
 import viewdsl.image
@@ -59,10 +58,11 @@ import viewdsl.tag
 import viewdsl.text
 import viewdsl.textSize
 import viewdsl.visible
+import viewdsl.withViewBuilder
 
 class NewsFragment : BaseFragment() {
   
-  override fun buildLayout() = buildView {
+  override fun buildLayout() = withViewBuilder {
     CoordinatorLayout(MatchParent, MatchParent) {
       child<View>(MatchParent, MatchParent) {
         tag(LoadingLayout)
