@@ -1,6 +1,6 @@
 @file:Suppress("ObjectPropertyName")
 
-package viewdsl
+package com.arsvechkarev.viewdsl
 
 import android.content.res.Resources
 

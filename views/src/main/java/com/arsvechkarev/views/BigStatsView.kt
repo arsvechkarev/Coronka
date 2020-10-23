@@ -12,6 +12,9 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import com.arsvechkarev.viewdsl.DURATION_MEDIUM
+import com.arsvechkarev.viewdsl.Floats.dp
+import com.arsvechkarev.viewdsl.cancelIfRunning
 import core.Application.numberFormatter
 import core.extenstions.execute
 import core.extenstions.f
@@ -19,9 +22,6 @@ import core.extenstions.i
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
-import viewdsl.DURATION_MEDIUM
-import viewdsl.Floats.dp
-import viewdsl.cancelIfRunning
 
 class BigStatsView @JvmOverloads constructor(
   context: Context,

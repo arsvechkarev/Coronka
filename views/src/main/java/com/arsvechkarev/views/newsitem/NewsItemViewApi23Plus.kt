@@ -14,11 +14,11 @@ import android.text.TextPaint
 import android.text.TextUtils
 import android.view.View
 import androidx.annotation.RequiresApi
+import com.arsvechkarev.viewdsl.rippleBackground
+import com.arsvechkarev.viewdsl.size
 import core.extenstions.execute
 import core.extenstions.f
 import core.viewbuilding.Colors
-import viewdsl.rippleBackground
-import viewdsl.size
 
 @SuppressLint("ViewConstructor")
 @RequiresApi(23)

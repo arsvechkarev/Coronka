@@ -12,6 +12,7 @@
   <string name="title_covid_19">COVID-19</string>
   <string name="title_stats">Stay home\nStay safe</string>
   <string name="title_tips">Stay home\nStay safe</string>
+  <string name="title_rankings">Rankings</string>
 
   <string name="number_thousands">%1$d K</string>
   <string name="number_millions">%1$d M</string>
@@ -50,7 +51,10 @@
   <string name="text_headache">Headache</string>
   <string name="text_fever">Fever</string>
   <string name="text_cough">Cough</string>
-  <string name="title_rankings">Rankings</string>
+  <string name="text_email_sent">Email verification link was sent. Check your email</string>
+
+  <string name="error_email_is_empty">Email is empty</string>
+  <string name="error_email_is_incorrect">Email is incorrect</string>
 
   <string name="hint_edit_text_email">Enter your email here</string>
 

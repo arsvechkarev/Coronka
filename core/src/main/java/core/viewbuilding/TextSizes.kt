@@ -1,7 +1,7 @@
 package core.viewbuilding
 
 import com.arsvechkarev.core.R
-import viewdsl.dimen
+import com.arsvechkarev.viewdsl.dimen
 
 object TextSizes {
   

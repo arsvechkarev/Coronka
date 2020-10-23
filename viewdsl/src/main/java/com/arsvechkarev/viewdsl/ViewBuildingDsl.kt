@@ -1,4 +1,4 @@
-package viewdsl
+package com.arsvechkarev.viewdsl
 
 import android.content.Context
 import android.view.View
@@ -8,8 +8,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
-import viewdsl.Size.Companion.WrapContent
-import viewdsl.Size.IntSize
+import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
+import com.arsvechkarev.viewdsl.Size.IntSize
 
 fun View.layoutWithLeftTop(left: Int, top: Int) {
   layout(left, top, left + measuredWidth, top + measuredHeight)

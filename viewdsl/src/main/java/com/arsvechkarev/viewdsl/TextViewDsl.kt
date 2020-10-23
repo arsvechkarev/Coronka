@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package viewdsl
+package com.arsvechkarev.viewdsl
 
 import android.graphics.Typeface
 import android.util.TypedValue

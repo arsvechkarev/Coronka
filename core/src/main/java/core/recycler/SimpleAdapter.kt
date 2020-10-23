@@ -3,7 +3,7 @@ package core.recycler
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import viewdsl.inflate
+import com.arsvechkarev.viewdsl.inflate
 
 class SimpleAdapter<T>(
   private val layoutRes: Int,

@@ -24,4 +24,5 @@ dependencies {
   implementation dependencies.rxJava
   implementation dependencies.firebaseAuth
   implementation dependencies.googleServicesAuth
+  implementation dependencies.timerx
 }

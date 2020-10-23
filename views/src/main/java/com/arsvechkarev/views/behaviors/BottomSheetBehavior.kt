@@ -12,11 +12,11 @@ import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.arsvechkarev.viewdsl.doOnEnd
+import com.arsvechkarev.viewdsl.getBehavior
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.HIDDEN
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.SHOWN
 import core.INVALID_POINTER
-import viewdsl.doOnEnd
-import viewdsl.getBehavior
 import kotlin.math.abs
 
 class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :

@@ -42,8 +42,10 @@
     <item name="colorDividerDark">@color/dark_dark_divider</item>
 
     <item name="colorAccent">@color/dark_accent</item>
-    <item name="colorAccentDarker">@color/dark_accent_darker</item>
+    <item name="colorSignInButtonStart">@color/dark_sign_in_button_start</item>
+    <item name="colorSignInButtonEnd">@color/dark_sign_in_button_end</item>
     <item name="colorDisabled">@color/dark_disabled</item>
+    <item name="colorCheckmark">@color/dark_checkmark</item>
   </style>
 
   <style name="TextStyle" parent="@style/TextAppearance.AppCompat">

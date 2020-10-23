@@ -10,6 +10,7 @@ import com.arsvechkarev.coronka.R
 import com.arsvechkarev.coronka.di.MainModuleInjector
 import com.arsvechkarev.registration.presentation.RegistrationFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
+import com.arsvechkarev.viewdsl.Densities
 import core.BaseScreenState
 import core.HostActivity
 import core.extenstions.connectivityManager
@@ -22,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_main.drawerTextNews
 import kotlinx.android.synthetic.main.activity_main.drawerTextRankings
 import kotlinx.android.synthetic.main.activity_main.drawerTextStatistics
 import kotlinx.android.synthetic.main.activity_main.drawerTextTips
-import viewdsl.Densities
 
 class MainActivity : AppCompatActivity(), HostActivity {
   
@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity(), HostActivity {
     navigator = MainModuleInjector.provideNavigator(this)
     viewModel = MainModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
+      model.figureOutScreenToGo(intent, savedInstanceState)
     }
     val connectivityObserver = ConnectivityObserver(connectivityManager, onNetworkAvailable = {
       navigator.currentFragment?.onNetworkAvailable()
@@ -45,7 +46,6 @@ class MainActivity : AppCompatActivity(), HostActivity {
     lifecycle.addObserver(connectivityObserver)
     lifecycle.addObserver(navigator)
     initListeners()
-    viewModel.figureOutScreenToGo(intent, savedInstanceState)
   }
   
   override fun openDrawer() {
@@ -66,19 +66,21 @@ class MainActivity : AppCompatActivity(), HostActivity {
         drawerLayout.respondToTouches = false
         navigator.navigateTo(RegistrationFragment::class)
       }
-      is GoToMainScreen -> {
-        drawerTextStatistics.isEnabled = true
-        navigator.navigateTo(StatsFragment::class)
-      }
+      is GoToMainScreen -> goToMainFragment()
       is ShowEmailLinkLoading -> {
         Toast.makeText(this, "Loading email link", Toast.LENGTH_LONG).show()
       }
       is SuccessfullySignedId -> {
         Toast.makeText(this, "Successfully signed in", Toast.LENGTH_LONG).show()
-        drawerLayout.respondToTouches = true
-        navigator.navigateTo(StatsFragment::class)
+        goToMainFragment()
       }
     }
+  }
+  
+  private fun goToMainFragment() {
+    drawerLayout.respondToTouches = true
+    drawerTextStatistics.isSelected = true
+    navigator.navigateTo(StatsFragment::class)
   }
   
   private fun initListeners() {

@@ -11,17 +11,17 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.util.StateSet
 import android.view.Gravity
 import androidx.appcompat.widget.AppCompatTextView
+import com.arsvechkarev.viewdsl.Ints.dp
+import com.arsvechkarev.viewdsl.background
+import com.arsvechkarev.viewdsl.font
+import com.arsvechkarev.viewdsl.gravity
+import com.arsvechkarev.viewdsl.paddingVertical
+import com.arsvechkarev.viewdsl.textSize
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
-import viewdsl.Ints.dp
-import viewdsl.background
-import viewdsl.font
-import viewdsl.gravity
-import viewdsl.paddingVertical
-import viewdsl.textSize
 
-class RegistrationButton(context: Context) : AppCompatTextView(context) {
+class SingInButton(context: Context) : AppCompatTextView(context) {
   
   init {
     paddingVertical(12.dp)
@@ -40,7 +40,7 @@ class RegistrationButton(context: Context) : AppCompatTextView(context) {
   
   private fun createEnabledDrawable(radius: Int): Drawable {
     val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.BL_TR,
-      intArrayOf(Colors.Accent, Colors.AccentDarker))
+      intArrayOf(Colors.SignInButtonStart, Colors.SignInButtonEnd))
     val r = radius.toFloat()
     val outerRadii = floatArrayOf(r, r, r, r, r, r, r, r)
     gradientDrawable.cornerRadii = outerRadii

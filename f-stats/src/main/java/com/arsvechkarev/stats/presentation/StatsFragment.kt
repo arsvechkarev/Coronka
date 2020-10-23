@@ -4,6 +4,13 @@ import androidx.lifecycle.Observer
 import com.arsvechkarev.stats.R
 import com.arsvechkarev.stats.behaviors.ScrollableContentBehavior
 import com.arsvechkarev.stats.di.StatsModuleInjector
+import com.arsvechkarev.viewdsl.animateChildrenInvisible
+import com.arsvechkarev.viewdsl.animateChildrenVisible
+import com.arsvechkarev.viewdsl.animateInvisible
+import com.arsvechkarev.viewdsl.animateVisible
+import com.arsvechkarev.viewdsl.getBehavior
+import com.arsvechkarev.viewdsl.gone
+import com.arsvechkarev.viewdsl.visible
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.setLoadingDrawable
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
 import com.arsvechkarev.views.drawables.StatsGraphLoadingStub
@@ -33,13 +40,6 @@ import kotlinx.android.synthetic.main.fragment_stats.statsScrollingContentView
 import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesChart
 import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesLabel
 import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesLoadingStub
-import viewdsl.animateChildrenInvisible
-import viewdsl.animateChildrenVisible
-import viewdsl.animateInvisible
-import viewdsl.animateVisible
-import viewdsl.getBehavior
-import viewdsl.gone
-import viewdsl.visible
 
 class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   

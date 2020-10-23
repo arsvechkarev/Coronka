@@ -9,11 +9,11 @@ import android.text.Layout
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import com.arsvechkarev.viewdsl.dimen
 import core.extenstions.execute
 import core.extenstions.f
 import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
-import viewdsl.dimen
 
 class Chip @JvmOverloads constructor(
   context: Context,

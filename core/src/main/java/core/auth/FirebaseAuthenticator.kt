@@ -2,8 +2,8 @@ package core.auth
 
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
-import core.asCompletable
-import core.asSingle
+import core.extenstions.asCompletable
+import core.extenstions.asSingle
 
 object FirebaseAuthenticator : Authenticator {
   

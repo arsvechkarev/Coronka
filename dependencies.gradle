@@ -19,6 +19,7 @@ ext {
       firebasePlatform   : "com.google.firebase:firebase-bom:25.12.0",
       firebaseAuth       : "com.google.firebase:firebase-auth",
       googleServicesAuth : "com.google.android.gms:play-services-auth:18.1.0",
+      timerx             : "com.arsvechkarev:timerx:2.3.0",
   ]
 
 

@@ -3,8 +3,8 @@ package core.recycler
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import viewdsl.ViewBuilder
-import viewdsl.inflate
+import com.arsvechkarev.viewdsl.ViewBuilder
+import com.arsvechkarev.viewdsl.inflate
 import kotlin.reflect.KClass
 
 inline fun <reified T : DifferentiableItem> delegate(

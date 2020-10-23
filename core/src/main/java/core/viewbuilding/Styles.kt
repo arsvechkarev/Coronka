@@ -3,10 +3,10 @@ package core.viewbuilding
 import android.text.TextUtils
 import android.view.Gravity
 import android.widget.TextView
-import viewdsl.font
-import viewdsl.gravity
-import viewdsl.textColor
-import viewdsl.textSize
+import com.arsvechkarev.viewdsl.font
+import com.arsvechkarev.viewdsl.gravity
+import com.arsvechkarev.viewdsl.textColor
+import com.arsvechkarev.viewdsl.textSize
 
 object Styles {
   

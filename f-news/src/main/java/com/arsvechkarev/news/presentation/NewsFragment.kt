@@ -15,6 +15,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.news.R
 import com.arsvechkarev.news.di.NewsModuleInjector
 import com.arsvechkarev.news.list.NewsAdapter
+import com.arsvechkarev.viewdsl.Size.Companion.MatchParent
+import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
+import com.arsvechkarev.viewdsl.Size.IntSize
+import com.arsvechkarev.viewdsl.animateInvisible
+import com.arsvechkarev.viewdsl.animateVisible
+import com.arsvechkarev.viewdsl.background
+import com.arsvechkarev.viewdsl.behavior
+import com.arsvechkarev.viewdsl.gone
+import com.arsvechkarev.viewdsl.gravity
+import com.arsvechkarev.viewdsl.image
+import com.arsvechkarev.viewdsl.invisible
+import com.arsvechkarev.viewdsl.layoutGravity
+import com.arsvechkarev.viewdsl.margins
+import com.arsvechkarev.viewdsl.onClick
+import com.arsvechkarev.viewdsl.orientation
+import com.arsvechkarev.viewdsl.paddings
+import com.arsvechkarev.viewdsl.tag
+import com.arsvechkarev.viewdsl.text
+import com.arsvechkarev.viewdsl.textSize
+import com.arsvechkarev.viewdsl.visible
+import com.arsvechkarev.viewdsl.withViewBuilder
 import com.arsvechkarev.views.RetryButton
 import com.arsvechkarev.views.behaviors.HeaderBehavior
 import com.arsvechkarev.views.behaviors.ScrollingRecyclerBehavior
@@ -38,27 +59,6 @@ import core.viewbuilding.Styles.BoldTextView
 import core.viewbuilding.Styles.HeaderTextView
 import core.viewbuilding.TextSizes
 import timber.log.Timber
-import viewdsl.Size.Companion.MatchParent
-import viewdsl.Size.Companion.WrapContent
-import viewdsl.Size.IntSize
-import viewdsl.animateInvisible
-import viewdsl.animateVisible
-import viewdsl.background
-import viewdsl.behavior
-import viewdsl.gone
-import viewdsl.gravity
-import viewdsl.image
-import viewdsl.invisible
-import viewdsl.layoutGravity
-import viewdsl.margins
-import viewdsl.onClick
-import viewdsl.orientation
-import viewdsl.paddings
-import viewdsl.tag
-import viewdsl.text
-import viewdsl.textSize
-import viewdsl.visible
-import viewdsl.withViewBuilder
 
 class NewsFragment : BaseFragment() {
   

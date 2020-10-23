@@ -6,10 +6,10 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import com.arsvechkarev.viewdsl.AccelerateDecelerateInterpolator
+import com.arsvechkarev.viewdsl.DURATION_DEFAULT
 import com.arsvechkarev.views.RoundedCornersImage
 import core.viewbuilding.Colors
-import viewdsl.AccelerateDecelerateInterpolator
-import viewdsl.DURATION_DEFAULT
 
 class NewsItemImage @JvmOverloads constructor(
   context: Context,

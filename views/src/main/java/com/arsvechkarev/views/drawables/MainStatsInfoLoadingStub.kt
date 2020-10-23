@@ -1,10 +1,10 @@
 package com.arsvechkarev.views.drawables
 
 import android.graphics.Path
+import com.arsvechkarev.viewdsl.dimen
 import com.arsvechkarev.views.GeneralStatsView
 import com.arsvechkarev.views.R
 import core.extenstions.i
-import viewdsl.dimen
 
 class MainStatsInfoLoadingStub : BaseLoadingStub() {
   

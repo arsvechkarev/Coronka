@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.view.ViewGroup
 import android.widget.TextView
-import viewdsl.addViews
-import viewdsl.atMost
-import viewdsl.exactly
-import viewdsl.layoutWithLeftTop
-import viewdsl.size
-import viewdsl.text
+import com.arsvechkarev.viewdsl.addViews
+import com.arsvechkarev.viewdsl.atMost
+import com.arsvechkarev.viewdsl.exactly
+import com.arsvechkarev.viewdsl.layoutWithLeftTop
+import com.arsvechkarev.viewdsl.size
+import com.arsvechkarev.viewdsl.text
 
 @SuppressLint("ViewConstructor") // Created through code
 class NewsItemViewApi22(

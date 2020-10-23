@@ -5,11 +5,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
+import com.arsvechkarev.viewdsl.DURATION_MEDIUM
+import com.arsvechkarev.viewdsl.Ints.dp
+import com.arsvechkarev.viewdsl.cancelIfRunning
 import core.extenstions.execute
 import core.extenstions.i
-import viewdsl.DURATION_MEDIUM
-import viewdsl.Ints.dp
-import viewdsl.cancelIfRunning
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sqrt

@@ -15,6 +15,10 @@ import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
+import com.arsvechkarev.viewdsl.AccelerateDecelerateInterpolator
+import com.arsvechkarev.viewdsl.cancelIfRunning
+import com.arsvechkarev.viewdsl.doOnEnd
+import com.arsvechkarev.viewdsl.isOrientationPortrait
 import com.arsvechkarev.views.DrawerLayout.DrawerState.CLOSED
 import com.arsvechkarev.views.DrawerLayout.DrawerState.OPENED
 import core.HostActivity.DrawerOpenCloseListener
@@ -22,10 +26,6 @@ import core.extenstions.assertThat
 import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.withAlpha
-import viewdsl.AccelerateDecelerateInterpolator
-import viewdsl.cancelIfRunning
-import viewdsl.doOnEnd
-import viewdsl.isOrientationPortrait
 import kotlin.math.abs
 import kotlin.math.hypot
 

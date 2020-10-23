@@ -1,6 +1,6 @@
 package com.arsvechkarev.tips.presentation
 
-import viewdsl.Ints.dp
+import com.arsvechkarev.viewdsl.Ints.dp
 
 object TipsDimens {
   

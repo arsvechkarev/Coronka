@@ -1,8 +1,8 @@
 package core.viewbuilding
 
 import com.arsvechkarev.core.R
-import viewdsl.Ints.dp
-import viewdsl.dimen
+import com.arsvechkarev.viewdsl.Ints.dp
+import com.arsvechkarev.viewdsl.dimen
 
 object Dimens {
   
@@ -15,7 +15,7 @@ object Dimens {
   val ErrorLayoutImageSize get() = 90.dp
   val ErrorLayoutTextPadding get() = 32.dp
   val ImageDrawerMargin get() = 16.dp
-  val ProgressBarSize get() = 40.dp
+  val ProgressBarSize get() = 50.dp
   
   init {
     textSizes[0] = dimen(R.dimen.gradient_header_curve_size)

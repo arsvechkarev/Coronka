@@ -20,6 +20,22 @@ import com.arsvechkarev.tips.presentation.TipsDimens.PreventionsLayoutTextImageS
 import com.arsvechkarev.tips.presentation.TipsDimens.PreventionsLayoutTextPadding
 import com.arsvechkarev.tips.presentation.TipsDimens.PreventionsLayoutVerticalMargin
 import com.arsvechkarev.tips.presentation.TipsDimens.SymptomsItemPadding
+import com.arsvechkarev.viewdsl.Size.Companion.MatchParent
+import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
+import com.arsvechkarev.viewdsl.Size.IntSize
+import com.arsvechkarev.viewdsl.background
+import com.arsvechkarev.viewdsl.drawables
+import com.arsvechkarev.viewdsl.gravity
+import com.arsvechkarev.viewdsl.image
+import com.arsvechkarev.viewdsl.layoutGravity
+import com.arsvechkarev.viewdsl.margin
+import com.arsvechkarev.viewdsl.margins
+import com.arsvechkarev.viewdsl.onClick
+import com.arsvechkarev.viewdsl.paddings
+import com.arsvechkarev.viewdsl.rippleBackground
+import com.arsvechkarev.viewdsl.size
+import com.arsvechkarev.viewdsl.text
+import com.arsvechkarev.viewdsl.textSize
 import com.arsvechkarev.views.PreventionView
 import com.arsvechkarev.views.SymptomsView
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior
@@ -39,22 +55,6 @@ import kotlinx.android.synthetic.main.fragment_tips.tipsBottomSheetCross
 import kotlinx.android.synthetic.main.fragment_tips.tipsRecyclerView
 import kotlinx.android.synthetic.main.fragment_tips.tipsTextAnswer
 import kotlinx.android.synthetic.main.fragment_tips.tipsTextTitle
-import viewdsl.Size.Companion.MatchParent
-import viewdsl.Size.Companion.WrapContent
-import viewdsl.Size.IntSize
-import viewdsl.background
-import viewdsl.drawables
-import viewdsl.gravity
-import viewdsl.image
-import viewdsl.layoutGravity
-import viewdsl.margin
-import viewdsl.margins
-import viewdsl.onClick
-import viewdsl.paddings
-import viewdsl.rippleBackground
-import viewdsl.size
-import viewdsl.text
-import viewdsl.textSize
 
 class TipsFragment : BaseFragment(R.layout.fragment_tips) {
   

@@ -1,6 +1,6 @@
 @file:Suppress("ObjectPropertyName")
 
-package viewdsl
+package com.arsvechkarev.viewdsl
 
 import android.content.Context
 
@@ -12,6 +12,6 @@ object ContextHolder {
     get() = _context
   
   fun init(context: Context) {
-    this._context = context
+    _context = context
   }
 }

@@ -6,6 +6,7 @@ import kotlin.reflect.KClass
 
 abstract class AdapterDelegate<T : DisplayableItem>(val modelClass: KClass<T>) {
   
+  @Suppress("UNCHECKED_CAST")
   internal fun onBindViewHolderRaw(holder: RecyclerView.ViewHolder, item: DisplayableItem) {
     onBindViewHolder(holder as DelegateViewHolder<T>, item as T)
   }

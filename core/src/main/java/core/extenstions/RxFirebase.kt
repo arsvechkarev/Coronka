@@ -1,4 +1,4 @@
-package core
+package core.extenstions
 
 import com.google.android.gms.tasks.Task
 import io.reactivex.Completable

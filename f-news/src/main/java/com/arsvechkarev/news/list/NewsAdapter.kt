@@ -4,13 +4,13 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.news.presentation.LoadingNextPage
 import com.arsvechkarev.news.presentation.NewsFragment
+import com.arsvechkarev.viewdsl.childView
+import com.arsvechkarev.viewdsl.invisible
+import com.arsvechkarev.viewdsl.visible
 import core.imageloading.GlideImageLoader
 import core.imageloading.ImageLoader
 import core.model.BasicNewsItem
 import core.recycler.ListAdapter
-import viewdsl.childView
-import viewdsl.invisible
-import viewdsl.visible
 
 class NewsAdapter(
   fragment: NewsFragment,

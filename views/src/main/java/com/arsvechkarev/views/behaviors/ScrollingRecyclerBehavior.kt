@@ -6,8 +6,8 @@ import android.view.View
 import android.view.View.MeasureSpec
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.arsvechkarev.viewdsl.hasBehavior
 import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
-import viewdsl.hasBehavior
 
 class ScrollingRecyclerBehavior(context: Context? = null, attrs: AttributeSet? = null) :
   CoordinatorLayout.Behavior<RecyclerView>() {

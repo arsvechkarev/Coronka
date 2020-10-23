@@ -1,6 +1,6 @@
 package com.arsvechkarev.views.newsitem
 
-import viewdsl.isOrientationPortrait
+import com.arsvechkarev.viewdsl.isOrientationPortrait
 
 object NewsItemsUtils {
   

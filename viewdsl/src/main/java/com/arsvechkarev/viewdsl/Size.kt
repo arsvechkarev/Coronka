@@ -1,4 +1,4 @@
-package viewdsl
+package com.arsvechkarev.viewdsl
 
 sealed class Size {
   

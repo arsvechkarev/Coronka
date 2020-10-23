@@ -1,4 +1,4 @@
-package viewdsl
+package com.arsvechkarev.viewdsl
 
 import android.graphics.drawable.Drawable
 import android.view.View

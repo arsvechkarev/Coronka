@@ -9,10 +9,11 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
+import com.arsvechkarev.viewdsl.Ints.dp
+import com.arsvechkarev.viewdsl.cancelIfRunning
+import com.arsvechkarev.viewdsl.startIfNotRunning
 import core.extenstions.execute
 import core.extenstions.f
-import viewdsl.Ints.dp
-import viewdsl.cancelIfRunning
 
 class ProgressBar @JvmOverloads constructor(
   context: Context,
@@ -59,6 +60,16 @@ class ProgressBar @JvmOverloads constructor(
     super.onAttachedToWindow()
     innerAnimator.start()
     outerAnimator.start()
+  }
+  
+  override fun onVisibilityChanged(changedView: View, visibility: Int) {
+    if (visibility == VISIBLE) {
+      innerAnimator.startIfNotRunning()
+      outerAnimator.startIfNotRunning()
+    } else {
+      innerAnimator.cancelIfRunning()
+      outerAnimator.cancelIfRunning()
+    }
   }
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

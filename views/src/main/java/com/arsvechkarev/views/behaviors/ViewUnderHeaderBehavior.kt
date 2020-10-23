@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import viewdsl.hasBehavior
+import com.arsvechkarev.viewdsl.hasBehavior
 
 class ViewUnderHeaderBehavior(
   context: Context? = null,

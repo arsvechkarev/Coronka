@@ -5,6 +5,12 @@ import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
 import com.arsvechkarev.map.uils.BaseMapFragment
 import com.arsvechkarev.map.uils.MapHelper
+import com.arsvechkarev.viewdsl.animateInvisible
+import com.arsvechkarev.viewdsl.animateVisible
+import com.arsvechkarev.viewdsl.gone
+import com.arsvechkarev.viewdsl.invisible
+import com.arsvechkarev.viewdsl.text
+import com.arsvechkarev.viewdsl.visible
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import core.BaseScreenState
 import core.Failure
@@ -27,12 +33,6 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextFailureReason
 import kotlinx.android.synthetic.main.fragment_map.mapTextRetry
 import kotlinx.android.synthetic.main.fragment_map.mapTextRetryUnknown
 import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
-import viewdsl.animateInvisible
-import viewdsl.animateVisible
-import viewdsl.gone
-import viewdsl.invisible
-import viewdsl.text
-import viewdsl.visible
 
 class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   

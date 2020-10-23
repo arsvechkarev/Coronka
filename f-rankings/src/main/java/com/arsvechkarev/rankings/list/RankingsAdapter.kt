@@ -1,13 +1,13 @@
 package com.arsvechkarev.rankings.list
 
 import com.arsvechkarev.rankings.R
+import com.arsvechkarev.viewdsl.paddingsRes
 import com.arsvechkarev.views.SmallStatsView
 import core.extenstions.assertThat
 import core.model.DisplayableCountry
 import core.recycler.CallbackType
 import core.recycler.ListAdapter
 import core.recycler.delegate
-import viewdsl.paddingsRes
 
 class RankingsAdapter : ListAdapter(
   delegate<DisplayableCountry> {

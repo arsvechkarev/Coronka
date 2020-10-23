@@ -5,6 +5,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.rankings.R
 import com.arsvechkarev.rankings.di.RankingsModuleInjector
 import com.arsvechkarev.rankings.list.RankingsAdapter
+import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
+import com.arsvechkarev.viewdsl.animateInvisible
+import com.arsvechkarev.viewdsl.animateVisible
+import com.arsvechkarev.viewdsl.background
+import com.arsvechkarev.viewdsl.dimen
+import com.arsvechkarev.viewdsl.gone
+import com.arsvechkarev.viewdsl.margins
+import com.arsvechkarev.viewdsl.onClick
+import com.arsvechkarev.viewdsl.unspecified
+import com.arsvechkarev.viewdsl.view
+import com.arsvechkarev.viewdsl.visible
 import com.arsvechkarev.views.Chip
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import com.arsvechkarev.views.behaviors.HeaderBehavior.Companion.asHeader
@@ -51,17 +62,6 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsListLoadingStub
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRecyclerView
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRetryButton
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsSelectedChipsLoadingStub
-import viewdsl.Size.Companion.WrapContent
-import viewdsl.animateInvisible
-import viewdsl.animateVisible
-import viewdsl.background
-import viewdsl.dimen
-import viewdsl.gone
-import viewdsl.margins
-import viewdsl.onClick
-import viewdsl.unspecified
-import viewdsl.view
-import viewdsl.visible
 
 class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   

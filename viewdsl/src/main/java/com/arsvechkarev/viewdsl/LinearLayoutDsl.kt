@@ -1,4 +1,4 @@
-package viewdsl
+package com.arsvechkarev.viewdsl
 
 import android.widget.LinearLayout
 

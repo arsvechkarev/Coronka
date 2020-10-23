@@ -1,4 +1,4 @@
-package viewdsl
+package com.arsvechkarev.viewdsl
 
 import android.content.res.ColorStateList
 import android.graphics.Color

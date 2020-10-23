@@ -10,14 +10,14 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import com.arsvechkarev.viewdsl.DURATION_DEFAULT
+import com.arsvechkarev.viewdsl.Ints.dp
+import com.arsvechkarev.viewdsl.paddings
 import core.extenstions.execute
 import core.extenstions.getTextHeight
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
-import viewdsl.DURATION_DEFAULT
-import viewdsl.Ints.dp
-import viewdsl.paddings
 
 class RetryButton @JvmOverloads constructor(
   context: Context,

@@ -31,7 +31,9 @@
   <color name="dark_failure_ripple">#70E64545</color>
   <color name="dark_divider">@color/dark_overlay</color>
   <color name="dark_dark_divider">#000000</color>
-  <color name="dark_accent">#C33C2F</color>
-  <color name="dark_accent_darker">#E16F65</color>
+  <color name="dark_accent">#1B64C3</color>
+  <color name="dark_sign_in_button_start">#C33C2F</color>
+  <color name="dark_sign_in_button_end">#E16F65</color>
   <color name="dark_disabled">#787878</color>
+  <color name="dark_checkmark">#3BA800</color>
 </resources>

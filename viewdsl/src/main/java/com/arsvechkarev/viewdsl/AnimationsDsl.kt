@@ -1,11 +1,12 @@
 @file:Suppress("UsePropertyAccessSyntax")
 
-package viewdsl
+package com.arsvechkarev.viewdsl
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
+import android.graphics.drawable.Animatable
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
@@ -19,10 +20,20 @@ const val DURATION_LONG = 800L
 
 val AccelerateDecelerateInterpolator = AccelerateDecelerateInterpolator()
 
+fun Animator.startIfNotRunning() {
+  if (!isRunning) start()
+}
+
 fun Animator.cancelIfRunning() {
-  if (isRunning) {
-    cancel()
-  }
+  if (isRunning) cancel()
+}
+
+fun Animatable.startIfNotRunning() {
+  if (!isRunning) start()
+}
+
+fun Animatable.stopIfRunning() {
+  if (isRunning) stop()
 }
 
 fun Animator.doOnEnd(block: () -> Unit) {

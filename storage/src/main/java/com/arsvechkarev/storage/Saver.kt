@@ -19,6 +19,14 @@ class Saver(filename: String, context: Context) {
     return sharedPrefs.getInt(key, Int.MAX_VALUE)
   }
   
+  fun hasLong(key: String): Boolean {
+    return sharedPrefs.getLong(key, Long.MIN_VALUE) != Long.MIN_VALUE
+  }
+  
+  fun getLong(key: String): Long {
+    return sharedPrefs.getLong(key, Long.MIN_VALUE)
+  }
+  
   fun isUpToDate(key: String, maxMinutesInCache: Int): Boolean {
     return sharedPrefs.contains(key) && cacheIsValid(key, maxMinutesInCache)
   }

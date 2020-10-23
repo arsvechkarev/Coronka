@@ -3,9 +3,9 @@ package com.arsvechkarev.views.drawables
 import android.content.Context
 import android.graphics.Path
 import android.view.View.MeasureSpec
+import com.arsvechkarev.viewdsl.dimen
 import com.arsvechkarev.views.Chip
 import com.arsvechkarev.views.R
-import viewdsl.dimen
 
 class SelectedChipsLoadingStub(
   context: Context,

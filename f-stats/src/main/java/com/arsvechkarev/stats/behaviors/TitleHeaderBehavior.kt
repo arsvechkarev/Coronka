@@ -5,9 +5,9 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.arsvechkarev.stats.R
+import com.arsvechkarev.viewdsl.forEachChild
+import com.arsvechkarev.viewdsl.hasBehavior
 import core.extenstions.f
-import viewdsl.forEachChild
-import viewdsl.hasBehavior
 
 class TitleHeaderBehavior<V : View>(context: Context, attrs: AttributeSet)
   : CoordinatorLayout.Behavior<V>() {

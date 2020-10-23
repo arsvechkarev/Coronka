@@ -8,6 +8,7 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import com.arsvechkarev.viewdsl.DURATION_LONG
 import core.Application
 import core.extenstions.f
 import core.extenstions.getTextHeight
@@ -15,7 +16,6 @@ import core.model.DailyCase
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
-import viewdsl.DURATION_LONG
 
 class DateAndNumberLabel @JvmOverloads constructor(
   context: Context,
