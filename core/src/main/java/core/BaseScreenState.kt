@@ -1,5 +1,6 @@
 package core
 
+import com.google.firebase.FirebaseNetworkException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 
@@ -17,6 +18,7 @@ open class Failure(
   val reason: FailureReason = when (throwable) {
     is TimeoutException -> FailureReason.TIMEOUT
     is UnknownHostException -> FailureReason.NO_CONNECTION
+    is FirebaseNetworkException -> FailureReason.NO_CONNECTION
     else -> FailureReason.UNKNOWN
   }
   

@@ -38,7 +38,9 @@ class MainActivity : AppCompatActivity(), HostActivity {
     navigator = MainModuleInjector.provideNavigator(this)
     viewModel = MainModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
-      model.figureOutScreenToGo(intent, savedInstanceState)
+      if (savedInstanceState == null) {
+        model.figureOutScreenToGo(intent)
+      }
     }
     val connectivityObserver = ConnectivityObserver(connectivityManager, onNetworkAvailable = {
       navigator.currentFragment?.onNetworkAvailable()

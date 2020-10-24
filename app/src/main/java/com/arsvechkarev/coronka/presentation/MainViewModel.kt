@@ -1,7 +1,6 @@
 package com.arsvechkarev.coronka.presentation
 
 import android.content.Intent
-import android.os.Bundle
 import core.RxViewModel
 import core.auth.AuthEmailSaver
 import core.auth.Authenticator
@@ -15,18 +14,12 @@ class MainViewModel(
   private val schedulers: Schedulers = AndroidSchedulers
 ) : RxViewModel() {
   
-  fun figureOutScreenToGo(intent: Intent, savedInstanceState: Bundle?) {
+  fun figureOutScreenToGo(intent: Intent) {
     val emailLink = intent.data.toString()
-    if (authenticator.isSignInWithEmailLink(emailLink)) {
-      handleSignInWithEmailLink(emailLink)
-    } else {
-      if (savedInstanceState == null) {
-        if (authenticator.isUserLoggedIn()) {
-          _state.value = GoToMainScreen
-        } else {
-          _state.value = GoToRegistrationScreen
-        }
-      }
+    when {
+      authenticator.isUserLoggedIn() -> _state.value = GoToMainScreen
+      authenticator.isSignInWithEmailLink(emailLink) -> handleSignInWithEmailLink(emailLink)
+      else -> _state.value = GoToRegistrationScreen
     }
   }
   

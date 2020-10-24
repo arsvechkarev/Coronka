@@ -3,8 +3,8 @@ package com.arsvechkarev.registration.presentation
 import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.arsvechkarev.storage.Saver
 import core.Failure
+import core.KeyValueStorage
 import core.Loading
 import core.RxViewModel
 import core.auth.AuthEmailSaver
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 class RegistrationViewModel(
   private val authenticator: Authenticator,
   private val emailSaver: AuthEmailSaver,
-  private val timerSaver: Saver,
+  private val timerSaver: KeyValueStorage,
   private val schedulers: Schedulers
 ) : RxViewModel() {
   
@@ -41,7 +41,9 @@ class RegistrationViewModel(
     timer = builder.build()
     if (startTimer) {
       timer.start()
-      _state.value = EmailLinkSent
+      _state.value = EmailLinkSent(emailSaver.getEmail())
+    } else {
+      _state.value = InitialState
     }
   }
   
@@ -64,7 +66,7 @@ class RegistrationViewModel(
           .observeOn(schedulers.mainThread())
           .smartSubscribe(onComplete = {
             emailSaver.saveEmail(email)
-            _state.value = EmailLinkSent
+            _state.value = EmailLinkSent(email)
             initTimer()
           }, onError = { e ->
             _state.value = Failure(e)

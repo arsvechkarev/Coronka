@@ -24,6 +24,10 @@ inline fun <reified T : View> Fragment.withViewBuilder(builder: ViewBuilder.() -
   return requireContext().withViewBuilder(builder)
 }
 
+inline fun <reified T : View> View.withViewBuilder(builder: ViewBuilder.() -> T): T {
+  return context.withViewBuilder(builder)
+}
+
 inline fun <reified T : View> Fragment.view(
   width: Size = WrapContent,
   height: Size = WrapContent,
@@ -68,7 +72,7 @@ class ViewBuilder(val context: Context) {
     width: Size,
     height: Size,
     style: T.() -> Unit = {},
-    block: T.() -> Unit,
+    block: T.() -> Unit = {},
   ): T {
     val viewGroupParams = ViewGroup.LayoutParams(
       context.determineSize(width),

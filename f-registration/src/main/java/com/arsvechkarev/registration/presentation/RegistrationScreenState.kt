@@ -2,7 +2,9 @@ package com.arsvechkarev.registration.presentation
 
 import core.BaseScreenState
 
-object EmailLinkSent : BaseScreenState()
+object InitialState : BaseScreenState()
+
+class EmailLinkSent(val email: String) : BaseScreenState()
 
 sealed class EmailState : BaseScreenState() {
   

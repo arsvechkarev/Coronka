@@ -35,6 +35,8 @@
   <string name="text_no_connection">Whoops! No internet connection available</string>
   <string name="text_timeout">Connection is too slow. Try again later</string>
   <string name="text_unknown_error">Oops! Something went wrong. Try again later</string>
+  <string name="text_no_connection_short">No internet connection</string>
+  <string name="text_timeout_short">Connection is too slow</string>
   <string name="text_unknown_error_short">An error occurred</string>
   <string name="text_retry">Try again</string>
   <string name="text_retry_short">RETRY</string>
@@ -56,7 +58,7 @@
   <string name="error_email_is_empty">Email is empty</string>
   <string name="error_email_is_incorrect">Email is incorrect</string>
 
-  <string name="hint_edit_text_email">Enter your email here</string>
+  <string name="hint_edit_text_email">Email</string>
 
   <string name="text_visit_who">
     More information: &lt;br>

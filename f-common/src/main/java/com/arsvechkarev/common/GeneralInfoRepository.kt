@@ -1,6 +1,6 @@
 package com.arsvechkarev.common
 
-import com.arsvechkarev.storage.Saver
+import core.CacheValidationStorage
 import core.Loggable
 import core.MAX_CACHE_MINUTES
 import core.RxNetworker
@@ -12,7 +12,7 @@ import org.json.JSONObject
 
 class GeneralInfoRepository(
   private val networker: RxNetworker,
-  private val saver: Saver
+  private val storage: CacheValidationStorage
 ) : Loggable {
   
   override val logTag = "Request_GeneralInfoRepository"
@@ -23,11 +23,11 @@ class GeneralInfoRepository(
   
   private fun getFromCache(): Observable<GeneralInfo> {
     return Observable.create { emitter ->
-      if (saver.isUpToDate(GENERAL_INFO_LAST_UPDATE_TIME, MAX_CACHE_MINUTES)) {
+      if (storage.isUpToDate(GENERAL_INFO_LAST_UPDATE_TIME, MAX_CACHE_MINUTES)) {
         val generalInfo = GeneralInfo(
-          saver.getInt(CONFIRMED),
-          saver.getInt(DEATHS),
-          saver.getInt(RECOVERED)
+          storage.getInt(CONFIRMED),
+          storage.getInt(DEATHS),
+          storage.getInt(RECOVERED)
         )
         log { "Successfully found general info in cache" }
         emitter.onNext(generalInfo)
@@ -52,8 +52,8 @@ class GeneralInfoRepository(
   }
   
   private fun loadToCache(generalInfo: GeneralInfo) {
-    saver.execute {
-      putLong(GENERAL_INFO_LAST_UPDATE_TIME, MillisDateTime.current().millis)
+    storage.apply {
+      saveTime(GENERAL_INFO_LAST_UPDATE_TIME, MillisDateTime.current().millis)
       putInt(CONFIRMED, generalInfo.confirmed)
       putInt(DEATHS, generalInfo.deaths)
       putInt(RECOVERED, generalInfo.recovered)
