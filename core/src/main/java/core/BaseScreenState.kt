@@ -1,5 +1,6 @@
 package core
 
+import com.arsvechkarev.core.R
 import com.google.firebase.FirebaseNetworkException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
@@ -22,5 +23,15 @@ open class Failure(
     else -> FailureReason.UNKNOWN
   }
   
-  enum class FailureReason { NO_CONNECTION, TIMEOUT, UNKNOWN }
+  enum class FailureReason {
+    NO_CONNECTION,
+    TIMEOUT,
+    UNKNOWN;
+    
+    fun getStringRes() = when (this) {
+      NO_CONNECTION -> R.string.error_no_connection
+      TIMEOUT -> R.string.error_timeout
+      UNKNOWN -> R.string.error_unknown
+    }
+  }
 }

@@ -1,5 +1,6 @@
-package com.arsvechkarev.coronka
+package core
 
+import android.annotation.SuppressLint
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
@@ -8,6 +9,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import core.concurrency.AndroidThreader
 
+@SuppressLint("MissingPermission")
 class ConnectivityObserver(
   private val connectivityManager: ConnectivityManager,
   private var onNetworkAvailable: (() -> Unit)?

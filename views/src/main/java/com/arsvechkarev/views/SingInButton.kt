@@ -12,7 +12,6 @@ import android.util.StateSet
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.TextView
 import com.arsvechkarev.viewdsl.Ints.dp
 import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
 import com.arsvechkarev.viewdsl.animateInvisible
@@ -27,7 +26,7 @@ import com.arsvechkarev.viewdsl.size
 import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.textSize
 import com.arsvechkarev.viewdsl.withViewBuilder
-import com.arsvechkarev.views.MaterialProgressBar.Type.THICK
+import com.arsvechkarev.views.progressbar.ProgressBar
 import core.viewbuilding.Colors
 import core.viewbuilding.Colors.TextPrimary
 import core.viewbuilding.Fonts
@@ -35,8 +34,8 @@ import core.viewbuilding.TextSizes
 
 class SingInButton(context: Context) : FrameLayout(context) {
   
-  val textView get() = getChildAt(0) as TextView
-  val progressBar get() = getChildAt(1) as MaterialProgressBar
+  private val textView get() = getChildAt(0)
+  private val progressBar get() = getChildAt(1)
   
   init {
     addView(withViewBuilder {
@@ -48,7 +47,7 @@ class SingInButton(context: Context) : FrameLayout(context) {
       }
     })
     addView(withViewBuilder {
-      MaterialProgressBar(context, TextPrimary, THICK).apply {
+      ProgressBar(context, TextPrimary, ProgressBar.Thickness.THICK).apply {
         size(32.dp, 32.dp)
         invisible()
       }

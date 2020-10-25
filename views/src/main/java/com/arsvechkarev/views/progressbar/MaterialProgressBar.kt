@@ -1,4 +1,4 @@
-package com.arsvechkarev.views
+package com.arsvechkarev.views.progressbar
 
 import android.content.Context
 import android.graphics.Canvas
@@ -8,18 +8,19 @@ import android.graphics.drawable.AnimatedVectorDrawable
 import android.view.View
 import com.arsvechkarev.viewdsl.startIfNotRunning
 import com.arsvechkarev.viewdsl.stopIfRunning
-import com.arsvechkarev.views.MaterialProgressBar.Type.NORMAL
-import com.arsvechkarev.views.MaterialProgressBar.Type.THICK
+import com.arsvechkarev.views.R
+import com.arsvechkarev.views.progressbar.ProgressBar.Thickness.NORMAL
+import com.arsvechkarev.views.progressbar.ProgressBar.Thickness.THICK
 import core.extenstions.execute
 
 class MaterialProgressBar constructor(
   context: Context,
   color: Int,
-  type: Type,
+  thickness: ProgressBar.Thickness,
 ) : View(context) {
   
   private val drawable: AnimatedVectorDrawable =
-      when (type) {
+      when (thickness) {
         NORMAL -> context.getDrawable(R.drawable.progress_anim_normal) as AnimatedVectorDrawable
         THICK -> context.getDrawable(R.drawable.progress_anim_thick) as AnimatedVectorDrawable
       }.apply {
@@ -50,9 +51,5 @@ class MaterialProgressBar constructor(
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
     drawable.stopIfRunning()
-  }
-  
-  enum class Type {
-    NORMAL, THICK
   }
 }

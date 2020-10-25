@@ -13,6 +13,7 @@ import core.auth.Authenticator
 import core.concurrency.Schedulers
 import core.extenstions.withNetworkDelay
 import core.extenstions.withRequestTimeout
+import timerx.TimeFormatter
 import timerx.Timer
 import timerx.TimerBuilder
 import java.util.concurrent.TimeUnit
@@ -32,10 +33,15 @@ class RegistrationViewModel(
   val timerState: LiveData<TimerState>
     get() = _timerState
   
-  private val timer: Timer
+  private lateinit var timer: Timer
   
-  init {
-    val pair = createTimer()
+  private var timerTickingState = TimerState.TimeIsTicking(
+    TimeFormatter.format(TIMER_FORMAT, TIMER_TIME_MILLIS),
+    TIMER_TIME_MILLIS
+  )
+  
+  fun initializeTimer(resetAndStartTimer: Boolean) {
+    val pair = createTimer(resetAndStartTimer)
     val builder = pair.first
     val startTimer = pair.second
     timer = builder.build()
@@ -47,15 +53,14 @@ class RegistrationViewModel(
     }
   }
   
-  private var timerTickingState = TimerState.TimeIsTicking(
-    timer.formattedStartTime,
-    timer.getRemainingTimeIn(TimeUnit.MILLISECONDS)
-  )
-  
-  fun sendEmailLink(email: String) {
+  fun sendEmailLink(email: String, resetTimer: Boolean = false) {
     _emailState.value = EmailChecker.validateEmail(email)
     if (_emailState.value is EmailState.Incorrect) {
       return
+    }
+    if (resetTimer) {
+      timer.reset()
+      timer.start()
     }
     _state.value = Loading()
     rxCall {
@@ -96,12 +101,16 @@ class RegistrationViewModel(
     timerSaver.execute { clear() }
   }
   
-  private fun createTimer(): Pair<TimerBuilder, Boolean> {
+  private fun createTimer(reset: Boolean): Pair<TimerBuilder, Boolean> {
     val builder = TimerBuilder()
         .startFormat(TIMER_FORMAT)
         .onTick { time, millis -> onTimerTick(time, millis) }
         .onFinish { onTimerFinish() }
     var startTimer = false
+    if (reset) {
+      builder.startTime(TIMER_TIME_MILLIS, TimeUnit.MILLISECONDS)
+      return Pair(builder, true)
+    }
     if (timerSaver.hasLong(TIMER_KEY)) {
       val timeLeft = timerSaver.getLong(TIMER_KEY) - SystemClock.elapsedRealtime()
       if (timeLeft > 0) {

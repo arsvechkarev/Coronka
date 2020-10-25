@@ -10,8 +10,8 @@ class SharedPrefsAuthEmailSaver(context: Context) : AuthEmailSaver {
     sharedPrefs.edit().putString(EMAIL_SAVER_KEY, email).apply()
   }
   
-  override fun getEmail(): String {
-    return sharedPrefs.getString(EMAIL_SAVER_KEY, null)!!
+  override fun getEmail(): String? {
+    return sharedPrefs.getString(EMAIL_SAVER_KEY, null)
   }
   
   companion object {

@@ -31,12 +31,12 @@ import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.textColor
 import com.arsvechkarev.viewdsl.visible
 import com.arsvechkarev.viewdsl.withViewBuilder
-import com.arsvechkarev.views.ProgressBar
 import com.arsvechkarev.views.newsitem.NewsItemImage
 import com.arsvechkarev.views.newsitem.NewsItemView
 import com.arsvechkarev.views.newsitem.NewsItemViewApi22
 import com.arsvechkarev.views.newsitem.NewsItemViewApi23Plus
 import com.arsvechkarev.views.newsitem.NewsItemsUtils
+import com.arsvechkarev.views.progressbar.ProgressBar
 import core.extenstions.assertThat
 import core.imageloading.ImageLoader
 import core.model.NewsItemWithPicture
@@ -88,7 +88,7 @@ fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNe
           padding(16.dp)
         }
         child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
-          text(R.string.text_unknown_error_short)
+          text(R.string.error_unknown_short)
         }
         child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
           tag(NewsAdapter.RetryButton)
@@ -100,7 +100,6 @@ fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNe
       child<ProgressBar>(ProgressBarSize, ProgressBarSize) {
         tag(NewsAdapter.ProgressBar)
         layoutGravity(Gravity.CENTER)
-        setColor(Colors.Accent)
       }
     }
   }

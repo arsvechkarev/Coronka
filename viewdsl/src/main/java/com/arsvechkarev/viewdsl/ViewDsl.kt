@@ -1,6 +1,7 @@
 package com.arsvechkarev.viewdsl
 
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.FrameLayout
@@ -165,6 +166,10 @@ fun View.tag(tag: String) {
 
 fun View.background(drawable: Drawable) {
   background = drawable
+}
+
+fun View.backgroundGradient(orientation: GradientDrawable.Orientation, vararg colors: Int) {
+  background = GradientDrawable(orientation, colors)
 }
 
 fun View.backgroundColor(@ColorInt color: Int) {

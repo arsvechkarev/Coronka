@@ -119,19 +119,10 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   private fun renderFailure(reason: FailureReason) {
     hostActivity.enableTouchesOnDrawer()
     updateContentView(putLoading = false)
+    statsErrorMessage.setText(reason.getStringRes())
     when (reason) {
-      NO_CONNECTION -> {
-        statsImageFailure.setImageResource(R.drawable.image_no_connection)
-        statsErrorMessage.setText(R.string.text_no_connection)
-      }
-      TIMEOUT -> {
-        statsImageFailure.setImageResource(R.drawable.image_unknown_error)
-        statsErrorMessage.setText(R.string.text_timeout)
-      }
-      UNKNOWN -> {
-        statsImageFailure.setImageResource(R.drawable.image_unknown_error)
-        statsErrorMessage.setText(R.string.text_unknown_error)
-      }
+      TIMEOUT, UNKNOWN -> statsImageFailure.setImageResource(R.drawable.image_unknown_error)
+      NO_CONNECTION -> statsImageFailure.setImageResource(R.drawable.image_no_connection)
     }
   }
   

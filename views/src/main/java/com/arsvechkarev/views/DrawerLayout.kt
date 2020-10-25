@@ -115,7 +115,8 @@ class DrawerLayout @JvmOverloads constructor(
   }
   
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    mainView.layout(mainView.left, 0, mainView.measuredWidth, mainView.measuredHeight)
+    val left = mainView.left
+    mainView.layout(left, 0, left + mainView.measuredWidth, b - t)
     slideRange = computeSlideRange(r - l)
     var drawerLeft = when (currentState) {
       OPENED -> 0

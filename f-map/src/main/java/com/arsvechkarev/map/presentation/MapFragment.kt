@@ -110,19 +110,13 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
     mapHelper.toggleMap(enable = false)
     mapLayoutUnknownError.invisible()
     mapLayoutNoConnection.invisible()
+    mapTextFailureReason.text(state.reason.getStringRes())
     when (state.reason) {
-      NO_CONNECTION -> {
-        mapTextFailureReason.text(R.string.text_no_connection)
-        mapLayoutNoConnection.visible()
-        mapEarthView.animateWifi()
-      }
-      TIMEOUT -> {
-        mapTextFailureReason.text(R.string.text_timeout)
+      NO_CONNECTION, TIMEOUT -> {
         mapLayoutNoConnection.visible()
         mapEarthView.animateWifi()
       }
       UNKNOWN -> {
-        mapTextFailureReason.text(R.string.text_unknown_error)
         mapLayoutUnknownError.visible()
       }
     }

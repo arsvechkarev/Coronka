@@ -71,17 +71,12 @@ abstract class BaseFragment(
     return viewsCache.getValue(tag)
   }
   
+  @Suppress("UNCHECKED_CAST")
+  fun <T : View> viewAs(tag: String) = view(tag) as T
+  
   fun imageView(tag: String) = viewAs<ImageView>(tag)
   
   fun textView(tag: String) = viewAs<TextView>(tag)
   
   fun editText(tag: String) = viewAs<EditText>(tag)
-  
-  @Suppress("UNCHECKED_CAST")
-  fun <T : View> viewAs(tag: String): T {
-    if (viewsCache[tag] == null) {
-      viewsCache[tag] = requireView().childView(tag) as T
-    }
-    return viewsCache.getValue(tag) as T
-  }
 }

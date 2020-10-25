@@ -38,7 +38,7 @@
       android:id="@+id/rankingsTitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/title_rankings"
+      android:text="@string/label_rankings"
       android:textSize="@dimen/text_header"
       app:layout_constraintBottom_toBottomOf="@id/rankingsHeaderGradientView"
       app:layout_constraintEnd_toEndOf="parent"

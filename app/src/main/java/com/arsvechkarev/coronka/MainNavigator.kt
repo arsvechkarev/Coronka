@@ -1,8 +1,14 @@
 package com.arsvechkarev.coronka
 
+import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextMap
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextNews
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextRankings
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextStatistics
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextTips
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.rankings.presentation.RankingsFragment
@@ -22,7 +28,7 @@ class MainNavigator(
   
   override var currentFragment: BaseFragment? = null
   
-  override fun navigateTo(fragmentClass: KClass<out BaseFragment>) {
+  override fun switchTo(fragmentClass: KClass<out BaseFragment>) {
     val supportFragmentManager = supportFragmentManager ?: return
     val drawerLayout = drawerLayout ?: return
     if (currentFragment?.javaClass?.name == fragmentClass.java.name) {
@@ -35,12 +41,12 @@ class MainNavigator(
       drawerLayout.removeOpenCloseListener(currentFragment!!.drawerOpenCloseListener)
       transaction.hide(currentFragment!!)
       if (!fragment.isAdded) {
-        transaction.add(R.id.fragment_container, fragment)
+        transaction.add(R.id.fragmentContainer, fragment)
       } else {
         transaction.show(fragment)
       }
     } else {
-      transaction.replace(R.id.fragment_container, fragment)
+      transaction.replace(R.id.fragmentContainer, fragment)
     }
     drawerLayout.addOpenCloseListener(fragment.drawerOpenCloseListener)
     transaction.runOnCommit { fragment.onAppearedOnScreen() }
@@ -48,14 +54,24 @@ class MainNavigator(
     currentFragment = fragment
   }
   
-  override fun handleOnDrawerItemClicked(id: Int) {
+  override fun navigateTo(fragmentClass: KClass<out BaseFragment>, data: Bundle?) {
+    val fragmentManager = supportFragmentManager ?: return
+    val fragment = fragmentClass.java.newInstance()
+    fragment.arguments = data
+    fragmentManager.beginTransaction()
+        .replace(R.id.fragmentContainer, fragment)
+        .commit()
+    
+  }
+  
+  override fun handleOnDrawerItemClicked(tag: String) {
     drawerLayout?.close(andThen = {
-      when (id) {
-        R.id.drawerTextStatistics -> navigateTo(StatsFragment::class)
-        R.id.drawerTextNews -> navigateTo(NewsFragment::class)
-        R.id.drawerTextMap -> navigateTo(MapFragment::class)
-        R.id.drawerTextTips -> navigateTo(TipsFragment::class)
-        R.id.drawerTextRankings -> navigateTo(RankingsFragment::class)
+      when (tag) {
+        TextStatistics -> switchTo(StatsFragment::class)
+        TextNews -> switchTo(NewsFragment::class)
+        TextMap -> switchTo(MapFragment::class)
+        TextRankings -> switchTo(RankingsFragment::class)
+        TextTips -> switchTo(TipsFragment::class)
       }
     })
   }

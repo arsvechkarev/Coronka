@@ -4,7 +4,7 @@ import core.BaseScreenState
 
 object InitialState : BaseScreenState()
 
-class EmailLinkSent(val email: String) : BaseScreenState()
+class EmailLinkSent(val email: String?) : BaseScreenState()
 
 sealed class EmailState : BaseScreenState() {
   

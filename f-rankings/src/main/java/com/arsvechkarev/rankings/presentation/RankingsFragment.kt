@@ -13,6 +13,7 @@ import com.arsvechkarev.viewdsl.dimen
 import com.arsvechkarev.viewdsl.gone
 import com.arsvechkarev.viewdsl.margins
 import com.arsvechkarev.viewdsl.onClick
+import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.unspecified
 import com.arsvechkarev.viewdsl.view
 import com.arsvechkarev.viewdsl.visible
@@ -139,19 +140,10 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     rankingsFabFilter.isClickable = false
     stopLoadingStubs()
     rankingsErrorLayout.animateVisible()
+    rankingsErrorMessage.text(reason.getStringRes())
     when (reason) {
-      NO_CONNECTION -> {
-        rankingsImageFailure.setImageResource(R.drawable.image_no_connection)
-        rankingsErrorMessage.setText(R.string.text_no_connection)
-      }
-      TIMEOUT -> {
-        rankingsImageFailure.setImageResource(R.drawable.image_unknown_error)
-        rankingsErrorMessage.setText(R.string.text_timeout)
-      }
-      UNKNOWN -> {
-        rankingsImageFailure.setImageResource(R.drawable.image_unknown_error)
-        rankingsErrorMessage.setText(R.string.text_unknown_error)
-      }
+      TIMEOUT, UNKNOWN -> rankingsImageFailure.setImageResource(R.drawable.image_unknown_error)
+      NO_CONNECTION -> rankingsImageFailure.setImageResource(R.drawable.image_no_connection)
     }
   }
   

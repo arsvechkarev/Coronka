@@ -11,12 +11,28 @@
 
   <string name="title_covid_19">COVID-19</string>
   <string name="title_stats">Stay home\nStay safe</string>
-  <string name="title_tips">Stay home\nStay safe</string>
-  <string name="title_rankings">Rankings</string>
+  <string name="title_tips">Q&amp;A and Tips</string>
+
+  <string name="error_email_sent">Email verification link was sent. Check your email</string>
+  <string name="error_no_connection">Whoops! No internet connection available</string>
+  <string name="error_timeout">Connection is too slow. Try again later</string>
+  <string name="error_unknown">Oops! Something went wrong. Try again later</string>
+  <string name="error_no_connection_short">No internet connection</string>
+  <string name="error_timeout_short">Connection is too slow</string>
+  <string name="error_unknown_short">An error occurred</string>
+  <string name="error_email_is_empty">Email is empty</string>
+  <string name="error_email_is_incorrect">Email is incorrect</string>
+  <string name="error_email_link_expired">Email link expired</string>
+  <string name="error_while_checking_link">An error occurred while checking link</string>
 
   <string name="number_thousands">%1$d K</string>
   <string name="number_millions">%1$d M</string>
   <string name="number_formatted_with_parts">%1$d.%2$s M</string>
+
+  <string name="text_retry">Try again</string>
+  <string name="text_resend_link">Resend link</string>
+  <string name="text_retry_short">RETRY</string>
+  <string name="text_loading_map">Loading map…</string>
 
   <string name="text_worldwide">Worldwide</string>
   <string name="text_asia">Asia</string>
@@ -26,20 +42,11 @@
   <string name="text_north_america">North america</string>
   <string name="text_south_america">South america</string>
   <string name="text_filters">Filters</string>
-  <string name="text_loading_map">Loading map…</string>
   <string name="text_confirmed">Confirmed</string>
   <string name="text_recovered">Recovered</string>
   <string name="text_deaths">Deaths</string>
   <string name="text_death_rate">Death rate</string>
   <string name="text_percent_in_country">Percent in country</string>
-  <string name="text_no_connection">Whoops! No internet connection available</string>
-  <string name="text_timeout">Connection is too slow. Try again later</string>
-  <string name="text_unknown_error">Oops! Something went wrong. Try again later</string>
-  <string name="text_no_connection_short">No internet connection</string>
-  <string name="text_timeout_short">Connection is too slow</string>
-  <string name="text_unknown_error_short">An error occurred</string>
-  <string name="text_retry">Try again</string>
-  <string name="text_retry_short">RETRY</string>
   <string name="text_new_cases">New cases</string>
   <string name="text_total_cases">Total cases</string>
   <string name="text_sign_in">Sign in</string>
@@ -53,10 +60,6 @@
   <string name="text_headache">Headache</string>
   <string name="text_fever">Fever</string>
   <string name="text_cough">Cough</string>
-  <string name="text_email_sent">Email verification link was sent. Check your email</string>
-
-  <string name="error_email_is_empty">Email is empty</string>
-  <string name="error_email_is_incorrect">Email is incorrect</string>
 
   <string name="hint_edit_text_email">Email</string>
 

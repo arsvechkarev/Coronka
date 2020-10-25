@@ -90,7 +90,7 @@ class RegistrationFragment : BaseFragment() {
           gravity(Gravity.CENTER)
           margins(top = 20.dp, start = 24.dp, end = 24.dp)
           textSize(TextSizes.H3)
-          text(R.string.text_email_sent)
+          text(R.string.error_email_sent)
           font(Fonts.SegoeUi)
         }
         child<TextView>(MatchParent, WrapContent) {
@@ -122,6 +122,14 @@ class RegistrationFragment : BaseFragment() {
       model.state.observe(this, Observer(::handleState))
       model.emailState.observe(this, Observer(::handleEmailState))
       model.timerState.observe(this, Observer(::handleTimerState))
+      val email = arguments?.getString(EMAIL_KEY)
+      if (email != null) {
+        model.initializeTimer(resetAndStartTimer = true)
+        model.sendEmailLink(email)
+        editText(EditTextEmail).text(email)
+      } else {
+        model.initializeTimer(resetAndStartTimer = false)
+      }
     }
   }
   
@@ -146,7 +154,9 @@ class RegistrationFragment : BaseFragment() {
   }
   
   private fun renderEmailLinkSent(state: EmailLinkSent) {
-    editText(EditTextEmail).text(state.email)
+    if (state.email != null) {
+      editText(EditTextEmail).text(state.email)
+    }
     viewAs<SingInButton>(ButtonSignIn).hideProgress()
     view(TextLinkWasSent).animateVisible()
     view(TextTimer).animateVisible()
@@ -161,9 +171,9 @@ class RegistrationFragment : BaseFragment() {
       textView(TextEmailError).text(R.string.error_email_is_incorrect)
     } else {
       val textRes = when (state.reason) {
-        NO_CONNECTION -> R.string.text_no_connection_short
-        TIMEOUT -> R.string.text_timeout_short
-        UNKNOWN -> R.string.text_unknown_error_short
+        NO_CONNECTION -> R.string.error_no_connection_short
+        TIMEOUT -> R.string.error_timeout_short
+        UNKNOWN -> R.string.error_unknown_short
       }
       textView(TextEmailError).text(textRes)
     }
@@ -198,12 +208,14 @@ class RegistrationFragment : BaseFragment() {
     }
   }
   
-  private companion object {
+  companion object {
     
-    const val EditTextEmail = "EditTextEmail"
-    const val ButtonSignIn = "ButtonSignIn"
-    const val TextTimer = "TextTimer"
-    const val TextEmailError = "TextEmailError"
-    const val TextLinkWasSent = "TextLinkWasSent"
+    const val EMAIL_KEY = "EMAIL_KEY"
+    
+    private const val EditTextEmail = "EditTextEmail"
+    private const val ButtonSignIn = "ButtonSignIn"
+    private const val TextTimer = "TextTimer"
+    private const val TextEmailError = "TextEmailError"
+    private const val TextLinkWasSent = "TextLinkWasSent"
   }
 }

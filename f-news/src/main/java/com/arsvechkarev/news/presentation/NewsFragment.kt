@@ -196,19 +196,10 @@ class NewsFragment : BaseFragment() {
     Timber.e(state.throwable, "Error")
     view(LoadingLayout).animateInvisible()
     view(ErrorLayout).animateVisible()
+    textView(ErrorMessage).text(state.reason.getStringRes())
     when (state.reason) {
-      NO_CONNECTION -> {
-        imageView(ImageFailure).image(R.drawable.image_no_connection)
-        textView(ErrorMessage).text(R.string.text_no_connection)
-      }
-      TIMEOUT -> {
-        imageView(ImageFailure).image(R.drawable.image_unknown_error)
-        textView(ErrorMessage).text(R.string.text_timeout)
-      }
-      UNKNOWN -> {
-        imageView(ImageFailure).image(R.drawable.image_unknown_error)
-        textView(ErrorMessage).text(R.string.text_unknown_error)
-      }
+      TIMEOUT, UNKNOWN -> imageView(ImageFailure).image(R.drawable.image_unknown_error)
+      NO_CONNECTION -> imageView(ImageFailure).image(R.drawable.image_no_connection)
     }
   }
   
