@@ -3,8 +3,6 @@ package com.arsvechkarev.views
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_CANCEL
@@ -23,9 +21,6 @@ import com.arsvechkarev.views.DrawerLayout.DrawerState.CLOSED
 import com.arsvechkarev.views.DrawerLayout.DrawerState.OPENED
 import core.HostActivity.DrawerOpenCloseListener
 import core.extenstions.assertThat
-import core.extenstions.execute
-import core.extenstions.f
-import core.extenstions.withAlpha
 import kotlin.math.abs
 import kotlin.math.hypot
 
@@ -36,7 +31,7 @@ class DrawerLayout @JvmOverloads constructor(
 ) : ViewGroup(context, attrs, defStyleAttr) {
   
   private val mainView: View get() = getChildAt(0)
-  private val drawerView: View get() = getChildAt(1)
+  private val drawerView: View get() = getChildAt(2)
   private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
   
   private val maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
@@ -59,6 +54,8 @@ class DrawerLayout @JvmOverloads constructor(
   private val openCloseListeners = ArrayList<DrawerOpenCloseListener>()
   
   var respondToTouches = true
+  
+  private val dummyView get() = getChildAt(1)
   
   fun addOpenCloseListener(listener: DrawerOpenCloseListener) {
     openCloseListeners.add(listener)
@@ -97,8 +94,8 @@ class DrawerLayout @JvmOverloads constructor(
   
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-    assertThat(childCount == 2) { "Layout must have exactly 2 children" }
     mainView.measure(widthMeasureSpec, heightMeasureSpec)
+    dummyView.measure(widthMeasureSpec, heightMeasureSpec)
     slideRange = computeSlideRange(widthSize)
     val widthSpec = MeasureSpec.makeMeasureSpec(slideRange, MeasureSpec.EXACTLY)
     drawerView.measure(widthSpec, heightMeasureSpec)
@@ -117,6 +114,7 @@ class DrawerLayout @JvmOverloads constructor(
   override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     val left = mainView.left
     mainView.layout(left, 0, left + mainView.measuredWidth, b - t)
+    dummyView.layout(left, 0, left + dummyView.measuredWidth, b - t)
     slideRange = computeSlideRange(r - l)
     var drawerLeft = when (currentState) {
       OPENED -> 0
@@ -259,19 +257,7 @@ class DrawerLayout @JvmOverloads constructor(
     val newMainLeft = (fraction * PARALLAX_COEFFICIENT * slideRange).toInt()
     mainView.left = newMainLeft
     mainView.right = newMainLeft + mainView.measuredWidth
-  }
-  
-  override fun dispatchDraw(canvas: Canvas) {
-    canvas.execute {
-      translate(mainView.left.f, 0f)
-      mainView.draw(canvas)
-    }
-    val fraction = (drawerView.right.toFloat() / slideRange).coerceAtLeast(0f)
-    canvas.drawColor(Color.BLACK.withAlpha(fraction * SHADOW_ALPHA_COEFFICIENT))
-    canvas.execute {
-      translate(drawerView.left.f, 0f)
-      drawerView.draw(canvas)
-    }
+    dummyView.alpha = fraction * SHADOW_ALPHA_COEFFICIENT
   }
   
   override fun generateDefaultLayoutParams(): LayoutParams {

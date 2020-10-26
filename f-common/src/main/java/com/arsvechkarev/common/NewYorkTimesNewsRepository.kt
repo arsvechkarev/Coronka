@@ -26,7 +26,7 @@ class NewYorkTimesNewsRepository(
   }
   
   private fun transformJson(json: String): List<DifferentiableItem> {
-    val news = ArrayList<DifferentiableItem>()
+    val news = ArrayList<NewsItemWithPicture>()
     val outerObject = JSONObject(json)
     val array = outerObject.getJSONObject("response").getJSONArray("docs")
     for (i in 0 until array.length()) {
@@ -41,10 +41,10 @@ class NewYorkTimesNewsRepository(
       if (multimediaItem != null) {
         val imagePath = multimediaItem.getString("url")
         val imageUrl = "https://static01.nyt.com/$imagePath"
-        Timber.d("$i: title='$title', date='$date', imageUrl='$imageUrl'")
+        Timber.d("$i: title='$title', id='$id',date='$date', imageUrl='$imageUrl'")
         news.add(NewsItemWithPicture(id, title, description, webUrl, formattedDate, imageUrl))
       }
     }
-    return news
+    return news.distinctBy { it.title }
   }
 }

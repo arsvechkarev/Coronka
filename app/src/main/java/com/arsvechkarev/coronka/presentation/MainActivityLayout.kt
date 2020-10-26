@@ -1,12 +1,15 @@
 package com.arsvechkarev.coronka.presentation
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.FrameLayout.LayoutParams
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import com.arsvechkarev.coronka.R
 import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextMap
@@ -17,6 +20,7 @@ import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextTips
 import com.arsvechkarev.viewdsl.Ints.dp
 import com.arsvechkarev.viewdsl.Size.Companion.MatchParent
 import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
+import com.arsvechkarev.viewdsl.backgroundColor
 import com.arsvechkarev.viewdsl.backgroundGradient
 import com.arsvechkarev.viewdsl.drawables
 import com.arsvechkarev.viewdsl.gravity
@@ -106,30 +110,38 @@ fun Context.buildMainActivityLayout() = withViewBuilder {
         id = R.id.fragmentContainer
       }
     }
-    child<DrawerGroupLinearLayout, LayoutParams>(MatchParent, MatchParent) {
-      tag(MainActivity.DrawerGroupLinearLayout)
-      orientation(LinearLayout.VERTICAL)
-      backgroundGradient(GradientDrawable.Orientation.BL_TR, Colors.GradientHeaderStart,
-        Colors.GradientHeaderEnd)
-      child<LinearLayout>(MatchParent, WrapContent) {
-        orientation(LinearLayout.HORIZONTAL)
-        gravity(Gravity.CENTER_VERTICAL)
-        margins(start = 8.dp, top = 12.dp, bottom = 12.dp)
-        child<ImageView>(LogoIconSize, LogoIconSize) {
-          image(R.drawable.logo_icon)
-          padding(12.dp)
+    child<View, LayoutParams>(MatchParent, MatchParent) {
+      // Dummy view for shadow effect
+      backgroundColor(Color.BLACK)
+      alpha = 0f
+    }
+    child<ScrollView, LayoutParams>(MatchParent, MatchParent) {
+      isFillViewport = true
+      child<DrawerGroupLinearLayout, LayoutParams>(MatchParent, MatchParent) {
+        tag(MainActivity.DrawerGroupLinearLayout)
+        orientation(LinearLayout.VERTICAL)
+        backgroundGradient(GradientDrawable.Orientation.BL_TR, Colors.GradientHeaderStart,
+          Colors.GradientHeaderEnd)
+        child<LinearLayout>(MatchParent, WrapContent) {
+          orientation(LinearLayout.HORIZONTAL)
+          gravity(Gravity.CENTER_VERTICAL)
+          margins(start = 8.dp, top = 12.dp, bottom = 12.dp)
+          child<ImageView>(LogoIconSize, LogoIconSize) {
+            image(R.drawable.logo_icon)
+            padding(12.dp)
+          }
+          child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
+            padding(12.dp)
+            text(R.string.app_name)
+            textSize(TextSizes.H0)
+          }
         }
-        child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
-          padding(12.dp)
-          text(R.string.app_name)
-          textSize(TextSizes.H0)
-        }
+        drawerTextVew(TextStatistics, R.drawable.ic_statistics, R.string.label_stats)
+        drawerTextVew(TextNews, R.drawable.ic_newspaper, R.string.label_news)
+        drawerTextVew(TextMap, R.drawable.ic_map, R.string.label_map)
+        drawerTextVew(TextRankings, R.drawable.ic_rankings, R.string.label_rankings)
+        drawerTextVew(TextTips, R.drawable.ic_tips, R.string.label_tips)
       }
-      drawerTextVew(TextStatistics, R.drawable.ic_statistics, R.string.label_stats)
-      drawerTextVew(TextNews, R.drawable.ic_newspaper, R.string.label_news)
-      drawerTextVew(TextMap, R.drawable.ic_map, R.string.label_map)
-      drawerTextVew(TextRankings, R.drawable.ic_rankings, R.string.label_rankings)
-      drawerTextVew(TextTips, R.drawable.ic_tips, R.string.label_tips)
     }
   }
 }
