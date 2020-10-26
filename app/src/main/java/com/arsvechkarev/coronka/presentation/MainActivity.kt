@@ -1,6 +1,5 @@
 package com.arsvechkarev.coronka.presentation
 
-import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
@@ -32,7 +31,6 @@ class MainActivity : BaseActivity(), HostActivity {
   private lateinit var viewModel: MainViewModel
   private lateinit var navigator: Navigator
   
-  @SuppressLint("SourceLockedOrientationActivity")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Densities.init(resources)

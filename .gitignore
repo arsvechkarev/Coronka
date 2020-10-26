@@ -16,3 +16,4 @@
 .cxx
 /f-map/src/debug/res/values/google_maps_api_key.xml
 /f-map/src/release/res/values/google_maps_api_key.xml
+app/google-services.json

@@ -6,6 +6,7 @@
     <inspection_tool class="AndroidLintGetContentDescriptionOverride" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="AndroidLintKeyboardInaccessibleWidget" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="AndroidLintLabelFor" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="AndroidLintSourceLockedOrientationActivity" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="AndroidLintViewConstructor" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ClassName" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="LiftReturnOrAssignment" enabled="false" level="INFO" enabled_by_default="false" />
