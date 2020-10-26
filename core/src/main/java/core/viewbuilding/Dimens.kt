@@ -11,6 +11,7 @@ object Dimens {
   val GradientHeaderCurveSize: Float get() = textSizes[0]
   val DividerHeight: Float get() = textSizes[1]
   
+  val LogoIconSize get() = 90.dp
   val GradientHeaderHeight get() = 120.dp
   val ErrorLayoutImageSize get() = 90.dp
   val ErrorLayoutTextPadding get() = 32.dp
