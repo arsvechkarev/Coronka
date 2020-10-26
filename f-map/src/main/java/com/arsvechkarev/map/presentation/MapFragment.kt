@@ -85,12 +85,14 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   
   private fun renderLoading() {
     mapHelper.toggleMap(enable = false)
+    mapView.invisible()
     mapLayoutFailure.animateInvisible()
     mapLayoutLoading.animateVisible()
   }
   
   private fun renderLoadedFromNetwork(state: LoadedCountries) {
     mapLayoutLoading.animateInvisible()
+    mapView.animateVisible()
     mapHelper.toggleMap(enable = true)
     mapHelper.drawCountries(state.iso2ToCountryMap)
   }
@@ -107,6 +109,7 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   }
   
   private fun renderFailure(state: Failure) {
+    mapView.invisible()
     mapHelper.toggleMap(enable = false)
     mapLayoutUnknownError.invisible()
     mapLayoutNoConnection.invisible()
