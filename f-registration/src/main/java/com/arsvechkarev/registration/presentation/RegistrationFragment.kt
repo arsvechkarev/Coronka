@@ -1,5 +1,6 @@
 package com.arsvechkarev.registration.presentation
 
+import android.content.Intent
 import android.view.Gravity
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -9,7 +10,13 @@ import com.arsvechkarev.registration.R
 import com.arsvechkarev.registration.di.RegistrationModuleInjector
 import com.arsvechkarev.registration.presentation.EmailState.Correct
 import com.arsvechkarev.registration.presentation.EmailState.Incorrect
-import com.arsvechkarev.viewdsl.Ints.dp
+import com.arsvechkarev.registration.presentation.RegistrationDimens.EditTextPadding
+import com.arsvechkarev.registration.presentation.RegistrationDimens.MarginBottom
+import com.arsvechkarev.registration.presentation.RegistrationDimens.MarginHorizontal
+import com.arsvechkarev.registration.presentation.RegistrationDimens.MarginHorizontalBig
+import com.arsvechkarev.registration.presentation.RegistrationDimens.MarginTop
+import com.arsvechkarev.registration.presentation.RegistrationDimens.MarginTopSmall
+import com.arsvechkarev.registration.presentation.TimerState.TimerHasFinished
 import com.arsvechkarev.viewdsl.Size.Companion.MatchParent
 import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
 import com.arsvechkarev.viewdsl.animateInvisible
@@ -39,6 +46,7 @@ import core.Failure.FailureReason.UNKNOWN
 import core.Loading
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
+import core.viewbuilding.Styles.ClickableTextView
 import core.viewbuilding.TextSizes
 import timber.log.Timber
 
@@ -54,32 +62,33 @@ class RegistrationFragment : BaseFragment() {
         orientation(LinearLayout.VERTICAL)
         child<TextView>(WrapContent, WrapContent) {
           layoutGravity(Gravity.CENTER)
-          margins(bottom = 24.dp)
+          margins(top = MarginTop)
           textSize(TextSizes.MainTitle)
-          text("Log in")
+          text(R.string.title_log_in)
           font(Fonts.SegoeUiBold)
         }
         child<TextView>(MatchParent, WrapContent) {
           gravity(Gravity.CENTER)
-          margins(start = 24.dp, end = 24.dp)
+          margins(start = MarginHorizontal, end = MarginHorizontal, top = MarginTop)
           textSize(TextSizes.H4)
-          text("Enter your email and you will receive link to sign up or log in to the app")
+          text(R.string.text_enter_your_email)
           font(Fonts.SegoeUi)
         }
         child<EditText>(MatchParent, WrapContent) {
           tag(EditTextEmail)
-          isEnabled = false
-          margins(start = 20.dp, end = 20.dp, top = 40.dp, bottom = 20.dp)
+          margins(start = MarginHorizontal, end = MarginHorizontal, top = MarginTop)
           font(Fonts.SegoeUi)
           textSize(TextSizes.H3)
-          padding(12.dp)
+          padding(EditTextPadding)
+          maxLines = 1
+          isEnabled = false
           setHint(R.string.hint_edit_text_email)
         }
         child<TextView>(WrapContent, WrapContent) {
           tag(TextEmailError)
           invisible()
           gravity(Gravity.CENTER)
-          margins(start = 32.dp, end = 32.dp)
+          margins(start = MarginHorizontalBig, end = MarginHorizontalBig, top = MarginTop)
           textColor(Colors.Failure)
           textSize(TextSizes.H4)
           font(Fonts.SegoeUi)
@@ -88,7 +97,7 @@ class RegistrationFragment : BaseFragment() {
           tag(TextLinkWasSent)
           invisible()
           gravity(Gravity.CENTER)
-          margins(top = 20.dp, start = 24.dp, end = 24.dp)
+          margins(start = MarginHorizontal, end = MarginHorizontal)
           textSize(TextSizes.H3)
           text(R.string.error_email_sent)
           font(Fonts.SegoeUi)
@@ -98,17 +107,29 @@ class RegistrationFragment : BaseFragment() {
           invisible()
           textColor(Colors.TextSecondary)
           gravity(Gravity.CENTER)
-          margins(top = 20.dp, start = 24.dp, end = 24.dp)
+          margins(top = MarginTopSmall, start = MarginHorizontal, end = MarginHorizontal)
           textSize(TextSizes.H4)
           font(Fonts.SegoeUi)
+        }
+        child<TextView>(WrapContent, WrapContent, style = ClickableTextView) {
+          tag(TextOpenEmailApp)
+          invisible()
+          layoutGravity(Gravity.CENTER)
+          text(R.string.text_open_email_app)
+          margins(top = MarginTop, start = MarginHorizontal, end = MarginHorizontal)
+          onClick {
+            val intent = Intent(Intent.ACTION_MAIN)
+            intent.addCategory(Intent.CATEGORY_APP_EMAIL)
+            startActivity(intent)
+          }
         }
       }
       child<SingInButton>(MatchParent, WrapContent) {
         tag(ButtonSignIn)
-        margins(start = 20.dp, end = 20.dp, bottom = 20.dp)
+        margins(start = MarginHorizontal, end = MarginHorizontal, bottom = MarginBottom)
         layoutGravity(Gravity.BOTTOM)
         onClick {
-          val email = editText(EditTextEmail).text.toString()
+          val email = editText(EditTextEmail).text.toString().trim()
           viewModel.sendEmailLink(email)
         }
       }
@@ -159,6 +180,7 @@ class RegistrationFragment : BaseFragment() {
     }
     viewAs<SingInButton>(ButtonSignIn).hideProgress()
     view(TextLinkWasSent).animateVisible()
+    view(TextOpenEmailApp).animateVisible()
     view(TextTimer).animateVisible()
     view(ButtonSignIn).isEnabled = false
     view(EditTextEmail).isEnabled = false
@@ -196,10 +218,11 @@ class RegistrationFragment : BaseFragment() {
   private fun handleTimerState(state: TimerState) {
     when (state) {
       is TimerState.TimeIsTicking -> {
-        textView(TextTimer).text("Resend link in ${state.time}")
+        textView(TextTimer).text(getString(R.string.number_resend_link, state.time))
       }
-      is TimerState.TimerHasFinished -> {
+      is TimerHasFinished -> {
         view(TextTimer).animateInvisible()
+        view(TextOpenEmailApp).animateInvisible()
         view(TextLinkWasSent).animateInvisible()
         view(ButtonSignIn).isEnabled = true
         view(EditTextEmail).isEnabled = true
@@ -215,6 +238,7 @@ class RegistrationFragment : BaseFragment() {
     private const val EditTextEmail = "EditTextEmail"
     private const val ButtonSignIn = "ButtonSignIn"
     private const val TextTimer = "TextTimer"
+    private const val TextOpenEmailApp = "TextOpenEmailApp"
     private const val TextEmailError = "TextEmailError"
     private const val TextLinkWasSent = "TextLinkWasSent"
   }

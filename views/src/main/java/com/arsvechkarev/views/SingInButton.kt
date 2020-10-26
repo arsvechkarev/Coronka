@@ -26,7 +26,6 @@ import com.arsvechkarev.viewdsl.size
 import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.textSize
 import com.arsvechkarev.viewdsl.withViewBuilder
-import com.arsvechkarev.views.progressbar.ProgressBar
 import core.viewbuilding.Colors
 import core.viewbuilding.Colors.TextPrimary
 import core.viewbuilding.Fonts

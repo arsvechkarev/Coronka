@@ -101,7 +101,7 @@
     android:gravity="center"
     android:visibility="invisible">
 
-    <com.arsvechkarev.views.progressbar.ProgressBar
+    <com.arsvechkarev.views.ProgressBar
       android:layout_width="@dimen/progress_bar_size"
       android:layout_height="@dimen/progress_bar_size"
       android:layout_margin="@dimen/map_loading_layout_margin"/>

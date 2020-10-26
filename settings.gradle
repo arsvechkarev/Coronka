@@ -1,4 +1,4 @@
-rootProject.name = "CoronavirusInfo"
+rootProject.name = "Coronka"
 include ':app'
 include ':core'
 include ':f-rankings'

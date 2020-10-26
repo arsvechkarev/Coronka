@@ -13,7 +13,7 @@
     <path
       android:name="progressBar"
       android:pathData="M0, 0 m 0, -18 a 18,18 0 1,1 0,36 a 18,18 0 1,1 0,-36"
-      android:strokeWidth="7"
+      android:strokeWidth="6"
       android:strokeColor="?colorAccent"
       android:strokeLineCap="round"
       android:strokeLineJoin="round"

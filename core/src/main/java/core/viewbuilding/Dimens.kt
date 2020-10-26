@@ -16,7 +16,9 @@ object Dimens {
   val ErrorLayoutTextPadding get() = 32.dp
   val ImageDrawerMargin get() = 16.dp
   val ProgressBarSize get() = 50.dp
-  val ProgressBarSizeBig get() = 70.dp
+  val ProgressBarSizeBig get() = 60.dp
+  val CheckmarkHeight get() = ProgressBarSize
+  val CheckmarkWidth get() = (CheckmarkHeight * 1.333f).toInt()
   
   init {
     textSizes[0] = dimen(R.dimen.gradient_header_curve_size)

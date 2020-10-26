@@ -10,10 +10,11 @@
   <string name="label_rankings">Rankings</string>
 
   <string name="title_covid_19">COVID-19</string>
+  <string name="title_log_in">Log in</string>
   <string name="title_stats">Stay home\nStay safe</string>
   <string name="title_tips">Q&amp;A and Tips</string>
 
-  <string name="error_email_sent">Email verification link was sent. Check your email</string>
+  <string name="error_email_sent">Email verification link was sent</string>
   <string name="error_no_connection">Whoops! No internet connection available</string>
   <string name="error_timeout">Connection is too slow. Try again later</string>
   <string name="error_unknown">Oops! Something went wrong. Try again later</string>
@@ -28,12 +29,16 @@
   <string name="number_thousands">%1$d K</string>
   <string name="number_millions">%1$d M</string>
   <string name="number_formatted_with_parts">%1$d.%2$s M</string>
+  <string name="number_resend_link">Resend link in %1$s</string>
 
   <string name="text_retry">Try again</string>
   <string name="text_resend_link">Resend link</string>
   <string name="text_retry_short">RETRY</string>
   <string name="text_loading_map">Loading map…</string>
   <string name="text_verifying_link">Verifying link…</string>
+  <string name="text_successfully_verified">Successfully verified!</string>
+  <string name="text_enter_your_email">Enter your email and you will receive link to sign in to the app</string>
+  <string name="text_open_email_app">Open email app</string>
 
   <string name="text_worldwide">Worldwide</string>
   <string name="text_asia">Asia</string>

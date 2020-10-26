@@ -3,6 +3,7 @@ package com.arsvechkarev.registration.presentation
 import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.arsvechkarev.registration.R
 import core.Failure
 import core.KeyValueStorage
 import core.Loading
@@ -53,14 +54,10 @@ class RegistrationViewModel(
     }
   }
   
-  fun sendEmailLink(email: String, resetTimer: Boolean = false) {
-    _emailState.value = EmailChecker.validateEmail(email)
+  fun sendEmailLink(email: String) {
+    _emailState.value = validateEmail(email)
     if (_emailState.value is EmailState.Incorrect) {
       return
-    }
-    if (resetTimer) {
-      timer.reset()
-      timer.start()
     }
     _state.value = Loading()
     rxCall {
@@ -123,6 +120,12 @@ class RegistrationViewModel(
       builder.startTime(TIMER_TIME_MILLIS, TimeUnit.MILLISECONDS)
     }
     return Pair(builder, startTimer)
+  }
+  
+  private fun validateEmail(email: String) = when {
+    email.isBlank() -> EmailState.Incorrect(R.string.error_email_is_empty)
+    !email.contains("@") -> EmailState.Incorrect(R.string.error_email_is_incorrect)
+    else -> EmailState.Correct
   }
   
   companion object {

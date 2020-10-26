@@ -31,12 +31,12 @@ import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.textColor
 import com.arsvechkarev.viewdsl.visible
 import com.arsvechkarev.viewdsl.withViewBuilder
+import com.arsvechkarev.views.ProgressBar
 import com.arsvechkarev.views.newsitem.NewsItemImage
 import com.arsvechkarev.views.newsitem.NewsItemView
 import com.arsvechkarev.views.newsitem.NewsItemViewApi22
 import com.arsvechkarev.views.newsitem.NewsItemViewApi23Plus
 import com.arsvechkarev.views.newsitem.NewsItemsUtils
-import com.arsvechkarev.views.progressbar.ProgressBar
 import core.extenstions.assertThat
 import core.imageloading.ImageLoader
 import core.model.NewsItemWithPicture
