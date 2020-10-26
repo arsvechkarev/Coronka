@@ -3,7 +3,7 @@ package core.auth
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import core.extenstions.asCompletable
-import core.extenstions.asSingle
+import core.extenstions.asObservable
 
 object FirebaseAuthenticator : Authenticator {
   
@@ -23,5 +23,5 @@ object FirebaseAuthenticator : Authenticator {
   override fun signInWithEmailLink(
     email: String,
     emailLink: String
-  ) = FirebaseAuth.getInstance().signInWithEmailLink(email, emailLink).asSingle()
+  ) = FirebaseAuth.getInstance().signInWithEmailLink(email, emailLink).asObservable()
 }

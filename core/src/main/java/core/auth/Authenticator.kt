@@ -3,7 +3,7 @@ package core.auth
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.AuthResult
 import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.Observable
 
 interface Authenticator {
   
@@ -13,5 +13,5 @@ interface Authenticator {
   
   fun isSignInWithEmailLink(email: String): Boolean
   
-  fun signInWithEmailLink(email: String, emailLink: String): Single<AuthResult>
+  fun signInWithEmailLink(email: String, emailLink: String): Observable<AuthResult>
 }

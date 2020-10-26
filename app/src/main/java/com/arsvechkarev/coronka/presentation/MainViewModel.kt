@@ -2,12 +2,14 @@ package com.arsvechkarev.coronka.presentation
 
 import android.content.Intent
 import com.google.firebase.auth.FirebaseAuthActionCodeException
+import core.BaseScreenState
+import core.Loading
 import core.RxViewModel
 import core.auth.AuthEmailSaver
 import core.auth.Authenticator
 import core.concurrency.Schedulers
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
+import core.extenstions.withDelayMillis
+import core.extenstions.withRequestTimeout
 
 class MainViewModel(
   private val authenticator: Authenticator,
@@ -30,24 +32,27 @@ class MainViewModel(
       _state.value = NoEmailSaved
       return
     }
-    _state.value = ShowEmailLinkLoading
     rxCall {
       authenticator.signInWithEmailLink(email, emailLink)
           .subscribeOn(schedulers.io())
-          .delay(2, TimeUnit.SECONDS, schedulers.computation(), true)
+          .withDelayMillis(DELAY_MILLIS, schedulers)
+          .withRequestTimeout()
           .observeOn(schedulers.mainThread())
-          .subscribe({ result ->
-            val receivedEmail = result.user!!.email
-            val message = "Successfully signed in as: $receivedEmail"
-            Timber.tag("Registration").d(message)
-            _state.value = SuccessfullySignedId
-          }, { e ->
+          .map<BaseScreenState> { SuccessfullySignedId }
+          .onErrorReturn { e ->
             if (e is FirebaseAuthActionCodeException) {
-              _state.value = VerificationLinkExpired(email)
+              VerificationLinkExpired(email)
             } else {
-              _state.value = EmailVerificationFailure(e)
+              EmailVerificationFailure(e)
             }
-          })
+          }
+          .startWith(Loading())
+          .smartSubscribe(_state::setValue)
     }
+  }
+  
+  private companion object {
+    
+    const val DELAY_MILLIS = 2000L
   }
 }

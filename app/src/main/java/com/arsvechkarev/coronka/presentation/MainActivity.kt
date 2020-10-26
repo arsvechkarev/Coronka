@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.FrameLayout.LayoutParams
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -23,11 +24,14 @@ import com.arsvechkarev.viewdsl.animateVisible
 import com.arsvechkarev.viewdsl.backgroundGradient
 import com.arsvechkarev.viewdsl.drawables
 import com.arsvechkarev.viewdsl.gravity
+import com.arsvechkarev.viewdsl.image
 import com.arsvechkarev.viewdsl.invisible
 import com.arsvechkarev.viewdsl.layoutGravity
 import com.arsvechkarev.viewdsl.margins
 import com.arsvechkarev.viewdsl.onClick
 import com.arsvechkarev.viewdsl.orientation
+import com.arsvechkarev.viewdsl.padding
+import com.arsvechkarev.viewdsl.paddings
 import com.arsvechkarev.viewdsl.size
 import com.arsvechkarev.viewdsl.tag
 import com.arsvechkarev.viewdsl.text
@@ -35,15 +39,19 @@ import com.arsvechkarev.viewdsl.textSize
 import com.arsvechkarev.viewdsl.withViewBuilder
 import com.arsvechkarev.views.DrawerGroupLinearLayout
 import com.arsvechkarev.views.DrawerLayout
+import com.arsvechkarev.views.progressbar.ProgressBar
 import core.BaseActivity
 import core.BaseScreenState
 import core.ConnectivityObserver
 import core.HostActivity
+import core.Loading
 import core.extenstions.connectivityManager
 import core.navigation.Navigator
 import core.viewbuilding.Colors
 import core.viewbuilding.Colors.GradientHeaderEnd
 import core.viewbuilding.Colors.GradientHeaderStart
+import core.viewbuilding.Dimens
+import core.viewbuilding.Styles
 import core.viewbuilding.Styles.BoldTextView
 import core.viewbuilding.Styles.DrawerTextView
 import core.viewbuilding.TextSizes
@@ -55,13 +63,46 @@ class MainActivity : BaseActivity(), HostActivity {
       tag(DrawerLayout)
       size(MatchParent, MatchParent)
       child<FrameLayout, LayoutParams>(MatchParent, MatchParent) {
-        addLoadingLayout().apply {
-          layoutGravity(Gravity.CENTER)
+        child<LinearLayout, LayoutParams>(MatchParent, WrapContent) {
+          tag(LayoutLoading)
           invisible()
+          orientation(LinearLayout.VERTICAL)
+          layoutGravity(Gravity.CENTER)
+          gravity(Gravity.CENTER)
+          child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
+            text(R.string.text_verifying_link)
+            padding(24.dp)
+            textSize(TextSizes.H1)
+          }
+          addView(ProgressBar(context, Colors.Accent, ProgressBar.Thickness.NORMAL).apply {
+            size(Dimens.ProgressBarSizeBig, Dimens.ProgressBarSizeBig)
+          })
         }
-        addFailureLayout().apply {
-          layoutGravity(Gravity.CENTER)
+        child<LinearLayout, LayoutParams>(MatchParent, MatchParent) {
+          tag(LayoutError)
           invisible()
+          gravity(Gravity.CENTER)
+          layoutGravity(Gravity.CENTER)
+          orientation(LinearLayout.VERTICAL)
+          child<ImageView>(Dimens.ErrorLayoutImageSize, Dimens.ErrorLayoutImageSize) {
+            image(R.drawable.image_unknown_error)
+            margins(bottom = Dimens.ErrorLayoutTextPadding)
+          }
+          child<TextView>(WrapContent, WrapContent, style = Styles.BoldTextView) {
+            tag(TextError)
+            gravity(Gravity.CENTER)
+            paddings(
+              start = Dimens.ErrorLayoutTextPadding,
+              end = Dimens.ErrorLayoutTextPadding,
+              bottom = Dimens.ErrorLayoutTextPadding
+            )
+            textSize(TextSizes.H2)
+            text(R.string.error_email_link_expired)
+          }
+          child<TextView>(WrapContent, WrapContent, style = Styles.ClickableTextView) {
+            tag(ButtonRetry)
+            text(R.string.text_resend_link)
+          }
         }
         child<FrameLayout, LayoutParams>(MatchParent, MatchParent) {
           id = R.id.fragmentContainer
@@ -88,14 +129,15 @@ class MainActivity : BaseActivity(), HostActivity {
     }
   }
   
-  private fun DrawerGroupLinearLayout.drawerTextVew(tag: String, drawableRes: Int, textRes: Int) =
-      addView(TextView(context).apply {
-        size(MatchParent, WrapContent)
-        apply(DrawerTextView)
-        tag(tag)
-        drawables(start = drawableRes)
-        text(textRes)
-      })
+  private fun DrawerGroupLinearLayout.drawerTextVew(tag: String, drawableRes: Int, textRes: Int) {
+    addView(TextView(context).apply {
+      size(MatchParent, WrapContent)
+      apply(DrawerTextView)
+      tag(tag)
+      drawables(start = drawableRes)
+      text(textRes)
+    })
+  }
   
   private lateinit var viewModel: MainViewModel
   private lateinit var navigator: Navigator
@@ -109,9 +151,7 @@ class MainActivity : BaseActivity(), HostActivity {
     navigator = MainModuleInjector.provideNavigator(this, DrawerLayout)
     viewModel = MainModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
-      if (savedInstanceState == null) {
-        model.figureOutScreenToGo(intent)
-      }
+      model.figureOutScreenToGo(intent)
     }
     val connectivityObserver = ConnectivityObserver(connectivityManager, onNetworkAvailable = {
       navigator.currentFragment?.onNetworkAvailable()
@@ -138,7 +178,7 @@ class MainActivity : BaseActivity(), HostActivity {
     when (state) {
       is GoToRegistrationScreen -> renderGoToRegistrationScreen()
       is GoToMainScreen -> goToMainFragment()
-      is ShowEmailLinkLoading -> renderEmailLinkLoading()
+      is Loading -> renderEmailLinkLoading()
       is SuccessfullySignedId -> renderSignedIn()
       is NoEmailSaved -> renderNoEmail()
       is VerificationLinkExpired -> renderLinkExpired(state)
@@ -158,6 +198,7 @@ class MainActivity : BaseActivity(), HostActivity {
   
   private fun renderEmailLinkLoading() {
     view(LayoutLoading).animateVisible()
+    view(LayoutError).animateInvisible()
   }
   
   private fun renderSignedIn() {
@@ -186,7 +227,12 @@ class MainActivity : BaseActivity(), HostActivity {
   }
   
   private fun renderFailure(state: EmailVerificationFailure) {
-  
+    showFailureLayout(
+      state.reason.getStringRes(),
+      R.string.text_retry,
+      onClickAction = {
+        viewModel.figureOutScreenToGo(intent)
+      })
   }
   
   private fun showFailureLayout(

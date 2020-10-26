@@ -7,8 +7,6 @@ object GoToRegistrationScreen : BaseScreenState()
 
 object GoToMainScreen : BaseScreenState()
 
-object ShowEmailLinkLoading : BaseScreenState()
-
 object SuccessfullySignedId : BaseScreenState()
 
 class VerificationLinkExpired(val email: String) : BaseScreenState()

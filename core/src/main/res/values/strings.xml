@@ -22,7 +22,7 @@
   <string name="error_unknown_short">An error occurred</string>
   <string name="error_email_is_empty">Email is empty</string>
   <string name="error_email_is_incorrect">Email is incorrect</string>
-  <string name="error_email_link_expired">Email link expired</string>
+  <string name="error_email_link_expired">Email link has expired</string>
   <string name="error_while_checking_link">An error occurred while checking link</string>
 
   <string name="number_thousands">%1$d K</string>
@@ -33,6 +33,7 @@
   <string name="text_resend_link">Resend link</string>
   <string name="text_retry_short">RETRY</string>
   <string name="text_loading_map">Loading map…</string>
+  <string name="text_verifying_link">Verifying link…</string>
 
   <string name="text_worldwide">Worldwide</string>
   <string name="text_asia">Asia</string>
