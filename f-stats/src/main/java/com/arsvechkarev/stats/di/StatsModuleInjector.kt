@@ -8,13 +8,11 @@ import com.arsvechkarev.common.GeneralInfoRepository
 import com.arsvechkarev.common.WorldCasesInfoRepository
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.stats.presentation.StatsViewModel
-import com.arsvechkarev.storage.SharedPrefsStorage
 
 object StatsModuleInjector {
   
   fun provideViewModel(fragment: StatsFragment): StatsViewModel {
-    val saver = SharedPrefsStorage(GeneralInfoRepository.SAVER_FILENAME, fragment.requireContext())
-    val generalInfoRepository = GeneralInfoRepository(networker, saver)
+    val generalInfoRepository = GeneralInfoRepository(networker)
     val factory = statsViewModelFactory(generalInfoRepository, WorldCasesInfoRepository(networker))
     return ViewModelProviders.of(fragment, factory).get(StatsViewModel::class.java)
   }

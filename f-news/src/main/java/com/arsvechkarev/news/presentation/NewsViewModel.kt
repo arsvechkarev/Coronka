@@ -9,7 +9,6 @@ import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
 import core.extenstions.withNetworkDelay
 import core.extenstions.withRequestTimeout
-import core.recycler.DifferentiableItem
 
 class NewsViewModel(
   private val newsRepository: NewYorkTimesNewsRepository,
@@ -22,7 +21,7 @@ class NewsViewModel(
     rxCall {
       newsRepository.getLatestNews(currentPage)
           .subscribeOn(schedulers.io())
-          .map(::transformToLoadedNews)
+          .map<BaseScreenState> { list -> LoadedNews(list) }
           .withNetworkDelay(schedulers)
           .withRequestTimeout()
           .observeOn(schedulers.mainThread())
@@ -37,7 +36,7 @@ class NewsViewModel(
     rxCall {
       newsRepository.getLatestNews(++currentPage)
           .subscribeOn(schedulers.io())
-          .map(::transformToLoadedNextPage)
+          .map<BaseScreenState> { list -> LoadedNextPage(list) }
           .withNetworkDelay(schedulers)
           .withRequestTimeout()
           .observeOn(schedulers.mainThread())
@@ -47,13 +46,5 @@ class NewsViewModel(
             FailureLoadingNextPage(e)
           }.smartSubscribe(_state::setValue)
     }
-  }
-  
-  private fun transformToLoadedNews(list: List<DifferentiableItem>): BaseScreenState {
-    return LoadedNews(list)
-  }
-  
-  private fun transformToLoadedNextPage(list: List<DifferentiableItem>): BaseScreenState {
-    return LoadedNextPage(list)
   }
 }

@@ -32,15 +32,13 @@ class StatsViewModel(
         { info, cases -> WorldCasesInfo(info, cases.first, cases.second) }
       ).withNetworkDelay(schedulers)
           .withRequestTimeout()
-          .map(::mapToWorldCasesInfo)
+          .map<BaseScreenState> { info -> LoadedWorldCasesInfo(info) }
           .onErrorReturn(::Failure)
           .startWith(Loading())
           .observeOn(schedulers.mainThread())
           .smartSubscribe(_state::setValue)
     }
   }
-  
-  private fun mapToWorldCasesInfo(it: WorldCasesInfo): BaseScreenState = LoadedWorldCasesInfo(it)
   
   private fun List<DailyCase>.toNewDailyCases(): List<DailyCase> {
     val dailyCases = ArrayList<DailyCase>()

@@ -1,45 +1,20 @@
 package com.arsvechkarev.common
 
-import core.CacheValidationStorage
 import core.Loggable
-import core.MAX_CACHE_MINUTES
 import core.RxNetworker
-import core.datetime.MillisDateTime
-import core.log
 import core.model.GeneralInfo
 import io.reactivex.Observable
 import org.json.JSONObject
 
 class GeneralInfoRepository(
-  private val networker: RxNetworker,
-  private val storage: CacheValidationStorage
+  private val networker: RxNetworker
 ) : Loggable {
   
   override val logTag = "Request_GeneralInfoRepository"
   
   fun getGeneralInfo(): Observable<GeneralInfo> {
-    return getFromNetwork()
-  }
-  
-  private fun getFromCache(): Observable<GeneralInfo> {
-    return Observable.create { emitter ->
-      if (storage.isUpToDate(GENERAL_INFO_LAST_UPDATE_TIME, MAX_CACHE_MINUTES)) {
-        val generalInfo = GeneralInfo(
-          storage.getInt(CONFIRMED),
-          storage.getInt(DEATHS),
-          storage.getInt(RECOVERED)
-        )
-        log { "Successfully found general info in cache" }
-        emitter.onNext(generalInfo)
-      }
-      emitter.onComplete()
-    }
-  }
-  
-  private fun getFromNetwork(): Observable<GeneralInfo> {
     return networker.requestObservable(URL)
-        .map(::transformJson)
-        .doOnNext(::loadToCache)
+        .map<GeneralInfo>(::transformJson)
   }
   
   private fun transformJson(json: String): GeneralInfo {
@@ -51,20 +26,8 @@ class GeneralInfoRepository(
     )
   }
   
-  private fun loadToCache(generalInfo: GeneralInfo) {
-    storage.apply {
-      saveTime(GENERAL_INFO_LAST_UPDATE_TIME, MillisDateTime.current().millis)
-      putInt(CONFIRMED, generalInfo.confirmed)
-      putInt(DEATHS, generalInfo.deaths)
-      putInt(RECOVERED, generalInfo.recovered)
-    }
-  }
-  
   companion object {
     
-    const val SAVER_FILENAME = "GeneralInfoRepository"
-    
-    private const val GENERAL_INFO_LAST_UPDATE_TIME = "generalInfoLastUpdateTime"
     private const val CONFIRMED = "cases"
     private const val RECOVERED = "recovered"
     private const val DEATHS = "deaths"

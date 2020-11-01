@@ -1,9 +1,10 @@
 package com.arsvechkarev.tips.presentation
 
 import android.view.Gravity
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arsvechkarev.tips.R
@@ -26,17 +27,14 @@ import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
 import com.arsvechkarev.viewdsl.Size.IntSize
 import com.arsvechkarev.viewdsl.background
 import com.arsvechkarev.viewdsl.behavior
-import com.arsvechkarev.viewdsl.childTextView
-import com.arsvechkarev.viewdsl.childView
-import com.arsvechkarev.viewdsl.constraints
 import com.arsvechkarev.viewdsl.drawables
 import com.arsvechkarev.viewdsl.gravity
-import com.arsvechkarev.viewdsl.id
 import com.arsvechkarev.viewdsl.image
 import com.arsvechkarev.viewdsl.layoutGravity
 import com.arsvechkarev.viewdsl.margin
 import com.arsvechkarev.viewdsl.margins
 import com.arsvechkarev.viewdsl.onClick
+import com.arsvechkarev.viewdsl.orientation
 import com.arsvechkarev.viewdsl.paddings
 import com.arsvechkarev.viewdsl.rippleBackground
 import com.arsvechkarev.viewdsl.size
@@ -69,47 +67,32 @@ class TipsFragment : BaseFragment() {
       child<CustomRecyclerView>(MatchParent, MatchParent) {
         tag(RecyclerView)
       }
-      child<ConstraintLayout>(MatchParent, WrapContent) {
+      child<FrameLayout>(MatchParent, WrapContent) {
         tag(BottomSheet)
-        id(R.id.tipsBottomSheet)
         background(R.drawable.bg_bottom_sheet)
         behavior(BottomSheetBehavior(context).apply {
           onHide = { hostActivity.enableTouchesOnDrawer() }
           onShow = { hostActivity.disableTouchesOnDrawer() }
         })
         child<ImageView>(WrapContent, WrapContent) {
-          id(R.id.tipsBottomSheetCross)
           image(R.drawable.ic_cross)
           background(R.drawable.bg_ripple)
           margin(24.dp)
-          constraints {
-            topToTop(parent)
-            endToEnd(parent)
-          }
+          layoutGravity(Gravity.END)
           onClick { view(BottomSheet).asBottomSheet.hide() }
         }
-        child<TextView>(IntSize(0), WrapContent) {
-          id(R.id.tipsTextTitle)
-          tag(TextTitle)
-          margins(top = 16.dp, start = 60.dp, end = 60.dp)
-          gravity(Gravity.CENTER)
-          textSize(TextSizes.H1)
-          constraints {
-            startToStart(parent)
-            topToTop(R.id.tipsBottomSheetCross)
-            endToEnd(parent)
-            bottomToBottom(R.id.tipsBottomSheetCross)
+        child<LinearLayout>(MatchParent, WrapContent) {
+          orientation(LinearLayout.VERTICAL)
+          child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
+            tag(TextTitle)
+            layoutGravity(Gravity.CENTER)
+            gravity(Gravity.CENTER)
+            margins(top = 16.dp, start = 60.dp, end = 60.dp)
+            textSize(TextSizes.H1)
           }
-        }
-        child<TextView>(MatchParent, WrapContent, style = BaseTextView) {
-          id(R.id.tipsTextAnswer)
-          tag(TextAnswer)
-          margin(20.dp)
-          constraints {
-            startToStart(parent)
-            topToBottom(R.id.tipsTextTitle)
-            endToEnd(parent)
-            bottomToBottom(parent)
+          child<TextView>(MatchParent, WrapContent, style = BaseTextView) {
+            tag(TextAnswer)
+            margin(20.dp)
           }
         }
       }
@@ -218,10 +201,10 @@ class TipsFragment : BaseFragment() {
     }
     onInitViewHolder {
       itemView.setOnClickListener {
-        if (itemView.childView(RecyclerView).isEnabled) {
-          itemView.childTextView(TextTitle).text = getString(item.questionLayoutRes)
-          itemView.childTextView(TextAnswer).text = getString(item.answerLayoutRes)
-          itemView.childView(BottomSheet).asBottomSheet.show()
+        if (view(RecyclerView).isEnabled) {
+          textView(TextTitle).text = getString(item.questionLayoutRes)
+          textView(TextAnswer).text = getString(item.answerLayoutRes)
+          view(BottomSheet).asBottomSheet.show()
         }
       }
     }
@@ -260,7 +243,6 @@ class TipsFragment : BaseFragment() {
   
   private companion object {
     
-    const val RootLayout = "RootLayout"
     const val RecyclerView = "RecyclerView"
     const val BottomSheet = "BottomSheet"
     const val TextTitle = "TextTitle"

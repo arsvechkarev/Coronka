@@ -17,19 +17,6 @@ class WorldCasesInfoRepository(
   override val logTag = "Request_WorldCasesRepository"
   
   fun getWorldDailyTotalCases(): Observable<List<DailyCase>> {
-    return Observable.concat(getTotalCasesFromCache(), getTotalCasesFromNetwork())
-        .subscribeOn(schedulers.io())
-        .firstElement()
-        .toObservable()
-        .share()
-        .observeOn(schedulers.mainThread())
-  }
-  
-  private fun getTotalCasesFromCache(): Observable<List<DailyCase>> = Observable.create { emitter ->
-    emitter.onComplete()
-  }
-  
-  private fun getTotalCasesFromNetwork(): Observable<List<DailyCase>> {
     return networker.requestObservable(URL_TOTAL_CASES)
         .map { transformJson(it) }
   }
@@ -51,7 +38,7 @@ class WorldCasesInfoRepository(
   }
   
   companion object {
-    private const val DAILY_CASES_LAST_UPDATE_TIME = "dailyCasesLastUpdateTime"
+  
     private const val URL_TOTAL_CASES = "https://covid19-update-api.herokuapp.com/api/v1/cases/graphs/totalCases"
   }
 }
