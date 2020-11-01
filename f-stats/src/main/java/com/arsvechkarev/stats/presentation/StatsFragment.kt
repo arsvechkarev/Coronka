@@ -10,6 +10,8 @@ import com.arsvechkarev.viewdsl.animateInvisible
 import com.arsvechkarev.viewdsl.animateVisible
 import com.arsvechkarev.viewdsl.getBehavior
 import com.arsvechkarev.viewdsl.gone
+import com.arsvechkarev.viewdsl.paddings
+import com.arsvechkarev.viewdsl.statusBarHeight
 import com.arsvechkarev.viewdsl.visible
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.setLoadingDrawable
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
@@ -29,6 +31,7 @@ import kotlinx.android.synthetic.main.fragment_stats.statsContentView
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorLayout
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorMessage
 import kotlinx.android.synthetic.main.fragment_stats.statsGeneralStatsView
+import kotlinx.android.synthetic.main.fragment_stats.statsHeader
 import kotlinx.android.synthetic.main.fragment_stats.statsIconDrawer
 import kotlinx.android.synthetic.main.fragment_stats.statsImageFailure
 import kotlinx.android.synthetic.main.fragment_stats.statsMainInfoLoadingStub
@@ -50,6 +53,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
     }
+    statsHeader.paddings(top = requireContext().statusBarHeight)
     initClickListeners()
     initLoadingStubs()
   }

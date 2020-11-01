@@ -53,9 +53,9 @@ class DrawerLayout @JvmOverloads constructor(
   
   private val openCloseListeners = ArrayList<DrawerOpenCloseListener>()
   
-  var respondToTouches = true
-  
   private val dummyView get() = getChildAt(1)
+  
+  var respondToTouches = true
   
   fun addOpenCloseListener(listener: DrawerOpenCloseListener) {
     openCloseListeners.add(listener)

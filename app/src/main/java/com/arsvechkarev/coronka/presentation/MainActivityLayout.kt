@@ -2,7 +2,7 @@ package com.arsvechkarev.coronka.presentation
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.GradientDrawable.Orientation.BL_TR
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
@@ -12,6 +12,12 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import com.arsvechkarev.coronka.R
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.ButtonRetry
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.DrawerGroupLinearLayout
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.LayoutError
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.LayoutLoading
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.ProgressBar
+import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextError
 import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextMap
 import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextNews
 import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextRankings
@@ -42,6 +48,8 @@ import com.arsvechkarev.views.DrawerLayout
 import com.arsvechkarev.views.ProgressBar
 import com.arsvechkarev.views.ProgressBar.Thickness.THICK
 import core.viewbuilding.Colors
+import core.viewbuilding.Colors.GradientHeaderEnd
+import core.viewbuilding.Colors.GradientHeaderStart
 import core.viewbuilding.Dimens.CheckmarkHeight
 import core.viewbuilding.Dimens.CheckmarkWidth
 import core.viewbuilding.Dimens.ErrorLayoutImageSize
@@ -58,7 +66,7 @@ fun Context.buildMainActivityLayout() = withViewBuilder {
     size(MatchParent, MatchParent)
     child<FrameLayout, LayoutParams>(MatchParent, MatchParent) {
       child<LinearLayout>(MatchParent, WrapContent) {
-        tag(MainActivity.LayoutLoading)
+        tag(LayoutLoading)
         invisible()
         orientation(LinearLayout.VERTICAL)
         layoutGravity(Gravity.CENTER)
@@ -75,13 +83,13 @@ fun Context.buildMainActivityLayout() = withViewBuilder {
             tag(MainActivity.CheckmarkView)
           }
           addView(ProgressBar(context, Colors.Accent, THICK).apply {
-            tag(MainActivity.ProgressBar)
+            tag(ProgressBar)
             size(ProgressBarSizeBig, ProgressBarSizeBig)
           })
         }
       }
       child<LinearLayout, LayoutParams>(MatchParent, MatchParent) {
-        tag(MainActivity.LayoutError)
+        tag(LayoutError)
         invisible()
         gravity(Gravity.CENTER)
         layoutGravity(Gravity.CENTER)
@@ -91,7 +99,7 @@ fun Context.buildMainActivityLayout() = withViewBuilder {
           margins(bottom = ErrorLayoutTextPadding)
         }
         child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
-          tag(MainActivity.TextError)
+          tag(TextError)
           gravity(Gravity.CENTER)
           paddings(
             start = ErrorLayoutTextPadding,
@@ -102,7 +110,7 @@ fun Context.buildMainActivityLayout() = withViewBuilder {
           text(R.string.error_email_link_expired)
         }
         child<TextView>(WrapContent, WrapContent, style = Styles.ClickableTextView) {
-          tag(MainActivity.ButtonRetry)
+          tag(ButtonRetry)
           text(R.string.text_resend_link)
         }
       }
@@ -118,10 +126,10 @@ fun Context.buildMainActivityLayout() = withViewBuilder {
     child<ScrollView, LayoutParams>(MatchParent, MatchParent) {
       isFillViewport = true
       child<DrawerGroupLinearLayout, LayoutParams>(MatchParent, MatchParent) {
-        tag(MainActivity.DrawerGroupLinearLayout)
+        tag(DrawerGroupLinearLayout)
+        paddings(top = StatusBarHeight)
         orientation(LinearLayout.VERTICAL)
-        backgroundGradient(GradientDrawable.Orientation.BL_TR, Colors.GradientHeaderStart,
-          Colors.GradientHeaderEnd)
+        backgroundGradient(BL_TR, GradientHeaderStart, GradientHeaderEnd)
         child<LinearLayout>(MatchParent, WrapContent) {
           orientation(LinearLayout.HORIZONTAL)
           gravity(Gravity.CENTER_VERTICAL)

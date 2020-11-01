@@ -103,9 +103,10 @@ class NewsFragment : BaseFragment() {
           onClick { viewModel?.startLoadingData() }
         }
       }
-      child<FrameLayout>(MatchParent, IntSize(GradientHeaderHeight)) {
+      child<FrameLayout>(MatchParent, IntSize(GradientHeaderHeight + StatusBarHeight)) {
         behavior(HeaderBehavior(context))
         child<View>(MatchParent, MatchParent) {
+          paddings(top = StatusBarHeight)
           background(GradientHeaderDrawable())
         }
         child<TextView>(WrapContent, WrapContent, style = HeaderTextView) {
@@ -113,7 +114,7 @@ class NewsFragment : BaseFragment() {
           layoutGravity(CENTER)
         }
         child<ImageView>(WrapContent, WrapContent) {
-          margins(start = ImageDrawerMargin, top = ImageDrawerMargin)
+          margins(start = ImageDrawerMargin, top = ImageDrawerMargin + StatusBarHeight)
           image(R.drawable.ic_drawer)
           onClick { hostActivity.openDrawer() }
         }

@@ -7,6 +7,7 @@
 
   <!-- Todo: replace with custom layout? -->
   <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/statsHeader"
     android:layout_width="match_parent"
     android:layout_height="@dimen/stats_header_height"
     app:layout_behavior="com.arsvechkarev.stats.behaviors.TitleHeaderBehavior">

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
@@ -39,6 +40,8 @@ inline fun <reified T : View> Fragment.view(
 }
 
 class ViewBuilder(val context: Context) {
+  
+  val StatusBarHeight get() = context.statusBarHeight
   
   fun Any.TextView(
     width: Size = WrapContent,
@@ -84,6 +87,20 @@ class ViewBuilder(val context: Context) {
     return instance.apply(style).apply(block)
   }
   
+  inline fun <reified T : View> FrameLayout.child(
+    width: Size,
+    height: Size,
+    style: T.() -> Unit = {},
+    block: T.() -> Unit,
+  ) = child<T, FrameLayout.LayoutParams>(width, height, style, block)
+  
+  inline fun <reified T : View> FrameLayout.child(
+    width: Int,
+    height: Int,
+    style: T.() -> Unit = {},
+    block: T.() -> Unit,
+  ) = child<T, FrameLayout.LayoutParams>(IntSize(width), IntSize(height), style, block)
+  
   inline fun <reified T : View> LinearLayout.child(
     width: Size,
     height: Size,
@@ -112,19 +129,19 @@ class ViewBuilder(val context: Context) {
     block: T.() -> Unit,
   ) = child<T, CoordinatorLayout.LayoutParams>(IntSize(width), IntSize(height), style, block)
   
-  inline fun <reified T : View> FrameLayout.child(
+  inline fun <reified T : View> ConstraintLayout.child(
     width: Size,
     height: Size,
     style: T.() -> Unit = {},
     block: T.() -> Unit,
-  ) = child<T, FrameLayout.LayoutParams>(width, height, style, block)
+  ) = child<T, ConstraintLayout.LayoutParams>(width, height, style, block)
   
-  inline fun <reified T : View> FrameLayout.child(
+  inline fun <reified T : View> ConstraintLayout.child(
     width: Int,
     height: Int,
     style: T.() -> Unit = {},
     block: T.() -> Unit,
-  ) = child<T, FrameLayout.LayoutParams>(IntSize(width), IntSize(height), style, block)
+  ) = child<T, ConstraintLayout.LayoutParams>(IntSize(width), IntSize(height), style, block)
   
   inline fun <reified T : View, reified P : ViewGroup.LayoutParams> ViewGroup.child(
     width: Size,
@@ -142,5 +159,50 @@ class ViewBuilder(val context: Context) {
     val params = paramsConstructor.newInstance(viewGroupParams)
     addView(child, params)
     return child.apply(style).apply(block)
+  }
+}
+
+fun View.constraints(block: ConstraintLayoutParams.() -> Unit) {
+  val parentId = (parent as ConstraintLayout).id
+  val constraintLayoutParams = layoutParams as ConstraintLayout.LayoutParams
+  val params = ConstraintLayoutParams(parentId, constraintLayoutParams)
+  params.apply(block)
+}
+
+class ConstraintLayoutParams(
+  val parent: Int,
+  private val params: ConstraintLayout.LayoutParams
+) {
+  
+  fun topToTop(id: Int) {
+    params.topToTop = id
+  }
+  
+  fun topToBottom(id: Int) {
+    params.topToBottom = id
+  }
+  
+  fun startToStart(id: Int) {
+    params.startToStart = id
+  }
+  
+  fun startToEnd(id: Int) {
+    params.startToEnd = id
+  }
+  
+  fun endToEnd(id: Int) {
+    params.endToEnd = id
+  }
+  
+  fun endToStart(id: Int) {
+    params.endToStart = id
+  }
+  
+  fun bottomToBottom(id: Int) {
+    params.bottomToBottom = id
+  }
+  
+  fun bottomToTop(id: Int) {
+    params.bottomToTop = id
   }
 }

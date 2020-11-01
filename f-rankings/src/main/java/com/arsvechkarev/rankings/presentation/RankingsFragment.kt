@@ -1,5 +1,6 @@
 package com.arsvechkarev.rankings.presentation
 
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.rankings.R
@@ -13,6 +14,7 @@ import com.arsvechkarev.viewdsl.dimen
 import com.arsvechkarev.viewdsl.gone
 import com.arsvechkarev.viewdsl.margins
 import com.arsvechkarev.viewdsl.onClick
+import com.arsvechkarev.viewdsl.statusBarHeight
 import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.unspecified
 import com.arsvechkarev.viewdsl.view
@@ -75,6 +77,9 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
     }
+    val statusBarHeight = requireContext().statusBarHeight
+    rankingsHeaderGradientView.layoutParams.height += statusBarHeight
+    (rankingsIconDrawer.layoutParams as MarginLayoutParams).topMargin += statusBarHeight
     rankingsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     rankingsRecyclerView.adapter = adapter
     setupClickListeners()

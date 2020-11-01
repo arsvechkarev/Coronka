@@ -19,8 +19,8 @@ import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.SHOWN
 import core.INVALID_POINTER
 import kotlin.math.abs
 
-class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
-  CoordinatorLayout.Behavior<V>() {
+class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
+  CoordinatorLayout.Behavior<View>() {
   
   enum class State {
     SHOWN, HIDDEN
@@ -70,7 +70,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
     }
   }
   
-  override fun onLayoutChild(parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
+  override fun onLayoutChild(parent: CoordinatorLayout, child: View, layoutDirection: Int): Boolean {
     child.layout(0, parent.height - child.measuredHeight, parent.width, parent.height)
     bottomSheet = child
     slideRange = child.height
@@ -85,7 +85,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
     return true
   }
   
-  override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
+  override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: View, event: MotionEvent): Boolean {
     if (slideAnimator.isRunning) return false
     val action = event.action
     if (action == ACTION_MOVE && isBeingDragged) {
@@ -127,7 +127,7 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
     return isBeingDragged
   }
   
-  override fun onTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
+  override fun onTouchEvent(parent: CoordinatorLayout, child: View, event: MotionEvent): Boolean {
     if (slideAnimator.isRunning) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {
@@ -221,7 +221,6 @@ class BottomSheetBehavior<V : View>(context: Context, attrs: AttributeSet) :
     private const val DURATION_SLIDE = 225L
     private const val FLING_VELOCITY_THRESHOLD = 0.18f
   
-    val View.asBottomSheet: BottomSheetBehavior<*>
-      get() = getBehavior()
+    val View.asBottomSheet get() = getBehavior<BottomSheetBehavior>()
   }
 }

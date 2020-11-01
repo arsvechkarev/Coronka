@@ -4,6 +4,7 @@
   <style name="AppTheme" parent="Theme.AppCompat">
     <item name="colorPrimary">?colorOverlay</item>
     <item name="android:textViewStyle">@style/TextStyle</item>
+    <item name="android:statusBarColor">@android:color/transparent</item>
     <item name="android:windowBackground">?colorBackground</item>
   </style>
 

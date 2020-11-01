@@ -49,7 +49,10 @@ class MainNavigator(
       transaction.replace(R.id.fragmentContainer, fragment)
     }
     drawerLayout.addOpenCloseListener(fragment.drawerOpenCloseListener)
-    transaction.runOnCommit { fragment.onAppearedOnScreen() }
+    transaction.runOnCommit {
+      fragment.onAppearedOnScreen()
+      drawerLayout.respondToTouches = true
+    }
     transaction.commit()
     currentFragment = fragment
   }

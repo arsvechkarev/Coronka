@@ -19,6 +19,16 @@ val isOrientationPortrait: Boolean
 val isLayoutLeftToRight: Boolean
   get() = TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_LTR
 
+val Context.statusBarHeight: Int
+  get() {
+    var result = 0
+    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+      result = resources.getDimensionPixelSize(resourceId)
+    }
+    return result
+  }
+
 @ColorInt
 fun Context.getAttrColor(@AttrRes resId: Int): Int {
   val typedValue = TypedValue()
@@ -46,7 +56,7 @@ fun Context.createLayoutParams(
 
 fun Context.determineSize(size: Size) = when (size) {
   Size.MATCH_PARENT -> ViewGroup.LayoutParams.MATCH_PARENT
-  Size.WRAP_PARENT -> ViewGroup.LayoutParams.WRAP_CONTENT
+  Size.WRAP_CONTENT -> ViewGroup.LayoutParams.WRAP_CONTENT
   is Size.IntSize -> size.size
   is Size.Dimen -> resources.getDimension(size.dimenRes).toInt()
 }

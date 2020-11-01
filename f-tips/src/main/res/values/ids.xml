@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <item name="tipsBottomSheet" type="id"/>
+  <item name="tipsBottomSheetCross" type="id"/>
+  <item name="tipsTextTitle" type="id"/>
+  <item name="tipsTextAnswer" type="id"/>
+</resources>

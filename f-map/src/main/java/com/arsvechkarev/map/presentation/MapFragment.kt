@@ -1,5 +1,6 @@
 package com.arsvechkarev.map.presentation
 
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.lifecycle.Observer
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
@@ -9,6 +10,7 @@ import com.arsvechkarev.viewdsl.animateInvisible
 import com.arsvechkarev.viewdsl.animateVisible
 import com.arsvechkarev.viewdsl.gone
 import com.arsvechkarev.viewdsl.invisible
+import com.arsvechkarev.viewdsl.statusBarHeight
 import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.visible
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
@@ -46,6 +48,8 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
       model.startLoadingData()
     }
     setupClickListeners()
+    val statusBarHeight = requireContext().statusBarHeight
+    (mapIconDrawer.layoutParams as MarginLayoutParams).topMargin += statusBarHeight
   }
   
   override fun onAppearedOnScreen() {

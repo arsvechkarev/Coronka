@@ -37,6 +37,8 @@ class MainActivity : BaseActivity(), HostActivity {
     Colors.init(this)
     supportActionBar?.hide()
     setContentView(buildMainActivityLayout())
+    window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
     navigator = MainModuleInjector.provideNavigator(this, DrawerLayout)
     viewModel = MainModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))

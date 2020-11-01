@@ -164,6 +164,10 @@ fun View.tag(tag: String) {
   this.tag = tag
 }
 
+fun View.id(idRes: Int) {
+  id = idRes
+}
+
 fun View.background(drawable: Drawable) {
   background = drawable
 }
@@ -202,4 +206,9 @@ fun View.childTextView(tag: String): TextView {
 
 fun View.childImageView(tag: String): ImageView {
   return findViewWithTag(tag) as ImageView
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T : View> T.childViewAs(tag: String): T {
+  return childView(tag) as T
 }
