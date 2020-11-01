@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.text.Layout
 import android.text.TextPaint
 import android.view.View
+import com.arsvechkarev.viewdsl.rippleBackground
 import core.extenstions.execute
 import core.extenstions.f
 import core.viewbuilding.Colors
@@ -32,6 +33,10 @@ class SmallStatsView(
   private var numberLayout: Layout? = null
   private var amountLayout: Layout? = null
   private var numberLayoutMaxWidth = 0f
+  
+  init {
+    rippleBackground(Colors.Ripple)
+  }
   
   fun updateData(rankNumber: Int, text: String, amount: String) {
     this.text = text

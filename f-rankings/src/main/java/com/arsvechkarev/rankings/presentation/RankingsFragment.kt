@@ -193,7 +193,8 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
         val chipMargin = dimen(R.dimen.rankings_header_chip_margin).toInt()
         val dividerMargin = dimen(R.dimen.rankings_divider_m_top).toInt()
         val dividerHeight = dimen(R.dimen.divider_height).toInt()
-        val headerHeight = dimen(R.dimen.rankings_header_height).toInt()
+        val headerHeight = dimen(
+          R.dimen.rankings_header_height).toInt() + requireContext().statusBarHeight
         val textChip = view<Chip>(WrapContent, WrapContent) {
           margins(top = chipMargin, bottom = chipMargin)
           text = context.getString(R.string.text_worldwide)

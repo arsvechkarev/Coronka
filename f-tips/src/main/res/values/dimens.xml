@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-  <dimen name="tips_bottom_sheet_cross_margin">24dp</dimen>
-  <dimen name="tips_bottom_sheet_title_m_horizontal">60dp</dimen>
-  <dimen name="tips_bottom_sheet_title_m_top">16dp</dimen>
-  <dimen name="tips_bottom_sheet_text_margin">20dp</dimen>
-</resources>
