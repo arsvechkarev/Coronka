@@ -15,19 +15,6 @@ fun unspecified(size: Int = 0): Int {
   return View.MeasureSpec.makeMeasureSpec(size, UNSPECIFIED)
 }
 
-/** Returns minimum size of width and height measure specs */
-fun getMinimumSize(widthSpec: Int, heightSpec: Int): Int {
-  val width = widthSpec.size
-  val height = heightSpec.size
-  if (width == 0 || height == 0) {
-    if (heightSpec.mode == UNSPECIFIED) {
-      require(width > 0)
-      return width
-    }
-  }
-  return minOf(width, height)
-}
-
 val Int.size: Int
   get() = View.MeasureSpec.getSize(this)
 

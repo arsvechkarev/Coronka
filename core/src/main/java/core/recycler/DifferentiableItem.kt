@@ -3,7 +3,7 @@ package core.recycler
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * Item for displaying in [RecyclerView]
+ * Item to be displayed in [RecyclerView]
  */
 interface DifferentiableItem : DisplayableItem {
   

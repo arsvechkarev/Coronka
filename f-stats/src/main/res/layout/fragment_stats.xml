@@ -9,8 +9,7 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/statsHeader"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/stats_header_height"
-    app:layout_behavior="com.arsvechkarev.stats.behaviors.TitleHeaderBehavior">
+    android:layout_height="@dimen/stats_header_height">
 
     <ImageView
       android:id="@+id/statsIconDrawer"
@@ -50,8 +49,7 @@
     android:id="@+id/statsScrollingContentView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/stats_image_doctor_height"
-    app:layout_behavior="com.arsvechkarev.stats.behaviors.ScrollableContentBehavior">
+    android:layout_marginTop="@dimen/stats_image_doctor_height">
 
     <LinearLayout
       android:id="@+id/statsContentView"

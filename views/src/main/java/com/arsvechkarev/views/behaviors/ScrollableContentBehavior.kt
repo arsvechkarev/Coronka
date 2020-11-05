@@ -1,8 +1,13 @@
-package com.arsvechkarev.stats.behaviors
+package com.arsvechkarev.views.behaviors
 
 import android.content.Context
-import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_CANCEL
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.MotionEvent.ACTION_MOVE
+import android.view.MotionEvent.ACTION_POINTER_DOWN
+import android.view.MotionEvent.ACTION_POINTER_UP
+import android.view.MotionEvent.ACTION_UP
 import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
@@ -15,7 +20,7 @@ import core.INVALID_POINTER
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
+class ScrollableContentBehavior<V>(context: Context) :
   CoordinatorLayout.Behavior<V>() where V : View, V : ScrollingView {
   
   private val scroller = OverScroller(context)
@@ -42,19 +47,22 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
   override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
     if (!respondToTouches) return false
     val action = event.action
-    if (action == MotionEvent.ACTION_MOVE && isBeingDragged) {
+    if (action == ACTION_MOVE && isBeingDragged) {
       return true
     }
     when (event.actionMasked) {
-      MotionEvent.ACTION_DOWN -> {
+      ACTION_DOWN -> {
         stopScroller(child)
         isBeingDragged = false
-        val y = event.y.toInt()
-        lastMotionY = y
         activePointerId = event.getPointerId(0)
+        lastMotionY = event.y.toInt()
         ensureVelocityTracker()
       }
-      MotionEvent.ACTION_MOVE -> {
+      ACTION_POINTER_DOWN -> {
+        activePointerId = event.getPointerId(event.actionIndex)
+        lastMotionY = event.getY(event.actionIndex).toInt()
+      }
+      ACTION_MOVE -> {
         stopScroller(child)
         val activePointerId = activePointerId
         if (activePointerId == INVALID_POINTER) {
@@ -73,7 +81,10 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
           lastMotionY = y
         }
       }
-      MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+      ACTION_POINTER_UP -> {
+        onPointerUp(event)
+      }
+      ACTION_UP, ACTION_CANCEL -> {
         findDrawerParent(parent).respondToTouches = true
         endTouch()
       }
@@ -85,14 +96,18 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
   override fun onTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
     if (!respondToTouches) return false
     when (event.actionMasked) {
-      MotionEvent.ACTION_DOWN -> {
+      ACTION_DOWN -> {
         stopScroller(child)
         val y = event.y.toInt()
         lastMotionY = y
         activePointerId = event.getPointerId(0)
         ensureVelocityTracker()
       }
-      MotionEvent.ACTION_MOVE -> {
+      ACTION_POINTER_DOWN -> {
+        activePointerId = event.getPointerId(event.actionIndex)
+        lastMotionY = event.getY(event.actionIndex).toInt()
+      }
+      ACTION_MOVE -> {
         val activePointerIndex = event.findPointerIndex(activePointerId)
         if (activePointerIndex == -1) {
           return true
@@ -113,7 +128,10 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
           updateOffset(dy)
         }
       }
-      MotionEvent.ACTION_UP -> {
+      ACTION_POINTER_UP -> {
+        onPointerUp(event)
+      }
+      ACTION_UP -> {
         findDrawerParent(parent).respondToTouches = true
         velocityTracker?.addMovement(event)
         velocityTracker?.computeCurrentVelocity(1000)
@@ -121,13 +139,22 @@ class ScrollableContentBehavior<V>(context: Context, attrs: AttributeSet?) :
         fling(child, velocityY)
         endTouch()
       }
-      MotionEvent.ACTION_CANCEL -> {
+      ACTION_CANCEL -> {
         findDrawerParent(parent).respondToTouches = true
         endTouch()
       }
     }
     velocityTracker?.addMovement(event)
     return true
+  }
+  
+  private fun onPointerUp(event: MotionEvent) {
+    val actionIndex = event.actionIndex
+    if (event.getPointerId(actionIndex) == activePointerId) {
+      val newIndex = if (actionIndex == 0) 1 else 0
+      activePointerId = event.getPointerId(newIndex)
+      lastMotionY = event.getY(newIndex).toInt()
+    }
   }
   
   private fun findDrawerParent(view: View): DrawerLayout {

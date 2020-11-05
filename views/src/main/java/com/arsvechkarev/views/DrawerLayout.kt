@@ -8,6 +8,8 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
+import android.view.MotionEvent.ACTION_POINTER_DOWN
+import android.view.MotionEvent.ACTION_POINTER_UP
 import android.view.MotionEvent.ACTION_UP
 import android.view.VelocityTracker
 import android.view.View
@@ -20,6 +22,7 @@ import com.arsvechkarev.viewdsl.isOrientationPortrait
 import com.arsvechkarev.views.DrawerLayout.DrawerState.CLOSED
 import com.arsvechkarev.views.DrawerLayout.DrawerState.OPENED
 import core.HostActivity.DrawerOpenCloseListener
+import core.INVALID_POINTER
 import core.extenstions.assertThat
 import kotlin.math.abs
 import kotlin.math.hypot
@@ -45,6 +48,7 @@ class DrawerLayout @JvmOverloads constructor(
   private var latestX = 0f
   private var velocityTracker: VelocityTracker? = null
   private var slideRange = 0
+  private var activePointerId = INVALID_POINTER
   
   private val drawerViewAnimator = ValueAnimator().apply {
     interpolator = AccelerateDecelerateInterpolator
@@ -128,22 +132,33 @@ class DrawerLayout @JvmOverloads constructor(
   
   override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
     if (!respondToTouches) return false
-    when (event.action) {
+    when (event.actionMasked) {
       ACTION_DOWN -> {
-        latestX = event.x
-        initVelocityTrackerIfNeeded()
-        velocityTracker?.addMovement(event)
         if (handleDownOutsideEvent(event)) return true
+        initVelocityTrackerIfNeeded()
+        activePointerId = event.getPointerId(0)
+        latestX = event.x
+      }
+      ACTION_POINTER_DOWN -> {
+        activePointerId = event.getPointerId(event.actionIndex)
+        latestX = event.getX(event.actionIndex)
       }
       ACTION_MOVE -> {
-        val x = event.x.toInt()
+        val pointerIndex: Int = event.findPointerIndex(activePointerId)
+        if (pointerIndex < 0) {
+          return false
+        }
+        val x = event.getX(pointerIndex).toInt()
         val xDiff = abs(latestX - x)
         if (xDiff > touchSlop * TOUCH_SLOP_MULTIPLIER) {
           isHoldingFinger = true
           velocityTracker?.addMovement(event)
           isBeingDragged = true
-          latestX = event.x
+          latestX = event.getX(pointerIndex)
         }
+      }
+      ACTION_POINTER_UP -> {
+        onPointerUp(event)
       }
       ACTION_UP, ACTION_CANCEL -> {
         if (outsideOnDrawerDown && handleUpOutsideEvent(event)) {
@@ -160,32 +175,55 @@ class DrawerLayout @JvmOverloads constructor(
   override fun onTouchEvent(event: MotionEvent): Boolean {
     if (!respondToTouches) return false
     initVelocityTrackerIfNeeded()
-    when (event.action) {
+    when (event.actionMasked) {
       ACTION_DOWN -> {
+        if (handleDownOutsideEvent(event)) return true
+        activePointerId = event.getPointerId(0)
         isHoldingFinger = true
         latestX = event.x
         velocityTracker?.addMovement(event)
-        if (handleDownOutsideEvent(event)) return true
       }
-      ACTION_MOVE, ACTION_UP -> {
+      ACTION_POINTER_DOWN -> {
+        activePointerId = event.getPointerId(event.actionIndex)
+        latestX = event.getX(event.actionIndex)
+      }
+      ACTION_MOVE -> {
+        val pointerIndex: Int = event.findPointerIndex(activePointerId)
+        if (pointerIndex < 0) {
+          return false
+        }
         velocityTracker?.addMovement(event)
-        val distance = event.x - latestX
+        val x = event.getX(pointerIndex)
+        val distance = x - latestX
         var newLeft = drawerView.left + distance.toInt()
         if (newLeft >= 0) newLeft = 0
         moveDrawer(newLeft)
-        latestX = event.x
+        latestX = event.getX(pointerIndex)
         invalidate()
-        if (event.action == ACTION_UP) {
-          isHoldingFinger = false
-          if (outsideOnDrawerDown && handleUpOutsideEvent(event)) {
-            return true
-          }
-          handleUpEvent()
+      }
+      ACTION_POINTER_UP -> {
+        onPointerUp(event)
+      }
+      ACTION_UP, ACTION_CANCEL -> {
+        isHoldingFinger = false
+        if (outsideOnDrawerDown && handleUpOutsideEvent(event)) {
+          return true
         }
+        handleUpEvent()
       }
     }
     return true
   }
+  
+  private fun onPointerUp(event: MotionEvent) {
+    val actionIndex = event.actionIndex
+    if (event.getPointerId(actionIndex) == activePointerId) {
+      val newIndex = if (actionIndex == 0) 1 else 0
+      activePointerId = event.getPointerId(newIndex)
+      latestX = event.getX(newIndex)
+    }
+  }
+  
   
   private fun handleDownOutsideEvent(event: MotionEvent): Boolean {
     if (currentState == OPENED && event.x > drawerView.right) {
@@ -209,8 +247,9 @@ class DrawerLayout @JvmOverloads constructor(
   }
   
   private fun handleUpEvent() {
+    latestX = Float.MIN_VALUE
     velocityTracker!!.computeCurrentVelocity(1000)
-    val xVelocity = velocityTracker!!.xVelocity
+    val xVelocity = velocityTracker!!.getXVelocity(activePointerId)
     val flingToClose = xVelocity < 0 && currentState == OPENED
     val flingToOpen = xVelocity > 0 && currentState == CLOSED
     if (abs(xVelocity) / maxFlingVelocity > FLING_VELOCITY_THRESHOLD
@@ -258,6 +297,8 @@ class DrawerLayout @JvmOverloads constructor(
     mainView.left = newMainLeft
     mainView.right = newMainLeft + mainView.measuredWidth
     dummyView.alpha = fraction * SHADOW_ALPHA_COEFFICIENT
+    dummyView.left = mainView.left
+    dummyView.right = mainView.right
   }
   
   override fun generateDefaultLayoutParams(): LayoutParams {
@@ -295,8 +336,8 @@ class DrawerLayout @JvmOverloads constructor(
   
     const val PARALLAX_COEFFICIENT = 0.3f
     const val SHADOW_ALPHA_COEFFICIENT = 0.7f
-    const val PORTRAIT_SLIDE_RANGE_COEFFICIENT = 0.75f
-    const val LANDSCAPE_SLIDE_RANGE_COEFFICIENT = 0.5f
+    const val PORTRAIT_SLIDE_RANGE_COEFFICIENT = 0.85f
+    const val LANDSCAPE_SLIDE_RANGE_COEFFICIENT = 0.6f
     const val FLING_VELOCITY_THRESHOLD = 0.18f
   
     const val DEFAULT_DURATION = 250L

@@ -7,6 +7,8 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_CANCEL
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
+import android.view.MotionEvent.ACTION_POINTER_DOWN
+import android.view.MotionEvent.ACTION_POINTER_UP
 import android.view.MotionEvent.ACTION_UP
 import android.view.VelocityTracker
 import android.view.View
@@ -22,19 +24,14 @@ import kotlin.math.abs
 class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   CoordinatorLayout.Behavior<View>() {
   
-  enum class State {
-    SHOWN, HIDDEN
-  }
-  
-  private var touchSlop = ViewConfiguration.get(context).scaledTouchSlop
-  private var maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
-  private var activePointerId = INVALID_POINTER
+  private val maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
+  private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
   private var isBeingDragged = false
   private var latestY = -1
   private var velocityTracker: VelocityTracker? = null
   private var bottomSheetOffsetHelper: BottomSheetOffsetHelper? = null
-  
   private var currentState = HIDDEN
+  private var activePointerId = INVALID_POINTER
   private var bottomSheet: View? = null
   private var parentHeight = 0
   private var slideRange = 0
@@ -97,17 +94,16 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
         val x = event.x.toInt()
         val y = event.y.toInt()
         if (parent.isPointInChildBounds(child, x, y)) {
-          latestY = y
           activePointerId = event.getPointerId(0)
+          latestY = y
           ensureVelocityTracker()
         }
       }
+      ACTION_POINTER_DOWN -> {
+        activePointerId = event.getPointerId(event.actionIndex)
+        latestY = event.getY(event.actionIndex).toInt()
+      }
       ACTION_MOVE -> {
-        val activePointerId = activePointerId
-        if (activePointerId == INVALID_POINTER) {
-          // If we don't have a valid id, the touch down wasn't on content.
-          return false
-        }
         val pointerIndex = event.findPointerIndex(activePointerId)
         if (pointerIndex == -1) {
           return false
@@ -118,6 +114,9 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
           isBeingDragged = true
           latestY = y
         }
+      }
+      ACTION_POINTER_UP -> {
+        onPointerUp(event)
       }
       ACTION_CANCEL, ACTION_UP -> {
         endTouch()
@@ -139,12 +138,16 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
           ensureVelocityTracker()
         }
       }
+      ACTION_POINTER_DOWN -> {
+        activePointerId = event.getPointerId(event.actionIndex)
+        latestY = event.getY(event.actionIndex).toInt()
+      }
       ACTION_MOVE -> {
-        val activePointerIndex = event.findPointerIndex(activePointerId)
-        if (activePointerIndex == -1) {
+        val pointerIndex = event.findPointerIndex(activePointerId)
+        if (pointerIndex == -1) {
           return true
         }
-        val y = event.getY(activePointerIndex).toInt()
+        val y = event.getY(pointerIndex).toInt()
         var dy = y - latestY
         if (!isBeingDragged && abs(dy) > touchSlop) {
           isBeingDragged = true
@@ -160,6 +163,9 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
           updateDyOffset(dy)
         }
       }
+      ACTION_POINTER_UP -> {
+        onPointerUp(event)
+      }
       ACTION_UP -> {
         handleUpEvent(event)
       }
@@ -169,6 +175,15 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
     }
     velocityTracker?.addMovement(event)
     return true
+  }
+  
+  private fun onPointerUp(event: MotionEvent) {
+    val actionIndex = event.actionIndex
+    if (event.getPointerId(actionIndex) == activePointerId) {
+      val newIndex = if (actionIndex == 0) 1 else 0
+      activePointerId = event.getPointerId(newIndex)
+      latestY = event.getY(newIndex).toInt()
+    }
   }
   
   private fun handleUpEvent(event: MotionEvent) {
@@ -217,10 +232,14 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
     velocityTracker = null
   }
   
+  enum class State {
+    SHOWN, HIDDEN
+  }
+  
   companion object {
     private const val DURATION_SLIDE = 225L
     private const val FLING_VELOCITY_THRESHOLD = 0.18f
-  
+    
     val View.asBottomSheet get() = getBehavior<BottomSheetBehavior>()
   }
 }

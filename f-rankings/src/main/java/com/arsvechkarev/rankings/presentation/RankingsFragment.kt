@@ -188,7 +188,6 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
   private fun setupBehavior() {
     rankingsHeaderLayout.asHeader.apply {
-      respondToHeaderTouches = false
       calculateSlideRangeCoefficient = l@{
         val chipMargin = dimen(R.dimen.rankings_header_chip_margin).toInt()
         val dividerMargin = dimen(R.dimen.rankings_divider_m_top).toInt()

@@ -1,4 +1,4 @@
-package com.arsvechkarev.stats.behaviors
+package com.arsvechkarev.views.behaviors
 
 import android.view.View
 import android.view.ViewGroup

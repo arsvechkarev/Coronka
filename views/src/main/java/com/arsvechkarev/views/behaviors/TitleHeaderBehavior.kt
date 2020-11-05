@@ -1,16 +1,14 @@
-package com.arsvechkarev.stats.behaviors
+package com.arsvechkarev.views.behaviors
 
-import android.content.Context
-import android.util.AttributeSet
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.arsvechkarev.stats.R
 import com.arsvechkarev.viewdsl.forEachChild
 import com.arsvechkarev.viewdsl.hasBehavior
 import core.extenstions.f
 
-class TitleHeaderBehavior<V : View>(context: Context, attrs: AttributeSet)
-  : CoordinatorLayout.Behavior<V>() {
+class TitleHeaderBehavior(
+  private val isViewTheDependency: (View) -> Boolean
+) : CoordinatorLayout.Behavior<View>() {
   
   private var scrollRange = 0
   private var dependentViewMaxTop = 0
@@ -18,8 +16,8 @@ class TitleHeaderBehavior<V : View>(context: Context, attrs: AttributeSet)
   private var initialChildTop = 0
   private var childHeight = 0
   
-  override fun layoutDependsOn(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
-    val isTheDependency = dependency.id == R.id.statsScrollingContentView
+  override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
+    val isTheDependency = isViewTheDependency(dependency)
     if (isTheDependency) {
       val behavior = (dependency.layoutParams as CoordinatorLayout.LayoutParams).behavior
       if (scrollRange == 0) {
@@ -33,12 +31,12 @@ class TitleHeaderBehavior<V : View>(context: Context, attrs: AttributeSet)
     return isTheDependency
   }
   
-  override fun onDependentViewChanged(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
+  override fun onDependentViewChanged(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
     child.top = getTopForHeader(parent, dependency)
     return true
   }
   
-  override fun onLayoutChild(parent: CoordinatorLayout, child: V, layoutDirection: Int): Boolean {
+  override fun onLayoutChild(parent: CoordinatorLayout, child: View, layoutDirection: Int): Boolean {
     parent.onLayoutChild(child, layoutDirection)
     child.top = getTopForHeader(parent)
     return true

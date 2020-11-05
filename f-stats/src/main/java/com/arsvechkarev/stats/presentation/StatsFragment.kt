@@ -2,17 +2,20 @@ package com.arsvechkarev.stats.presentation
 
 import androidx.lifecycle.Observer
 import com.arsvechkarev.stats.R
-import com.arsvechkarev.stats.behaviors.ScrollableContentBehavior
 import com.arsvechkarev.stats.di.StatsModuleInjector
 import com.arsvechkarev.viewdsl.animateChildrenInvisible
 import com.arsvechkarev.viewdsl.animateChildrenVisible
 import com.arsvechkarev.viewdsl.animateInvisible
 import com.arsvechkarev.viewdsl.animateVisible
+import com.arsvechkarev.viewdsl.behavior
 import com.arsvechkarev.viewdsl.getBehavior
 import com.arsvechkarev.viewdsl.gone
 import com.arsvechkarev.viewdsl.paddings
 import com.arsvechkarev.viewdsl.statusBarHeight
 import com.arsvechkarev.viewdsl.visible
+import com.arsvechkarev.views.ScrollingView
+import com.arsvechkarev.views.behaviors.ScrollableContentBehavior
+import com.arsvechkarev.views.behaviors.TitleHeaderBehavior
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.setLoadingDrawable
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
 import com.arsvechkarev.views.drawables.StatsGraphLoadingStub
@@ -54,8 +57,8 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
       model.startLoadingData()
     }
     statsHeader.paddings(top = requireContext().statusBarHeight)
+    initViews()
     initClickListeners()
-    initLoadingStubs()
   }
   
   override fun onNetworkAvailable() {
@@ -162,7 +165,9 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     statsRetryButton.setOnClickListener { viewModel!!.startLoadingData() }
   }
   
-  private fun initLoadingStubs() {
+  private fun initViews() {
+    statsHeader.behavior(TitleHeaderBehavior { it.id == R.id.statsScrollingContentView })
+    statsScrollingContentView.behavior(ScrollableContentBehavior<ScrollingView>(requireContext()))
     statsMainInfoLoadingStub.setLoadingDrawable(MainStatsInfoLoadingStub())
     statsTotalCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
     statsNewCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))

@@ -79,7 +79,7 @@ class MainActivity : BaseActivity(), HostActivity {
   }
   
   private fun renderGoToRegistrationScreen() {
-    navigator.switchTo(RegistrationFragment::class)
+    navigator.navigateTo(RegistrationFragment::class)
   }
   
   private fun goToMainFragment() {
