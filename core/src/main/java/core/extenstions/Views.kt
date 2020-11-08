@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 
-operator fun View.contains(ev: MotionEvent): Boolean {
-  val x = ev.x
-  val y = ev.y
+operator fun View.contains(event: MotionEvent): Boolean {
+  val x = event.x
+  val y = event.y
   return x >= left && y >= top && x <= right && y <= bottom
 }
 

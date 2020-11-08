@@ -47,6 +47,7 @@
     <item name="colorSignInButtonEnd">@color/dark_sign_in_button_end</item>
     <item name="colorDisabled">@color/dark_disabled</item>
     <item name="colorCheckmark">@color/dark_checkmark</item>
+    <item name="colorShadow">@color/dark_shadow</item>
   </style>
 
   <style name="TextStyle" parent="@style/TextAppearance.AppCompat">

@@ -2,17 +2,12 @@ package com.arsvechkarev.common
 
 import core.Loggable
 import core.RxNetworker
-import core.concurrency.AndroidSchedulers
-import core.concurrency.Schedulers
 import core.extenstions.assertThat
 import core.model.DailyCase
 import io.reactivex.Observable
 import org.json.JSONObject
 
-class WorldCasesInfoRepository(
-  private val networker: RxNetworker,
-  private val schedulers: Schedulers = AndroidSchedulers
-) : Loggable {
+class WorldCasesInfoRepository(private val networker: RxNetworker) : Loggable {
   
   override val logTag = "Request_WorldCasesRepository"
   
@@ -28,7 +23,8 @@ class WorldCasesInfoRepository(
     val casesArray = graphObject.getJSONArray("data")
     val dateArray = graphObject.getJSONArray("categories")
     assertThat(casesArray.length() == dateArray.length())
-    for (i in 0 until casesArray.length()) {
+    val start = maxOf(casesArray.length() - MAX_CASES, 0)
+    for (i in start until casesArray.length()) {
       val cases = casesArray.optInt(i)
       val date = dateArray.getString(i)
       val dailyCase = DailyCase(cases, date)
@@ -39,6 +35,7 @@ class WorldCasesInfoRepository(
   
   companion object {
   
+    private const val MAX_CASES = 181 // Half a year + 1 day to calculate new cases properly
     private const val URL_TOTAL_CASES = "https://covid19-update-api.herokuapp.com/api/v1/cases/graphs/totalCases"
   }
 }

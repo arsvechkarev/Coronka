@@ -83,7 +83,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   }
   
   override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: View, event: MotionEvent): Boolean {
-    if (slideAnimator.isRunning) return false
+    if (slideAnimator.isRunning || currentState == HIDDEN) return false
     val action = event.action
     if (action == ACTION_MOVE && isBeingDragged) {
       return true
@@ -127,7 +127,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   }
   
   override fun onTouchEvent(parent: CoordinatorLayout, child: View, event: MotionEvent): Boolean {
-    if (slideAnimator.isRunning) return false
+    if (slideAnimator.isRunning || currentState == HIDDEN) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {
         val x = event.x.toInt()
@@ -237,6 +237,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   }
   
   companion object {
+  
     private const val DURATION_SLIDE = 225L
     private const val FLING_VELOCITY_THRESHOLD = 0.18f
     

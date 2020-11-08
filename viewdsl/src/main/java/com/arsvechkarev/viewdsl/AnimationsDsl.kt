@@ -11,6 +11,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 
 const val DURATION_SHORT = 150L
@@ -19,6 +20,7 @@ const val DURATION_MEDIUM = 500L
 const val DURATION_LONG = 800L
 
 val AccelerateDecelerateInterpolator = AccelerateDecelerateInterpolator()
+val OvershootInterpolator = OvershootInterpolator()
 
 fun Animator.startIfNotRunning() {
   if (!isRunning) start()

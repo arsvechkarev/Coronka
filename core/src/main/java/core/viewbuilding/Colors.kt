@@ -6,7 +6,7 @@ import com.arsvechkarev.viewdsl.getAttrColor
 
 object Colors {
   
-  private val colors = IntArray(33) { 0 }
+  private val colors = IntArray(34) { 0 }
   
   val Background get() = colors[0]
   val BackgroundLight get() = colors[1]
@@ -44,6 +44,7 @@ object Colors {
   val SignInButtonEnd get() = colors[30]
   val Disabled get() = colors[31]
   val Checkmark get() = colors[32]
+  val Shadow get() = colors[33]
   
   fun init(context: Context) {
     colors[0] = context.getAttrColor(R.attr.colorBackground)
@@ -79,5 +80,6 @@ object Colors {
     colors[30] = context.getAttrColor(R.attr.colorSignInButtonEnd)
     colors[31] = context.getAttrColor(R.attr.colorDisabled)
     colors[32] = context.getAttrColor(R.attr.colorCheckmark)
+    colors[33] = context.getAttrColor(R.attr.colorShadow)
   }
 }

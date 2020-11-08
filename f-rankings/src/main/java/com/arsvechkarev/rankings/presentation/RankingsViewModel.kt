@@ -41,8 +41,7 @@ class RankingsViewModel(
     rxCall {
       Observable.fromCallable {
         countriesFilterer.filter(optionType, worldRegion)
-      }
-          .subscribeOn(schedulers.computation())
+      }.subscribeOn(schedulers.computation())
           .observeOn(schedulers.mainThread())
           .smartSubscribe { list -> _state.value = FilteredCountries(list) }
     }

@@ -12,21 +12,6 @@ class AllCountriesRepository(
 ) {
   
   fun getData(): Observable<TotalData> {
-    return createLoadingObservable()
-  }
-  
-  private fun createLoadingObservable(): Observable<TotalData> {
-    return Observable.concat(getFromCache(), getFromNetwork())
-        .firstElement()
-        .toObservable()
-  }
-  
-  // TODO (6/13/2020): Add cache
-  private fun getFromCache(): Observable<TotalData> = Observable.create { emitter ->
-    emitter.onComplete()
-  }
-  
-  private fun getFromNetwork(): Observable<TotalData> {
     return networker.requestObservable(URL)
         .map { transformJson(it) }
   }

@@ -8,52 +8,44 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
-import android.view.View
 import android.widget.FrameLayout
+import androidx.core.graphics.ColorUtils
 import com.arsvechkarev.viewdsl.AccelerateDecelerateInterpolator
 import com.arsvechkarev.viewdsl.DURATION_MEDIUM
+import com.arsvechkarev.viewdsl.OvershootInterpolator
 import com.arsvechkarev.viewdsl.cancelIfRunning
 import com.arsvechkarev.viewdsl.gone
 import com.arsvechkarev.viewdsl.visible
-import core.extenstions.assertThat
-import core.extenstions.f
-import core.extenstions.happenedIn
-import core.extenstions.lerpColor
+import core.extenstions.contains
+import core.viewbuilding.Colors
 
 class SimpleDialog @JvmOverloads constructor(
   context: Context,
-  attrs: AttributeSet? = null
-) : FrameLayout(context, attrs) {
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
   
-  private lateinit var dialogView: View
   private var wasNoMoveEvent = false
   private var currentShadowFraction = 0f
+  private val dialogView get() = getChildAt(0)
   private val shadowAnimator = ValueAnimator().apply {
     interpolator = AccelerateDecelerateInterpolator
     duration = DURATION_MEDIUM
     addUpdateListener {
       currentShadowFraction = it.animatedValue as Float
-      val color = lerpColor(Color.TRANSPARENT, COLOR_SHADOW, currentShadowFraction)
+      onShadowFractionChangedListener?.invoke(currentShadowFraction)
+      val color = ColorUtils.blendARGB(Color.TRANSPARENT, Colors.Shadow, currentShadowFraction)
       setBackgroundColor(color)
     }
   }
+  
+  var onShadowFractionChangedListener: ((Float) -> Unit)? = null
   
   var isOpened = false
     private set
   
   init {
     gone()
-  }
-  
-  override fun onFinishInflate() {
-    super.onFinishInflate()
-    assertThat(childCount == 1) { "Only one child for dialog is allowed" }
-    dialogView = getChildAt(0)
-  }
-  
-  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-    dialogView.translationY = getTranslationForDialogView()
-    dialogView.scaleX = getScaleXDialogView()
   }
   
   fun show() {
@@ -69,10 +61,10 @@ class SimpleDialog @JvmOverloads constructor(
       dialogView.animate()
           .withLayer()
           .scaleX(1f)
+          .scaleY(1f)
           .alpha(1f)
-          .translationY(0f)
           .setDuration(DURATION_MEDIUM)
-          .setInterpolator(AccelerateDecelerateInterpolator)
+          .setInterpolator(OvershootInterpolator)
           .start()
     }
   }
@@ -87,13 +79,18 @@ class SimpleDialog @JvmOverloads constructor(
       dialogView.animate()
           .withLayer()
           .alpha(0f)
-          .scaleX(getScaleXDialogView())
-          .translationY(getTranslationForDialogView())
+          .scaleX(SCALE_FACTOR)
+          .scaleY(SCALE_FACTOR)
           .setDuration((DURATION_MEDIUM * 0.8).toLong())
           .setInterpolator(AccelerateDecelerateInterpolator)
-          .withEndAction { gone() }
+          .withEndAction(::gone)
           .start()
     }
+  }
+  
+  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    dialogView.scaleX = SCALE_FACTOR
+    dialogView.scaleY = SCALE_FACTOR
   }
   
   override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -106,7 +103,7 @@ class SimpleDialog @JvmOverloads constructor(
         wasNoMoveEvent = false
       }
       ACTION_UP -> {
-        if (wasNoMoveEvent && !(event happenedIn dialogView)) {
+        if (wasNoMoveEvent && event !in dialogView) {
           hide()
           return true
         }
@@ -115,12 +112,8 @@ class SimpleDialog @JvmOverloads constructor(
     return false
   }
   
-  private fun getTranslationForDialogView(): Float = dialogView.measuredHeight.f
-  
-  private fun getScaleXDialogView(): Float = 0.8f
-  
   companion object {
-    
-    const val COLOR_SHADOW = 0x70000000
+  
+    private const val SCALE_FACTOR = 0.8f
   }
 }

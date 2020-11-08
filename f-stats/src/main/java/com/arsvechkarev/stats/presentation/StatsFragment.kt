@@ -110,7 +110,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   }
   
   private fun renderCharts(info: WorldCasesInfo) {
-    statsTotalCasesChart.update(info.totalDailyCases)
+    statsTotalCasesChart.update(info.totalDailyCases, offset = 1)
     statsNewCasesChart.update(info.newDailyCases)
     statsTotalCasesChart.animateVisible(andThen = { statsTotalCasesLoadingStub.background = null })
     statsNewCasesChart.animateVisible(andThen = { statsNewCasesLoadingStub.background = null })
