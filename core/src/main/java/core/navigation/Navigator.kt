@@ -14,4 +14,6 @@ interface Navigator : LifecycleObserver {
   fun navigateTo(fragmentClass: KClass<out BaseFragment>, data: Bundle? = null)
   
   fun handleOnDrawerItemClicked(tag: String)
+  
+  fun allowBackPress(): Boolean
 }

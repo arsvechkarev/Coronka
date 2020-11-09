@@ -1,6 +1,7 @@
 package com.arsvechkarev.rankings.presentation
 
 import android.view.ViewGroup.MarginLayoutParams
+import android.view.ViewGroup.VISIBLE
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.rankings.R
@@ -14,6 +15,7 @@ import com.arsvechkarev.viewdsl.dimen
 import com.arsvechkarev.viewdsl.gone
 import com.arsvechkarev.viewdsl.margins
 import com.arsvechkarev.viewdsl.onClick
+import com.arsvechkarev.viewdsl.setClickable
 import com.arsvechkarev.viewdsl.statusBarHeight
 import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.unspecified
@@ -98,7 +100,6 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     setupChips()
     setupDrawables()
     rankingsDialog.setPadding(0, requireContext().statusBarHeight, 0, 0)
-    rankingsDialogIconBack.onClick { rankingsDialog.animateInvisible() }
   }
   
   override fun onNetworkAvailable() {
@@ -119,6 +120,14 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
   override fun onOrientationBecamePortrait() {
     rankingsImageFailure.visible()
+  }
+  
+  override fun allowBackPress(): Boolean {
+    if (rankingsDialog.visibility == VISIBLE) {
+      goBackFromCountryInfo()
+      return false
+    }
+    return true
   }
   
   private fun handleState(state: BaseScreenState) {
@@ -163,6 +172,10 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
       country.recovered,
       country.deaths,
     )
+    rankingsHeaderLayout.asHeader.isScrollable = false
+    rankingsRecyclerView.isEnabled = false
+    setClickable(false, rankingsIconDrawer, rankingsFabFilter,
+      rankingsChipOptionType, rankingsChipWorldRegion)
     rankingsTextNewConfirmed.text(NumberFormatter.formatNumber(country.newConfirmed))
     rankingsTextNewDeaths.text(NumberFormatter.formatNumber(country.newDeaths))
     rankingsTextDeathRate.text(NumberFormatter.formatPercent(state.deathRate))
@@ -183,8 +196,8 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
   private fun toggleItems(enable: Boolean) {
     rankingsHeaderLayout.asHeader.isScrollable = enable
-    rankingsRecyclerView.isEnabled = enable
     rankingsFabFilter.isEnabled = enable
+    rankingsRecyclerView.isEnabled = enable
   }
   
   private fun setupClickListeners() {
@@ -192,18 +205,17 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     rankingsRetryButton.setOnClickListener { viewModel!!.startLoadingData() }
     onClick(rankingsFabFilter, rankingsChipOptionType, rankingsChipWorldRegion) {
       rankingsBottomSheet.asBottomSheet.show()
-      rankingsHeaderLayout.asHeader.isScrollable = false
-      rankingsRecyclerView.isEnabled = false
+    }
+    rankingsBottomSheet.asBottomSheet.onShow = {
+      toggleItems(false)
       hostActivity.disableTouchesOnDrawer()
     }
-    val whenBottomSheetClosed = {
-      rankingsBottomSheet.asBottomSheet.hide()
-      rankingsHeaderLayout.asHeader.isScrollable = true
-      rankingsRecyclerView.isEnabled = true
+    rankingsBottomSheet.asBottomSheet.onHide = {
+      toggleItems(true)
       hostActivity.enableTouchesOnDrawer()
     }
-    rankingsBottomSheetCross.setOnClickListener { whenBottomSheetClosed() }
-    rankingsBottomSheet.asBottomSheet.onHide = { whenBottomSheetClosed() }
+    rankingsBottomSheetCross.onClick { rankingsBottomSheet.asBottomSheet.hide() }
+    rankingsDialogIconBack.onClick { goBackFromCountryInfo() }
   }
   
   private fun stopLoadingStubs() {
@@ -254,6 +266,16 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
       onWorldRegionChipSelected = { chip ->
         rankingsChipWorldRegion.text = chip.text
       })
+  }
+  
+  private fun goBackFromCountryInfo() {
+    rankingsHeaderLayout.asHeader.isScrollable = true
+    rankingsFabFilter.isClickable = true
+    rankingsChipOptionType.isClickable = true
+    rankingsChipWorldRegion.isClickable = true
+    rankingsDialog.animateInvisible(andThen = {
+      rankingsRecyclerView.isEnabled = true
+    })
   }
   
   private fun setupDrawables() {

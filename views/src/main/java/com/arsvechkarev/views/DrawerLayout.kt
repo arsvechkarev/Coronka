@@ -34,11 +34,10 @@ class DrawerLayout @JvmOverloads constructor(
 ) : ViewGroup(context, attrs, defStyleAttr) {
   
   private val mainView: View get() = getChildAt(0)
+  private val dummyView get() = getChildAt(1)
   private val drawerView: View get() = getChildAt(2)
   private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
-  
   private val maxFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
-  
   private var isHoldingFinger = false
   private var currentState = CLOSED
   private var isBeingDragged = false
@@ -49,15 +48,13 @@ class DrawerLayout @JvmOverloads constructor(
   private var velocityTracker: VelocityTracker? = null
   private var slideRange = 0
   private var activePointerId = INVALID_POINTER
-  
+  private val openCloseListeners = ArrayList<DrawerOpenCloseListener>()
   private val drawerViewAnimator = ValueAnimator().apply {
     interpolator = AccelerateDecelerateInterpolator
     addUpdateListener { moveDrawer(it.animatedValue as Int) }
   }
   
-  private val openCloseListeners = ArrayList<DrawerOpenCloseListener>()
-  
-  private val dummyView get() = getChildAt(1)
+  val state get() = currentState
   
   var respondToTouches = true
   
@@ -274,12 +271,15 @@ class DrawerLayout @JvmOverloads constructor(
         result
       }
     }
-    if (endX == 0) {
+    if (endX == -slideRange && currentState == OPENED) {
+      drawerViewAnimator.doOnEnd { openCloseListeners.forEach { it.onDrawerClosed() } }
+    } else if (endX == 0 && currentState == CLOSED) {
       drawerViewAnimator.doOnEnd { openCloseListeners.forEach { it.onDrawerOpened() } }
+    }
+    if (endX == 0) {
       currentState = OPENED
     } else {
       assertThat(endX == -slideRange)
-      drawerViewAnimator.doOnEnd { openCloseListeners.forEach { it.onDrawerClosed() } }
       currentState = CLOSED
     }
     drawerViewAnimator.cancelIfRunning()
@@ -328,7 +328,7 @@ class DrawerLayout @JvmOverloads constructor(
     velocityTracker = null
   }
   
-  private enum class DrawerState {
+  enum class DrawerState {
     OPENED, CLOSED;
   }
   

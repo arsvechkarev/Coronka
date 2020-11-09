@@ -63,6 +63,12 @@ abstract class BaseFragment(
   
   open fun onOrientationBecameLandscape() = Unit
   
+  /**
+   * If returns true, then navigator is allowed to pop this fragment. If returns false, then
+   * fragment is not popped from back stack
+   */
+  open fun allowBackPress(): Boolean = true
+  
   @Suppress("UNCHECKED_CAST")
   fun view(tag: String): View {
     if (viewsCache[tag] == null) {

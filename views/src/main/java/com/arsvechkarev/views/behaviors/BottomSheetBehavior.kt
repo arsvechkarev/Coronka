@@ -42,6 +42,8 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
     }
   }
   
+  val state get() = currentState
+  
   var onHide: () -> Unit = {}
   var onShow: () -> Unit = {}
   

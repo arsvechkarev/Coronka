@@ -156,6 +156,14 @@ fun onClick(vararg views: View, action: (View) -> Unit) {
   views.forEach { it.setOnClickListener(action) }
 }
 
+fun setEnabled(isEnabled: Boolean, vararg views: View) {
+  views.forEach { it.isEnabled = isEnabled }
+}
+
+fun setClickable(isClickable: Boolean, vararg views: View) {
+  views.forEach { it.isClickable = isClickable }
+}
+
 fun View.onClick(block: () -> Unit) {
   setOnClickListener { block() }
 }

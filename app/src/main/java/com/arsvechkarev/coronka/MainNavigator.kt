@@ -50,8 +50,8 @@ class MainNavigator(
     }
     drawerLayout.addOpenCloseListener(fragment.drawerOpenCloseListener)
     transaction.runOnCommit {
-      fragment.onAppearedOnScreen()
       drawerLayout.respondToTouches = true
+      fragment.onAppearedOnScreen()
     }
     transaction.commit()
     currentFragment = fragment
@@ -77,6 +77,10 @@ class MainNavigator(
         TextTips -> switchTo(TipsFragment::class)
       }
     })
+  }
+  
+  override fun allowBackPress(): Boolean {
+    return currentFragment?.allowBackPress() ?: true
   }
   
   @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

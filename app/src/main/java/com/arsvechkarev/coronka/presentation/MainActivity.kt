@@ -17,6 +17,7 @@ import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.views.CheckmarkView
 import com.arsvechkarev.views.DrawerGroupLinearLayout
 import com.arsvechkarev.views.DrawerLayout
+import com.arsvechkarev.views.DrawerLayout.DrawerState.OPENED
 import core.BaseActivity
 import core.BaseScreenState
 import core.ConnectivityObserver
@@ -64,6 +65,17 @@ class MainActivity : BaseActivity(), HostActivity {
   
   override fun disableTouchesOnDrawer() {
     viewAs<DrawerLayout>(DrawerLayout).respondToTouches = false
+  }
+  
+  override fun onBackPressed() {
+    val drawerLayout = viewAs<DrawerLayout>(DrawerLayout)
+    if (drawerLayout.state == OPENED) {
+      drawerLayout.close()
+      return
+    }
+    if (navigator.allowBackPress()) {
+      super.onBackPressed()
+    }
   }
   
   private fun handleState(state: BaseScreenState) {

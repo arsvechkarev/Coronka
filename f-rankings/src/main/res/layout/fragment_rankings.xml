@@ -324,7 +324,7 @@
       android:layout_marginTop="@dimen/rankings_dialog_item_m_top"
       android:fontFamily="@font/segoe_ui_bold"
       android:textColor="?colorTextPrimary"
-      android:textSize="@dimen/text_main_title"
+      android:textSize="@dimen/text_dialog_title"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/rankingsDialogIconBack"/>
