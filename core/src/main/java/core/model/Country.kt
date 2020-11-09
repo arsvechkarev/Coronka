@@ -15,7 +15,9 @@ data class Country(
   val iso2: String,
   val confirmed: Int,
   val deaths: Int,
-  val recovered: Int
+  val recovered: Int,
+  val newConfirmed: Int,
+  val newDeaths: Int,
 )
 
 /** Country to be displayed on a map */
@@ -35,7 +37,8 @@ data class CountryMetaInfo(
 data class DisplayableCountry(
   val name: String,
   val amount: Number,
-  val amountString: String
+  val amountString: String,
+  val derivedCountry: Country
 ) : DifferentiableItem, Comparable<DisplayableCountry> {
   
   var number: Int = 0

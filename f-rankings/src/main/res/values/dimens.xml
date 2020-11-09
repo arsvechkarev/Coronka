@@ -16,7 +16,8 @@
   <dimen name="rankings_header_fab_margin">16dp</dimen>
   <dimen name="rankings_header_fab_padding">12dp</dimen>
   <dimen name="rankings_header_chip_margin">8dp</dimen>
-  <dimen name="rankings_divider_m_top">16dp</dimen>
+  <dimen name="rankings_header_chip_m_top">14dp</dimen>
+  <dimen name="rankings_divider_m_top">18dp</dimen>
 
   <dimen name="rankings_bottom_sheet_title_m_start">32dp</dimen>
   <dimen name="rankings_bottom_sheet_title_m_top">24dp</dimen>
@@ -25,4 +26,9 @@
   <dimen name="rankings_bottom_sheet_flexbox_options_m_bottom">16dp</dimen>
   <dimen name="rankings_bottom_sheet_cross_margin">28dp</dimen>
   <dimen name="rankings_bottom_sheet_chip_margin">4dp</dimen>
+
+  <dimen name="rankings_dialog_title_m_horizontal">24dp</dimen>
+  <dimen name="rankings_dialog_title_margin">24dp</dimen>
+  <dimen name="rankings_dialog_item_m_top">32dp</dimen>
+  <dimen name="rankings_dialog_general_stats_m_horizontal">12dp</dimen>
 </resources>

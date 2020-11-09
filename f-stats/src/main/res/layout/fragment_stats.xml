@@ -5,7 +5,6 @@
   android:layout_height="match_parent"
   android:background="?colorBackgroundLight">
 
-  <!-- Todo: replace with custom layout? -->
   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/statsHeader"
     android:layout_width="match_parent"
@@ -69,7 +68,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
 
-        <com.arsvechkarev.views.GeneralStatsView
+        <com.arsvechkarev.views.statsviews.MainGeneralStatsView
           android:id="@+id/statsGeneralStatsView"
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>

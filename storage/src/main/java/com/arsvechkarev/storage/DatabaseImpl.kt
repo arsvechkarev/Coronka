@@ -8,7 +8,6 @@ class DatabaseImpl(
   private val databaseHelper: DatabaseHelper
 ) : CountriesMetaInfoDatabase, Database {
   
-  
   override fun query(sql: String, function: Cursor.() -> Unit) {
     databaseHelper.configureIfNeeded()
     databaseHelper.readableDb.use { database ->

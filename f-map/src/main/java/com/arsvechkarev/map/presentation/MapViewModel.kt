@@ -25,7 +25,7 @@ class MapViewModel(
   fun startLoadingData() {
     rxCall {
       Observable.zip(
-        allCountriesRepository.getData().subscribeOn(schedulers.io()),
+        allCountriesRepository.getTotalData().subscribeOn(schedulers.io()),
         countriesMetaInfoRepository.getLocationsMap().subscribeOn(schedulers.io()),
         { map, countries -> Pair(map, countries) }
       ).withNetworkDelay(schedulers)

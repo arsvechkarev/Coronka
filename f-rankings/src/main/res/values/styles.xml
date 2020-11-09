@@ -9,4 +9,10 @@
   <style name="Chip.RegionName">
     <item name="colorFill">?colorTextPrimary</item>
   </style>
+
+  <style name="TextViewDialog">
+    <item name="android:textColor">?colorTextPrimary</item>
+    <item name="android:fontFamily">@font/segoe_ui_bold</item>
+    <item name="android:textSize">@dimen/text_h3</item>
+  </style>
 </resources>

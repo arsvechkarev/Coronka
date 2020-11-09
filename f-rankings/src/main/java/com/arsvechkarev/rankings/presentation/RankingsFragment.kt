@@ -35,6 +35,7 @@ import core.Failure.FailureReason.NO_CONNECTION
 import core.Failure.FailureReason.TIMEOUT
 import core.Failure.FailureReason.UNKNOWN
 import core.Loading
+import core.NumberFormatter
 import core.extenstions.heightWithMargins
 import core.hostActivity
 import kotlinx.android.synthetic.main.fragment_rankings.chipAfrica
@@ -53,6 +54,10 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsBottomSheet
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsBottomSheetCross
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsChipOptionType
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsChipWorldRegion
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsDialog
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsDialogGeneralView
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsDialogIconBack
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsDialogTitle
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsDivider
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsErrorLayout
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsErrorMessage
@@ -65,12 +70,18 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsListLoadingStub
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRecyclerView
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsRetryButton
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsSelectedChipsLoadingStub
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsTextDeathRate
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsTextNewConfirmed
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsTextNewDeaths
+import kotlinx.android.synthetic.main.fragment_rankings.rankingsTextPercentInCountry
 
 class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
   private lateinit var chipHelper: ChipHelper
   private var viewModel: RankingsViewModel? = null
-  private val adapter = RankingsAdapter()
+  private val adapter = RankingsAdapter(onClick = { country ->
+    viewModel?.onCountryClicked(country)
+  })
   
   override fun onInit() {
     viewModel = RankingsModuleInjector.provideViewModel(this).also { model ->
@@ -86,6 +97,8 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     setupBehavior()
     setupChips()
     setupDrawables()
+    rankingsDialog.setPadding(0, requireContext().statusBarHeight, 0, 0)
+    rankingsDialogIconBack.onClick { rankingsDialog.animateInvisible() }
   }
   
   override fun onNetworkAvailable() {
@@ -113,6 +126,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
       is Loading -> renderLoading()
       is LoadedCountries -> renderLoaded(state)
       is FilteredCountries -> renderFiltered(state)
+      is ShowCountryInfo -> renderShowCountryInfo(state)
       is Failure -> renderFailure(state.reason)
     }
   }
@@ -139,6 +153,21 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     rankingsHeaderLayout.asHeader.animateScrollToTop(andThen = {
       adapter.submitList(state.list)
     })
+  }
+  
+  private fun renderShowCountryInfo(state: ShowCountryInfo) {
+    val country = state.country
+    rankingsDialogTitle.text(country.name)
+    rankingsDialogGeneralView.updateData(
+      country.confirmed,
+      country.recovered,
+      country.deaths,
+    )
+    rankingsTextNewConfirmed.text(NumberFormatter.formatNumber(country.newConfirmed))
+    rankingsTextNewDeaths.text(NumberFormatter.formatNumber(country.newDeaths))
+    rankingsTextDeathRate.text(NumberFormatter.formatPercent(state.deathRate))
+    rankingsTextPercentInCountry.text(NumberFormatter.formatPercent(state.percentInCountry))
+    rankingsDialog.animateVisible()
   }
   
   private fun renderFailure(reason: FailureReason) {

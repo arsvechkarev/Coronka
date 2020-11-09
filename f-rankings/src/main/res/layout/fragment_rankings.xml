@@ -47,23 +47,26 @@
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/rankingsChipWorldRegion"
-      style="@style/Chip.RegionName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="@dimen/rankings_header_chip_margin"
+      android:layout_marginHorizontal="@dimen/rankings_header_chip_margin"
+      android:layout_marginTop="@dimen/rankings_header_chip_m_top"
+      android:layout_marginBottom="@dimen/rankings_header_chip_margin"
       android:text="@string/text_worldwide"
+      android:textSize="@dimen/rankings_chip_text_size"
       android:visibility="invisible"
+      app:colorFill="?colorTextPrimary"
       app:colorSecondary="?colorBackground"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/rankingsHeaderGradientView"/>
 
     <com.arsvechkarev.views.Chip
       android:id="@+id/rankingsChipOptionType"
-      style="@style/Chip"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/rankings_header_chip_margin"
       android:text="@string/text_confirmed"
+      android:textSize="@dimen/rankings_chip_text_size"
       android:visibility="invisible"
       app:colorFill="?colorConfirmed"
       app:colorSecondary="?colorBackground"
@@ -282,7 +285,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_percent_in_country"
-        app:colorFill="?colorPercentByCountry"/>
+        app:colorFill="?colorPercentInCountry"/>
 
       <com.arsvechkarev.views.Chip
         android:id="@+id/chipDeathRate"
@@ -296,13 +299,138 @@
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
-  <com.arsvechkarev.views.SimpleDialog
-    android:id="@+id/rankingsDialogCountryInfo"
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/rankingsDialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="gone">
+    android:background="?colorMapWater"
+    android:visibility="invisible">
 
+    <ImageView
+      android:id="@+id/rankingsDialogIconBack"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/icon_drawer_margin"
+      android:background="@drawable/bg_ripple"
+      android:src="@drawable/ic_back"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
 
-  </com.arsvechkarev.views.SimpleDialog>
+    <TextView
+      android:id="@+id/rankingsDialogTitle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_dialog_title_m_horizontal"
+      android:layout_marginTop="@dimen/rankings_dialog_item_m_top"
+      android:fontFamily="@font/segoe_ui_bold"
+      android:textColor="?colorTextPrimary"
+      android:textSize="@dimen/text_main_title"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/rankingsDialogIconBack"/>
+
+    <com.arsvechkarev.views.statsviews.CountryGeneralStatsView
+      android:id="@+id/rankingsDialogGeneralView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_dialog_general_stats_m_horizontal"
+      android:layout_marginTop="@dimen/rankings_dialog_item_m_top"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/rankingsDialogTitle"/>
+
+    <TextView
+      android:id="@+id/rankingsTitleNewConfirmed"
+      style="@style/TextViewDialog"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_dialog_title_m_horizontal"
+      android:layout_marginTop="@dimen/rankings_dialog_item_m_top"
+      android:text="@string/text_new_confirmed"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/rankingsDialogGeneralView"/>
+
+    <TextView
+      android:id="@+id/rankingsTitleNewDeaths"
+      style="@style/TextViewDialog"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_dialog_title_margin"
+      android:layout_marginTop="@dimen/rankings_dialog_title_margin"
+      android:text="@string/text_new_deaths"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/rankingsTitleNewConfirmed"/>
+
+    <TextView
+      android:id="@+id/rankingsTitleDeathRate"
+      style="@style/TextViewDialog"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_dialog_title_margin"
+      android:layout_marginTop="@dimen/rankings_dialog_title_margin"
+      android:text="@string/text_death_rate"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/rankingsTitleNewDeaths"/>
+
+    <TextView
+      android:id="@+id/rankingsTitlePercentInCountry"
+      style="@style/TextViewDialog"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_dialog_title_margin"
+      android:layout_marginTop="@dimen/rankings_dialog_title_margin"
+      android:text="@string/text_percent_in_country_long"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/rankingsTitleDeathRate"/>
+
+    <TextView
+      android:id="@+id/rankingsTextNewConfirmed"
+      style="@style/TextViewDialog"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_dialog_title_m_horizontal"
+      android:textColor="?colorConfirmed"
+      android:textSize="@dimen/text_h2"
+      app:layout_constraintBottom_toBottomOf="@id/rankingsTitleNewConfirmed"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@id/rankingsTitleNewConfirmed"/>
+
+    <TextView
+      android:id="@+id/rankingsTextNewDeaths"
+      style="@style/TextViewDialog"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_dialog_title_m_horizontal"
+      android:textColor="?colorDeaths"
+      android:textSize="@dimen/text_h2"
+      app:layout_constraintBottom_toBottomOf="@id/rankingsTitleNewDeaths"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@id/rankingsTitleNewDeaths"/>
+
+    <TextView
+      android:id="@+id/rankingsTextDeathRate"
+      style="@style/TextViewDialog"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_dialog_title_m_horizontal"
+      android:textColor="?colorDeathRate"
+      android:textSize="@dimen/text_h2"
+      app:layout_constraintBottom_toBottomOf="@id/rankingsTitleDeathRate"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@id/rankingsTitleDeathRate"/>
+
+    <TextView
+      android:id="@+id/rankingsTextPercentInCountry"
+      style="@style/TextViewDialog"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="@dimen/rankings_dialog_title_m_horizontal"
+      android:textColor="?colorPercentInCountry"
+      android:textSize="@dimen/text_h2"
+      app:layout_constraintBottom_toBottomOf="@id/rankingsTitlePercentInCountry"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@id/rankingsTitlePercentInCountry"/>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -17,7 +17,7 @@
   <color name="dark_confirmed">#EC3E3E</color>
   <color name="dark_recovered">#22BF17</color>
   <color name="dark_deaths">#FF6F00</color>
-  <color name="dark_percent_by_country">#FFDA1E</color>
+  <color name="dark_percent_in_country">#FFDA1E</color>
   <color name="dark_death_rate">#007FFF</color>
 
   <color name="dark_map_water">#151622</color>
@@ -37,4 +37,5 @@
   <color name="dark_disabled">#787878</color>
   <color name="dark_checkmark">#3BA800</color>
   <color name="dark_shadow">#8F000000</color>
+  <color name="dark_overlay_dark">#2C2D3E</color>
 </resources>

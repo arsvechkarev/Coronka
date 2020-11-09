@@ -15,7 +15,7 @@ sealed class EmailState : BaseScreenState() {
 
 sealed class TimerState : BaseScreenState() {
   
-  class TimeIsTicking(var time: CharSequence, var millis: Long) : TimerState()
+  class TimeIsTicking(var time: CharSequence) : TimerState()
   
   object TimerHasFinished : TimerState()
 }

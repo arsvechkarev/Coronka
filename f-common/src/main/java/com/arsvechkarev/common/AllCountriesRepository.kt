@@ -11,7 +11,7 @@ class AllCountriesRepository(
   private val networker: RxNetworker
 ) {
   
-  fun getData(): Observable<TotalData> {
+  fun getTotalData(): Observable<TotalData> {
     return networker.requestObservable(URL)
         .map { transformJson(it) }
   }
@@ -35,7 +35,9 @@ class AllCountriesRepository(
         iso2 = item.getString("CountryCode"),
         confirmed = item.getString("TotalConfirmed").toInt(),
         deaths = item.getString("TotalDeaths").toInt(),
-        recovered = item.getString("TotalRecovered").toInt()
+        recovered = item.getString("TotalRecovered").toInt(),
+        newConfirmed = item.getString("NewConfirmed").toInt(),
+        newDeaths = item.getString("NewDeaths").toInt()
       )
       countriesList.add(country)
     }

@@ -29,7 +29,7 @@
     <item name="colorConfirmed">@color/dark_confirmed</item>
     <item name="colorRecovered">@color/dark_recovered</item>
     <item name="colorDeaths">@color/dark_deaths</item>
-    <item name="colorPercentByCountry">@color/dark_percent_by_country</item>
+    <item name="colorPercentInCountry">@color/dark_percent_in_country</item>
     <item name="colorDeathRate">@color/dark_death_rate</item>
 
     <item name="colorMapWater">@color/dark_map_water</item>
@@ -48,6 +48,7 @@
     <item name="colorDisabled">@color/dark_disabled</item>
     <item name="colorCheckmark">@color/dark_checkmark</item>
     <item name="colorShadow">@color/dark_shadow</item>
+    <item name="colorOverlayDark">@color/dark_overlay_dark</item>
   </style>
 
   <style name="TextStyle" parent="@style/TextAppearance.AppCompat">

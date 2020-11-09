@@ -7,10 +7,8 @@ import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase.Companion.la
 import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase.Companion.lng
 import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase.Companion.population
 import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase.Companion.world_region
-import core.extenstions.assertThat
-import core.extenstions.collectToList
+import core.extenstions.collectToMap
 import core.extenstions.intOfColumn
-import core.extenstions.iterate
 import core.extenstions.stringOfColumn
 import core.model.CountryMetaInfo
 import core.model.Location
@@ -23,28 +21,30 @@ class CountriesMetaInfoRepository(
   fun getCountriesMetaInfoSync() = database.query(
     sql = "SELECT $iso2, $population, $world_region FROM $TABLE_NAME",
     converter = {
-      collectToList {
-        CountryMetaInfo(
-          stringOfColumn(iso2),
-          intOfColumn(population),
-          stringOfColumn(world_region)
-        )
+      collectToMap<String, CountryMetaInfo> {
+        key { stringOfColumn(iso2) }
+        value {
+          CountryMetaInfo(
+            stringOfColumn(iso2),
+            intOfColumn(population),
+            stringOfColumn(world_region)
+          )
+        }
       }
     })
   
   fun getLocationsMap() = Observable.fromCallable<Map<String, Location>> lb@{
-    val iso2ToLocations = HashMap<String, Location>()
-    database.query(
+    return@lb database.query(
       sql = "SELECT $iso2, $lat, $lng FROM $TABLE_NAME WHERE $lat IS NOT NULL",
-      function = {
-        iterate {
-          val iso2 = getString(getColumnIndex(iso2))
-          val lat = getString(getColumnIndex(lat))
-          val lng = getString(getColumnIndex(lng))
-          iso2ToLocations[iso2] = Location(lat.toDouble(), lng.toDouble())
+      converter = {
+        collectToMap<String, Location> {
+          key { stringOfColumn(iso2) }
+          value {
+            val lat = stringOfColumn(lat)
+            val lng = stringOfColumn(lng)
+            Location(lat.toDouble(), lng.toDouble())
+          }
         }
       })
-    assertThat(iso2ToLocations.isNotEmpty())
-    return@lb iso2ToLocations
   }
 }

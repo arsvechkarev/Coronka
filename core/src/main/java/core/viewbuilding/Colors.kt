@@ -6,7 +6,7 @@ import com.arsvechkarev.viewdsl.getAttrColor
 
 object Colors {
   
-  private val colors = IntArray(34) { 0 }
+  private val colors = IntArray(35) { 0 }
   
   val Background get() = colors[0]
   val BackgroundLight get() = colors[1]
@@ -45,6 +45,7 @@ object Colors {
   val Disabled get() = colors[31]
   val Checkmark get() = colors[32]
   val Shadow get() = colors[33]
+  val OverlayDark get() = colors[34]
   
   fun init(context: Context) {
     colors[0] = context.getAttrColor(R.attr.colorBackground)
@@ -63,7 +64,7 @@ object Colors {
     colors[13] = context.getAttrColor(R.attr.colorConfirmed)
     colors[14] = context.getAttrColor(R.attr.colorRecovered)
     colors[15] = context.getAttrColor(R.attr.colorDeaths)
-    colors[16] = context.getAttrColor(R.attr.colorPercentByCountry)
+    colors[16] = context.getAttrColor(R.attr.colorPercentInCountry)
     colors[17] = context.getAttrColor(R.attr.colorDeathRate)
     colors[18] = context.getAttrColor(R.attr.colorMapWater)
     colors[19] = context.getAttrColor(R.attr.colorMapLandscape)
@@ -81,5 +82,6 @@ object Colors {
     colors[31] = context.getAttrColor(R.attr.colorDisabled)
     colors[32] = context.getAttrColor(R.attr.colorCheckmark)
     colors[33] = context.getAttrColor(R.attr.colorShadow)
+    colors[34] = context.getAttrColor(R.attr.colorOverlayDark)
   }
 }

@@ -1,6 +1,7 @@
 package com.arsvechkarev.rankings.list
 
 import com.arsvechkarev.rankings.R
+import com.arsvechkarev.viewdsl.onClick
 import com.arsvechkarev.viewdsl.paddingsRes
 import com.arsvechkarev.views.SmallStatsView
 import core.extenstions.assertThat
@@ -9,7 +10,7 @@ import core.recycler.CallbackType
 import core.recycler.ListAdapter
 import core.recycler.delegate
 
-class RankingsAdapter : ListAdapter(
+class RankingsAdapter(onClick: (DisplayableCountry) -> Unit) : ListAdapter(
   delegate<DisplayableCountry> {
     buildView {
       SmallStatsView(context).apply {
@@ -20,6 +21,9 @@ class RankingsAdapter : ListAdapter(
           R.dimen.rankings_small_stats_view_p_vertical
         )
       }
+    }
+    onInitViewHolder {
+      itemView.onClick { onClick(item) }
     }
     onBind { itemView, country ->
       assertThat(itemView is SmallStatsView)

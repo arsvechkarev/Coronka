@@ -9,7 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.viewdsl.DURATION_LONG
-import core.Application
+import core.NumberFormatter
 import core.extenstions.f
 import core.extenstions.getTextHeight
 import core.model.DailyCase
@@ -45,7 +45,7 @@ class DateAndNumberLabel @JvmOverloads constructor(
     duration = DURATION_LONG
     addUpdateListener {
       currentNumber = (it.animatedFraction * resultNumber).toInt()
-      numberText = Application.numberFormatter.format(currentNumber)
+      numberText = NumberFormatter.formatNumber(currentNumber)
       invalidate()
     }
   }
@@ -60,7 +60,7 @@ class DateAndNumberLabel @JvmOverloads constructor(
       animateAppearance(dailyCase)
     } else {
       dateText = dailyCase.date
-      numberText = Application.numberFormatter.format(dailyCase.cases)
+      numberText = NumberFormatter.formatNumber(dailyCase.cases)
       invalidate()
     }
   }

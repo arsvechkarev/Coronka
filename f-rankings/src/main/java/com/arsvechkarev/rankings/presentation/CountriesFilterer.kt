@@ -1,7 +1,6 @@
 package com.arsvechkarev.rankings.presentation
 
-import core.Application
-import core.Application.decimalFormatter
+import core.NumberFormatter
 import core.extenstions.assertThat
 import core.model.Country
 import core.model.CountryMetaInfo
@@ -12,14 +11,14 @@ import core.recycler.DifferentiableItem
 
 class CountriesFilterer(
   private val countries: List<Country>,
-  private val metaInfoList: List<CountryMetaInfo>
+  private val metaInfoList: Map<String, CountryMetaInfo>
 ) {
   
   private val regionsToCountries = HashMap<String, MutableList<Country>>()
   private val cache = HashMap<Pair<OptionType, WorldRegion>, List<DifferentiableItem>>()
   
   init {
-    metaInfoList.forEach { metaInfo ->
+    metaInfoList.values.forEach { metaInfo ->
       val list = regionsToCountries[metaInfo.worldRegion] ?: mutableListOf()
       val country = countries.find { it.iso2 == metaInfo.iso2 }
       if (country != null) {
@@ -66,13 +65,13 @@ class CountriesFilterer(
       when (val amount = determineAmount(optionType, country)) {
         is Float -> {
           if (amount > 0.001f) {
-            val amountString = "${decimalFormatter.format(amount)}%"
-            items.add(DisplayableCountry(country.name, amount, amountString))
+            val amountString = NumberFormatter.formatPercent(amount)
+            items.add(DisplayableCountry(country.name, amount, amountString, country))
           }
         }
         else -> {
-          val amountString = Application.numberFormatter.format(amount)
-          items.add(DisplayableCountry(country.name, amount, amountString))
+          val amountString = NumberFormatter.formatNumber(amount)
+          items.add(DisplayableCountry(country.name, amount, amountString, country))
         }
       }
     }
@@ -90,11 +89,11 @@ class CountriesFilterer(
     }
     for (country in list) {
       if (country.isFromRegion(worldRegion)) {
-        val countryMetaInfo = metaInfoList.find { it.iso2 == country.iso2 }!!
+        val countryMetaInfo = metaInfoList.getValue(country.iso2)
         val amount = country.confirmed.toFloat() / countryMetaInfo.population.toFloat() * 100
         if (amount >= 0.001f) {
-          val amountString = "${decimalFormatter.format(amount)}%"
-          items.add(DisplayableCountry(country.name, amount, amountString))
+          val amountString = NumberFormatter.formatPercent(amount)
+          items.add(DisplayableCountry(country.name, amount, amountString, country))
         }
       }
     }
@@ -117,6 +116,6 @@ class CountriesFilterer(
   
   private fun Country.isFromRegion(worldRegion: WorldRegion): Boolean {
     if (worldRegion == WorldRegion.WORLDWIDE) return true
-    return metaInfoList.find { it.iso2 == this.iso2 }!!.worldRegion == worldRegion.letters
+    return metaInfoList.getValue(this.iso2).worldRegion == worldRegion.letters
   }
 }

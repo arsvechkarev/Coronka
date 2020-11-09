@@ -17,7 +17,7 @@
   <attr name="colorConfirmed" format="color"/>
   <attr name="colorRecovered" format="color"/>
   <attr name="colorDeaths" format="color"/>
-  <attr name="colorPercentByCountry" format="color"/>
+  <attr name="colorPercentInCountry" format="color"/>
   <attr name="colorDeathRate" format="color"/>
 
   <attr name="colorMapWater" format="color"/>
@@ -36,4 +36,5 @@
   <attr name="colorDisabled" format="color"/>
   <attr name="colorCheckmark" format="color"/>
   <attr name="colorShadow" format="color"/>
+  <attr name="colorOverlayDark" format="color"/>
 </resources>

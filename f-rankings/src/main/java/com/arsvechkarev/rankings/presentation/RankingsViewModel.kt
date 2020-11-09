@@ -8,8 +8,11 @@ import core.Loading
 import core.RxViewModel
 import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
+import core.extenstions.f
 import core.extenstions.withNetworkDelay
 import core.extenstions.withRequestTimeout
+import core.model.CountryMetaInfo
+import core.model.DisplayableCountry
 import core.model.OptionType
 import core.model.TotalData
 import core.model.WorldRegion
@@ -22,10 +25,11 @@ class RankingsViewModel(
 ) : RxViewModel() {
   
   private lateinit var countriesFilterer: CountriesFilterer
+  private lateinit var countriesMetaInfo: Map<String, CountryMetaInfo>
   
   fun startLoadingData() {
     rxCall {
-      allCountriesRepository.getData()
+      allCountriesRepository.getTotalData()
           .subscribeOn(schedulers.io())
           .withNetworkDelay(schedulers)
           .withRequestTimeout()
@@ -47,12 +51,22 @@ class RankingsViewModel(
     }
   }
   
+  fun onCountryClicked(country: DisplayableCountry) {
+    val population = countriesMetaInfo.getValue(country.derivedCountry.iso2).population
+    val confirmed = country.derivedCountry.confirmed.f
+    val deathRate = country.derivedCountry.deaths.f / country.derivedCountry.confirmed
+    val percentInCountry = confirmed / population * 100f
+    _state.value = ShowCountryInfo(
+      country.derivedCountry, deathRate, percentInCountry
+    )
+  }
+  
   private fun transformToScreenState(totalData: TotalData): BaseScreenState {
-    val countriesMetaInfo = metaInfoRepository.getCountriesMetaInfoSync()
+    countriesMetaInfo = metaInfoRepository.getCountriesMetaInfoSync()
     countriesFilterer = CountriesFilterer(totalData.countries, countriesMetaInfo)
     val worldRegion = WorldRegion.WORLDWIDE
     val optionType = OptionType.CONFIRMED
     val data = countriesFilterer.filter(optionType, worldRegion)
-    return LoadedCountries(data, optionType, worldRegion)
+    return LoadedCountries(data)
   }
 }

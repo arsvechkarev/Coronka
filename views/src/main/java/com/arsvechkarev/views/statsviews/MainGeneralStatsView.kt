@@ -1,4 +1,4 @@
-package com.arsvechkarev.views
+package com.arsvechkarev.views.statsviews
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,13 +6,14 @@ import android.graphics.Paint
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import com.arsvechkarev.views.R
 import core.extenstions.formattedMillions
 import core.extenstions.getTextHeight
 import core.model.GeneralInfo
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 
-class GeneralStatsView @JvmOverloads constructor(
+class MainGeneralStatsView @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
@@ -46,7 +47,7 @@ class GeneralStatsView @JvmOverloads constructor(
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val width = MeasureSpec.getSize(widthMeasureSpec)
     setMeasuredDimension(
-      widthMeasureSpec,
+      resolveSize(width, widthMeasureSpec),
       resolveSize(getSquareSize(width), heightMeasureSpec)
     )
   }
@@ -63,7 +64,7 @@ class GeneralStatsView @JvmOverloads constructor(
     numberTextSize = getTextSizeFor(
       confirmedNumber!!, recoveredNumber!!, deathsNumber!!, width, textPaint
     )
-    val offset = getSquareMargin(width).toFloat()
+    val offset = getItemMargin(width).toFloat()
     val squareSize = getSquareSize(width).toFloat()
     canvas.drawItem(Colors.Confirmed, confirmedTitle, confirmedNumber!!, 0f)
     canvas.drawItem(Colors.Recovered, recoveredTitle, recoveredNumber!!,
@@ -79,7 +80,7 @@ class GeneralStatsView @JvmOverloads constructor(
     start: Float
   ) {
     val itemSize = getSquareSize(width).toFloat()
-    val radius = getSquareCornersRadius(width)
+    val radius = getItemCornersRadius(width)
     squarePaint.color = color
     drawRoundRect(start, 0f, start + itemSize, itemSize,
       radius, radius, squarePaint)
@@ -90,52 +91,5 @@ class GeneralStatsView @JvmOverloads constructor(
     textPaint.textSize = numberTextSize
     drawText(number, 0, number.length, start + itemSize / 2f,
       height - verticalMargin, textPaint)
-  }
-  
-  private fun getTextSizeFor(
-    text1: String,
-    text2: String,
-    text3: String,
-    width: Int,
-    paint: Paint
-  ): Float {
-    val squareSize = getSquareSize(width)
-    calculateTextSize(squareSize, text1, paint)
-    val firstTitleSize = paint.textSize
-    calculateTextSize(squareSize, text2, paint)
-    val secondTitleSize = paint.textSize
-    calculateTextSize(squareSize, text3, paint)
-    val thirdTitleSize = paint.textSize
-    return minOf(firstTitleSize, secondTitleSize, thirdTitleSize)
-  }
-  
-  companion object {
-    
-    fun calculateTextSize(width: Int, text: String, paint: Paint) {
-      paint.textSize = 10f
-      while (true) {
-        val titleTextWidth = paint.measureText(text)
-        if (titleTextWidth > width - getTextHorizontalMargin(width) * 2f) {
-          break
-        }
-        paint.textSize++
-      }
-    }
-    
-    fun getSquareSize(width: Int): Int {
-      return (width - getSquareMargin(width) * 2) / 3
-    }
-    
-    fun getSquareCornersRadius(width: Int): Float {
-      return width / 35f
-    }
-    
-    fun getSquareMargin(width: Int): Int {
-      return width / 18
-    }
-    
-    fun getTextHorizontalMargin(itemSize: Int) = itemSize / 12f
-    
-    fun getTextVerticalMargin(itemSize: Int) = itemSize / 8f
   }
 }

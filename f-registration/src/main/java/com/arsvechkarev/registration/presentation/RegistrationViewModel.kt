@@ -37,8 +37,7 @@ class RegistrationViewModel(
   private lateinit var timer: Timer
   
   private var timerTickingState = TimerState.TimeIsTicking(
-    TimeFormatter.format(TIMER_FORMAT, TIMER_TIME_MILLIS),
-    TIMER_TIME_MILLIS
+    TimeFormatter.format(TIMER_FORMAT, TIMER_TIME_MILLIS)
   )
   
   fun initializeTimer(resetAndStartTimer: Boolean) {
@@ -87,9 +86,8 @@ class RegistrationViewModel(
     timer.start()
   }
   
-  private fun onTimerTick(time: CharSequence, millis: Long) {
+  private fun onTimerTick(time: CharSequence) {
     timerTickingState.time = time
-    timerTickingState.millis = millis
     _timerState.value = timerTickingState
   }
   
@@ -101,7 +99,7 @@ class RegistrationViewModel(
   private fun createTimer(reset: Boolean): Pair<TimerBuilder, Boolean> {
     val builder = TimerBuilder()
         .startFormat(TIMER_FORMAT)
-        .onTick { time, millis -> onTimerTick(time, millis) }
+        .onTick { time -> onTimerTick(time) }
         .onFinish { onTimerFinish() }
     var startTimer = false
     if (reset) {
