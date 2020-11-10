@@ -1,15 +1,18 @@
-package com.arsvechkarev.views.statsviews
+package com.arsvechkarev.views.generalstatsviews
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import com.arsvechkarev.viewdsl.size
 import com.arsvechkarev.views.R
 import core.NumberFormatter
 import core.extenstions.getTextHeight
+import core.extenstions.i
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 
@@ -38,6 +41,11 @@ class CountryGeneralStatsView @JvmOverloads constructor(
   private var recoveredText: String? = null
   private var deathsText: String? = null
   
+  override fun onAttachedToWindow() {
+    super.onAttachedToWindow()
+    adjustToOrientation(resources.configuration.orientation)
+  }
+  
   fun updateData(confirmed: Int, recovered: Int, deaths: Int) {
     confirmedText = NumberFormatter.formatNumber(confirmed)
     recoveredText = NumberFormatter.formatNumber(recovered)
@@ -48,7 +56,7 @@ class CountryGeneralStatsView @JvmOverloads constructor(
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val width = widthMeasureSpec.size
     titleTextSize = getTextSizeFor(
-      confirmedTitle, recoveredTitle, deathsTitle, width, textPaint
+      confirmedTitle, recoveredTitle, deathsTitle, getItemWidth(width), textPaint
     )
     textPaint.textSize = titleTextSize
     titleTextHeight = textPaint.getTextHeight(confirmedTitle).toFloat()
@@ -61,15 +69,15 @@ class CountryGeneralStatsView @JvmOverloads constructor(
   override fun onDraw(canvas: Canvas) {
     confirmedText ?: return
     numberTextSize = getTextSizeFor(
-      confirmedText!!, recoveredText!!, deathsText!!, width, textPaint
+      confirmedText!!, recoveredText!!, deathsText!!, getItemWidth(width), textPaint
     )
     val offset = getItemMargin(width).toFloat()
-    val itemSize = getSquareSize(width).toFloat()
+    val itemWidth = getItemWidth(width).toFloat()
     canvas.drawItem(Colors.Confirmed, confirmedTitle, confirmedText!!, 0f)
     canvas.drawItem(Colors.Recovered, recoveredTitle, recoveredText!!,
-      itemSize + offset)
+      itemWidth + offset)
     canvas.drawItem(Colors.Deaths, deathsTitle, deathsText!!,
-      itemSize * 2 + offset * 2)
+      itemWidth * 2 + offset * 2)
   }
   
   private fun Canvas.drawItem(
@@ -78,7 +86,7 @@ class CountryGeneralStatsView @JvmOverloads constructor(
     number: String,
     start: Float
   ) {
-    val itemWidth = getSquareSize(width).toFloat()
+    val itemWidth = getItemWidth(width).toFloat()
     val itemHeight = getItemHeight(titleTextSize)
     val radius = getItemCornersRadius(width)
     drawRoundRect(start, 0f, start + itemWidth, itemHeight,
@@ -91,7 +99,23 @@ class CountryGeneralStatsView @JvmOverloads constructor(
     textPaint.textSize = numberTextSize
     textPaint.color = color
     drawText(number, 0, number.length, start + itemWidth / 2f,
-      height - verticalMargin, textPaint)
+      itemHeight - verticalMargin, textPaint)
+  }
+  
+  override fun onConfigurationChanged(newConfig: Configuration) {
+    adjustToOrientation(newConfig.orientation)
+  }
+  
+  private fun adjustToOrientation(orientation: Int) {
+    val mTop = resources.getDimension(R.dimen.country_stats_view_m_top).i
+    val params = layoutParams as ViewGroup.MarginLayoutParams
+    if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+      val mHorizontal = resources.getDimension(R.dimen.country_stats_view_m_horizontal).i
+      params.setMargins(mHorizontal, mTop, mHorizontal, 0)
+    } else {
+      val mHorizontalBig = resources.getDimension(R.dimen.general_stats_view_landscape_margin).i
+      params.setMargins(mHorizontalBig, mTop, mHorizontalBig, 0)
+    }
   }
   
   companion object {
@@ -101,5 +125,9 @@ class CountryGeneralStatsView @JvmOverloads constructor(
     private fun getItemHeight(textSize: Float) = textSize * 5
     
     private fun getVerticalMargin(textSize: Float) = textSize * 0.9f
+    
+    private fun getItemWidth(width: Int): Int {
+      return (width - getItemMargin(width) * 2) / 3
+    }
   }
 }

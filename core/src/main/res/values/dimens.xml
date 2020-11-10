@@ -29,4 +29,7 @@
   <dimen name="chip_stroke_size">2.5dp</dimen>
   <dimen name="error_layout_image_height">90dp</dimen>
   <dimen name="error_layout_text_margin">32dp</dimen>
+  <dimen name="country_stats_view_m_horizontal">12dp</dimen>
+  <dimen name="country_stats_view_m_top">32dp</dimen>
+  <dimen name="general_stats_view_landscape_margin">140dp</dimen>
 </resources>

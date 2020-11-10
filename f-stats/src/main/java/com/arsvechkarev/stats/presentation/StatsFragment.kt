@@ -168,7 +168,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   private fun initViews() {
     statsHeader.behavior(TitleHeaderBehavior { it.id == R.id.statsScrollingContentView })
     statsScrollingContentView.behavior(ScrollableContentBehavior<ScrollingView>(requireContext()))
-    statsMainInfoLoadingStub.setLoadingDrawable(MainStatsInfoLoadingStub())
+    statsMainInfoLoadingStub.setLoadingDrawable(MainStatsInfoLoadingStub(requireContext()))
     statsTotalCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
     statsNewCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
   }

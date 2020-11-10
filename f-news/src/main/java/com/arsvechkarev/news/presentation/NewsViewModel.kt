@@ -5,14 +5,13 @@ import core.BaseScreenState
 import core.Failure
 import core.Loading
 import core.RxViewModel
-import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
 import core.extenstions.withNetworkDelay
 import core.extenstions.withRequestTimeout
 
 class NewsViewModel(
   private val newsRepository: NewYorkTimesNewsRepository,
-  private val schedulers: Schedulers = AndroidSchedulers
+  private val schedulers: Schedulers
 ) : RxViewModel() {
   
   private var currentPage = 0

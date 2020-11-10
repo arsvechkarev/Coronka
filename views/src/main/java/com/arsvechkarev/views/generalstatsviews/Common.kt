@@ -1,4 +1,4 @@
-package com.arsvechkarev.views.statsviews
+package com.arsvechkarev.views.generalstatsviews
 
 import android.graphics.Paint
 
@@ -6,15 +6,14 @@ fun getTextSizeFor(
   text1: String,
   text2: String,
   text3: String,
-  width: Int,
+  itemSize: Int,
   paint: Paint
 ): Float {
-  val squareSize = getSquareSize(width)
-  calculateTextSize(squareSize, text1, paint)
+  calculateTextSize(itemSize, text1, paint)
   val firstTitleSize = paint.textSize
-  calculateTextSize(squareSize, text2, paint)
+  calculateTextSize(itemSize, text2, paint)
   val secondTitleSize = paint.textSize
-  calculateTextSize(squareSize, text3, paint)
+  calculateTextSize(itemSize, text3, paint)
   val thirdTitleSize = paint.textSize
   return minOf(firstTitleSize, secondTitleSize, thirdTitleSize)
 }
@@ -30,18 +29,6 @@ fun calculateTextSize(width: Int, text: String, paint: Paint) {
   }
 }
 
-fun getSquareSize(width: Int): Int {
-  return (width - getItemMargin(width) * 2) / 3
-}
-
-fun getItemCornersRadius(width: Int): Float {
-  return width / 35f
-}
-
-fun getItemMargin(width: Int): Int {
-  return width / 18
-}
+fun getItemCornersRadius(width: Int) = width / 35f
 
 fun getTextHorizontalMargin(itemSize: Int) = itemSize / 12f
-
-fun getTextVerticalMargin(itemSize: Int) = itemSize / 8f

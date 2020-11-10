@@ -68,7 +68,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
 
-        <com.arsvechkarev.views.statsviews.MainGeneralStatsView
+        <com.arsvechkarev.views.generalstatsviews.MainGeneralStatsView
           android:id="@+id/statsGeneralStatsView"
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>

@@ -3,10 +3,13 @@ package com.arsvechkarev.coronka.di
 import com.arsvechkarev.coronka.MainNavigator
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.presentation.MainViewModel
+import core.ConnectivityObserver
 import core.auth.FirebaseAuthenticator
 import core.auth.SharedPrefsAuthEmailSaver
 import core.concurrency.AndroidSchedulers
+import core.extenstions.connectivityManager
 import core.extenstions.createViewModel
+import core.navigation.Navigator
 
 object MainModuleInjector {
   
@@ -16,10 +19,17 @@ object MainModuleInjector {
   }
   
   fun provideViewModel(activity: MainActivity): MainViewModel {
-    return activity.createViewModel(
-      FirebaseAuthenticator,
-      SharedPrefsAuthEmailSaver(activity),
-      AndroidSchedulers
+    val saver = SharedPrefsAuthEmailSaver(activity)
+    return activity.createViewModel(FirebaseAuthenticator, saver, AndroidSchedulers)
+  }
+  
+  fun provideConnectivityObserver(
+    activity: MainActivity,
+    navigator: Navigator,
+  ): ConnectivityObserver {
+    return ConnectivityObserver(
+      activity.connectivityManager,
+      onNetworkAvailable = { navigator.currentFragment?.onNetworkAvailable() }
     )
   }
 }

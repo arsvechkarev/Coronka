@@ -2,6 +2,8 @@ package com.arsvechkarev.coronka.presentation
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.provider.Settings.System
+import android.provider.Settings.System.ACCELEROMETER_ROTATION
 import android.view.View
 import androidx.lifecycle.Observer
 import com.arsvechkarev.coronka.R
@@ -20,10 +22,8 @@ import com.arsvechkarev.views.DrawerLayout
 import com.arsvechkarev.views.DrawerLayout.DrawerState.OPENED
 import core.BaseActivity
 import core.BaseScreenState
-import core.ConnectivityObserver
 import core.HostActivity
 import core.Loading
-import core.extenstions.connectivityManager
 import core.navigation.Navigator
 import core.viewbuilding.Colors
 
@@ -45,14 +45,10 @@ class MainActivity : BaseActivity(), HostActivity {
       model.state.observe(this, Observer(::handleState))
       model.figureOutScreenToGo(intent)
     }
-    val connectivityObserver = ConnectivityObserver(connectivityManager, onNetworkAvailable = {
-      navigator.currentFragment?.onNetworkAvailable()
-    })
     lifecycle.addObserver(navigator)
-    lifecycle.addObserver(connectivityObserver)
+    lifecycle.addObserver(MainModuleInjector.provideConnectivityObserver(this, navigator))
     viewAs<DrawerLayout>(DrawerLayout).respondToTouches = false
     initListeners()
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
   }
   
   override fun openDrawer() {
@@ -91,11 +87,14 @@ class MainActivity : BaseActivity(), HostActivity {
   }
   
   private fun renderGoToRegistrationScreen() {
+    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     navigator.navigateTo(RegistrationFragment::class)
   }
   
   private fun goToMainFragment() {
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
+    if (System.getInt(contentResolver, ACCELEROMETER_ROTATION, 0) == 1) {
+      requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
+    }
     viewAs<DrawerLayout>(DrawerLayout).respondToTouches = true
     view(TextStatistics).isSelected = true
     navigator.switchTo(StatsFragment::class)

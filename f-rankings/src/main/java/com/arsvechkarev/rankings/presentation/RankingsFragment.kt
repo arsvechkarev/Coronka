@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arsvechkarev.rankings.R
 import com.arsvechkarev.rankings.di.RankingsModuleInjector
-import com.arsvechkarev.rankings.list.RankingsAdapter
 import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
 import com.arsvechkarev.viewdsl.animateInvisible
 import com.arsvechkarev.viewdsl.animateVisible
@@ -81,9 +80,9 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
   private lateinit var chipHelper: ChipHelper
   private var viewModel: RankingsViewModel? = null
-  private val adapter = RankingsAdapter(onClick = { country ->
+  private val adapter = RankingsModuleInjector.provideAdapter { country ->
     viewModel?.onCountryClicked(country)
-  })
+  }
   
   override fun onInit() {
     viewModel = RankingsModuleInjector.provideViewModel(this).also { model ->

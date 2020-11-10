@@ -6,7 +6,6 @@ import core.BaseScreenState
 import core.Failure
 import core.Loading
 import core.RxViewModel
-import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
 import core.extenstions.withNetworkDelay
 import core.extenstions.withRequestTimeout
@@ -17,7 +16,7 @@ import io.reactivex.Observable
 class StatsViewModel(
   private val generalInfoRepository: GeneralInfoRepository,
   private val worldCasesInfoRepository: WorldCasesInfoRepository,
-  private val schedulers: Schedulers = AndroidSchedulers
+  private val schedulers: Schedulers
 ) : RxViewModel() {
   
   fun startLoadingData() {

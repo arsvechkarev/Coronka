@@ -1,14 +1,18 @@
-package com.arsvechkarev.views.statsviews
+package com.arsvechkarev.views.generalstatsviews
 
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import com.arsvechkarev.views.R
 import core.extenstions.formattedMillions
 import core.extenstions.getTextHeight
+import core.extenstions.i
 import core.model.GeneralInfo
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
@@ -37,6 +41,11 @@ class MainGeneralStatsView @JvmOverloads constructor(
   private var recoveredNumber: String? = null
   private var deathsNumber: String? = null
   
+  override fun onAttachedToWindow() {
+    super.onAttachedToWindow()
+    adjustToOrientation(resources.configuration.orientation)
+  }
+  
   fun updateNumbers(generalInfo: GeneralInfo) {
     confirmedNumber = generalInfo.confirmed.formattedMillions(context)
     recoveredNumber = generalInfo.recovered.formattedMillions(context)
@@ -54,7 +63,7 @@ class MainGeneralStatsView @JvmOverloads constructor(
   
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     titleTextSize = getTextSizeFor(
-      confirmedTitle, recoveredTitle, deathsTitle, w, textPaint
+      confirmedTitle, recoveredTitle, deathsTitle, getSquareSize(w), textPaint
     )
     titleTextHeight = textPaint.getTextHeight(confirmedTitle).toFloat()
   }
@@ -62,7 +71,7 @@ class MainGeneralStatsView @JvmOverloads constructor(
   override fun onDraw(canvas: Canvas) {
     confirmedNumber ?: return
     numberTextSize = getTextSizeFor(
-      confirmedNumber!!, recoveredNumber!!, deathsNumber!!, width, textPaint
+      confirmedNumber!!, recoveredNumber!!, deathsNumber!!, getSquareSize(width), textPaint
     )
     val offset = getItemMargin(width).toFloat()
     val squareSize = getSquareSize(width).toFloat()
@@ -91,5 +100,30 @@ class MainGeneralStatsView @JvmOverloads constructor(
     textPaint.textSize = numberTextSize
     drawText(number, 0, number.length, start + itemSize / 2f,
       height - verticalMargin, textPaint)
+  }
+  
+  override fun onConfigurationChanged(newConfig: Configuration) {
+    val orientation = newConfig.orientation
+    adjustToOrientation(orientation)
+  }
+  
+  private fun adjustToOrientation(orientation: Int) {
+    if (orientation == ORIENTATION_PORTRAIT) {
+      (layoutParams as MarginLayoutParams).setMargins(0, 0, 0, 0)
+    } else {
+      val margin = resources.getDimension(R.dimen.general_stats_view_landscape_margin).i
+      (layoutParams as MarginLayoutParams).setMargins(margin, 0, margin, 0)
+    }
+  }
+  
+  companion object {
+    
+    fun getItemMargin(width: Int) = width / 18
+    
+    private fun getTextVerticalMargin(itemSize: Int) = itemSize / 8f
+    
+    private fun getSquareSize(width: Int): Int {
+      return (width - getItemMargin(width) * 2) / 3
+    }
   }
 }

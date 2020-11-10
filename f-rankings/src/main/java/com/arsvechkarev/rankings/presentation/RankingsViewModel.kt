@@ -6,7 +6,6 @@ import core.BaseScreenState
 import core.Failure
 import core.Loading
 import core.RxViewModel
-import core.concurrency.AndroidSchedulers
 import core.concurrency.Schedulers
 import core.extenstions.f
 import core.extenstions.withNetworkDelay
@@ -21,7 +20,7 @@ import io.reactivex.Observable
 class RankingsViewModel(
   private val allCountriesRepository: AllCountriesRepository,
   private val metaInfoRepository: CountriesMetaInfoRepository,
-  private val schedulers: Schedulers = AndroidSchedulers
+  private val schedulers: Schedulers
 ) : RxViewModel() {
   
   private lateinit var countriesFilterer: CountriesFilterer
