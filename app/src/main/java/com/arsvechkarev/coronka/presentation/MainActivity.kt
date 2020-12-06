@@ -1,40 +1,25 @@
 package com.arsvechkarev.coronka.presentation
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.provider.Settings.System
-import android.provider.Settings.System.ACCELEROMETER_ROTATION
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import com.arsvechkarev.coronka.R
 import com.arsvechkarev.coronka.di.MainModuleInjector
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.rankings.presentation.RankingsFragment
-import com.arsvechkarev.registration.presentation.RegistrationFragment
-import com.arsvechkarev.registration.presentation.RegistrationFragment.Companion.EMAIL_KEY
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
 import com.arsvechkarev.viewdsl.Densities
-import com.arsvechkarev.viewdsl.animateInvisible
-import com.arsvechkarev.viewdsl.animateVisible
-import com.arsvechkarev.viewdsl.onClick
-import com.arsvechkarev.viewdsl.text
-import com.arsvechkarev.views.CheckmarkView
 import com.arsvechkarev.views.DrawerGroupLinearLayout
 import com.arsvechkarev.views.DrawerLayout
 import com.arsvechkarev.views.DrawerLayout.DrawerState.OPENED
 import core.BaseActivity
-import core.BaseScreenState
 import core.HostActivity
-import core.Loading
-import core.navigation.Navigator
+import core.Navigator
 import core.viewbuilding.Colors
 
 class MainActivity : BaseActivity(), HostActivity {
   
-  private lateinit var viewModel: MainViewModel
   private lateinit var navigator: Navigator
   
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,14 +33,10 @@ class MainActivity : BaseActivity(), HostActivity {
     navigator = MainModuleInjector.provideNavigator(this, DrawerLayout) {
       setSelectedMenuItem(it)
     }
-    viewModel = MainModuleInjector.provideViewModel(this).also { model ->
-      model.state.observe(this, Observer(::handleState))
-      model.figureOutScreenToGo(intent)
-    }
     lifecycle.addObserver(navigator)
     lifecycle.addObserver(MainModuleInjector.provideConnectivityObserver(this, navigator))
-    viewAs<DrawerLayout>(DrawerLayout).respondToTouches = false
     initListeners()
+    goToMainFragment()
   }
   
   override fun openDrawer() {
@@ -81,88 +62,9 @@ class MainActivity : BaseActivity(), HostActivity {
     }
   }
   
-  private fun handleState(state: BaseScreenState) {
-    when (state) {
-      is GoToRegistrationScreen -> renderGoToRegistrationScreen()
-      is GoToMainScreen -> goToMainFragment()
-      is Loading -> renderLoading()
-      is SuccessfullySignedId -> renderSignedIn()
-      is NoEmailSaved -> renderNoEmail()
-      is VerificationLinkExpired -> renderLinkExpired(state)
-      is EmailVerificationFailure -> renderFailure(state)
-    }
-  }
-  
-  private fun renderGoToRegistrationScreen() {
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    navigator.navigateTo(RegistrationFragment::class)
-  }
-  
   private fun goToMainFragment() {
-    if (System.getInt(contentResolver, ACCELEROMETER_ROTATION, 0) == 1) {
-      requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
-    }
-    viewAs<DrawerLayout>(DrawerLayout).respondToTouches = true
     view(TextStatistics).isSelected = true
     navigator.switchTo(StatsFragment::class)
-  }
-  
-  private fun renderLoading() {
-    textView(TextVerifyingLink).text(R.string.text_verifying_link)
-    view(LayoutLoading).animateVisible()
-    view(LayoutError).animateInvisible()
-  }
-  
-  private fun renderSignedIn() {
-    view(ProgressBar).animateInvisible(andThen = {
-      textView(TextVerifyingLink).text(R.string.text_successfully_verified)
-      viewAs<CheckmarkView>(CheckmarkView).animateCheckmark(andThen = {
-        view(LayoutLoading).animateInvisible(andThen = {
-          goToMainFragment()
-        })
-      })
-    })
-  }
-  
-  private fun renderNoEmail() {
-    showFailureLayout(
-      R.string.error_while_checking_link,
-      R.string.text_retry,
-      onClickAction = {
-        navigator.navigateTo(RegistrationFragment::class)
-      })
-  }
-  
-  private fun renderLinkExpired(state: VerificationLinkExpired) {
-    showFailureLayout(
-      R.string.error_email_link_expired,
-      R.string.text_resend_link,
-      onClickAction = {
-        navigator.navigateTo(RegistrationFragment::class, Bundle().apply {
-          putString(EMAIL_KEY, state.email)
-        })
-      })
-  }
-  
-  private fun renderFailure(state: EmailVerificationFailure) {
-    showFailureLayout(
-      state.reason.getStringRes(),
-      R.string.text_retry,
-      onClickAction = {
-        viewModel.figureOutScreenToGo(intent)
-      })
-  }
-  
-  private fun showFailureLayout(
-    textErrorRes: Int,
-    textButtonRetryRes: Int,
-    onClickAction: () -> Unit
-  ) {
-    view(LayoutLoading).animateInvisible()
-    view(LayoutError).animateVisible()
-    textView(TextError).text(textErrorRes)
-    textView(ButtonRetry).text(textButtonRetryRes)
-    textView(ButtonRetry).onClick(onClickAction)
   }
   
   private fun initListeners() {
@@ -191,14 +93,6 @@ class MainActivity : BaseActivity(), HostActivity {
   }
   
   companion object {
-    
-    const val LayoutLoading = "LayoutLoading"
-    const val LayoutError = "LayoutError"
-    const val TextError = "TextError"
-    const val ButtonRetry = "ButtonRetry"
-    const val ProgressBar = "ProgressBar"
-    const val CheckmarkView = "CheckmarkView"
-    const val TextVerifyingLink = "TextVerifyingLink"
     
     const val DrawerLayout = "DrawerLayout"
     const val DrawerGroupLinearLayout = "DrawerGroupLinearLayout"

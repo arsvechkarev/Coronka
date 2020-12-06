@@ -15,10 +15,7 @@ ext {
       glide              : "com.github.bumptech.glide:glide:4.11.0",
       glideApt           : "com.github.bumptech.glide:compiler:4.11.0",
       threeTenAbp        : "com.jakewharton.threetenabp:threetenabp:1.2.4",
-      firebasePlatform   : "com.google.firebase:firebase-bom:25.12.0",
-      firebaseAuth       : "com.google.firebase:firebase-auth",
       googleServicesAuth : "com.google.android.gms:play-services-auth:18.1.0",
-      timerx             : "com.arsvechkarev:timerx:2.3.2",
   ]
 
 

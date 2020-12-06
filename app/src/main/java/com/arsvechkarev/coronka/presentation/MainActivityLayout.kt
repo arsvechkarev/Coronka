@@ -12,12 +12,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import com.arsvechkarev.coronka.R
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.ButtonRetry
 import com.arsvechkarev.coronka.presentation.MainActivity.Companion.DrawerGroupLinearLayout
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.LayoutError
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.LayoutLoading
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.ProgressBar
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextError
 import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextMap
 import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextNews
 import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextRankings
@@ -31,8 +26,6 @@ import com.arsvechkarev.viewdsl.backgroundGradient
 import com.arsvechkarev.viewdsl.drawables
 import com.arsvechkarev.viewdsl.gravity
 import com.arsvechkarev.viewdsl.image
-import com.arsvechkarev.viewdsl.invisible
-import com.arsvechkarev.viewdsl.layoutGravity
 import com.arsvechkarev.viewdsl.margins
 import com.arsvechkarev.viewdsl.orientation
 import com.arsvechkarev.viewdsl.padding
@@ -42,20 +35,11 @@ import com.arsvechkarev.viewdsl.tag
 import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.textSize
 import com.arsvechkarev.viewdsl.withViewBuilder
-import com.arsvechkarev.views.CheckmarkView
 import com.arsvechkarev.views.DrawerGroupLinearLayout
 import com.arsvechkarev.views.DrawerLayout
-import com.arsvechkarev.views.ProgressBar
-import com.arsvechkarev.views.ProgressBar.Thickness.THICK
-import core.viewbuilding.Colors
 import core.viewbuilding.Colors.GradientHeaderEnd
 import core.viewbuilding.Colors.GradientHeaderStart
-import core.viewbuilding.Dimens.CheckmarkHeight
-import core.viewbuilding.Dimens.CheckmarkWidth
-import core.viewbuilding.Dimens.ErrorLayoutImageSize
-import core.viewbuilding.Dimens.ErrorLayoutTextPadding
 import core.viewbuilding.Dimens.LogoIconSize
-import core.viewbuilding.Dimens.ProgressBarSizeBig
 import core.viewbuilding.Styles
 import core.viewbuilding.Styles.BoldTextView
 import core.viewbuilding.TextSizes
@@ -65,58 +49,7 @@ fun Context.buildMainActivityLayout() = withViewBuilder {
     tag(MainActivity.DrawerLayout)
     size(MatchParent, MatchParent)
     child<FrameLayout, LayoutParams>(MatchParent, MatchParent) {
-      child<LinearLayout>(MatchParent, WrapContent) {
-        tag(LayoutLoading)
-        invisible()
-        orientation(LinearLayout.VERTICAL)
-        layoutGravity(Gravity.CENTER)
-        gravity(Gravity.CENTER)
-        child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
-          tag(MainActivity.TextVerifyingLink)
-          text(R.string.text_verifying_link)
-          padding(24.dp)
-          textSize(TextSizes.H1)
-        }
-        child<FrameLayout>(WrapContent, WrapContent) {
-          child<CheckmarkView>(CheckmarkWidth, CheckmarkHeight) {
-            invisible()
-            tag(MainActivity.CheckmarkView)
-          }
-          addView(ProgressBar(context, Colors.Accent, THICK).apply {
-            tag(ProgressBar)
-            size(ProgressBarSizeBig, ProgressBarSizeBig)
-          })
-        }
-      }
-      child<LinearLayout, LayoutParams>(MatchParent, MatchParent) {
-        tag(LayoutError)
-        invisible()
-        gravity(Gravity.CENTER)
-        layoutGravity(Gravity.CENTER)
-        orientation(LinearLayout.VERTICAL)
-        child<ImageView>(ErrorLayoutImageSize, ErrorLayoutImageSize) {
-          image(R.drawable.image_unknown_error)
-          margins(bottom = ErrorLayoutTextPadding)
-        }
-        child<TextView>(WrapContent, WrapContent, style = BoldTextView) {
-          tag(TextError)
-          gravity(Gravity.CENTER)
-          paddings(
-            start = ErrorLayoutTextPadding,
-            end = ErrorLayoutTextPadding,
-            bottom = ErrorLayoutTextPadding
-          )
-          textSize(TextSizes.H2)
-          text(R.string.error_email_link_expired)
-        }
-        child<TextView>(WrapContent, WrapContent, style = Styles.ClickableTextView) {
-          tag(ButtonRetry)
-          text(R.string.text_resend_link)
-        }
-      }
-      child<FrameLayout, LayoutParams>(MatchParent, MatchParent) {
-        id = R.id.fragmentContainer
-      }
+      id = R.id.fragmentContainer
     }
     child<View, LayoutParams>(MatchParent, MatchParent) {
       // Dummy view for shadow effect

@@ -18,7 +18,7 @@ import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
 import com.arsvechkarev.views.DrawerLayout
 import core.BaseFragment
-import core.navigation.Navigator
+import core.Navigator
 import kotlin.reflect.KClass
 
 class MainNavigator(

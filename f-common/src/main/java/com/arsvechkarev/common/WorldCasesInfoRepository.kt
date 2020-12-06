@@ -1,15 +1,12 @@
 package com.arsvechkarev.common
 
-import core.Loggable
 import core.RxNetworker
 import core.extenstions.assertThat
 import core.model.DailyCase
 import io.reactivex.Observable
 import org.json.JSONObject
 
-class WorldCasesInfoRepository(private val networker: RxNetworker) : Loggable {
-  
-  override val logTag = "Request_WorldCasesRepository"
+class WorldCasesInfoRepository(private val networker: RxNetworker) {
   
   fun getWorldDailyTotalCases(): Observable<List<DailyCase>> {
     return networker.requestObservable(URL_TOTAL_CASES)

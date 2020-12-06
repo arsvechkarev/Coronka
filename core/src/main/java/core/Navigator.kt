@@ -1,8 +1,7 @@
-package core.navigation
+package core
 
 import android.os.Bundle
 import androidx.lifecycle.LifecycleObserver
-import core.BaseFragment
 import kotlin.reflect.KClass
 
 interface Navigator : LifecycleObserver {

@@ -1,16 +1,11 @@
 package com.arsvechkarev.common
 
-import core.Loggable
 import core.RxNetworker
 import core.model.GeneralInfo
 import io.reactivex.Observable
 import org.json.JSONObject
 
-class GeneralInfoRepository(
-  private val networker: RxNetworker
-) : Loggable {
-  
-  override val logTag = "Request_GeneralInfoRepository"
+class GeneralInfoRepository(private val networker: RxNetworker) {
   
   fun getGeneralInfo(): Observable<GeneralInfo> {
     return networker.requestObservable(URL)
