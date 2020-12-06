@@ -88,6 +88,11 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     statsImageFailure.visible()
   }
   
+  override fun onDestroyView() {
+    super.onDestroyView()
+    (statsMainInfoLoadingStub.background as? MainStatsInfoLoadingStub)?.release()
+  }
+  
   private fun handleState(state: BaseScreenState) {
     when (state) {
       is Loading -> {

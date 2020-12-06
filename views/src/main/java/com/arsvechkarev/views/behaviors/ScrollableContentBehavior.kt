@@ -64,7 +64,6 @@ class ScrollableContentBehavior<V>(context: Context) :
       }
       ACTION_MOVE -> {
         stopScroller(child)
-        val activePointerId = activePointerId
         if (activePointerId == INVALID_POINTER) {
           // If we don't have a valid id, the touch down wasn't on content.
           return false

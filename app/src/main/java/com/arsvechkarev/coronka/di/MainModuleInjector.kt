@@ -1,5 +1,6 @@
 package com.arsvechkarev.coronka.di
 
+import androidx.fragment.app.Fragment
 import com.arsvechkarev.coronka.MainNavigator
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.presentation.MainViewModel
@@ -13,9 +14,16 @@ import core.navigation.Navigator
 
 object MainModuleInjector {
   
-  fun provideNavigator(activity: MainActivity, drawerLayoutTag: String): MainNavigator {
-    return MainNavigator(activity.supportFragmentManager,
-      activity.window.decorView.findViewWithTag(drawerLayoutTag))
+  fun provideNavigator(
+    activity: MainActivity,
+    drawerLayoutTag: String,
+    onFragmentAppeared: (Fragment) -> Unit,
+  ): Navigator {
+    return MainNavigator(
+      activity.supportFragmentManager,
+      activity.window.decorView.findViewWithTag(drawerLayoutTag),
+      onFragmentAppeared
+    )
   }
   
   fun provideViewModel(activity: MainActivity): MainViewModel {
@@ -29,7 +37,9 @@ object MainModuleInjector {
   ): ConnectivityObserver {
     return ConnectivityObserver(
       activity.connectivityManager,
-      onNetworkAvailable = { navigator.currentFragment?.onNetworkAvailable() }
+      onNetworkAvailable = {
+        navigator.currentFragment?.onNetworkAvailable()
+      }
     )
   }
 }

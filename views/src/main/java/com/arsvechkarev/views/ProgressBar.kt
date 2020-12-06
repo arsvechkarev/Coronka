@@ -19,7 +19,7 @@ class ProgressBar(
   thickness: Thickness,
 ) : FrameLayout(context) {
   
-  val drawable get() = background as AnimatedVectorDrawable
+  private val drawable get() = background as AnimatedVectorDrawable
   
   constructor(context: Context) : this(context, Accent, NORMAL)
   

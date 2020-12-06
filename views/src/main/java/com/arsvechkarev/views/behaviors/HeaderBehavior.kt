@@ -19,7 +19,7 @@ import core.extenstions.assertThat
 class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
   CoordinatorLayout.Behavior<View>() {
   
-  private var headerViewOffsetHelper: HeaderViewOffsetHelper? = null
+  private var headerViewOffsetHelper: HeaderBehaviorOffsetHelper? = null
   private var offsetFromPreviousLayout = 0
   
   private val scrollAnimator = ValueAnimator().apply {
@@ -85,7 +85,7 @@ class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
       if (slideRangeCoefficient == 1f) {
         slideRangeCoefficient = calculateSlideRangeCoefficient()
       }
-      headerViewOffsetHelper = HeaderViewOffsetHelper(child, slideRangeCoefficient)
+      headerViewOffsetHelper = HeaderBehaviorOffsetHelper(child, slideRangeCoefficient)
     }
     parent.onLayoutChild(child, layoutDirection)
     ViewCompat.offsetTopAndBottom(child, offsetFromPreviousLayout)

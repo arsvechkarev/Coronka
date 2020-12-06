@@ -65,7 +65,7 @@ class Chip @JvmOverloads constructor(
     attributes.recycle()
   
     if (paddingStart == 0 && paddingEnd == 0 && paddingTop == 0 && paddingBottom == 0) {
-      // Padding is not set applying default padding
+      // Padding is not set -> applying default padding
       val paddingHorizontal = context.resources.getDimension(
         R.dimen.chip_padding_horizontal).toInt()
       val poddingVertical = context.resources.getDimension(

@@ -54,11 +54,6 @@ class SmallStatsView(
       resolveSize(measuredHeight.toInt(), heightMeasureSpec))
   }
   
-  override fun onConfigurationChanged(newConfig: Configuration?) {
-    super.onConfigurationChanged(newConfig)
-    requestLayout()
-  }
-  
   override fun onDraw(canvas: Canvas) {
     if (numberLayout == null || amountLayout == null || text == null) {
       return
@@ -82,8 +77,14 @@ class SmallStatsView(
     }
   }
   
-  companion object {
+  override fun onConfigurationChanged(newConfig: Configuration?) {
+    super.onConfigurationChanged(newConfig)
+    requestLayout()
+    textLayout = null
+  }
   
+  companion object {
+    
     const val RANK_TEXT_FOR_MEASURE = "000.000"
   }
 }

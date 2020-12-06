@@ -11,12 +11,13 @@ import core.extenstions.execute
 import core.extenstions.i
 
 class MainStatsInfoLoadingStub(
-  private val context: Context
+  private var context: Context?
 ) : BaseLoadingStub() {
   
   private val cornersRadius = dimen(R.dimen.bg_overlay_corners_small)
   
   override fun drawBackgroundWithPath(path: Path, width: Float, height: Float) {
+    val context = context ?: return
     var adjWidth = width
     if (context.resources.configuration.orientation == ORIENTATION_LANDSCAPE) {
       val margin = context.resources.getDimension(R.dimen.general_stats_view_landscape_margin)
@@ -45,6 +46,7 @@ class MainStatsInfoLoadingStub(
   }
   
   override fun draw(canvas: Canvas) {
+    val context = context ?: return
     canvas.execute {
       if (context.resources.configuration.orientation == ORIENTATION_LANDSCAPE) {
         val margin = context.resources.getDimension(R.dimen.general_stats_view_landscape_margin)
@@ -52,5 +54,9 @@ class MainStatsInfoLoadingStub(
       }
       super.draw(canvas)
     }
+  }
+  
+  fun release() {
+    context = null
   }
 }

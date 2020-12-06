@@ -5,12 +5,17 @@ import android.os.Bundle
 import android.provider.Settings.System
 import android.provider.Settings.System.ACCELEROMETER_ROTATION
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.arsvechkarev.coronka.R
 import com.arsvechkarev.coronka.di.MainModuleInjector
+import com.arsvechkarev.map.presentation.MapFragment
+import com.arsvechkarev.news.presentation.NewsFragment
+import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.registration.presentation.RegistrationFragment
 import com.arsvechkarev.registration.presentation.RegistrationFragment.Companion.EMAIL_KEY
 import com.arsvechkarev.stats.presentation.StatsFragment
+import com.arsvechkarev.tips.presentation.TipsFragment
 import com.arsvechkarev.viewdsl.Densities
 import com.arsvechkarev.viewdsl.animateInvisible
 import com.arsvechkarev.viewdsl.animateVisible
@@ -40,7 +45,9 @@ class MainActivity : BaseActivity(), HostActivity {
     setContentView(buildMainActivityLayout())
     window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-    navigator = MainModuleInjector.provideNavigator(this, DrawerLayout)
+    navigator = MainModuleInjector.provideNavigator(this, DrawerLayout) {
+      setSelectedMenuItem(it)
+    }
     viewModel = MainModuleInjector.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
       model.figureOutScreenToGo(intent)
@@ -170,8 +177,21 @@ class MainActivity : BaseActivity(), HostActivity {
     view(TextTips).setOnClickListener(onDrawerItemClick)
   }
   
-  companion object {
+  private fun setSelectedMenuItem(fragment: Fragment) {
+    val tag = when (fragment) {
+      is StatsFragment -> TextStatistics
+      is NewsFragment -> TextNews
+      is MapFragment -> TextMap
+      is RankingsFragment -> TextRankings
+      is TipsFragment -> TextTips
+      else -> throw IllegalStateException()
+    }
+    val drawerGroupLayout = viewAs<DrawerGroupLinearLayout>(DrawerGroupLinearLayout)
+    drawerGroupLayout.setSelectedMenuItem(tag)
+  }
   
+  companion object {
+    
     const val LayoutLoading = "LayoutLoading"
     const val LayoutError = "LayoutError"
     const val TextError = "TextError"
@@ -179,7 +199,7 @@ class MainActivity : BaseActivity(), HostActivity {
     const val ProgressBar = "ProgressBar"
     const val CheckmarkView = "CheckmarkView"
     const val TextVerifyingLink = "TextVerifyingLink"
-  
+    
     const val DrawerLayout = "DrawerLayout"
     const val DrawerGroupLinearLayout = "DrawerGroupLinearLayout"
     const val TextStatistics = "TextStatistics"

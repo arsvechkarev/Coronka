@@ -3,7 +3,7 @@ package com.arsvechkarev.views.behaviors
 import android.view.View
 import androidx.core.view.ViewCompat
 
-class HeaderViewOffsetHelper(val view: View, var slideRangeCoefficient: Float) {
+class HeaderBehaviorOffsetHelper(val view: View, var slideRangeCoefficient: Float) {
   
   var topAndBottomOffset = 0
     private set
@@ -20,5 +20,4 @@ class HeaderViewOffsetHelper(val view: View, var slideRangeCoefficient: Float) {
     }
     return prefOffset - topAndBottomOffset
   }
-  
 }

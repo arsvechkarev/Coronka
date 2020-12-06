@@ -58,7 +58,6 @@ fun newsItemDelegate(
   }
   onInitViewHolder {
     itemView.setOnClickListener { onNewsItemClicked.invoke(item) }
-    onViewRecycled()
   }
   onRecycled { itemView ->
     assertThat(itemView is NewsItemView)

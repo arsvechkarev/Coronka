@@ -11,6 +11,13 @@ class DrawerGroupLinearLayout @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
   
+  fun setSelectedMenuItem(tag: String) {
+    for (i in 0 until childCount) {
+      val child = getChildAt(i)
+      child.isSelected = child.tag == tag
+    }
+  }
+  
   fun onTextViewClicked(textView: View) {
     for (i in 0 until childCount) {
       val child = getChildAt(i)
