@@ -43,6 +43,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   }
   
   val state get() = currentState
+  var allowMultipleFingers = true
   
   var onHide: () -> Unit = {}
   var onShow: () -> Unit = {}
@@ -85,6 +86,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   }
   
   override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: View, event: MotionEvent): Boolean {
+    if (!allowMultipleFingers && event.pointerCount > 1) return false
     if (slideAnimator.isRunning || currentState == HIDDEN) return false
     val action = event.action
     if (action == ACTION_MOVE && isBeingDragged) {
@@ -129,6 +131,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   }
   
   override fun onTouchEvent(parent: CoordinatorLayout, child: View, event: MotionEvent): Boolean {
+    if (!allowMultipleFingers && event.pointerCount > 1) return false
     if (slideAnimator.isRunning || currentState == HIDDEN) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {

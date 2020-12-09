@@ -47,7 +47,7 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
       model.state.observe(this, Observer(this::handleStateChanged))
       model.startLoadingData()
     }
-    setupClickListeners()
+    setupViews()
     val statusBarHeight = requireContext().statusBarHeight
     (mapIconDrawer.layoutParams as MarginLayoutParams).topMargin += statusBarHeight
   }
@@ -136,7 +136,8 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
     viewModel!!.showCountryInfo(country)
   }
   
-  private fun setupClickListeners() {
+  private fun setupViews() {
+    mapLayoutCountryInfo.asBottomSheet.allowMultipleFingers = false
     mapTextRetry.setOnClickListener { viewModel!!.startLoadingData() }
     mapTextRetryUnknown.setOnClickListener { viewModel!!.startLoadingData() }
     mapIconDrawer.setOnClickListener {
