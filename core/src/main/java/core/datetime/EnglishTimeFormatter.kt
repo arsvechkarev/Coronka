@@ -5,14 +5,14 @@ class EnglishTimeFormatter : TimeFormatter {
   override fun formatPublishedDate(stringDate: String): String {
     val date = DateTime.of(stringDate)
     val now = DateTime.now()
-    return if (date.dayOfYear < now.dayOfYear) {
-      val diff = now.dayOfYear - date.dayOfYear
+    val daysDiff = (now.year - date.year) * 366 - date.dayOfYear + now.dayOfYear
+    return if (daysDiff > 0) {
       when {
-        diff == 1 -> "${now.hour + (24 - date.hour)} hours ago"
-        diff < 14 -> "$diff days ago"
-        diff < 21 -> "2 weeks ago"
-        diff < 28 -> "3 weeks ago"
-        diff < 365 -> "${date.monthName} ${date.dayOfMonth}"
+        daysDiff == 1 -> "${now.hour + (24 - date.hour)} hours ago"
+        daysDiff < 14 -> "$daysDiff days ago"
+        daysDiff < 21 -> "2 weeks ago"
+        daysDiff < 28 -> "3 weeks ago"
+        daysDiff < 365 -> "${date.monthName} ${date.dayOfMonth}"
         else -> "${date.monthValue}/${date.dayOfMonth}/${date.year}"
       }
     } else {

@@ -1,10 +1,9 @@
 package com.arsvechkarev.common
 
 import core.RxNetworker
-import core.extenstions.assertThat
 import core.model.DailyCase
 import io.reactivex.Observable
-import org.json.JSONObject
+import org.json.JSONArray
 
 class WorldCasesInfoRepository(private val networker: RxNetworker) {
   
@@ -15,24 +14,21 @@ class WorldCasesInfoRepository(private val networker: RxNetworker) {
   
   private fun transformJson(json: String): List<DailyCase> {
     val dailyCases = ArrayList<DailyCase>()
-    val outerObject = JSONObject(json)
-    val graphObject = outerObject.getJSONObject("graph")
-    val casesArray = graphObject.getJSONArray("data")
-    val dateArray = graphObject.getJSONArray("categories")
-    assertThat(casesArray.length() == dateArray.length())
-    val start = maxOf(casesArray.length() - MAX_CASES, 0)
-    for (i in start until casesArray.length()) {
-      val cases = casesArray.optInt(i)
-      val date = dateArray.getString(i)
+    val array = JSONArray(json)
+    for (i in array.length() - MAX_CASES until array.length()) {
+      val obj = array.getJSONObject(i)
+      val cases = obj.getInt("Confirmed")
+      val date = obj.getString("Date")
       val dailyCase = DailyCase(cases, date)
       dailyCases.add(dailyCase)
     }
     return dailyCases
   }
   
-  companion object {
-  
-    private const val MAX_CASES = 181 // Half a year + 1 day to calculate new cases properly
-    private const val URL_TOTAL_CASES = "https://covid19-update-api.herokuapp.com/api/v1/cases/graphs/totalCases"
+  private companion object {
+    
+    const val MAX_CASES = 181 // Half a year + 1 day to calculate new cases properly
+    const val URL_TOTAL_CASES = "https://pkgstore.datahub.io/core/covid-19/" +
+        "worldwide-aggregate_json/data/dd3677f2c7add2d89018e1b14fcba00a/worldwide-aggregate_json.json"
   }
 }

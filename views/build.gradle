@@ -17,6 +17,7 @@ dependencies {
   implementation dependencies.recyclerView
   implementation dependencies.coordinatorLayout
   implementation dependencies.mpAndroidChart
+  implementation dependencies.threeTenAbp
   implementation dependencies.googleMaps
   implementation dependencies.glide
 }

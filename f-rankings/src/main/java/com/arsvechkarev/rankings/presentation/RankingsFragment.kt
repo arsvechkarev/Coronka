@@ -31,7 +31,6 @@ import com.arsvechkarev.views.drawables.SelectedChipsLoadingStub
 import core.BaseFragment
 import core.BaseScreenState
 import core.Failure
-import core.Failure.FailureReason
 import core.Failure.FailureReason.NO_CONNECTION
 import core.Failure.FailureReason.TIMEOUT
 import core.Failure.FailureReason.UNKNOWN
@@ -75,6 +74,7 @@ import kotlinx.android.synthetic.main.fragment_rankings.rankingsTextDeathRate
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsTextNewConfirmed
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsTextNewDeaths
 import kotlinx.android.synthetic.main.fragment_rankings.rankingsTextPercentInCountry
+import timber.log.Timber
 
 class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
@@ -135,7 +135,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
       is LoadedCountries -> renderLoaded(state)
       is FilteredCountries -> renderFiltered(state)
       is ShowCountryInfo -> renderShowCountryInfo(state)
-      is Failure -> renderFailure(state.reason)
+      is Failure -> renderFailure(state)
     }
   }
   
@@ -182,12 +182,13 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     rankingsDialog.animateVisible()
   }
   
-  private fun renderFailure(reason: FailureReason) {
+  private fun renderFailure(state: Failure) {
+    Timber.d(state.throwable)
     rankingsFabFilter.isClickable = false
     stopLoadingStubs()
     rankingsErrorLayout.animateVisible()
-    rankingsErrorMessage.text(reason.getStringRes())
-    when (reason) {
+    rankingsErrorMessage.text(state.reason.getStringRes())
+    when (state.reason) {
       TIMEOUT, UNKNOWN -> rankingsImageFailure.setImageResource(R.drawable.image_unknown_error)
       NO_CONNECTION -> rankingsImageFailure.setImageResource(R.drawable.image_no_connection)
     }

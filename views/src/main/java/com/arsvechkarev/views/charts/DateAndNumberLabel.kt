@@ -12,10 +12,12 @@ import com.arsvechkarev.viewdsl.DURATION_LONG
 import core.NumberFormatter
 import core.extenstions.f
 import core.extenstions.getTextHeight
+import core.extenstions.toFormattedEnglishDate
 import core.model.DailyCase
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
+import org.threeten.bp.format.TextStyle.FULL
 
 class DateAndNumberLabel @JvmOverloads constructor(
   context: Context,
@@ -59,14 +61,14 @@ class DateAndNumberLabel @JvmOverloads constructor(
     if (dateText == null || numberText == null) {
       animateAppearance(dailyCase)
     } else {
-      dateText = dailyCase.date
+      dateText = dailyCase.date.toFormattedEnglishDate(FULL)
       numberText = NumberFormatter.formatNumber(dailyCase.cases)
       invalidate()
     }
   }
   
   private fun animateAppearance(dailyCase: DailyCase) {
-    dateText = dailyCase.date
+    dateText = dailyCase.date.toFormattedEnglishDate(FULL)
     resultNumber = dailyCase.cases
     currentNumber = 0
     animator.setFloatValues(0f, 1f)

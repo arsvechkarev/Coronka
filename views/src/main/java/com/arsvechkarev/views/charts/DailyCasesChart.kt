@@ -7,6 +7,8 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_UP
+import com.arsvechkarev.views.charts.DailyCasesChart.Type.NEW_CASES
+import com.arsvechkarev.views.charts.DailyCasesChart.Type.TOTAL_CASES
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarEntry
@@ -16,21 +18,33 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import core.extenstions.toFormattedShortString
+import core.extenstions.toFormattedEnglishDate
+import core.extenstions.toNewCasesAmount
+import core.extenstions.toTotalCasesAmount
 import core.model.DailyCase
 import core.viewbuilding.Colors
+import org.threeten.bp.format.TextStyle.SHORT
 
 class DailyCasesChart @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
-  defStyleAttr: Int = 0
-) : LineChart(context, attrs), OnChartValueSelectedListener {
+  defStyleAttr: Int = 0,
+) : LineChart(context, attrs, defStyleAttr), OnChartValueSelectedListener {
   
   private var dailyCaseListener: (dailyCase: DailyCase) -> Unit = { _ -> }
   private var dailyCases: List<DailyCase>? = null
   
   var onDown: () -> Unit = {}
   var onUp: () -> Unit = {}
+  
+  var type: Type = TOTAL_CASES
+    set(value) {
+      field = value
+      when (value) {
+        TOTAL_CASES -> axisRight.valueFormatter = TotalCasesAxisFormatter()
+        NEW_CASES -> axisRight.valueFormatter = NewCasesAxisFormatter()
+      }
+    }
   
   init {
     setOnChartValueSelectedListener(this)
@@ -45,7 +59,6 @@ class DailyCasesChart @JvmOverloads constructor(
       axisMinimum = 0f
       setDrawGridLines(false)
       textColor = Colors.TextPrimary
-      valueFormatter = YAxisFormatter()
     }
     axisLeft.apply {
       axisMinimum = 0f
@@ -111,18 +124,30 @@ class DailyCasesChart @JvmOverloads constructor(
     return entries
   }
   
-  
-  private inner class YAxisFormatter : ValueFormatter() {
+  private inner class TotalCasesAxisFormatter : ValueFormatter() {
     
-    override fun getFormattedValue(value: Float): String {
-      return if (value == 0f) "" else value.toFormattedShortString(context)
+    override fun getFormattedValue(value: Float) = when (value) {
+      0f -> ""
+      else -> value.toTotalCasesAmount(context)
+    }
+  }
+  
+  private inner class NewCasesAxisFormatter : ValueFormatter() {
+    
+    override fun getFormattedValue(value: Float) = when (value) {
+      0f -> ""
+      else -> value.toNewCasesAmount(context)
     }
   }
   
   private inner class DateAxisFormatter : ValueFormatter() {
     
     override fun getFormattedValue(value: Float): String {
-      return dailyCases!![value.toInt()].date
+      return dailyCases!![value.toInt()].date.toFormattedEnglishDate(SHORT)
     }
+  }
+  
+  enum class Type {
+    TOTAL_CASES, NEW_CASES
   }
 }

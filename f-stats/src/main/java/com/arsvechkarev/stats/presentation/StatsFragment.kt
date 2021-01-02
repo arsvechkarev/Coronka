@@ -16,13 +16,14 @@ import com.arsvechkarev.viewdsl.visible
 import com.arsvechkarev.views.ScrollingView
 import com.arsvechkarev.views.behaviors.ScrollableContentBehavior
 import com.arsvechkarev.views.behaviors.TitleHeaderBehavior
+import com.arsvechkarev.views.charts.DailyCasesChart.Type.NEW_CASES
+import com.arsvechkarev.views.charts.DailyCasesChart.Type.TOTAL_CASES
 import com.arsvechkarev.views.drawables.BaseLoadingStub.Companion.setLoadingDrawable
 import com.arsvechkarev.views.drawables.MainStatsInfoLoadingStub
 import com.arsvechkarev.views.drawables.StatsGraphLoadingStub
 import core.BaseFragment
 import core.BaseScreenState
 import core.Failure
-import core.Failure.FailureReason
 import core.Failure.FailureReason.NO_CONNECTION
 import core.Failure.FailureReason.TIMEOUT
 import core.Failure.FailureReason.UNKNOWN
@@ -46,6 +47,7 @@ import kotlinx.android.synthetic.main.fragment_stats.statsScrollingContentView
 import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesChart
 import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesLabel
 import kotlinx.android.synthetic.main.fragment_stats.statsTotalCasesLoadingStub
+import timber.log.Timber
 
 class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   
@@ -105,7 +107,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
         renderCharts(state.worldCasesInfo)
       }
       is Failure -> {
-        renderFailure(state.reason)
+        renderFailure(state)
       }
     }
   }
@@ -128,7 +130,9 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     statsGeneralStatsView.animateVisible(andThen = { statsMainInfoLoadingStub.background = null })
   }
   
-  private fun renderFailure(reason: FailureReason) {
+  private fun renderFailure(failure: Failure) {
+    val reason = failure.reason
+    Timber.d(failure.throwable)
     hostActivity.enableTouchesOnDrawer()
     updateContentView(putLoading = false)
     statsErrorMessage.setText(reason.getStringRes())
@@ -171,6 +175,8 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   }
   
   private fun initViews() {
+    statsTotalCasesChart.type = TOTAL_CASES
+    statsNewCasesChart.type = NEW_CASES
     statsHeader.behavior(TitleHeaderBehavior { it.id == R.id.statsScrollingContentView })
     statsScrollingContentView.behavior(ScrollableContentBehavior<ScrollingView>(requireContext()))
     statsMainInfoLoadingStub.setLoadingDrawable(MainStatsInfoLoadingStub(requireContext()))
