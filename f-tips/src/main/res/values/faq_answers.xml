@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="a1">
-    Coronaviruses are a large family of viruses which may cause illness in animals or humans. In humans,
-    several coronaviruses are known to cause respiratory infections ranging from the common cold to more
-    severe diseases such as Middle East Respiratory Syndrome (MERS) and Severe Acute Respiratory Syndrome (SARS)
-  </string>
   <string name="a2">
     COVID-19 is the infectious disease caused by the most recently discovered coronavirus. This new virus and
     disease were unknown before the outbreak began in Wuhan, China, in December 2019
@@ -27,11 +22,6 @@
     reduce your risk of catching or spreading COVID-19
   </string>
   <string name="a5">
-    Not yet. To date, there is no vaccine and no specific antiviral medicine to prevent or treat COVID-2019.
-    However, those affected should receive care to relieve symptoms. People with serious illness should be
-    hospitalized. Most patients recover thanks to supportive care
-  </string>
-  <string name="a6">
     The most common symptoms of COVID-19 are fever, tiredness, and dry cough. Some patients may have aches
     and pains, nasal congestion, runny nose, sore throat or diarrhea. These symptoms are usually mild and
     begin gradually. Some people become infected but don’t develop any symptoms and don’t feel unwell.
@@ -40,19 +30,20 @@
     and those with underlying medical problems like high blood pressure, heart problems or diabetes, are more
     likely to develop serious illness. People with fever, cough and difficulty breathing should seek medical attention
   </string>
-  <string name="a9">
-    No. Antibiotics do not work against viruses, they only work on bacterial infections. COVID-19 is caused
-    by a virus, so antibiotics do not work. Antibiotics should not be used as a means of prevention or
-    treatment of COVID-19. They should only be used as directed by a physician to treat a bacterial infection
+  <string name="a6">
+    The time from exposure to COVID-19 to the moment when symptoms begin is, on average, 5-6 days and can
+    range from 1-14 days. This is why people who have been exposed to the virus are advised to remain at home
+    and stay away from others, for 14 days, in order to prevent the spread of the virus, especially where
+    testing is not easily available.
   </string>
-  <string name="a10">
+  <string name="a8">
     While some western, traditional or home remedies may provide comfort and alleviate symptoms of COVID-19,
     there is no evidence that current medicine can prevent or cure the disease. WHO does not recommend
     self-medication with any medicines, including antibiotics, as a prevention or cure for COVID-19. However,
     there are several ongoing clinical trials that include both western and traditional medicines. WHO will
     continue to provide updated information as soon as clinical findings are available
   </string>
-  <string name="a11">
+  <string name="a9">
     • Regularly and thoroughly clean your hands with an alcohol-based hand rub or wash them with soap and water.
     \n• Maintain at least 1 metre (3 feet) distance between yourself and anyone who is coughing or sneezing.
     \n• Avoid touching eyes, nose and mouth.
@@ -60,48 +51,10 @@
     \n• Stay home if you feel unwell. If you have a fever, cough and difficulty breathing, seek medical attention and call in advance. Follow the directions of your local health authority.
     \n• Keep up to date on the latest COVID-19 hotspots (cities or local areas where COVID-19 is spreading widely). If possible, avoid traveling to places  – especially if you are an older person or have diabetes, heart or lung disease.
   </string>
-  <string name="a13">
-    Only wear a mask if you are ill with COVID-19 symptoms (especially coughing) or looking after someone
-    who may have COVID-19. Disposable face mask can only be used once. If you are not ill or looking after
-    someone who is ill then you are wasting a mask. There is a world-wide shortage of masks, so WHO urges
-    people to use masks wisely
-  </string>
-  <string name="a15">
-    The “incubation period” means the time between catching the virus and beginning to have symptoms of
-    the disease. Most estimates of the incubation period for COVID-19 range from 1-14 days, most commonly
-    around five days. These estimates will be updated as more data become available
-  </string>
-  <string name="a20">
+  <string name="a10">
     The following measures ARE NOT effective against COVID-2019 and can be harmful:
     \n\n• Smoking
     \n• Wearing multiple masks
     \n• Taking antibiotics
-  </string>
-  <string name="a21">
-    Currently, the source of SARS-CoV-2, the coronavirus (CoV) causing COVID-19 is unknown. All available
-    evidence suggests that SARS-CoV-2 has a natural animal origin and is not a constructed virus. SARS-CoV-2
-    virus most probably has its ecological reservoir in bats. SARS-CoV-2, belongs to a group of genetically
-    related viruses, which also include SARS-CoV and a number of other CoVs isolated from bats populations.
-    MERS-CoV also belongs to this group, but is less closely related
-  </string>
-  <string name="a23">
-    There is currently no evidence to confirm or disprove that COVID-19 virus can be transmitted through
-    coins or banknotes. However, respiratory droplets expelled from an infected person can contaminate and
-    persist on surfaces. Wash your hands regularly and thoroughly after touching any frequently-touched
-    surface or object, including coins or banknotes. Avoid touching your eyes, mouth and nose, if
-    your hands are not cleaned
-  </string>
-  <string name="a24">
-    When grocery shopping, keep at least 1-metre distance from others and avoid touching your eyes, mouth
-    and nose. If possible, sanitize the handles of shopping trolleys or baskets before shopping. Once home,
-    wash your hands thoroughly and also after handling and storing your purchased products. There is
-    currently no confirmed case of COVID-19 transmitted through food or food packaging
-  </string>
-  <string name="a26">
-    The virus that causes COVID-19 is mainly transmitted through droplets generated when an infected person
-    coughs, sneezes, or speaks. These droplets are too heavy to hang in the air. They quickly fall on floors or
-    surfaces. You can be infected by breathing in the virus if you are within 1 metre of a person who has
-    COVID-19, or by touching a contaminated surface and then touching your eyes, nose or mouth before
-    washing your hands
   </string>
 </resources>

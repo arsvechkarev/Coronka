@@ -174,11 +174,14 @@ class TipsFragment : BaseFragment() {
   
   private fun faqItemLayout(): StaticDelegateBuilder<FAQItem>.() -> Unit = {
     data(listOf(
-      FAQItem(R.string.q1, R.string.a1),
       FAQItem(R.string.q2, R.string.a2),
       FAQItem(R.string.q3, R.string.a3),
       FAQItem(R.string.q4, R.string.a4),
-      FAQItem(R.string.q5, R.string.a5)
+      FAQItem(R.string.q5, R.string.a5),
+      FAQItem(R.string.q6, R.string.a6),
+      FAQItem(R.string.q8, R.string.a8),
+      FAQItem(R.string.q9, R.string.a9),
+      FAQItem(R.string.q10, R.string.a10)
     ))
     buildView {
       TextView(MatchParent, WrapContent, style = BoldTextView) {
