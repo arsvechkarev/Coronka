@@ -4,6 +4,17 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+  signingConfigs {
+    release {
+      def properties = new Properties()
+      properties.load(project.rootProject.file('local.properties').newDataInputStream())
+      storeFile file(properties.getProperty('keystore.path'))
+      storePassword(properties.getProperty('keystore.storePassword'))
+      keyAlias properties.getProperty('keystore.keyAlias')
+      keyPassword(properties.getProperty('keystore.keyPassword'))
+    }
+  }
+
   def configs = rootProject.ext
 
   compileSdkVersion configs.compileSdkVersion
@@ -20,6 +31,7 @@ android {
     release {
       minifyEnabled configs.minifyEnabled
       proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
+      signingConfig signingConfigs.release
     }
   }
 }
@@ -35,9 +47,6 @@ dependencies {
   implementation project(':f-tips')
   implementation project(':f-rankings')
 
-  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
-
-  implementation "com.google.firebase:firebase-storage:19.2.0"
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
   implementation dependencies.appCompat

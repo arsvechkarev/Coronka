@@ -7,6 +7,6 @@ ext {
   versionName = '1.0.0'
   testInstrumentationRunner = 'androidx.test.runner.AndroidJUnitRunner'
 
-  minifyEnabled = false
-  shrinkResources = false
+  minifyEnabled = true
+  shrinkResources = true
 }

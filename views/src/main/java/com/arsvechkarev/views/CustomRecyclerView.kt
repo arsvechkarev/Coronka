@@ -11,11 +11,6 @@ class CustomRecyclerView @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
   
-  override fun setEnabled(enabled: Boolean) {
-    println("lala = $enabled")
-    super.setEnabled(enabled)
-  }
-  
   override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
     return if (isEnabled) super.dispatchTouchEvent(ev) else false
   }
