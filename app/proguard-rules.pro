@@ -1,4 +1,3 @@
-# LifecycleObserver's empty constructor is considered to be unused by proguard
 -keepclassmembers class * implements androidx.lifecycle.LifecycleObserver {
     <init>(...);
 }
@@ -20,3 +19,5 @@
 -keep class * extends core.RxViewModel {
     <init>();
 }
+
+-keep class com.google.android.gms.maps.MapView

@@ -55,6 +55,7 @@ dependencies {
   implementation dependencies.coordinatorLayout
   implementation dependencies.threeTenAbp
   implementation dependencies.rxJava
+  implementation dependencies.googleMaps
 
   def testDependencies = rootProject.ext.testDependencies
   testImplementation testDependencies.junit
