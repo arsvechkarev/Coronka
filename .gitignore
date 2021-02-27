@@ -14,5 +14,6 @@
 /captures
 .externalNativeBuild
 .cxx
+/app/google-services.json
 /f-map/src/debug/res/values/google_maps_api_key.xml
 /f-map/src/release/res/values/google_maps_api_key.xml
