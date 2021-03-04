@@ -34,6 +34,13 @@ android {
       signingConfig signingConfigs.release
     }
   }
+  sourceSets {
+    debug {
+      java {
+        srcDirs 'src\\debug\\java'
+      }
+    }
+  }
 }
 
 dependencies {
@@ -54,10 +61,17 @@ dependencies {
   implementation dependencies.constraintLayout
   implementation dependencies.coordinatorLayout
   implementation dependencies.threeTenAbp
+  implementation dependencies.mpAndroidChart
   implementation dependencies.rxJava
   implementation dependencies.googleMaps
 
   def testDependencies = rootProject.ext.testDependencies
-  testImplementation testDependencies.junit
-  testImplementation testDependencies.mockk
+
+  androidTestImplementation testDependencies.kakao
+  androidTestImplementation testDependencies.espresso
+  androidTestImplementation testDependencies.espressoContrib
+  androidTestImplementation testDependencies.androidTestRunner
+  androidTestImplementation testDependencies.androidTestRules
+  androidTestImplementation testDependencies.androidTestCore
+  androidTestImplementation testDependencies.androidTestExt
 }

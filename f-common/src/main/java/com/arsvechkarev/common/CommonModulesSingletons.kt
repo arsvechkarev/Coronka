@@ -5,11 +5,13 @@ import com.arsvechkarev.storage.DatabaseImpl
 import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseHelper
 import core.NetworkConnection
 import core.NetworkConnectionImpl
+import core.Networker
 import core.RxNetworker
 
 object CommonModulesSingletons {
   
-  val networker = RxNetworker()
+  lateinit var networker: Networker
+    private set
   
   lateinit var connection: NetworkConnection
     private set
@@ -20,7 +22,16 @@ object CommonModulesSingletons {
   lateinit var metaInfoRepository: CountriesMetaInfoRepository
     private set
   
-  fun init(context: Context) {
+  fun initCustomNetworker(context: Context, networker: Networker) {
+    init(context, networker)
+  }
+  
+  fun initDefault(context: Context) {
+    init(context, RxNetworker)
+  }
+  
+  fun init(context: Context, networker: Networker) {
+    this.networker = networker
     connection = NetworkConnectionImpl(context)
     allCountriesRepository = AllCountriesRepository(networker)
     val database = DatabaseImpl(CountriesMetaInfoDatabaseHelper.instance)

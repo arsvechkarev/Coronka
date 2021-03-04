@@ -24,9 +24,7 @@ ext {
 
   testDependencies = [
       junit              : "junit:junit:4.12",
-      mockk              : "io.mockk:mockk:1.9.3",
-      kotlinTestFramework: "io.kotlintest:kotlintest-runner-junit5:3.3.2",
-      kakao              : "com.agoda.kakao:kakao:2.2.0",
+      kakao              : "com.agoda.kakao:kakao:2.4.0",
       espresso           : "androidx.test.espresso:espresso-core:$espresso_version",
       espressoContrib    : "androidx.test.espresso:espresso-contrib:$espresso_version",
       androidTestRunner  : "androidx.test:runner:$androidTest_version",

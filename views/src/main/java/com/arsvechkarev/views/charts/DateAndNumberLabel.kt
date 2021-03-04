@@ -12,7 +12,7 @@ import com.arsvechkarev.viewdsl.DURATION_LONG
 import core.NumberFormatter
 import core.extenstions.f
 import core.extenstions.getTextHeight
-import core.extenstions.toFormattedEnglishDate
+import core.extenstions.toFormattedGraphDate
 import core.model.DailyCase
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
@@ -61,14 +61,14 @@ class DateAndNumberLabel @JvmOverloads constructor(
     if (dateText == null || numberText == null) {
       animateAppearance(dailyCase)
     } else {
-      dateText = dailyCase.date.toFormattedEnglishDate(FULL)
+      dateText = dailyCase.date.toFormattedGraphDate(FULL)
       numberText = NumberFormatter.formatNumber(dailyCase.cases)
       invalidate()
     }
   }
   
   private fun animateAppearance(dailyCase: DailyCase) {
-    dateText = dailyCase.date.toFormattedEnglishDate(FULL)
+    dateText = dailyCase.date.toFormattedGraphDate(FULL)
     resultNumber = dailyCase.cases
     currentNumber = 0
     animator.setFloatValues(0f, 1f)

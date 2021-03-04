@@ -1,6 +1,6 @@
 package com.arsvechkarev.common
 
-import core.RxNetworker
+import core.Networker
 import core.model.Country
 import core.model.GeneralInfo
 import core.model.TotalData
@@ -8,12 +8,11 @@ import io.reactivex.Observable
 import org.json.JSONObject
 
 class AllCountriesRepository(
-  private val networker: RxNetworker
+  private val networker: Networker
 ) {
   
   fun getTotalData(): Observable<TotalData> {
-    return networker.requestObservable(URL)
-        .map { transformJson(it) }
+    return networker.request(URL).map(::transformJson)
   }
   
   private fun transformJson(json: String): TotalData {

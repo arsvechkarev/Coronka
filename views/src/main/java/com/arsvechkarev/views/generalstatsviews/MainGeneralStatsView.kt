@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import com.arsvechkarev.views.R
-import core.extenstions.formattedMillions
+import core.extenstions.formatGeneralInfo
 import core.extenstions.getTextHeight
 import core.extenstions.i
 import core.model.GeneralInfo
@@ -37,9 +37,13 @@ class MainGeneralStatsView @JvmOverloads constructor(
   private val confirmedTitle = context.getString(R.string.text_confirmed)
   private val recoveredTitle = context.getString(R.string.text_recovered)
   private val deathsTitle = context.getString(R.string.text_deaths)
-  private var confirmedNumber: String? = null
-  private var recoveredNumber: String? = null
-  private var deathsNumber: String? = null
+  
+  var confirmedNumber: String? = null
+    private set
+  var recoveredNumber: String? = null
+    private set
+  var deathsNumber: String? = null
+    private set
   
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
@@ -47,9 +51,9 @@ class MainGeneralStatsView @JvmOverloads constructor(
   }
   
   fun updateNumbers(generalInfo: GeneralInfo) {
-    confirmedNumber = generalInfo.confirmed.formattedMillions(context)
-    recoveredNumber = generalInfo.recovered.formattedMillions(context)
-    deathsNumber = generalInfo.deaths.formattedMillions(context)
+    confirmedNumber = generalInfo.confirmed.formatGeneralInfo(context)
+    recoveredNumber = generalInfo.recovered.formatGeneralInfo(context)
+    deathsNumber = generalInfo.deaths.formatGeneralInfo(context)
     requestLayout()
   }
   

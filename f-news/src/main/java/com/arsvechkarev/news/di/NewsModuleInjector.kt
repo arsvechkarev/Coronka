@@ -20,7 +20,7 @@ object NewsModuleInjector {
     get() {
       return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-          val formatter = EnglishTimeFormatter()
+          val formatter = EnglishTimeFormatter
           val repository = NewYorkTimesNewsRepository(networker, formatter, BuildConfig.NYT_API_KEY)
           return NewsViewModel(repository, AndroidSchedulers) as T
         }

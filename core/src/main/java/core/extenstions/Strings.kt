@@ -6,10 +6,14 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.format.TextStyle
 import java.util.Locale
 
-fun String.dropAfterLast(string: String): String {
-  val i = lastIndexOf(string)
-  val lengthLeft = length - i
-  return dropLast(lengthLeft)
+fun Number.formatGeneralInfo(context: Context): String {
+  return formattedMillions(context)
+}
+
+fun String.toFormattedGraphDate(monthNameStyle: TextStyle): String {
+  val localDate = LocalDate.parse(this)
+  val monthName = localDate.month.getDisplayName(monthNameStyle, Locale.US)
+  return "$monthName ${localDate.dayOfMonth}"
 }
 
 fun Number.toTotalCasesAmount(context: Context): String {
@@ -38,7 +42,13 @@ fun Number.toNewCasesAmount(context: Context): String {
   }
 }
 
-fun Number.formattedMillions(context: Context): String {
+fun String.dropAfterLast(string: String): String {
+  val i = lastIndexOf(string)
+  val lengthLeft = length - i
+  return dropLast(lengthLeft)
+}
+
+private fun Number.formattedMillions(context: Context): String {
   val thousands = this.toInt() / 1000
   val millionsPart = thousands / 1000
   var thousandsPart = (thousands % 1000).toString()
@@ -49,10 +59,4 @@ fun Number.formattedMillions(context: Context): String {
   }
   return context.getString(R.string.number_formatted_with_parts, millionsPart,
     thousandsPart)
-}
-
-fun String.toFormattedEnglishDate(monthNameStyle: TextStyle): String {
-  val localDate = LocalDate.parse(this)
-  val monthName = localDate.month.getDisplayName(monthNameStyle, Locale.US)
-  return "$monthName ${localDate.dayOfMonth}"
 }

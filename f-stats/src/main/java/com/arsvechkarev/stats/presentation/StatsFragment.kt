@@ -132,7 +132,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   
   private fun renderFailure(failure: Failure) {
     val reason = failure.reason
-    Timber.d(failure.throwable)
+    Timber.w(failure.throwable)
     hostActivity.enableTouchesOnDrawer()
     updateContentView(putLoading = false)
     statsErrorMessage.setText(reason.getStringRes())

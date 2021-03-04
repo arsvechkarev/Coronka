@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_UP
+import com.arsvechkarev.viewdsl.ContextHolder.context
 import com.arsvechkarev.views.charts.DailyCasesChart.Type.NEW_CASES
 import com.arsvechkarev.views.charts.DailyCasesChart.Type.TOTAL_CASES
 import com.github.mikephil.charting.charts.LineChart
@@ -18,7 +19,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import core.extenstions.toFormattedEnglishDate
+import core.extenstions.toFormattedGraphDate
 import core.extenstions.toNewCasesAmount
 import core.extenstions.toTotalCasesAmount
 import core.model.DailyCase
@@ -32,8 +33,9 @@ class DailyCasesChart @JvmOverloads constructor(
 ) : LineChart(context, attrs, defStyleAttr), OnChartValueSelectedListener {
   
   private var dailyCaseListener: (dailyCase: DailyCase) -> Unit = { _ -> }
-  private var dailyCases: List<DailyCase>? = null
+  private var _dailyCases: List<DailyCase>? = null
   
+  val dailyCases get() = _dailyCases!!
   var onDown: () -> Unit = {}
   var onUp: () -> Unit = {}
   
@@ -41,8 +43,8 @@ class DailyCasesChart @JvmOverloads constructor(
     set(value) {
       field = value
       when (value) {
-        TOTAL_CASES -> axisRight.valueFormatter = TotalCasesAxisFormatter()
-        NEW_CASES -> axisRight.valueFormatter = NewCasesAxisFormatter()
+        TOTAL_CASES -> axisRight.valueFormatter = TotalCasesAxisFormatter
+        NEW_CASES -> axisRight.valueFormatter = NewCasesAxisFormatter
       }
     }
   
@@ -72,7 +74,7 @@ class DailyCasesChart @JvmOverloads constructor(
   }
   
   fun update(dailyCases: List<DailyCase>, offset: Int = 0) {
-    this.dailyCases = dailyCases
+    this._dailyCases = dailyCases
     val entries = createEntries(dailyCases, offset)
     val lineDataSet = LineDataSet(entries, "")
     lineDataSet.apply {
@@ -102,7 +104,7 @@ class DailyCasesChart @JvmOverloads constructor(
   }
   
   override fun onValueSelected(e: Entry, h: Highlight) {
-    dailyCaseListener.invoke(dailyCases!![e.x.toInt()])
+    dailyCaseListener.invoke(_dailyCases!![e.x.toInt()])
   }
   
   override fun onNothingSelected() = Unit
@@ -124,7 +126,7 @@ class DailyCasesChart @JvmOverloads constructor(
     return entries
   }
   
-  private inner class TotalCasesAxisFormatter : ValueFormatter() {
+  object TotalCasesAxisFormatter : ValueFormatter() {
     
     override fun getFormattedValue(value: Float) = when (value) {
       0f -> ""
@@ -132,7 +134,7 @@ class DailyCasesChart @JvmOverloads constructor(
     }
   }
   
-  private inner class NewCasesAxisFormatter : ValueFormatter() {
+  object NewCasesAxisFormatter : ValueFormatter() {
     
     override fun getFormattedValue(value: Float) = when (value) {
       0f -> ""
@@ -143,7 +145,7 @@ class DailyCasesChart @JvmOverloads constructor(
   private inner class DateAxisFormatter : ValueFormatter() {
     
     override fun getFormattedValue(value: Float): String {
-      return dailyCases!![value.toInt()].date.toFormattedEnglishDate(SHORT)
+      return _dailyCases!![value.toInt()].date.toFormattedGraphDate(SHORT)
     }
   }
   

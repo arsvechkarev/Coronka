@@ -1,15 +1,14 @@
 package com.arsvechkarev.common
 
-import core.RxNetworker
+import core.Networker
 import core.model.DailyCase
 import io.reactivex.Observable
 import org.json.JSONArray
 
-class WorldCasesInfoRepository(private val networker: RxNetworker) {
+class WorldCasesInfoRepository(private val networker: Networker) {
   
   fun getWorldDailyTotalCases(): Observable<List<DailyCase>> {
-    return networker.requestObservable(URL_TOTAL_CASES)
-        .map { transformJson(it) }
+    return networker.request(URL).map(::transformJson)
   }
   
   private fun transformJson(json: String): List<DailyCase> {
@@ -25,9 +24,9 @@ class WorldCasesInfoRepository(private val networker: RxNetworker) {
     return dailyCases
   }
   
-  private companion object {
+  companion object {
     
     const val MAX_CASES = 181 // Half a year + 1 day to calculate new cases properly
-    const val URL_TOTAL_CASES = "https://raw.githubusercontent.com/arsvechkarev/coronavirus-data/main/daily_cases.json"
+    const val URL = "https://raw.githubusercontent.com/arsvechkarev/coronavirus-data/main/daily_cases.json"
   }
 }

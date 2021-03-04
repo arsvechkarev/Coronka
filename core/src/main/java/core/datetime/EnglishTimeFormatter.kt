@@ -1,6 +1,6 @@
 package core.datetime
 
-class EnglishTimeFormatter : TimeFormatter {
+object EnglishTimeFormatter : TimeFormatter {
   
   override fun formatPublishedDate(stringDate: String): String {
     val date = DateTime.of(stringDate)

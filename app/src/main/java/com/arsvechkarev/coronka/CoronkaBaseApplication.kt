@@ -1,21 +1,19 @@
 package com.arsvechkarev.coronka
 
-import com.arsvechkarev.common.CommonModulesSingletons
+import android.app.Application
+import androidx.annotation.CallSuper
 import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseHelper
 import com.arsvechkarev.viewdsl.ContextHolder
 import com.jakewharton.threetenabp.AndroidThreeTen
 import core.viewbuilding.Fonts
-import timber.log.Timber
-import android.app.Application as AndroidApp
 
-class ApplicationLoader : AndroidApp() {
+open class CoronkaBaseApplication : Application() {
   
+  @CallSuper
   override fun onCreate() {
     super.onCreate()
-    Timber.plant(Timber.DebugTree())
     ContextHolder.init(applicationContext)
     CountriesMetaInfoDatabaseHelper.init(applicationContext)
-    CommonModulesSingletons.init(applicationContext)
     Fonts.init(applicationContext)
     AndroidThreeTen.init(applicationContext)
   }

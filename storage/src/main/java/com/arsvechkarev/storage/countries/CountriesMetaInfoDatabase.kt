@@ -1,9 +1,17 @@
 package com.arsvechkarev.storage.countries
 
+import android.database.Cursor
+
 /**
  * Database with countries meta information: iso2, population, world region, latitude and longitude
  */
-interface CountriesMetaInfoDatabase : Database {
+interface CountriesMetaInfoDatabase {
+  
+  /**
+   * Queries given [sql] synchronously, applies received cursor to function
+   * and returns value [T]
+   */
+  fun <T> query(sql: String, converter: Cursor.() -> T): T
   
   /** A schema for database */
   companion object {

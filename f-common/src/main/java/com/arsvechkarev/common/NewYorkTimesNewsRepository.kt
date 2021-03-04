@@ -1,6 +1,6 @@
 package com.arsvechkarev.common
 
-import core.RxNetworker
+import core.Networker
 import core.datetime.TimeFormatter
 import core.model.NewsItemWithPicture
 import core.recycler.DifferentiableItem
@@ -9,7 +9,7 @@ import org.json.JSONObject
 import timber.log.Timber
 
 class NewYorkTimesNewsRepository(
-  private val rxNetworker: RxNetworker,
+  private val networker: Networker,
   private val formatter: TimeFormatter,
   nytApiKey: String
 ) {
@@ -21,7 +21,7 @@ class NewYorkTimesNewsRepository(
   fun getLatestNews(page: Int): Observable<List<DifferentiableItem>> {
     val url = baseUrl + page.toString()
     Timber.d("Loading page $page")
-    return rxNetworker.requestObservable(url)
+    return networker.request(url)
         .map { transformJson(it) }
   }
   
