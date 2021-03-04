@@ -1,7 +1,8 @@
 package com.arsvechkarev.rankings.presentation
 
-import core.NumberFormatter
 import core.extenstions.assertThat
+import core.extenstions.toFormattedDecimalNumber
+import core.extenstions.toFormattedNumber
 import core.model.Country
 import core.model.CountryMetaInfo
 import core.model.DisplayableCountry
@@ -65,12 +66,12 @@ class CountriesFilterer(
       when (val amount = determineAmount(optionType, country)) {
         is Float -> {
           if (amount > 0.001f) {
-            val amountString = NumberFormatter.formatPercent(amount)
+            val amountString = amount.toFormattedDecimalNumber()
             items.add(DisplayableCountry(country.name, amount, amountString, country))
           }
         }
         else -> {
-          val amountString = NumberFormatter.formatNumber(amount)
+          val amountString = amount.toFormattedNumber()
           items.add(DisplayableCountry(country.name, amount, amountString, country))
         }
       }
@@ -92,7 +93,7 @@ class CountriesFilterer(
         val countryMetaInfo = metaInfoList.getValue(country.iso2)
         val amount = country.confirmed.toFloat() / countryMetaInfo.population.toFloat() * 100
         if (amount >= 0.001f) {
-          val amountString = NumberFormatter.formatPercent(amount)
+          val amountString = amount.toFormattedDecimalNumber()
           items.add(DisplayableCountry(country.name, amount, amountString, country))
         }
       }

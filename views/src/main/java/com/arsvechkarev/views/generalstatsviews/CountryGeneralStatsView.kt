@@ -10,9 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.arsvechkarev.viewdsl.size
 import com.arsvechkarev.views.R
-import core.NumberFormatter
 import core.extenstions.getTextHeight
 import core.extenstions.i
+import core.extenstions.toFormattedNumber
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 
@@ -47,9 +47,9 @@ class CountryGeneralStatsView @JvmOverloads constructor(
   }
   
   fun updateData(confirmed: Int, recovered: Int, deaths: Int) {
-    confirmedText = NumberFormatter.formatNumber(confirmed)
-    recoveredText = NumberFormatter.formatNumber(recovered)
-    deathsText = NumberFormatter.formatNumber(deaths)
+    confirmedText = confirmed.toFormattedNumber()
+    recoveredText = recovered.toFormattedNumber()
+    deathsText = deaths.toFormattedNumber()
     requestLayout()
   }
   

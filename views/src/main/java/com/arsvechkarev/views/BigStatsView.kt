@@ -15,10 +15,10 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.viewdsl.DURATION_MEDIUM
 import com.arsvechkarev.viewdsl.Floats.dp
 import com.arsvechkarev.viewdsl.cancelIfRunning
-import core.NumberFormatter
 import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.i
+import core.extenstions.toFormattedNumber
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
@@ -90,9 +90,9 @@ class BigStatsView @JvmOverloads constructor(
   
   fun updateNumbers(confirmed: Int, recovered: Int, deaths: Int) {
     calculateLengths(confirmed.f, recovered.f, deaths.f)
-    val confirmedFormatted = NumberFormatter.formatNumber(confirmed)
-    val recoveredFormatted = NumberFormatter.formatNumber(recovered)
-    val deathsFormatted = NumberFormatter.formatNumber(deaths)
+    val confirmedFormatted = confirmed.toFormattedNumber()
+    val recoveredFormatted = recovered.toFormattedNumber()
+    val deathsFormatted = deaths.toFormattedNumber()
     if (confirmedNumberLayout?.text == confirmedFormatted
         && recoveredNumberLayout?.text == recoveredFormatted
         && deathsNumberLayout?.text == deathsFormatted) {

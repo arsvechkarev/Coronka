@@ -1,6 +1,6 @@
 package com.arsvechkarev.stats.presentation
 
-import com.arsvechkarev.common.GeneralInfoRepository
+import com.arsvechkarev.common.GeneralInfoDataSource
 import com.arsvechkarev.common.WorldCasesInfoRepository
 import core.BaseScreenState
 import core.Failure
@@ -14,7 +14,7 @@ import core.model.WorldCasesInfo
 import io.reactivex.Observable
 
 class StatsViewModel(
-  private val generalInfoRepository: GeneralInfoRepository,
+  private val generalInfoDataSource: GeneralInfoDataSource,
   private val worldCasesInfoRepository: WorldCasesInfoRepository,
   private val schedulers: Schedulers
 ) : RxViewModel() {
@@ -22,7 +22,7 @@ class StatsViewModel(
   fun startLoadingData() {
     rxCall {
       Observable.zip(
-        generalInfoRepository.getGeneralInfo()
+        generalInfoDataSource.getGeneralInfo()
             .subscribeOn(schedulers.io()),
         worldCasesInfoRepository.getWorldDailyTotalCases()
             .map { totalCases -> Pair(totalCases, totalCases.toNewDailyCases()) }

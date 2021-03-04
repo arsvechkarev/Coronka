@@ -35,8 +35,9 @@ import core.Failure.FailureReason.NO_CONNECTION
 import core.Failure.FailureReason.TIMEOUT
 import core.Failure.FailureReason.UNKNOWN
 import core.Loading
-import core.NumberFormatter
 import core.extenstions.heightWithMargins
+import core.extenstions.toFormattedDecimalNumber
+import core.extenstions.toFormattedNumber
 import core.hostActivity
 import kotlinx.android.synthetic.main.fragment_rankings.chipAfrica
 import kotlinx.android.synthetic.main.fragment_rankings.chipAsia
@@ -175,10 +176,10 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     rankingsRecyclerView.isEnabled = false
     setClickable(false, rankingsIconDrawer, rankingsFabFilter,
       rankingsChipOptionType, rankingsChipWorldRegion)
-    rankingsTextNewConfirmed.text(NumberFormatter.formatNumber(country.newConfirmed))
-    rankingsTextNewDeaths.text(NumberFormatter.formatNumber(country.newDeaths))
-    rankingsTextDeathRate.text(NumberFormatter.formatPercent(state.deathRate))
-    rankingsTextPercentInCountry.text(NumberFormatter.formatPercent(state.percentInCountry))
+    rankingsTextNewConfirmed.text(country.newConfirmed.toFormattedNumber())
+    rankingsTextNewDeaths.text(country.newDeaths.toFormattedNumber())
+    rankingsTextDeathRate.text(state.deathRate.toFormattedDecimalNumber())
+    rankingsTextPercentInCountry.text(state.percentInCountry.toFormattedDecimalNumber())
     rankingsDialog.animateVisible()
   }
   

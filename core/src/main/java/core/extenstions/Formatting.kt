@@ -4,16 +4,35 @@ import android.content.Context
 import com.arsvechkarev.core.R
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.TextStyle
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.util.Locale
+
+private val decimalFormatter: NumberFormat = DecimalFormat("#0.000")
+
+// Use FRANCE locale because it uses spaces for grouping digits (e.g 12354 -> 12 354)
+private val numberFormatter = NumberFormat.getInstance(Locale.FRANCE)
+    .apply { isGroupingUsed = true }
+
 
 fun Number.formatGeneralInfo(context: Context): String {
   return formattedMillions(context)
 }
 
-fun String.toFormattedGraphDate(monthNameStyle: TextStyle): String {
-  val localDate = LocalDate.parse(this)
-  val monthName = localDate.month.getDisplayName(monthNameStyle, Locale.US)
-  return "$monthName ${localDate.dayOfMonth}"
+fun String.toFormattedGraphDate(): String {
+  return toFormattedDate(TextStyle.SHORT)
+}
+
+fun String.toFormattedTextLabelDate(): String {
+  return toFormattedDate(TextStyle.FULL)
+}
+
+fun Number.toFormattedNumber(): String {
+  return numberFormatter.format(this)
+}
+
+fun Number.toFormattedDecimalNumber(): String {
+  return decimalFormatter.format(this)
 }
 
 fun Number.toTotalCasesAmount(context: Context): String {
@@ -59,4 +78,10 @@ private fun Number.formattedMillions(context: Context): String {
   }
   return context.getString(R.string.number_formatted_with_parts, millionsPart,
     thousandsPart)
+}
+
+private fun String.toFormattedDate(monthNameStyle: TextStyle): String {
+  val localDate = LocalDate.parse(this)
+  val monthName = localDate.month.getDisplayName(monthNameStyle, Locale.US)
+  return "$monthName ${localDate.dayOfMonth}"
 }

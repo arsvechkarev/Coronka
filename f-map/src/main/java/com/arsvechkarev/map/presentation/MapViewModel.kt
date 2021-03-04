@@ -1,6 +1,6 @@
 package com.arsvechkarev.map.presentation
 
-import com.arsvechkarev.common.AllCountriesRepository
+import com.arsvechkarev.common.AllCountriesDataSource
 import com.arsvechkarev.common.CountriesMetaInfoRepository
 import core.BaseScreenState
 import core.Failure
@@ -16,7 +16,7 @@ import core.model.TotalData
 import io.reactivex.Observable
 
 class MapViewModel(
-  private val allCountriesRepository: AllCountriesRepository,
+  private val allCountriesDataSource: AllCountriesDataSource,
   private val countriesMetaInfoRepository: CountriesMetaInfoRepository,
   private val schedulers: Schedulers
 ) : RxViewModel() {
@@ -24,7 +24,7 @@ class MapViewModel(
   fun startLoadingData() {
     rxCall {
       Observable.zip(
-        allCountriesRepository.getTotalData().subscribeOn(schedulers.io()),
+        allCountriesDataSource.getTotalData().subscribeOn(schedulers.io()),
         countriesMetaInfoRepository.getLocationsMap().subscribeOn(schedulers.io()),
         { map, countries -> Pair(map, countries) }
       ).withNetworkDelay(schedulers)

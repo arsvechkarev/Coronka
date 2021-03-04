@@ -16,7 +16,7 @@ object CommonModulesSingletons {
   lateinit var connection: NetworkConnection
     private set
   
-  lateinit var allCountriesRepository: AllCountriesRepository
+  lateinit var allCountriesDataSource: AllCountriesDataSource
     private set
   
   lateinit var metaInfoRepository: CountriesMetaInfoRepository
@@ -33,7 +33,7 @@ object CommonModulesSingletons {
   fun init(context: Context, networker: Networker) {
     this.networker = networker
     connection = NetworkConnectionImpl(context)
-    allCountriesRepository = AllCountriesRepository(networker)
+    allCountriesDataSource = AllCountriesDataSource(networker)
     val database = DatabaseImpl(CountriesMetaInfoDatabaseHelper.instance)
     metaInfoRepository = CountriesMetaInfoRepository(database)
   }

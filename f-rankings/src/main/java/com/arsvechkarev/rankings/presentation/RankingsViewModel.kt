@@ -1,6 +1,6 @@
 package com.arsvechkarev.rankings.presentation
 
-import com.arsvechkarev.common.AllCountriesRepository
+import com.arsvechkarev.common.AllCountriesDataSource
 import com.arsvechkarev.common.CountriesMetaInfoRepository
 import core.BaseScreenState
 import core.Failure
@@ -18,7 +18,7 @@ import core.model.WorldRegion
 import io.reactivex.Observable
 
 class RankingsViewModel(
-  private val allCountriesRepository: AllCountriesRepository,
+  private val allCountriesDataSource: AllCountriesDataSource,
   private val metaInfoRepository: CountriesMetaInfoRepository,
   private val schedulers: Schedulers
 ) : RxViewModel() {
@@ -28,7 +28,7 @@ class RankingsViewModel(
   
   fun startLoadingData() {
     rxCall {
-      allCountriesRepository.getTotalData()
+      allCountriesDataSource.getTotalData()
           .subscribeOn(schedulers.io())
           .withNetworkDelay(schedulers)
           .withRequestTimeout()

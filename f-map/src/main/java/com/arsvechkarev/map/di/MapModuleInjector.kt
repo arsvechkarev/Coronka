@@ -3,7 +3,7 @@ package com.arsvechkarev.map.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.arsvechkarev.common.CommonModulesSingletons.allCountriesRepository
+import com.arsvechkarev.common.CommonModulesSingletons.allCountriesDataSource
 import com.arsvechkarev.common.CommonModulesSingletons.metaInfoRepository
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.map.presentation.MapViewModel
@@ -19,7 +19,7 @@ object MapModuleInjector {
     get() {
       return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-          return MapViewModel(allCountriesRepository, metaInfoRepository, AndroidSchedulers) as T
+          return MapViewModel(allCountriesDataSource, metaInfoRepository, AndroidSchedulers) as T
         }
       }
     }

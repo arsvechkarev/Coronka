@@ -9,15 +9,15 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.arsvechkarev.viewdsl.DURATION_LONG
-import core.NumberFormatter
 import core.extenstions.f
 import core.extenstions.getTextHeight
-import core.extenstions.toFormattedGraphDate
+import core.extenstions.toFormattedNumber
+import core.extenstions.toFormattedTextLabelDate
 import core.model.DailyCase
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
-import org.threeten.bp.format.TextStyle.FULL
+import kotlin.math.roundToInt
 
 class DateAndNumberLabel @JvmOverloads constructor(
   context: Context,
@@ -46,29 +46,38 @@ class DateAndNumberLabel @JvmOverloads constructor(
     interpolator = AccelerateDecelerateInterpolator()
     duration = DURATION_LONG
     addUpdateListener {
-      currentNumber = (it.animatedFraction * resultNumber).toInt()
-      numberText = NumberFormatter.formatNumber(currentNumber)
+      val fraction = it.animatedValue as Float
+      currentNumber = (fraction * resultNumber).roundToInt()
+      if (fraction == 1f) {
+        // When fraction is 1f, setting number text directly from
+        // result number to prevent rounding errors
+        numberText = resultNumber.toFormattedNumber()
+      } else {
+        numberText = currentNumber.toFormattedNumber()
+      }
       invalidate()
     }
   }
   private var currentNumber = 0
   private var resultNumber = 0
   
-  private var dateText: String? = null
-  private var numberText: String? = null
+  var dateText: String? = null
+    private set
+  var numberText: String? = null
+    private set
   
   fun drawCase(dailyCase: DailyCase) {
     if (dateText == null || numberText == null) {
       animateAppearance(dailyCase)
     } else {
-      dateText = dailyCase.date.toFormattedGraphDate(FULL)
-      numberText = NumberFormatter.formatNumber(dailyCase.cases)
+      dateText = dailyCase.date.toFormattedTextLabelDate()
+      numberText = dailyCase.cases.toFormattedNumber()
       invalidate()
     }
   }
   
   private fun animateAppearance(dailyCase: DailyCase) {
-    dateText = dailyCase.date.toFormattedGraphDate(FULL)
+    dateText = dailyCase.date.toFormattedTextLabelDate()
     resultNumber = dailyCase.cases
     currentNumber = 0
     animator.setFloatValues(0f, 1f)

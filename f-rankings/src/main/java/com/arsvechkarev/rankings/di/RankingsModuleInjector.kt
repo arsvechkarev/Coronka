@@ -2,7 +2,7 @@ package com.arsvechkarev.rankings.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.arsvechkarev.common.CommonModulesSingletons.allCountriesRepository
+import com.arsvechkarev.common.CommonModulesSingletons.allCountriesDataSource
 import com.arsvechkarev.common.CommonModulesSingletons.metaInfoRepository
 import com.arsvechkarev.rankings.list.RankingsAdapter
 import com.arsvechkarev.rankings.presentation.RankingsFragment
@@ -24,7 +24,7 @@ object RankingsModuleInjector {
     get() {
       return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-          return RankingsViewModel(allCountriesRepository, metaInfoRepository,
+          return RankingsViewModel(allCountriesDataSource, metaInfoRepository,
             AndroidSchedulers) as T
         }
       }

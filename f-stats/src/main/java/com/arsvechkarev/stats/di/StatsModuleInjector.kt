@@ -3,7 +3,7 @@ package com.arsvechkarev.stats.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.arsvechkarev.common.CommonModulesSingletons.networker
-import com.arsvechkarev.common.GeneralInfoRepository
+import com.arsvechkarev.common.GeneralInfoDataSource
 import com.arsvechkarev.common.WorldCasesInfoRepository
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.stats.presentation.StatsViewModel
@@ -19,7 +19,7 @@ object StatsModuleInjector {
     get() {
       return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-          val generalRepository = GeneralInfoRepository(networker)
+          val generalRepository = GeneralInfoDataSource(networker)
           val worldCasesRepository = WorldCasesInfoRepository(networker)
           return StatsViewModel(generalRepository, worldCasesRepository, AndroidSchedulers) as T
         }

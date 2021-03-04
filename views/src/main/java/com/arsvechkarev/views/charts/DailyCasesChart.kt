@@ -24,7 +24,6 @@ import core.extenstions.toNewCasesAmount
 import core.extenstions.toTotalCasesAmount
 import core.model.DailyCase
 import core.viewbuilding.Colors
-import org.threeten.bp.format.TextStyle.SHORT
 
 class DailyCasesChart @JvmOverloads constructor(
   context: Context,
@@ -104,6 +103,10 @@ class DailyCasesChart @JvmOverloads constructor(
   }
   
   override fun onValueSelected(e: Entry, h: Highlight) {
+    println("qwerty ==============")
+    println("qwerty = ${e.x}")
+    println("qwerty2 = ${_dailyCases!![e.x.toInt()]}")
+    println("qwerty3 = ${_dailyCases!!.size}")
     dailyCaseListener.invoke(_dailyCases!![e.x.toInt()])
   }
   
@@ -145,7 +148,7 @@ class DailyCasesChart @JvmOverloads constructor(
   private inner class DateAxisFormatter : ValueFormatter() {
     
     override fun getFormattedValue(value: Float): String {
-      return _dailyCases!![value.toInt()].date.toFormattedGraphDate(SHORT)
+      return _dailyCases!![value.toInt()].date.toFormattedGraphDate()
     }
   }
   
