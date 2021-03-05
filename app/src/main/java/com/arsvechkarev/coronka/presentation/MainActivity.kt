@@ -91,15 +91,4 @@ class MainActivity : BaseActivity(), HostActivity {
     val drawerGroupLayout = viewAs<DrawerGroupLinearLayout>(DrawerGroupLinearLayout)
     drawerGroupLayout.setSelectedMenuItem(tag)
   }
-  
-  companion object {
-    
-    const val DrawerLayout = "DrawerLayout"
-    const val DrawerGroupLinearLayout = "DrawerGroupLinearLayout"
-    const val TextStatistics = "TextStatistics"
-    const val TextNews = "TextNews"
-    const val TextMap = "TextMap"
-    const val TextRankings = "TextRankings"
-    const val TextTips = "TextTips"
-  }
 }

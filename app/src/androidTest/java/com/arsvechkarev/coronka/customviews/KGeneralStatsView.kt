@@ -11,14 +11,14 @@ import core.extenstions.formatGeneralInfo
 import core.model.GeneralInfo
 import org.hamcrest.Matcher
 
-class KGeneralStatsView : KBaseView<KGeneralStatsView>, GeneralStatsAssertions {
+class KGeneralStatsView : KBaseView<KGeneralStatsView>, GeneralStatsViewAssertions {
   
   constructor(function: ViewBuilder.() -> Unit) : super(function)
   constructor(parent: Matcher<View>, function: ViewBuilder.() -> Unit) : super(parent, function)
   constructor(parent: DataInteraction, function: ViewBuilder.() -> Unit) : super(parent, function)
 }
 
-interface GeneralStatsAssertions : BaseAssertions {
+interface GeneralStatsViewAssertions : BaseAssertions {
   
   fun hasGeneralInfo(generalInfo: GeneralInfo) {
     view.matches<MainGeneralStatsView>("has general info $generalInfo") { item ->

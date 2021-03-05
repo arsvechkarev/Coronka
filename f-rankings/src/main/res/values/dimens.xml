@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <item name="small_stats_id" type="id"/>
+
   <dimen name="rankings_small_stats_view_p_start">16dp</dimen>
   <dimen name="rankings_small_stats_view_p_end">8dp</dimen>
   <dimen name="rankings_small_stats_view_p_vertical">8dp</dimen>

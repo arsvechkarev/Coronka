@@ -61,10 +61,8 @@ fun Number.toNewCasesAmount(context: Context): String {
   }
 }
 
-fun String.dropAfterLast(string: String): String {
-  val i = lastIndexOf(string)
-  val lengthLeft = length - i
-  return dropLast(lengthLeft)
+fun Int.formatRankingsNumber(): String {
+  return "$this."
 }
 
 private fun Number.formattedMillions(context: Context): String {

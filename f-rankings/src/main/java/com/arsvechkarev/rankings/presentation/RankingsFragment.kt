@@ -248,10 +248,10 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   }
   
   private fun setupChips() {
-    rankingsChipWorldRegion.isActive = true
-    rankingsChipOptionType.isActive = true
-    chipWorldwide.isActive = true
-    chipConfirmed.isActive = true
+    rankingsChipWorldRegion.isSelected = true
+    rankingsChipOptionType.isSelected = true
+    chipWorldwide.isSelected = true
+    chipConfirmed.isSelected = true
     val groupWorldRegions = ChipGroup(chipWorldwide, chipEurope, chipAsia,
       chipAfrica, chipNorthAmerica, chipOceania, chipSouthAmerica)
     val groupOptionTypes = ChipGroup(chipConfirmed, chipRecovered, chipDeaths,

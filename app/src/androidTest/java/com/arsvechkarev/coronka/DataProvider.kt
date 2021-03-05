@@ -1,7 +1,6 @@
-package com.arsvechkarev.coronka.fakeapi
+package com.arsvechkarev.coronka
 
 import androidx.test.platform.app.InstrumentationRegistry
-import com.arsvechkarev.coronka.readAssetsFile
 import core.datetime.EnglishTimeFormatter
 import core.jsontransformers.AllCountriesTransformer
 import core.jsontransformers.GeneralInfoTransformer

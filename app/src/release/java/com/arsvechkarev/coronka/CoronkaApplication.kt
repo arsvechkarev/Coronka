@@ -9,7 +9,7 @@ class CoronkaApplication : CoronkaBaseApplication() {
   override fun onCreate() {
     super.onCreate()
     Timber.plant(ReleaseTree)
-    CommonModulesSingletons.init(applicationContext)
+    CommonModulesSingletons.initDefault(applicationContext)
   }
   
   object ReleaseTree : Timber.Tree() {

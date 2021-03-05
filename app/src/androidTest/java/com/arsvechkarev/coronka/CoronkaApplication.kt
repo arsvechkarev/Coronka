@@ -1,7 +1,6 @@
 package com.arsvechkarev.coronka
 
 import com.arsvechkarev.common.CommonModulesSingletons
-import com.arsvechkarev.coronka.fakeapi.FakeNetworker
 
 class CoronkaApplication : CoronkaBaseApplication() {
   

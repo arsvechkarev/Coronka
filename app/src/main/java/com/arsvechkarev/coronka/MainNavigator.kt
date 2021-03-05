@@ -6,11 +6,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextMap
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextNews
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextRankings
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextStatistics
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextTips
+import com.arsvechkarev.coronka.presentation.TextMap
+import com.arsvechkarev.coronka.presentation.TextNews
+import com.arsvechkarev.coronka.presentation.TextRankings
+import com.arsvechkarev.coronka.presentation.TextStatistics
+import com.arsvechkarev.coronka.presentation.TextTips
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.rankings.presentation.RankingsFragment

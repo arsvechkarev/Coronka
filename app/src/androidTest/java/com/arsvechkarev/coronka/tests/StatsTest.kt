@@ -3,7 +3,7 @@ package com.arsvechkarev.coronka.tests
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
 import com.agoda.kakao.screen.Screen.Companion.onScreen
-import com.arsvechkarev.coronka.fakeapi.DataProvider
+import com.arsvechkarev.coronka.DataProvider
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.screens.StatsScreen
 import core.extenstions.f
@@ -21,7 +21,7 @@ class StatsTest {
   val chain: RuleChain = RuleChain.outerRule(ActivityTestRule(MainActivity::class.java))
   
   @Test
-  fun test() {
+  fun test_displaying_stats() {
     val generalInfo = DataProvider.getGeneralInfo()
     val dailyCases = DataProvider.getDailyCases()
     onScreen<StatsScreen> {

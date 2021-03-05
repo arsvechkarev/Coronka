@@ -103,10 +103,6 @@ class DailyCasesChart @JvmOverloads constructor(
   }
   
   override fun onValueSelected(e: Entry, h: Highlight) {
-    println("qwerty ==============")
-    println("qwerty = ${e.x}")
-    println("qwerty2 = ${_dailyCases!![e.x.toInt()]}")
-    println("qwerty3 = ${_dailyCases!!.size}")
     dailyCaseListener.invoke(_dailyCases!![e.x.toInt()])
   }
   

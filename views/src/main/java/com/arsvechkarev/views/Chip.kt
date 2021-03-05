@@ -33,14 +33,6 @@ class Chip @JvmOverloads constructor(
   private var textLayout: Layout
   private var colorSecondary: Int = 0
   
-  var isActive = false
-    set(value) {
-      if (field != value) {
-        field = value
-        invalidate()
-      }
-    }
-  
   var colorFill: Int = 0
     set(value) {
       rectPaint.color = value
@@ -91,7 +83,7 @@ class Chip @JvmOverloads constructor(
   
   override fun onDraw(canvas: Canvas) {
     val strokeOffsetForRect: Float
-    if (isActive) {
+    if (isSelected) {
       strokeOffsetForRect = rectPaint.strokeWidth / 2f
       rectPaint.style = Paint.Style.FILL
       textPaint.color = colorSecondary

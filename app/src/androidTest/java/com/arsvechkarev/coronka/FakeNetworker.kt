@@ -1,9 +1,9 @@
-package com.arsvechkarev.coronka.fakeapi
+package com.arsvechkarev.coronka
 
-import com.arsvechkarev.coronka.fakeapi.DataProvider.allCountriesData
-import com.arsvechkarev.coronka.fakeapi.DataProvider.generalInfoData
-import com.arsvechkarev.coronka.fakeapi.DataProvider.newsData
-import com.arsvechkarev.coronka.fakeapi.DataProvider.worldCasesData
+import com.arsvechkarev.coronka.DataProvider.allCountriesData
+import com.arsvechkarev.coronka.DataProvider.generalInfoData
+import com.arsvechkarev.coronka.DataProvider.newsData
+import com.arsvechkarev.coronka.DataProvider.worldCasesData
 import core.Networker
 import io.reactivex.Observable
 import com.arsvechkarev.common.AllCountriesDataSource.Companion.URL as ALL_COUNTIES_URL

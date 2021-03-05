@@ -12,12 +12,6 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import com.arsvechkarev.coronka.R
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.DrawerGroupLinearLayout
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextMap
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextNews
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextRankings
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextStatistics
-import com.arsvechkarev.coronka.presentation.MainActivity.Companion.TextTips
 import com.arsvechkarev.viewdsl.Ints.dp
 import com.arsvechkarev.viewdsl.Size.Companion.MatchParent
 import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
@@ -44,9 +38,17 @@ import core.viewbuilding.Styles
 import core.viewbuilding.Styles.BoldTextView
 import core.viewbuilding.TextSizes
 
+const val DrawerLayout = "DrawerLayout"
+const val DrawerGroupLinearLayout = "DrawerGroupLinearLayout"
+const val TextStatistics = "TextStatistics"
+const val TextNews = "TextNews"
+const val TextMap = "TextMap"
+const val TextRankings = "TextRankings"
+const val TextTips = "TextTips"
+
 fun Context.buildMainActivityLayout() = withViewBuilder {
   DrawerLayout(context).apply {
-    tag(MainActivity.DrawerLayout)
+    tag(DrawerLayout)
     size(MatchParent, MatchParent)
     child<FrameLayout, LayoutParams>(MatchParent, MatchParent) {
       id = R.id.fragmentContainer

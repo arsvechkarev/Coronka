@@ -13,9 +13,9 @@ class ChipGroup(vararg chips: Chip) {
       chip.setOnClickListener {
         val chipInner = it as Chip
         if (chipInner != currentChip) {
-          currentChip.isActive = false
+          currentChip.isSelected = false
           currentChip = chipInner
-          currentChip.isActive = true
+          currentChip.isSelected = true
           onNewChipSelected(currentChip)
         }
       }

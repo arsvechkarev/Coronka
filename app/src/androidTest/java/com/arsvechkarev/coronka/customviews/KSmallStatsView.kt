@@ -6,23 +6,27 @@ import com.agoda.kakao.common.assertions.BaseAssertions
 import com.agoda.kakao.common.builders.ViewBuilder
 import com.agoda.kakao.common.views.KBaseView
 import com.arsvechkarev.coronka.matches
-import com.arsvechkarev.views.charts.DateAndNumberLabel
+import com.arsvechkarev.views.SmallStatsView
 import org.hamcrest.Matcher
 
-class KDateAndNumberLabel : KBaseView<KDateAndNumberLabel>, DateAndNumberLabelAssertions {
+class KSmallStatsView : KBaseView<KGeneralStatsView>, SmallStatsViewAssertions {
   
   constructor(function: ViewBuilder.() -> Unit) : super(function)
   constructor(parent: Matcher<View>, function: ViewBuilder.() -> Unit) : super(parent, function)
   constructor(parent: DataInteraction, function: ViewBuilder.() -> Unit) : super(parent, function)
 }
 
-interface DateAndNumberLabelAssertions : BaseAssertions {
+interface SmallStatsViewAssertions : BaseAssertions {
   
-  fun hasDateText(text: String) {
-    view.matches<DateAndNumberLabel> { label -> label.dateText == text }
+  fun hasText(text: String) {
+    view.matches<SmallStatsView> { item -> item.text == text }
   }
   
-  fun hasNumberText(text: String) {
-    view.matches<DateAndNumberLabel> { label -> label.numberText == text }
+  fun hasNumber(formattedNumber: String) {
+    view.matches<SmallStatsView> { item -> item.number == formattedNumber }
+  }
+  
+  fun hasAmount(formattedAmount: String) {
+    view.matches<SmallStatsView> { item -> item.amount == formattedAmount }
   }
 }

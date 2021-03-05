@@ -11,6 +11,7 @@ import android.view.View
 import com.arsvechkarev.viewdsl.rippleBackground
 import core.extenstions.execute
 import core.extenstions.f
+import core.extenstions.formatRankingsNumber
 import core.viewbuilding.Colors
 import core.viewbuilding.Fonts
 import core.viewbuilding.TextSizes
@@ -28,20 +29,26 @@ class SmallStatsView(
     textSize = this@SmallStatsView.textSize
   }
   
-  private var text: String? = null
+  private var _text: String? = null
   private var textLayout: Layout? = null
   private var numberLayout: Layout? = null
   private var amountLayout: Layout? = null
   private var numberLayoutMaxWidth = 0f
+  
+  val text get() = textLayout!!.text!!
+  
+  val number get() = numberLayout!!.text!!
+  
+  val amount get() = amountLayout!!.text!!
   
   init {
     rippleBackground(Colors.Ripple)
   }
   
   fun updateData(rankNumber: Int, text: String, amount: String) {
-    this.text = text
+    this._text = text
     textLayout = null
-    numberLayout = boringLayoutOf(textPaint, "$rankNumber.")
+    numberLayout = boringLayoutOf(textPaint, rankNumber.formatRankingsNumber())
     numberLayoutMaxWidth = textPaint.measureText(RANK_TEXT_FOR_MEASURE)
     amountLayout = boringLayoutOf(textPaint, amount)
     invalidate()
@@ -55,11 +62,11 @@ class SmallStatsView(
   }
   
   override fun onDraw(canvas: Canvas) {
-    if (numberLayout == null || amountLayout == null || text == null) {
+    if (numberLayout == null || amountLayout == null || _text == null) {
       return
     }
     if (textLayout == null) {
-      textLayout = boringLayoutOf(textPaint, text!!,
+      textLayout = boringLayoutOf(textPaint, _text!!,
         (width - numberLayoutMaxWidth - amountLayout!!.width) * 0.85f)
     }
     val numberLayout = numberLayout!!
