@@ -53,6 +53,7 @@ class RankingsTest {
     
     val allCountries = DataProvider.getTotalData().countries
     val countryWithMostRecovered = allCountries.maxByOrNull { it.recovered }!!
+    val countryWithLeastRecovered = allCountries.minByOrNull { it.recovered }!!
     
     screen<StatsScreen>().iconDrawer.click()
     
@@ -75,6 +76,11 @@ class RankingsTest {
           assertThat(itemView is SmallStatsView)
           return@lb itemView.number == (1.formatRankingsNumber())
               && itemView.amount == (countryWithMostRecovered.recovered.toFormattedNumber())
+        }
+        hasItemViewAt(allCountries.lastIndex) lb@{ itemView ->
+          assertThat(itemView is SmallStatsView)
+          return@lb itemView.number == (allCountries.size.formatRankingsNumber())
+              && itemView.amount == (countryWithLeastRecovered.recovered.toFormattedNumber())
         }
       }
       

@@ -2,7 +2,7 @@ package com.arsvechkarev.stats.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.arsvechkarev.common.CommonModulesSingletons.networker
+import com.arsvechkarev.common.CoreDiComponent.networker
 import com.arsvechkarev.common.GeneralInfoDataSource
 import com.arsvechkarev.common.WorldCasesInfoRepository
 import com.arsvechkarev.stats.presentation.StatsFragment

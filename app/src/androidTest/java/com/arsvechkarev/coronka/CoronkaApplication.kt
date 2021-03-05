@@ -1,11 +1,13 @@
 package com.arsvechkarev.coronka
 
-import com.arsvechkarev.common.CommonModulesSingletons
+import com.arsvechkarev.common.CoreDiComponent
+import timber.log.Timber
 
 class CoronkaApplication : CoronkaBaseApplication() {
   
   override fun onCreate() {
     super.onCreate()
-    CommonModulesSingletons.initCustomNetworker(applicationContext, FakeNetworker)
+    Timber.plant(Timber.DebugTree())
+    CoreDiComponent.initCustomNetworker(applicationContext, FakeNetworker)
   }
 }

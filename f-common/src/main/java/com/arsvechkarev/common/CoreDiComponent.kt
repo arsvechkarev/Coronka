@@ -8,7 +8,7 @@ import core.NetworkConnectionImpl
 import core.Networker
 import core.RxNetworker
 
-object CommonModulesSingletons {
+object CoreDiComponent {
   
   lateinit var networker: Networker
     private set
@@ -30,7 +30,7 @@ object CommonModulesSingletons {
     init(context, RxNetworker)
   }
   
-  fun init(context: Context, networker: Networker) {
+  private fun init(context: Context, networker: Networker) {
     this.networker = networker
     connection = NetworkConnectionImpl(context)
     allCountriesDataSource = AllCountriesDataSource(networker)

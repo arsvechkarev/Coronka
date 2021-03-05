@@ -1,6 +1,6 @@
 package com.arsvechkarev.coronka
 
-import com.arsvechkarev.common.CommonModulesSingletons
+import com.arsvechkarev.common.CoreDiComponent
 import timber.log.Timber
 
 class CoronkaApplication : CoronkaBaseApplication() {
@@ -8,6 +8,6 @@ class CoronkaApplication : CoronkaBaseApplication() {
   override fun onCreate() {
     super.onCreate()
     Timber.plant(Timber.DebugTree())
-    CommonModulesSingletons.initDefault(applicationContext)
+    CoreDiComponent.initDefault(applicationContext)
   }
 }

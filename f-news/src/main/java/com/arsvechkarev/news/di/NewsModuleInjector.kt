@@ -2,7 +2,7 @@ package com.arsvechkarev.news.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.arsvechkarev.common.CommonModulesSingletons.networker
+import com.arsvechkarev.common.CoreDiComponent.networker
 import com.arsvechkarev.common.NewYorkTimesNewsRepository
 import com.arsvechkarev.news.BuildConfig
 import com.arsvechkarev.news.presentation.NewsFragment

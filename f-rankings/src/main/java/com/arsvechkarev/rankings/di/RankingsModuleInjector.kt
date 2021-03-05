@@ -2,8 +2,8 @@ package com.arsvechkarev.rankings.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.arsvechkarev.common.CommonModulesSingletons.allCountriesDataSource
-import com.arsvechkarev.common.CommonModulesSingletons.metaInfoRepository
+import com.arsvechkarev.common.CoreDiComponent.allCountriesDataSource
+import com.arsvechkarev.common.CoreDiComponent.metaInfoRepository
 import com.arsvechkarev.rankings.list.RankingsAdapter
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.rankings.presentation.RankingsViewModel
