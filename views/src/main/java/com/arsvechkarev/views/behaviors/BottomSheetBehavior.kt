@@ -18,9 +18,9 @@ import com.arsvechkarev.viewdsl.doOnEnd
 import com.arsvechkarev.viewdsl.getBehavior
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.HIDDEN
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.SHOWN
-import core.INVALID_POINTER
 import kotlin.math.abs
 
+@Suppress("UNUSED_PARAMETER") // 'attrs' used for xml
 class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   CoordinatorLayout.Behavior<View>() {
   
@@ -242,9 +242,10 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   }
   
   companion object {
-  
+    
     private const val DURATION_SLIDE = 225L
     private const val FLING_VELOCITY_THRESHOLD = 0.18f
+    private const val INVALID_POINTER = -1
     
     val View.asBottomSheet get() = getBehavior<BottomSheetBehavior>()
   }

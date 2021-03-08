@@ -1,6 +1,6 @@
 package com.arsvechkarev.coronka
 
-import com.arsvechkarev.common.CoreDiComponent
+import core.CoreDiComponent
 import timber.log.Timber
 
 class CoronkaApplication : CoronkaBaseApplication() {

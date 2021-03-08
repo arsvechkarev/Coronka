@@ -1,6 +1,7 @@
 package core.recycler
 
 import androidx.recyclerview.widget.RecyclerView
+import core.DisplayableItem
 import kotlin.reflect.KClass
 
 fun adapter(block: AdapterBuilder.() -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder> {

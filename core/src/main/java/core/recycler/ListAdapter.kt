@@ -5,8 +5,9 @@ import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import core.concurrency.AndroidThreader
-import core.concurrency.Threader
+import core.AndroidSchedulers
+import core.DifferentiableItem
+import core.Schedulers
 import core.recycler.CallbackType.ALWAYS_FALSE
 import core.recycler.CallbackType.APPENDED_LIST
 import core.recycler.CallbackType.TWO_LISTS
@@ -15,7 +16,7 @@ import kotlin.reflect.KClass
 abstract class ListAdapter(
   private val delegates: List<ListAdapterDelegate<out DifferentiableItem>>,
   private val callbackType: CallbackType = TWO_LISTS,
-  private val threader: Threader = AndroidThreader,
+  private val schedulers: Schedulers = AndroidSchedulers,
   private var onReadyToLoadNextPage: (() -> Unit)? = null
 ) : RecyclerView.Adapter<ViewHolder>() {
   
@@ -29,9 +30,9 @@ abstract class ListAdapter(
   constructor(
     vararg delegates: ListAdapterDelegate<out DifferentiableItem>,
     callbackType: CallbackType = TWO_LISTS,
-    threader: Threader = AndroidThreader,
+    schedulers: Schedulers = AndroidSchedulers,
     onReadyToLoadNextPage: () -> Unit = {}
-  ) : this(delegates.toList(), callbackType, threader, onReadyToLoadNextPage)
+  ) : this(delegates.toList(), callbackType, schedulers, onReadyToLoadNextPage)
   
   init {
     delegates.forEachIndexed { i, delegate ->
@@ -41,7 +42,7 @@ abstract class ListAdapter(
   }
   
   fun addItem(item: DifferentiableItem) {
-    threader.onMainThread {
+    schedulers.mainThread().scheduleDirect {
       data.add(item)
       notifyItemInserted(data.size - 1)
     }
@@ -71,9 +72,9 @@ abstract class ListAdapter(
   }
   
   private fun applyChanges(callback: DiffUtil.Callback) {
-    threader.onBackground {
+    schedulers.computation().scheduleDirect {
       val diffResult = DiffUtil.calculateDiff(callback)
-      threader.onMainThread {
+      schedulers.mainThread().scheduleDirect {
         diffResult.dispatchUpdatesTo(this)
       }
     }

@@ -1,0 +1,24 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  defaultConfig {
+    minSdkVersion rootProject.ext.minSdkVersion
+  }
+}
+
+dependencies {
+  implementation project(":core")
+
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+  def appDependencies = rootProject.ext.applicationDependencies
+  implementation appDependencies.rxJava
+  implementation appDependencies.appCompat
+
+  def testDependencies = rootProject.ext.testDependencies
+  api testDependencies.junit
+  api testDependencies.mockito
+  api testDependencies.androidArchTesting
+}

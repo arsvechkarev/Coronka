@@ -2,6 +2,7 @@ package core.recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import core.DisplayableItem
 import kotlin.reflect.KClass
 
 abstract class AdapterDelegate<T : DisplayableItem>(val modelClass: KClass<T>) {

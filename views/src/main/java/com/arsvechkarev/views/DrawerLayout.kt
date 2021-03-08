@@ -22,7 +22,6 @@ import com.arsvechkarev.viewdsl.isOrientationPortrait
 import com.arsvechkarev.views.DrawerLayout.DrawerState.CLOSED
 import com.arsvechkarev.views.DrawerLayout.DrawerState.OPENED
 import core.HostActivity.DrawerOpenCloseListener
-import core.INVALID_POINTER
 import core.extenstions.assertThat
 import kotlin.math.abs
 import kotlin.math.hypot
@@ -342,5 +341,6 @@ class DrawerLayout @JvmOverloads constructor(
   
     const val DEFAULT_DURATION = 250L
     const val TOUCH_SLOP_MULTIPLIER = 2
+    const val INVALID_POINTER = -1
   }
 }

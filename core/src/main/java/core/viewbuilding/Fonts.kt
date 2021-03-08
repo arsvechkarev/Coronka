@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Typeface
 import androidx.core.content.res.ResourcesCompat
 import com.arsvechkarev.core.R
-import core.concurrency.AndroidThreader
+import core.AndroidSchedulers
 import java.util.concurrent.CountDownLatch
 
 object Fonts {
@@ -27,7 +27,7 @@ object Fonts {
     }
   
   fun init(context: Context) {
-    AndroidThreader.onBackground {
+    AndroidSchedulers.io().scheduleDirect {
       segoeUi = ResourcesCompat.getFont(context, R.font.segoe_ui)
       segoeUiBold = ResourcesCompat.getFont(context, R.font.segoe_ui_bold)
       initializationLatch.countDown()

@@ -9,7 +9,7 @@ import core.jsontransformers.WorldCasesInfoTransformer
 import core.model.DailyCase
 import core.model.GeneralInfo
 import core.model.NewsItemWithPicture
-import core.model.TotalData
+import core.model.TotalInfo
 
 object DataProvider {
   
@@ -20,7 +20,7 @@ object DataProvider {
   val newsData by lazy { context.readAssetsFile("news_data.json") }
   val generalInfoData by lazy { context.readAssetsFile("general_info_data.json") }
   
-  fun getTotalData(): TotalData {
+  fun getTotalData(): TotalInfo {
     return AllCountriesTransformer.toTotalData(allCountriesData)
   }
   

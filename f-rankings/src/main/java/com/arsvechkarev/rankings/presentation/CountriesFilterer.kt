@@ -1,5 +1,6 @@
 package com.arsvechkarev.rankings.presentation
 
+import core.DifferentiableItem
 import core.extenstions.assertThat
 import core.extenstions.toFormattedDecimalNumber
 import core.extenstions.toFormattedNumber
@@ -8,7 +9,6 @@ import core.model.CountryMetaInfo
 import core.model.DisplayableCountry
 import core.model.OptionType
 import core.model.WorldRegion
-import core.recycler.DifferentiableItem
 
 class CountriesFilterer(
   private val countries: List<Country>,
@@ -116,7 +116,7 @@ class CountriesFilterer(
   }
   
   private fun Country.isFromRegion(worldRegion: WorldRegion): Boolean {
-    if (worldRegion == WorldRegion.WORLDWIDE) return true
+    if (worldRegion == core.model.WorldRegion.WORLDWIDE) return true
     return metaInfoList.getValue(this.iso2).worldRegion == worldRegion.letters
   }
 }

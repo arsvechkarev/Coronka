@@ -2,7 +2,7 @@ package core.jsontransformers
 
 import core.model.Country
 import core.model.GeneralInfo
-import core.model.TotalData
+import core.model.TotalInfo
 import org.json.JSONObject
 
 object AllCountriesTransformer {
@@ -18,7 +18,7 @@ object AllCountriesTransformer {
   private const val NEW_CONFIRMED = "NewConfirmed"
   private const val NEW_DEATHS = "NewDeaths"
   
-  fun toTotalData(json: String): TotalData {
+  fun toTotalData(json: String): TotalInfo {
     val countriesList = ArrayList<Country>()
     val jsonObject = JSONObject(json)
     val jsonGlobalInfo = jsonObject.getJSONObject(GLOBAL)
@@ -43,6 +43,6 @@ object AllCountriesTransformer {
       )
       countriesList.add(country)
     }
-    return TotalData(countriesList, generalInfo)
+    return TotalInfo(countriesList, generalInfo)
   }
 }

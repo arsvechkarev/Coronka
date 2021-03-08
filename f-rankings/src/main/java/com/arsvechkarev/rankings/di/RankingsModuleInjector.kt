@@ -2,13 +2,13 @@ package com.arsvechkarev.rankings.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.arsvechkarev.common.CoreDiComponent.allCountriesDataSource
-import com.arsvechkarev.common.CoreDiComponent.metaInfoRepository
-import com.arsvechkarev.common.CoreDiComponent.networkAvailabilityNotifier
 import com.arsvechkarev.rankings.list.RankingsAdapter
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.rankings.presentation.RankingsViewModel
-import core.concurrency.AndroidSchedulers
+import core.AndroidSchedulers
+import core.CoreDiComponent.countriesMetaInfoDataSource
+import core.CoreDiComponent.networkAvailabilityNotifier
+import core.CoreDiComponent.totalInfoDataSource
 import core.model.DisplayableCountry
 
 object RankingsModuleInjector {
@@ -25,7 +25,7 @@ object RankingsModuleInjector {
     get() {
       return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-          return RankingsViewModel(allCountriesDataSource, metaInfoRepository,
+          return RankingsViewModel(totalInfoDataSource, countriesMetaInfoDataSource,
             networkAvailabilityNotifier, AndroidSchedulers) as T
         }
       }

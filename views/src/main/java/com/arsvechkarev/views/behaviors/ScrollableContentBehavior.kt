@@ -16,7 +16,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ScrollingView
 import androidx.core.view.ViewCompat
 import com.arsvechkarev.views.DrawerLayout
-import core.INVALID_POINTER
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -216,7 +215,7 @@ class ScrollableContentBehavior<V>(context: Context) :
   private inner class FlingRunnable(val child: V) : Runnable {
     
     private var latestY: Int = Int.MAX_VALUE
-    
+  
     override fun run() {
       if (scroller.computeScrollOffset()) {
         if (latestY != Int.MAX_VALUE) {
@@ -226,5 +225,10 @@ class ScrollableContentBehavior<V>(context: Context) :
         child.postOnAnimation(this)
       }
     }
+  }
+  
+  private companion object {
+    
+    const val INVALID_POINTER = -1
   }
 }

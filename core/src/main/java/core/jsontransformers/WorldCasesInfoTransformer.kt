@@ -21,4 +21,16 @@ object WorldCasesInfoTransformer {
     }
     return dailyCases
   }
+  
+  
+  fun toNewDailyCases(list: List<DailyCase>): List<DailyCase> {
+    val dailyCases = ArrayList<DailyCase>()
+    for (i in 1 until list.size) {
+      val curr = list[i]
+      val prev = list[i - 1]
+      val diff = curr.cases - prev.cases
+      dailyCases.add(DailyCase(diff, curr.date))
+    }
+    return dailyCases
+  }
 }

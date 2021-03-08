@@ -5,14 +5,14 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.agoda.kakao.screen.Screen.Companion.onScreen
-import com.arsvechkarev.common.CoreDiComponent
-import com.arsvechkarev.coronka.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.coronka.RetryCountWebApiFactory
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.screen
 import com.arsvechkarev.coronka.screens.DrawerScreen
 import com.arsvechkarev.coronka.screens.NewsScreen
 import com.arsvechkarev.coronka.screens.StatsScreen
+import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
+import core.CoreDiComponent
 import core.RxConfigurator
 import org.junit.Rule
 import org.junit.Test
@@ -21,13 +21,15 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4ClassRunner::class)
 class NewsTest {
   
+  private val fakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
+  
   @get:Rule
   val rule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
     
     override fun beforeActivityLaunched() {
       val applicationContext = InstrumentationRegistry.getInstrumentation().targetContext
       val webApiFactory = RetryCountWebApiFactory(1)
-      CoreDiComponent.initCustom(webApiFactory, FakeNetworkAvailabilityNotifier, applicationContext)
+      CoreDiComponent.initCustom(webApiFactory, fakeNetworkAvailabilityNotifier, applicationContext)
       RxConfigurator.configureRetryCount(0)
       RxConfigurator.configureNetworkDelay(0)
     }
@@ -67,8 +69,8 @@ class NewsTest {
     onScreen<NewsScreen> {
       recyclerView.isNotDisplayed()
       errorLayout.isDisplayed()
-      
-      FakeNetworkAvailabilityNotifier.notifyNetworkAvailable()
+  
+      fakeNetworkAvailabilityNotifier.notifyNetworkAvailable()
       
       sleep(1000)
       

@@ -45,9 +45,7 @@ android {
 
 dependencies {
   implementation project(':core')
-  implementation project(':storage')
   implementation project(':views')
-  implementation project(':f-common')
   implementation project(':f-stats')
   implementation project(':f-news')
   implementation project(':f-map')
@@ -67,6 +65,7 @@ dependencies {
 
   def testDependencies = rootProject.ext.testDependencies
 
+  androidTestImplementation project(':test-common')
   androidTestImplementation testDependencies.kakao
   androidTestImplementation testDependencies.espresso
   androidTestImplementation testDependencies.espressoContrib

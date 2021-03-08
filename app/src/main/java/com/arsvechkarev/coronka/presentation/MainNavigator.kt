@@ -1,6 +1,5 @@
 package com.arsvechkarev.coronka.presentation
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -61,15 +60,6 @@ class MainNavigator(
     }
     transaction.commit()
     currentFragment = fragment
-  }
-  
-  override fun navigateTo(fragmentClass: KClass<out BaseFragment>, data: Bundle?) {
-    val fragmentManager = supportFragmentManager ?: return
-    val fragment = fragmentClass.java.newInstance()
-    fragment.arguments = data
-    fragmentManager.beginTransaction()
-        .replace(R.id.fragmentContainer, fragment)
-        .commit()
   }
   
   override fun handleOnDrawerItemClicked(tag: String) {

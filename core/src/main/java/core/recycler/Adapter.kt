@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import core.DisplayableItem
 import kotlin.reflect.KClass
 
 abstract class Adapter(

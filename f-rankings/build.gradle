@@ -11,9 +11,7 @@ android {
 
 dependencies {
   implementation project(":core")
-  implementation project(':storage')
   implementation project(":views")
-  implementation project(":f-common")
 
   implementation 'com.google.android:flexbox:2.0.1'
 

@@ -12,7 +12,6 @@ android {
 dependencies {
   implementation project(":core")
   implementation project(":views")
-  implementation project(":f-common")
 
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin

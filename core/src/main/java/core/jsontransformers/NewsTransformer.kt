@@ -1,6 +1,6 @@
 package core.jsontransformers
 
-import core.datetime.TimeFormatter
+import core.TimeFormatter
 import core.model.NewsItemWithPicture
 import org.json.JSONObject
 import timber.log.Timber

@@ -6,19 +6,20 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
-import core.concurrency.AndroidThreader
+import core.AndroidSchedulers
+import core.Schedulers
 import core.model.Country
 import core.model.CountryOnMap
 
 class MapHelper(
   private val context: Context,
   mapView: MapView,
-  private val onCountrySelected: (Country) -> Unit
+  private val onCountrySelected: (Country) -> Unit,
+  private val schedulers: Schedulers = AndroidSchedulers
 ) {
   
   private val mapHolder = MapHolder()
   private val countriesDrawer = CountriesDrawer(mapHolder, context)
-  private val threader = AndroidThreader
   
   private var currentCountry: CountryOnMap? = null
   private var currentMarker: Marker? = null
@@ -50,9 +51,9 @@ class MapHelper(
   
   private fun initMap(map: GoogleMap) {
     mapHolder.init(map)
-    threader.onBackground {
+    schedulers.io().scheduleDirect {
       val loadRawResourceStyle = MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style)
-      threader.onMainThread {
+      schedulers.mainThread().scheduleDirect {
         map.setMapStyle(loadRawResourceStyle)
         map.uiSettings.isMapToolbarEnabled = false
         map.uiSettings.isRotateGesturesEnabled = false

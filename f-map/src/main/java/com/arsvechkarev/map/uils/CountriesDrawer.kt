@@ -9,8 +9,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import core.concurrency.AndroidThreader
-import core.concurrency.Threader
 import core.extenstions.iterate
 import core.model.CountryOnMap
 import core.viewbuilding.Colors.MapCircleDefault
@@ -23,7 +21,6 @@ import kotlin.math.pow
 class CountriesDrawer(
   private val mapHolder: MapHolder,
   context: Context,
-  private val threader: Threader = AndroidThreader,
 ) {
   
   private val minBitmapSize: Float

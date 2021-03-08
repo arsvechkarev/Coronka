@@ -1,7 +1,7 @@
 package core.extenstions
 
 import core.RxConfigurator
-import core.concurrency.Schedulers
+import core.Schedulers
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 

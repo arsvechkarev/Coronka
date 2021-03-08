@@ -1,35 +1,35 @@
 package com.arsvechkarev.map.presentation
 
-import android.net.ConnectivityManager
-import com.arsvechkarev.common.AllCountriesDataSource
-import com.arsvechkarev.common.CountriesMetaInfoRepository
 import core.BaseScreenState
 import core.Failure
 import core.Loading
 import core.NetworkAvailabilityNotifier
+import core.NetworkListener
 import core.RxViewModel
-import core.concurrency.Schedulers
+import core.Schedulers
+import core.datasources.CountriesMetaInfoDataSource
+import core.datasources.TotalInfoDataSource
 import core.extenstions.withNetworkDelay
 import core.extenstions.withRequestTimeout
 import core.extenstions.withRetry
 import core.model.Country
 import core.model.CountryOnMap
 import core.model.Location
-import core.model.TotalData
+import core.model.TotalInfo
 import io.reactivex.Observable
 
 class MapViewModel(
-  private val allCountriesDataSource: AllCountriesDataSource,
-  private val countriesMetaInfoRepository: CountriesMetaInfoRepository,
+  private val totalInfoDataSource: TotalInfoDataSource,
+  private val countriesMetaInfoDataSource: CountriesMetaInfoDataSource,
   private val networkAvailabilityNotifier: NetworkAvailabilityNotifier,
   private val schedulers: Schedulers
-) : RxViewModel(), ConnectivityManager.OnNetworkActiveListener {
+) : RxViewModel(), NetworkListener {
   
   init {
     networkAvailabilityNotifier.registerListener(this)
   }
   
-  override fun onNetworkActive() {
+  override fun onNetworkAvailable() {
     if (_state.value is Failure) {
       schedulers.mainThread().scheduleDirect(::startLoadingData)
     }
@@ -38,8 +38,8 @@ class MapViewModel(
   fun startLoadingData() {
     rxCall {
       Observable.zip(
-        allCountriesDataSource.getTotalData().subscribeOn(schedulers.io()),
-        countriesMetaInfoRepository.getLocationsMap().subscribeOn(schedulers.io()),
+        totalInfoDataSource.requestTotalInfo().subscribeOn(schedulers.io()),
+        countriesMetaInfoDataSource.getLocationsMap().subscribeOn(schedulers.io()),
         { map, countries -> Pair(map, countries) }
       ).withNetworkDelay(schedulers)
           .withRequestTimeout()
@@ -59,7 +59,7 @@ class MapViewModel(
     }
   }
   
-  private fun transformResult(pair: Pair<TotalData, Map<String, Location>>): BaseScreenState {
+  private fun transformResult(pair: Pair<TotalInfo, Map<String, Location>>): BaseScreenState {
     val map = HashMap<String, CountryOnMap>()
     for (country in pair.first.countries) {
       val location = pair.second[country.iso2] ?: continue

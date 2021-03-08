@@ -1,6 +1,6 @@
 package core.model
 
-import core.recycler.DifferentiableItem
+import core.DifferentiableItem
 
 /**
  * News item with basic information

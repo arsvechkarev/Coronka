@@ -7,9 +7,9 @@ import com.arsvechkarev.coronka.DataProvider.worldCasesData
 import core.WebApi
 import io.reactivex.Observable
 import java.net.UnknownHostException
-import com.arsvechkarev.common.AllCountriesDataSource.Companion.URL as ALL_COUNTIES_URL
-import com.arsvechkarev.common.GeneralInfoDataSource.Companion.URL as GENERAL_INFO_URL
-import com.arsvechkarev.common.WorldCasesInfoRepository.Companion.URL as WORLD_CASES_URL
+import core.datasourcesimpl.GeneralInfoDataSourceImpl.Companion.URL as GENERAL_INFO_URL
+import core.datasourcesimpl.TotalInfoDataSourceImpl.Companion.URL as ALL_COUNTIES_URL
+import core.datasourcesimpl.WorldCasesInfoDataSourceImpl.Companion.URL as WORLD_CASES_URL
 
 object FakeWebApi : WebApi, WebApi.Factory {
   

@@ -1,6 +1,7 @@
 package core.recycler
 
 import androidx.recyclerview.widget.DiffUtil
+import core.DifferentiableItem
 
 /**
  * Callback type for diff util
