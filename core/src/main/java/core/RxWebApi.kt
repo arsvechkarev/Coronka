@@ -5,7 +5,11 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
 
-object RxNetworker : Networker {
+object RxWebApiFactory : WebApi.Factory {
+  override fun create(): WebApi = RxWebApi
+}
+
+object RxWebApi : WebApi {
   
   override fun request(url: String) = Observable.create<String> { emitter ->
     try {

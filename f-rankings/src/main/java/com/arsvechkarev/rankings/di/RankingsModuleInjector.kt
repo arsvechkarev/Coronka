@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.arsvechkarev.common.CoreDiComponent.allCountriesDataSource
 import com.arsvechkarev.common.CoreDiComponent.metaInfoRepository
+import com.arsvechkarev.common.CoreDiComponent.networkAvailabilityNotifier
 import com.arsvechkarev.rankings.list.RankingsAdapter
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.rankings.presentation.RankingsViewModel
@@ -25,7 +26,7 @@ object RankingsModuleInjector {
       return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
           return RankingsViewModel(allCountriesDataSource, metaInfoRepository,
-            AndroidSchedulers) as T
+            networkAvailabilityNotifier, AndroidSchedulers) as T
         }
       }
     }

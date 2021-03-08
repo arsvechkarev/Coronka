@@ -1,27 +1,23 @@
 package com.arsvechkarev.storage.countries
 
+import android.content.Context
 import android.database.Cursor
+import com.arsvechkarev.storage.AssetsDatabase
+import com.arsvechkarev.storage.Database
 
-/**
- * Database with countries meta information: iso2, population, world region, latitude and longitude
- */
-interface CountriesMetaInfoDatabase {
+class CountriesMetaInfoDatabase(context: Context) :
+  AssetsDatabase(context, DATABASE_NAME, DATABASE_VERSION), Database {
   
-  /**
-   * Queries given [sql] synchronously, applies received cursor to function
-   * and returns value [T]
-   */
-  fun <T> query(sql: String, converter: Cursor.() -> T): T
+  override fun <T> query(sql: String, converter: Cursor.() -> T): T {
+    createDatabaseIfNeeded()
+    readableDatabase.use { database ->
+      return database.rawQuery(sql, null).use(converter)
+    }
+  }
   
-  /** A schema for database */
   companion object {
     
-    const val TABLE_NAME = "countries_meta_info"
-    
-    const val iso2 = "iso2"
-    const val population = "population"
-    const val world_region = "world_region"
-    const val lat = "lat"
-    const val lng = "lng"
+    private const val DATABASE_VERSION = 1
+    private const val DATABASE_NAME = "countries_meta_info.db"
   }
 }

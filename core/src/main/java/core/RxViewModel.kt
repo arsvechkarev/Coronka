@@ -7,7 +7,6 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import java.util.concurrent.CopyOnWriteArraySet
 
 abstract class RxViewModel : ViewModel() {
   
@@ -17,7 +16,7 @@ abstract class RxViewModel : ViewModel() {
   
   protected val compositeDisposable = CompositeDisposable()
   
-  protected val loadingNowList = CopyOnWriteArraySet<String>()
+  protected val loadingNowList = ArrayList<String>()
   
   protected fun rxCall(onSubscribe: () -> Disposable?) {
     rxCall(DEFAULT_LOADING_CONSTANT, onSubscribe)

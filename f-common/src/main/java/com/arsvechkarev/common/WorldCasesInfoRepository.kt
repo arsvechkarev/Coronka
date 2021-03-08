@@ -1,14 +1,14 @@
 package com.arsvechkarev.common
 
-import core.Networker
+import core.WebApi
 import core.jsontransformers.WorldCasesInfoTransformer
 import core.model.DailyCase
 import io.reactivex.Observable
 
-class WorldCasesInfoRepository(private val networker: Networker) {
+class WorldCasesInfoRepository(private val webApi: WebApi) {
   
   fun getWorldDailyTotalCases(): Observable<List<DailyCase>> {
-    return networker.request(URL).map(WorldCasesInfoTransformer::toDailyCases)
+    return webApi.request(URL).map(WorldCasesInfoTransformer::toDailyCases)
   }
   
   companion object {

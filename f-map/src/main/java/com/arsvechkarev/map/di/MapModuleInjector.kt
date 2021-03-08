@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.arsvechkarev.common.CoreDiComponent.allCountriesDataSource
 import com.arsvechkarev.common.CoreDiComponent.metaInfoRepository
+import com.arsvechkarev.common.CoreDiComponent.networkAvailabilityNotifier
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.map.presentation.MapViewModel
 import core.concurrency.AndroidSchedulers
@@ -19,7 +20,8 @@ object MapModuleInjector {
     get() {
       return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-          return MapViewModel(allCountriesDataSource, metaInfoRepository, AndroidSchedulers) as T
+          return MapViewModel(allCountriesDataSource, metaInfoRepository,
+            networkAvailabilityNotifier, AndroidSchedulers) as T
         }
       }
     }

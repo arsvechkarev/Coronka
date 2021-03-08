@@ -9,6 +9,7 @@ import android.animation.ObjectAnimator
 import android.graphics.drawable.Animatable
 import android.view.View
 import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.OvershootInterpolator
@@ -47,11 +48,15 @@ fun Animator.doOnEnd(block: () -> Unit) {
   })
 }
 
-fun View.animateVisible(andThen: () -> Unit = {}) {
-  if (alpha == 1f && visibility == View.VISIBLE) {
+fun View.animateVisibleIfNotAlready(andThen: () -> Unit = {}) {
+  if (visibility == VISIBLE) {
     andThen()
     return
   }
+  animateVisible(andThen)
+}
+
+fun View.animateVisible(andThen: () -> Unit = {}) {
   alpha = 0f
   visible()
   animate().alpha(1f).setDuration(DURATION_DEFAULT)
@@ -60,11 +65,15 @@ fun View.animateVisible(andThen: () -> Unit = {}) {
       .start()
 }
 
-fun View.animateInvisible(andThen: () -> Unit = {}) {
+fun View.animateInvisibleIfNotAlready(andThen: () -> Unit = {}) {
   if (visibility == INVISIBLE) {
     andThen()
     return
   }
+  animateInvisible(andThen)
+}
+
+fun View.animateInvisible(andThen: () -> Unit = {}) {
   animate().alpha(0f).setDuration(DURATION_DEFAULT)
       .setInterpolator(AccelerateDecelerateInterpolator)
       .withEndAction {

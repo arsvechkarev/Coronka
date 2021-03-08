@@ -1,14 +1,14 @@
 package com.arsvechkarev.common
 
-import core.Networker
+import core.WebApi
 import core.jsontransformers.GeneralInfoTransformer
 import core.model.GeneralInfo
 import io.reactivex.Observable
 
-class GeneralInfoDataSource(private val networker: Networker) {
+class GeneralInfoDataSource(private val webApi: WebApi) {
   
   fun getGeneralInfo(): Observable<GeneralInfo> {
-    return networker.request(URL).map(GeneralInfoTransformer::toGeneralInfo)
+    return webApi.request(URL).map(GeneralInfoTransformer::toGeneralInfo)
   }
   
   companion object {

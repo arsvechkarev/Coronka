@@ -63,14 +63,6 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     initClickListeners()
   }
   
-  override fun onNetworkAvailable() {
-    val viewModel = viewModel ?: return
-    val value = viewModel.state.value ?: return
-    if (value !is LoadedWorldCasesInfo) {
-      viewModel.startLoadingData()
-    }
-  }
-  
   override fun onDrawerOpened() = toggleScrollingContent(false)
   
   override fun onDrawerClosed() {
@@ -98,7 +90,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   private fun handleState(state: BaseScreenState) {
     when (state) {
       is Loading -> {
-        renderLoading()
+        updateContentView(putLoading = true)
       }
       is LoadedWorldCasesInfo -> {
         hostActivity.enableTouchesOnDrawer()
@@ -110,10 +102,6 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
         renderFailure(state)
       }
     }
-  }
-  
-  private fun renderLoading() {
-    updateContentView(putLoading = true)
   }
   
   private fun renderCharts(info: WorldCasesInfo) {

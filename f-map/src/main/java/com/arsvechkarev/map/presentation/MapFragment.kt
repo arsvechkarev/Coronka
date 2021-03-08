@@ -52,15 +52,9 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
     (mapIconDrawer.layoutParams as MarginLayoutParams).topMargin += statusBarHeight
   }
   
-  override fun onAppearedOnScreen() {
-    hostActivity.disableTouchesOnDrawer()
-  }
-  
-  override fun onNetworkAvailable() {
-    val viewModel = viewModel ?: return
-    val value = viewModel.state.value ?: return
-    if (value !is Loading && value !is FoundCountry && value !is LoadedCountries) {
-      viewModel.startLoadingData()
+  override fun onHiddenChanged(hidden: Boolean) {
+    if (!hidden) {
+      hostActivity.disableTouchesOnDrawer()
     }
   }
   

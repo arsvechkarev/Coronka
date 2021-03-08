@@ -1,11 +1,9 @@
 package com.arsvechkarev.coronka.di
 
 import androidx.fragment.app.Fragment
-import com.arsvechkarev.coronka.MainNavigator
 import com.arsvechkarev.coronka.presentation.MainActivity
-import core.ConnectivityObserver
+import com.arsvechkarev.coronka.presentation.MainNavigator
 import core.Navigator
-import core.extenstions.connectivityManager
 
 object MainModuleInjector {
   
@@ -18,18 +16,6 @@ object MainModuleInjector {
       activity.supportFragmentManager,
       activity.window.decorView.findViewWithTag(drawerLayoutTag),
       onFragmentAppeared
-    )
-  }
-  
-  fun provideConnectivityObserver(
-    activity: MainActivity,
-    navigator: Navigator,
-  ): ConnectivityObserver {
-    return ConnectivityObserver(
-      activity.connectivityManager,
-      onNetworkAvailable = {
-        navigator.currentFragment?.onNetworkAvailable()
-      }
     )
   }
 }

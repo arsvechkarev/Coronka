@@ -34,7 +34,6 @@ class MainActivity : BaseActivity(), HostActivity {
       setSelectedMenuItem(it)
     }
     lifecycle.addObserver(navigator)
-    lifecycle.addObserver(MainModuleInjector.provideConnectivityObserver(this, navigator))
     initListeners()
     goToMainFragment()
   }

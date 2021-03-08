@@ -1,15 +1,18 @@
 package com.arsvechkarev.rankings.presentation
 
+import android.net.ConnectivityManager
 import com.arsvechkarev.common.AllCountriesDataSource
 import com.arsvechkarev.common.CountriesMetaInfoRepository
 import core.BaseScreenState
 import core.Failure
 import core.Loading
+import core.NetworkAvailabilityNotifier
 import core.RxViewModel
 import core.concurrency.Schedulers
 import core.extenstions.f
 import core.extenstions.withNetworkDelay
 import core.extenstions.withRequestTimeout
+import core.extenstions.withRetry
 import core.model.CountryMetaInfo
 import core.model.DisplayableCountry
 import core.model.OptionType
@@ -20,16 +23,28 @@ import io.reactivex.Observable
 class RankingsViewModel(
   private val allCountriesDataSource: AllCountriesDataSource,
   private val metaInfoRepository: CountriesMetaInfoRepository,
+  private val networkAvailabilityNotifier: NetworkAvailabilityNotifier,
   private val schedulers: Schedulers
-) : RxViewModel() {
+) : RxViewModel(), ConnectivityManager.OnNetworkActiveListener {
   
   private lateinit var countriesFilterer: CountriesFilterer
   private lateinit var countriesMetaInfo: Map<String, CountryMetaInfo>
+  
+  init {
+    networkAvailabilityNotifier.registerListener(this)
+  }
+  
+  override fun onNetworkActive() {
+    if (_state.value is Failure) {
+      schedulers.mainThread().scheduleDirect(::startLoadingData)
+    }
+  }
   
   fun startLoadingData() {
     rxCall {
       allCountriesDataSource.getTotalData()
           .subscribeOn(schedulers.io())
+          .withRetry()
           .withNetworkDelay(schedulers)
           .withRequestTimeout()
           .map(::transformToScreenState)
@@ -67,5 +82,9 @@ class RankingsViewModel(
     val optionType = OptionType.CONFIRMED
     val data = countriesFilterer.filter(optionType, worldRegion)
     return LoadedCountries(data)
+  }
+  
+  override fun onCleared() {
+    networkAvailabilityNotifier.unregisterListener(this)
   }
 }

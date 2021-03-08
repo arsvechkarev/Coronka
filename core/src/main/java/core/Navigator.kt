@@ -6,8 +6,6 @@ import kotlin.reflect.KClass
 
 interface Navigator : LifecycleObserver {
   
-  val currentFragment: BaseFragment?
-  
   fun switchTo(fragmentClass: KClass<out BaseFragment>)
   
   fun navigateTo(fragmentClass: KClass<out BaseFragment>, data: Bundle? = null)

@@ -2,7 +2,8 @@ package com.arsvechkarev.news.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.arsvechkarev.common.CoreDiComponent.networker
+import com.arsvechkarev.common.CoreDiComponent.networkAvailabilityNotifier
+import com.arsvechkarev.common.CoreDiComponent.webApi
 import com.arsvechkarev.common.NewYorkTimesNewsRepository
 import com.arsvechkarev.news.BuildConfig
 import com.arsvechkarev.news.presentation.NewsFragment
@@ -21,8 +22,8 @@ object NewsModuleInjector {
       return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
           val formatter = EnglishTimeFormatter
-          val repository = NewYorkTimesNewsRepository(networker, formatter, BuildConfig.NYT_API_KEY)
-          return NewsViewModel(repository, AndroidSchedulers) as T
+          val repository = NewYorkTimesNewsRepository(webApi, formatter, BuildConfig.NYT_API_KEY)
+          return NewsViewModel(repository, networkAvailabilityNotifier, AndroidSchedulers) as T
         }
       }
     }

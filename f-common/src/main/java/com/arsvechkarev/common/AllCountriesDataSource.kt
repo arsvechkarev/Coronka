@@ -1,14 +1,14 @@
 package com.arsvechkarev.common
 
-import core.Networker
+import core.WebApi
 import core.jsontransformers.AllCountriesTransformer
 import core.model.TotalData
 import io.reactivex.Observable
 
-class AllCountriesDataSource(private val networker: Networker) {
+class AllCountriesDataSource(private val webApi: WebApi) {
   
   fun getTotalData(): Observable<TotalData> {
-    return networker.request(URL).map(AllCountriesTransformer::toTotalData)
+    return webApi.request(URL).map(AllCountriesTransformer::toTotalData)
   }
   
   companion object {

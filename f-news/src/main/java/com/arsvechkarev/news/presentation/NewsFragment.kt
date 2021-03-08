@@ -20,6 +20,7 @@ import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
 import com.arsvechkarev.viewdsl.Size.IntSize
 import com.arsvechkarev.viewdsl.animateInvisible
 import com.arsvechkarev.viewdsl.animateVisible
+import com.arsvechkarev.viewdsl.animateVisibleIfNotAlready
 import com.arsvechkarev.viewdsl.background
 import com.arsvechkarev.viewdsl.behavior
 import com.arsvechkarev.viewdsl.gone
@@ -145,12 +146,6 @@ class NewsFragment : BaseFragment() {
     }
   }
   
-  override fun onNetworkAvailable() {
-    if (viewModel != null && viewModel?.state?.value is Failure) {
-      viewModel!!.startLoadingData()
-    }
-  }
-  
   override fun onOrientationBecameLandscape() {
     view(ImageFailure).gone()
   }
@@ -175,7 +170,7 @@ class NewsFragment : BaseFragment() {
   }
   
   private fun renderLoading() {
-    view(LoadingLayout).animateVisible()
+    view(LoadingLayout).animateVisibleIfNotAlready()
     animateInvisible(view(RecyclerView), view(ErrorLayout))
   }
   
@@ -204,8 +199,8 @@ class NewsFragment : BaseFragment() {
     }
   }
   
-  private companion object {
-  
+  companion object {
+    
     const val LoadingLayout = "NewsLoadingLayout"
     const val ErrorLayout = "NewsErrorLayout"
     const val RecyclerView = "NewsRecyclerView"

@@ -2,14 +2,14 @@ package com.arsvechkarev.coronka
 
 import android.util.Log
 import timber.log.Timber
-import com.arsvechkarev.common.CommonModulesSingletons
+import com.arsvechkarev.common.CoreDiComponent
 
 class CoronkaApplication : CoronkaBaseApplication() {
   
   override fun onCreate() {
     super.onCreate()
     Timber.plant(ReleaseTree)
-    CommonModulesSingletons.initDefault(applicationContext)
+    CoreDiComponent.initDefault(applicationContext)
   }
   
   object ReleaseTree : Timber.Tree() {

@@ -11,14 +11,13 @@ import core.extenstions.toFormattedNumber
 import core.extenstions.toFormattedTextLabelDate
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class StatsTest {
   
   @get:Rule
-  val chain: RuleChain = RuleChain.outerRule(ActivityTestRule(MainActivity::class.java))
+  val rule = ActivityTestRule(MainActivity::class.java)
   
   @Test
   fun test_displaying_stats() {

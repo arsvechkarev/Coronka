@@ -1,6 +1,6 @@
 package com.arsvechkarev.common
 
-import core.Networker
+import core.WebApi
 import core.datetime.TimeFormatter
 import core.jsontransformers.NewsTransformer.toNewsItems
 import core.model.NewsItemWithPicture
@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import timber.log.Timber
 
 class NewYorkTimesNewsRepository(
-  private val networker: Networker,
+  private val webApi: WebApi,
   private val formatter: TimeFormatter,
   nytApiKey: String
 ) {
@@ -20,6 +20,6 @@ class NewYorkTimesNewsRepository(
   fun getLatestNews(page: Int): Observable<List<NewsItemWithPicture>> {
     val url = baseUrl + page.toString()
     Timber.d("Loading page $page")
-    return networker.request(url).map { json -> toNewsItems(formatter, json) }
+    return webApi.request(url).map { json -> toNewsItems(formatter, json) }
   }
 }

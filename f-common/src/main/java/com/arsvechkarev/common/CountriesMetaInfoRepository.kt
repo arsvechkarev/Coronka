@@ -1,12 +1,12 @@
 package com.arsvechkarev.common
 
-import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase
-import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase.Companion.TABLE_NAME
-import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase.Companion.iso2
-import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase.Companion.lat
-import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase.Companion.lng
-import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase.Companion.population
-import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabase.Companion.world_region
+import com.arsvechkarev.storage.Database
+import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseSchema.TABLE_NAME
+import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseSchema.iso2
+import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseSchema.lat
+import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseSchema.lng
+import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseSchema.population
+import com.arsvechkarev.storage.countries.CountriesMetaInfoDatabaseSchema.world_region
 import core.extenstions.collectToMap
 import core.extenstions.intOfColumn
 import core.extenstions.stringOfColumn
@@ -15,7 +15,7 @@ import core.model.Location
 import io.reactivex.Observable
 
 class CountriesMetaInfoRepository(
-  private val database: CountriesMetaInfoDatabase
+  private val database: Database
 ) {
   
   fun getCountriesMetaInfoSync() = database.query(

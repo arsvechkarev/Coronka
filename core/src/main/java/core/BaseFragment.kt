@@ -51,10 +51,6 @@ abstract class BaseFragment(
   
   open fun buildLayout(): View? = null
   
-  open fun onAppearedOnScreen() = Unit
-  
-  open fun onNetworkAvailable() = Unit
-  
   open fun onDrawerOpened() = Unit
   
   open fun onDrawerClosed() = Unit

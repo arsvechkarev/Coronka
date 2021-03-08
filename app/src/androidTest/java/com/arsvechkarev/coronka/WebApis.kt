@@ -4,13 +4,16 @@ import com.arsvechkarev.coronka.DataProvider.allCountriesData
 import com.arsvechkarev.coronka.DataProvider.generalInfoData
 import com.arsvechkarev.coronka.DataProvider.newsData
 import com.arsvechkarev.coronka.DataProvider.worldCasesData
-import core.Networker
+import core.WebApi
 import io.reactivex.Observable
+import java.net.UnknownHostException
 import com.arsvechkarev.common.AllCountriesDataSource.Companion.URL as ALL_COUNTIES_URL
 import com.arsvechkarev.common.GeneralInfoDataSource.Companion.URL as GENERAL_INFO_URL
 import com.arsvechkarev.common.WorldCasesInfoRepository.Companion.URL as WORLD_CASES_URL
 
-object FakeNetworker : Networker {
+object FakeWebApi : WebApi, WebApi.Factory {
+  
+  override fun create(): WebApi = FakeWebApi
   
   override fun request(url: String): Observable<String> = when {
     url == ALL_COUNTIES_URL -> Observable.just(allCountriesData)
@@ -19,4 +22,21 @@ object FakeNetworker : Networker {
     url.startsWith("https://api.nytimes.com") -> Observable.just(newsData)
     else -> throw IllegalStateException()
   }
+}
+
+class RetryCountWebApi(private val retryCount: Int) : WebApi {
+  
+  private var errors = 0
+  
+  override fun request(url: String): Observable<String> {
+    if (errors < retryCount) {
+      errors++
+      return Observable.error(UnknownHostException())
+    }
+    return FakeWebApi.request(url)
+  }
+}
+
+class RetryCountWebApiFactory(private val retryCount: Int) : WebApi.Factory {
+  override fun create(): WebApi = RetryCountWebApi(retryCount)
 }

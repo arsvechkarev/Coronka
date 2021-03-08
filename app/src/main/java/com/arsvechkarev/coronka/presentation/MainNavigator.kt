@@ -1,4 +1,4 @@
-package com.arsvechkarev.coronka
+package com.arsvechkarev.coronka.presentation
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,11 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.arsvechkarev.coronka.presentation.TextMap
-import com.arsvechkarev.coronka.presentation.TextNews
-import com.arsvechkarev.coronka.presentation.TextRankings
-import com.arsvechkarev.coronka.presentation.TextStatistics
-import com.arsvechkarev.coronka.presentation.TextTips
+import com.arsvechkarev.coronka.R
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.rankings.presentation.RankingsFragment
@@ -27,42 +23,41 @@ class MainNavigator(
   private var onFragmentAppeared: (Fragment) -> Unit
 ) : Navigator, LifecycleObserver {
   
-  private val fragments = HashMap<KClass<out BaseFragment>, BaseFragment>()
-  private val stack = ArrayList<BaseFragment>()
+  private val stack = ArrayList<String>() // Stack of current fragment names
   
-  override var currentFragment: BaseFragment? = null
+  private var currentFragment: BaseFragment? = null
   
   override fun switchTo(fragmentClass: KClass<out BaseFragment>) {
-    val supportFragmentManager = supportFragmentManager ?: return
+    val fragmentManager = supportFragmentManager ?: return
     val drawerLayout = drawerLayout ?: return
     if (currentFragment?.javaClass?.name == fragmentClass.java.name) {
       return
     }
-    val fragment = fragments[fragmentClass] ?: fragmentClass.java.newInstance()
-    fragments[fragmentClass] = fragment
-    val transaction = supportFragmentManager.beginTransaction()
+    val tag = fragmentClass.java.name
+    val fragment = fragmentManager.findFragmentByTag(tag) ?: fragmentClass.java.newInstance()
+    val transaction = fragmentManager.beginTransaction()
+    val fragmentName = fragment.getNameForStack()
     if (currentFragment != null) {
       drawerLayout.removeOpenCloseListener(currentFragment!!.drawerOpenCloseListener)
       transaction.hide(currentFragment!!)
       if (!fragment.isAdded) {
-        stack.add(fragment)
-        transaction.add(R.id.fragmentContainer, fragment)
+        stack.add(fragmentName)
+        transaction.add(R.id.fragmentContainer, fragment, fragmentName)
       } else {
-        if (stack.contains(fragment)) {
-          stack.swap(stack.indexOf(fragment), stack.indexOf(currentFragment!!))
+        if (stack.contains(fragmentName)) {
+          stack.swap(fragmentName, currentFragment!!.getNameForStack())
         } else {
-          stack.add(fragment)
+          stack.add(fragmentName)
         }
         transaction.show(fragment)
       }
     } else {
-      stack.add(fragment)
-      transaction.replace(R.id.fragmentContainer, fragment)
+      stack.add(fragmentName)
+      transaction.add(R.id.fragmentContainer, fragment, fragmentName)
     }
-    drawerLayout.addOpenCloseListener(fragment.drawerOpenCloseListener)
+    drawerLayout.addOpenCloseListener((fragment as BaseFragment).drawerOpenCloseListener)
     transaction.runOnCommit {
       drawerLayout.respondToTouches = true
-      fragment.onAppearedOnScreen()
     }
     transaction.commit()
     currentFragment = fragment
@@ -93,13 +88,13 @@ class MainNavigator(
     if (stack.isEmpty()) return true
     if (currentFragment?.allowBackPress() == true) {
       if (stack.size == 1) return true
-      val last = stack.removeLast()
       val fragmentManager = supportFragmentManager ?: return true
-      val newLast = stack.last()
-      currentFragment = newLast
-      onFragmentAppeared(newLast)
+      val last = fragmentManager.getFragmentByName(stack.removeLast()) ?: return true
+      val newFragment = fragmentManager.getFragmentByName(stack.last()) ?: return true
+      currentFragment = newFragment
+      onFragmentAppeared(newFragment)
       fragmentManager.beginTransaction()
-          .show(newLast)
+          .show(newFragment)
           .hide(last)
           .commit()
     }
@@ -111,9 +106,18 @@ class MainNavigator(
     drawerLayout = null
     supportFragmentManager = null
     onFragmentAppeared = {}
+    currentFragment = null
   }
   
-  private fun <T> ArrayList<T>.swap(i: Int, j: Int) {
+  private fun Fragment.getNameForStack() = this::class.java.name
+  
+  private fun FragmentManager.getFragmentByName(fragmentClassName: String): BaseFragment? {
+    return fragments.find { it.getNameForStack() == fragmentClassName } as? BaseFragment
+  }
+  
+  private fun <T> ArrayList<T>.swap(e1: T, e2: T) {
+    val i = indexOf(e1)
+    val j = indexOf(e2)
     val temp = this[i]
     this[i] = this[j]
     this[j] = temp

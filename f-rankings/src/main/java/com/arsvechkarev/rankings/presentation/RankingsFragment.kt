@@ -102,14 +102,6 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     rankingsDialog.setPadding(0, requireContext().statusBarHeight, 0, 0)
   }
   
-  override fun onNetworkAvailable() {
-    val viewModel = viewModel ?: return
-    val value = viewModel.state.value ?: return
-    if (value !is LoadedCountries && value !is FilteredCountries) {
-      viewModel.startLoadingData()
-    }
-  }
-  
   override fun onDrawerOpened() = toggleItems(false)
   
   override fun onDrawerClosed() = toggleItems(true)
