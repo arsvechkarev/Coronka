@@ -40,15 +40,15 @@ class NewsViewModel(
           .withNetworkDelay(schedulers)
           .withRequestTimeout()
           .observeOn(schedulers.mainThread())
-          .startWith(Loading())
           .withRetry()
+          .startWith(Loading())
           .onErrorReturn(::Failure)
           .smartSubscribe(_state::setValue)
     }
   }
   
   fun tryLoadNextPage() {
-    if (currentPage >= 100) return
+    if (currentPage >= newsDataSource.maxPages) return
     rxCall {
       newsDataSource.requestLatestNews(++currentPage)
           .subscribeOn(schedulers.io())
@@ -56,8 +56,8 @@ class NewsViewModel(
           .withNetworkDelay(schedulers)
           .withRequestTimeout()
           .observeOn(schedulers.mainThread())
-          .startWith(LoadingNextPage)
           .withRetry()
+          .startWith(LoadingNextPage)
           .onErrorReturn { e ->
             currentPage--
             FailureLoadingNextPage(e)

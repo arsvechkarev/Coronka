@@ -14,8 +14,7 @@ import core.extenstions.withRequestTimeout
 import core.extenstions.withRetry
 import core.model.Country
 import core.model.CountryOnMap
-import core.model.Location
-import core.model.TotalInfo
+import core.transformers.MapTransformer
 import io.reactivex.Observable
 
 class MapViewModel(
@@ -43,12 +42,14 @@ class MapViewModel(
         { map, countries -> Pair(map, countries) }
       ).withNetworkDelay(schedulers)
           .withRequestTimeout()
-          .map(::transformResult)
+          .map<BaseScreenState> { LoadedCountries(MapTransformer.transformResult(it)) }
           .withRetry()
           .onErrorReturn(::Failure)
           .startWith(Loading())
           .observeOn(schedulers.mainThread())
-          .smartSubscribe(_state::setValue)
+          .smartSubscribe {
+            _state.setValue(it)
+          }
     }
   }
   
@@ -57,15 +58,6 @@ class MapViewModel(
       is LoadedCountries -> notifyFoundCountry(state.iso2ToCountryMap, country)
       is FoundCountry -> notifyFoundCountry(state.iso2ToCountryMap, country)
     }
-  }
-  
-  private fun transformResult(pair: Pair<TotalInfo, Map<String, Location>>): BaseScreenState {
-    val map = HashMap<String, CountryOnMap>()
-    for (country in pair.first.countries) {
-      val location = pair.second[country.iso2] ?: continue
-      map[country.iso2] = CountryOnMap(country, location)
-    }
-    return LoadedCountries(map)
   }
   
   private fun notifyFoundCountry(

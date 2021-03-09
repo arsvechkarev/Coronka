@@ -2,14 +2,14 @@ package com.arsvechkarev.coronka
 
 import androidx.test.platform.app.InstrumentationRegistry
 import core.datetime.EnglishTimeFormatter
-import core.jsontransformers.AllCountriesTransformer
-import core.jsontransformers.GeneralInfoTransformer
-import core.jsontransformers.NewsTransformer
-import core.jsontransformers.WorldCasesInfoTransformer
 import core.model.DailyCase
 import core.model.GeneralInfo
 import core.model.NewsItemWithPicture
 import core.model.TotalInfo
+import core.transformers.AllCountriesTransformer
+import core.transformers.GeneralInfoTransformer
+import core.transformers.NewsTransformer
+import core.transformers.WorldCasesInfoTransformer
 
 object DataProvider {
   

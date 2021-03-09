@@ -36,4 +36,6 @@ dependencies {
   implementation dependencies.threeTenAbp
   implementation dependencies.glide
   kapt dependencies.glideApt
+
+  testImplementation project(":test-common")
 }

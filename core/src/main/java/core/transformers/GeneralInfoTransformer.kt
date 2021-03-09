@@ -1,4 +1,4 @@
-package core.jsontransformers
+package core.transformers
 
 import core.model.GeneralInfo
 import org.json.JSONObject

@@ -6,9 +6,7 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 fun <T> Observable<T>.withRetry(): Observable<T> {
-  val retryCount = RxConfigurator.retryCount
-  if (retryCount == 0L) return this
-  return retry(retryCount)
+  return retry(RxConfigurator.retryCount)
 }
 
 fun <T> Observable<T>.withNetworkDelay(schedulers: Schedulers): Observable<T> {

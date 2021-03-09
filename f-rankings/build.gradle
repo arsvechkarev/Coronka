@@ -13,14 +13,15 @@ dependencies {
   implementation project(":core")
   implementation project(":views")
 
-  implementation 'com.google.android:flexbox:2.0.1'
-
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
   implementation dependencies.appCompat
   implementation dependencies.coordinatorLayout
   implementation dependencies.constraintLayout
+  implementation dependencies.flexboxLayout
   implementation dependencies.lifecycleExtensions
   implementation dependencies.recyclerView
   implementation dependencies.rxJava
+
+  testImplementation project(":test-common")
 }

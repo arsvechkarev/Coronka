@@ -9,6 +9,7 @@ import core.AndroidSchedulers
 import core.CoreDiComponent.countriesMetaInfoDataSource
 import core.CoreDiComponent.networkAvailabilityNotifier
 import core.CoreDiComponent.totalInfoDataSource
+import core.CountriesFiltererImpl
 import core.model.DisplayableCountry
 
 object RankingsModuleInjector {
@@ -21,13 +22,17 @@ object RankingsModuleInjector {
     return RankingsAdapter(onClick)
   }
   
+  @Suppress("UNCHECKED_CAST")
   private val rankingsViewModelFactory: ViewModelProvider.Factory
     get() {
       return object : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-          return RankingsViewModel(totalInfoDataSource, countriesMetaInfoDataSource,
-            networkAvailabilityNotifier, AndroidSchedulers) as T
-        }
+        override fun <T : ViewModel?> create(modelClass: Class<T>) = RankingsViewModel(
+          totalInfoDataSource,
+          countriesMetaInfoDataSource,
+          CountriesFiltererImpl(),
+          networkAvailabilityNotifier,
+          AndroidSchedulers
+        ) as T
       }
     }
 }

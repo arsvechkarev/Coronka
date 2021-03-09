@@ -20,4 +20,6 @@ dependencies {
   implementation dependencies.lifecycleExtensions
   implementation dependencies.googleMaps
   implementation dependencies.rxJava
+
+  testImplementation project(":test-common")
 }

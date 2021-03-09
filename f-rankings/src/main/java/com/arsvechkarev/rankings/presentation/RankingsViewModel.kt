@@ -1,6 +1,7 @@
 package com.arsvechkarev.rankings.presentation
 
 import core.BaseScreenState
+import core.CountriesFilterer
 import core.Failure
 import core.Loading
 import core.NetworkAvailabilityNotifier
@@ -23,12 +24,14 @@ import io.reactivex.Observable
 class RankingsViewModel(
   private val totalInfoDataSource: TotalInfoDataSource,
   private val countriesMetaInfoDataSource: CountriesMetaInfoDataSource,
+  private val countriesFilterer: CountriesFilterer,
   private val networkAvailabilityNotifier: NetworkAvailabilityNotifier,
   private val schedulers: Schedulers
 ) : RxViewModel(), NetworkListener {
   
-  private lateinit var countriesFilterer: CountriesFilterer
-  private lateinit var countriesMetaInfo: Map<String, CountryMetaInfo>
+  private val countriesMetaInfo: Map<String, CountryMetaInfo> by lazy {
+    countriesMetaInfoDataSource.getCountriesMetaInfoSync()
+  }
   
   init {
     networkAvailabilityNotifier.registerListener(this)
@@ -44,9 +47,9 @@ class RankingsViewModel(
     rxCall {
       totalInfoDataSource.requestTotalInfo()
           .subscribeOn(schedulers.io())
-          .withRetry()
           .withNetworkDelay(schedulers)
           .withRequestTimeout()
+          .withRetry()
           .map(::transformToScreenState)
           .onErrorReturn(::Failure)
           .startWith(Loading())
@@ -55,10 +58,10 @@ class RankingsViewModel(
     }
   }
   
-  fun filter(optionType: OptionType, worldRegion: WorldRegion) {
+  fun filter(worldRegion: WorldRegion, optionType: OptionType) {
     rxCall {
       Observable.fromCallable {
-        countriesFilterer.filter(optionType, worldRegion)
+        countriesFilterer.filter(worldRegion, optionType)
       }.subscribeOn(schedulers.computation())
           .observeOn(schedulers.mainThread())
           .smartSubscribe { list -> _state.value = FilteredCountries(list) }
@@ -76,15 +79,22 @@ class RankingsViewModel(
   }
   
   private fun transformToScreenState(totalInfo: TotalInfo): BaseScreenState {
-    countriesMetaInfo = countriesMetaInfoDataSource.getCountriesMetaInfoSync()
-    countriesFilterer = CountriesFilterer(totalInfo.countries, countriesMetaInfo)
-    val worldRegion = WorldRegion.WORLDWIDE
-    val optionType = OptionType.CONFIRMED
-    val data = countriesFilterer.filter(optionType, worldRegion)
+    val data = countriesFilterer.filterInitial(
+      totalInfo.countries,
+      countriesMetaInfo,
+      DefaultWorldRegion,
+      DefaultOptionType
+    )
     return LoadedCountries(data)
   }
   
   override fun onCleared() {
     networkAvailabilityNotifier.unregisterListener(this)
+  }
+  
+  companion object {
+    
+    val DefaultWorldRegion = WorldRegion.WORLDWIDE
+    val DefaultOptionType = OptionType.CONFIRMED
   }
 }

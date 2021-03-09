@@ -5,9 +5,9 @@ import android.net.ConnectivityManager
 import core.database.CountriesMetaInfoDatabase
 import core.database.Database
 import core.datasources.CountriesMetaInfoDataSource
+import core.datasources.CountriesMetaInfoDataSourceImpl
 import core.datasources.TotalInfoDataSource
-import core.datasourcesimpl.CountriesMetaInfoDataSourceImpl
-import core.datasourcesimpl.TotalInfoDataSourceImpl
+import core.datasources.TotalInfoDataSourceImpl
 
 object CoreDiComponent {
   

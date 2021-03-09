@@ -249,8 +249,8 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     val groupOptionTypes = ChipGroup(chipConfirmed, chipRecovered, chipDeaths,
       chipPercentByCountry, chipDeathRate)
     chipHelper = ChipHelper(groupOptionTypes, groupWorldRegions,
-      onNewChipSelected = { optionType, worldRegion ->
-        viewModel!!.filter(optionType, worldRegion)
+      onNewChipSelected = { worldRegion, optionType ->
+        viewModel!!.filter(worldRegion, optionType)
       },
       onOptionTypeChipSelected = { chip ->
         rankingsChipOptionType.text = chip.text

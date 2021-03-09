@@ -49,7 +49,6 @@ class RankingsTest {
   
   @Test
   fun test_filtering() {
-    
     val allCountries = DataProvider.getTotalData().countries
     val countryWithMostRecovered = allCountries.maxByOrNull { it.recovered }!!
     val countryWithLeastRecovered = allCountries.minByOrNull { it.recovered }!!

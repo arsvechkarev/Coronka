@@ -181,7 +181,7 @@ class NewsFragment : BaseFragment() {
   }
   
   private fun renderLoadedNextPage(state: LoadedNextPage) {
-    newsAdapter.removeLastAndAdd(state.news)
+    newsAdapter.removeLastAndAdd(state.newNews)
   }
   
   private fun renderFailureLoadingNextPage() {

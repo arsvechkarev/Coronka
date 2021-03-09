@@ -8,7 +8,7 @@ import com.arsvechkarev.news.presentation.NewsViewModel
 import core.AndroidSchedulers
 import core.CoreDiComponent.networkAvailabilityNotifier
 import core.CoreDiComponent.webApi
-import core.datasourcesimpl.NewYorkTimesNewsDataSourceImpl
+import core.datasources.NewYorkTimesNewsDataSourceImpl
 import core.datetime.EnglishTimeFormatter
 
 object NewsModuleInjector {

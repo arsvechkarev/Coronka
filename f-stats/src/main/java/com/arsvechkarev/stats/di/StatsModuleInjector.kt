@@ -7,8 +7,8 @@ import com.arsvechkarev.stats.presentation.StatsViewModel
 import core.AndroidSchedulers
 import core.CoreDiComponent.networkAvailabilityNotifier
 import core.CoreDiComponent.webApi
-import core.datasourcesimpl.GeneralInfoDataSourceImpl
-import core.datasourcesimpl.WorldCasesInfoDataSourceImpl
+import core.datasources.GeneralInfoDataSourceImpl
+import core.datasources.WorldCasesInfoDataSourceImpl
 
 object StatsModuleInjector {
   

@@ -1,4 +1,4 @@
-package core.jsontransformers
+package core.transformers
 
 import core.TimeFormatter
 import core.model.NewsItemWithPicture

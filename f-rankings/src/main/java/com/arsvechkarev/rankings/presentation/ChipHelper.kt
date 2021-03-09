@@ -8,7 +8,7 @@ import core.model.WorldRegion
 class ChipHelper(
   optionsTypeChips: ChipGroup,
   worldRegionChips: ChipGroup,
-  private val onNewChipSelected: (OptionType, WorldRegion) -> Unit,
+  private val onNewChipSelected: (WorldRegion, OptionType) -> Unit,
   private val onWorldRegionChipSelected: (Chip) -> Unit,
   private val onOptionTypeChipSelected: (Chip) -> Unit,
 ) {
@@ -43,11 +43,11 @@ class ChipHelper(
   
   private fun notifyClick(optionType: OptionType) {
     currentOptionType = optionType
-    onNewChipSelected(currentOptionType, currentWorldRegion)
+    onNewChipSelected(currentWorldRegion, currentOptionType)
   }
   
   private fun notifyClick(worldRegion: WorldRegion) {
     currentWorldRegion = worldRegion
-    onNewChipSelected(currentOptionType, currentWorldRegion)
+    onNewChipSelected(currentWorldRegion, currentOptionType)
   }
 }

@@ -23,15 +23,15 @@ import java.net.UnknownHostException
 val FakeGeneralInfo = GeneralInfo(115887454, 2573769, 91562289)
 
 val FakeMetaInfoMap = mapOf(
-  "US" to CountryMetaInfo("US", 320_000_000, NORTH_AMERICA.name),
-  "CA" to CountryMetaInfo("CA", 40_000_000, NORTH_AMERICA.name),
-  "UK" to CountryMetaInfo("UK", 62_000_000, EUROPE.name),
-  "FR" to CountryMetaInfo("FR", 31_000_000, EUROPE.name),
-  "DE" to CountryMetaInfo("DE", 53_000_000, EUROPE.name),
-  "CN" to CountryMetaInfo("CN", 1232_000_000, ASIA.name),
-  "IN" to CountryMetaInfo("IN", 1124_000_000, ASIA.name),
-  "BR" to CountryMetaInfo("BR", 351_000_000, SOUTH_AMERICA.name),
-  "AU" to CountryMetaInfo("AU", 23_000_000, OCEANIA.name),
+  "US" to CountryMetaInfo("US", 320_000_000, NORTH_AMERICA.letters!!),
+  "CA" to CountryMetaInfo("CA", 40_000_000, NORTH_AMERICA.letters!!),
+  "UK" to CountryMetaInfo("UK", 62_000_000, EUROPE.letters!!),
+  "FR" to CountryMetaInfo("FR", 31_000_000, EUROPE.letters!!),
+  "DE" to CountryMetaInfo("DE", 53_000_000, EUROPE.letters!!),
+  "CN" to CountryMetaInfo("CN", 1232_000_000, ASIA.letters!!),
+  "IN" to CountryMetaInfo("IN", 1124_000_000, ASIA.letters!!),
+  "BR" to CountryMetaInfo("BR", 351_000_000, SOUTH_AMERICA.letters!!),
+  "AU" to CountryMetaInfo("AU", 23_000_000, OCEANIA.letters!!),
 )
 
 val FakeLocationsMap = mapOf(
@@ -108,70 +108,89 @@ class FakeCountriesMetaInfoDataSource : CountriesMetaInfoDataSource {
   }
 }
 
-
 class FakeGeneralInfoDataSource(
   private val totalRetryCount: Int = 0,
-  private val errorToThrow: () -> Throwable = { UnknownHostException() }
+  private val errorFactory: () -> Throwable = { UnknownHostException() }
 ) : GeneralInfoDataSource {
   
   private var retryCount = 0
   
-  override fun requestGeneralInfo(): Observable<GeneralInfo> {
+  override fun requestGeneralInfo() = Observable.create<GeneralInfo> { emitter ->
     if (retryCount < totalRetryCount) {
       retryCount++
-      return Observable.error(errorToThrow())
+      emitter.onError(errorFactory())
+      return@create
     }
-    return Observable.just(FakeGeneralInfo)
+    emitter.onNext(FakeGeneralInfo)
+    emitter.onComplete()
   }
 }
 
 class FakeNewYorkTimesNewsDataSource(
   private val totalRetryCount: Int = 0,
-  private val errorToThrow: () -> Throwable = { UnknownHostException() }
+  private val errorFactory: () -> Throwable = { UnknownHostException() }
 ) : NewYorkTimesNewsDataSource {
+  
+  private var nextThrowable: Throwable? = null
   
   private var retryCount = 0
   
-  override fun requestLatestNews(page: Int): Observable<List<NewsItemWithPicture>> {
+  fun setNextCallAsError(throwable: Throwable) {
+    this.nextThrowable = throwable
+  }
+  
+  override val maxPages: Int = 4
+  
+  override fun requestLatestNews(page: Int) = Observable.create<List<NewsItemWithPicture>> { emitter ->
+    if (nextThrowable != null) {
+      emitter.onError(nextThrowable!!)
+      nextThrowable = null
+      return@create
+    }
     if (retryCount < totalRetryCount) {
       retryCount++
-      return Observable.error(errorToThrow())
+      emitter.onError(errorFactory())
+      return@create
     }
-    return when (page) {
-      in 0..3 -> Observable.just(FakeNewListPages[page])
-      else -> Observable.empty()
+    if (page in 0 until maxPages) {
+      emitter.onNext(FakeNewListPages[page])
     }
+    emitter.onComplete()
   }
 }
 
 class FakeTotalInfoDataSource(
   private val totalRetryCount: Int = 0,
-  private val errorToThrow: () -> Throwable = { UnknownHostException() }
+  private val errorFactory: () -> Throwable = { UnknownHostException() }
 ) : TotalInfoDataSource {
   
   private var retryCount = 0
   
-  override fun requestTotalInfo(): Observable<TotalInfo> {
+  override fun requestTotalInfo() = Observable.create<TotalInfo> { emitter ->
     if (retryCount < totalRetryCount) {
       retryCount++
-      return Observable.error(errorToThrow())
+      emitter.onError(errorFactory())
+      return@create
     }
-    return Observable.just(FakeTotalInfo)
+    emitter.onNext(FakeTotalInfo)
+    emitter.onComplete()
   }
 }
 
 class FakeWorldCasesInfoDataSource(
   private val totalRetryCount: Int = 0,
-  private val errorToThrow: () -> Throwable = { UnknownHostException() }
+  private val errorFactory: () -> Throwable = { UnknownHostException() }
 ) : WorldCasesInfoDataSource {
   
   private var retryCount = 0
   
-  override fun requestWorldDailyCases(): Observable<List<DailyCase>> {
+  override fun requestWorldDailyCases() = Observable.create<List<DailyCase>> { emitter ->
     if (retryCount < totalRetryCount) {
       retryCount++
-      return Observable.error(errorToThrow())
+      emitter.onError(errorFactory())
+      return@create
     }
-    return Observable.just(FakeDailyCases)
+    emitter.onNext(FakeDailyCases)
+    emitter.onComplete()
   }
 }

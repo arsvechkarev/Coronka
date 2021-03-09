@@ -16,6 +16,7 @@ ext {
       glideApt           : "com.github.bumptech.glide:compiler:4.11.0",
       threeTenAbp        : "com.jakewharton.threetenabp:threetenabp:1.2.4",
       googleServicesAuth : "com.google.android.gms:play-services-auth:18.1.0",
+      flexboxLayout      : "com.google.android:flexbox:2.0.1",
   ]
 
 

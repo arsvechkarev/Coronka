@@ -12,8 +12,8 @@ import core.datasources.WorldCasesInfoDataSource
 import core.extenstions.withNetworkDelay
 import core.extenstions.withRequestTimeout
 import core.extenstions.withRetry
-import core.jsontransformers.WorldCasesInfoTransformer.toNewDailyCases
 import core.model.WorldCasesInfo
+import core.transformers.WorldCasesInfoTransformer.toNewDailyCases
 import io.reactivex.Observable
 
 class StatsViewModel(

@@ -1,26 +1,26 @@
-package com.arsvechkarev.stats
+package com.arsvechkarev.map
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.arsvechkarev.stats.presentation.LoadedWorldCasesInfo
-import com.arsvechkarev.stats.presentation.StatsViewModel
-import com.arsvechkarev.test.FakeDailyCases
-import com.arsvechkarev.test.FakeGeneralInfo
-import com.arsvechkarev.test.FakeGeneralInfoDataSource
+import com.arsvechkarev.map.presentation.FoundCountry
+import com.arsvechkarev.map.presentation.LoadedCountries
+import com.arsvechkarev.map.presentation.MapViewModel
+import com.arsvechkarev.test.FakeCountries
+import com.arsvechkarev.test.FakeCountriesMetaInfoDataSource
+import com.arsvechkarev.test.FakeLocationsMap
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.test.FakeSchedulers
 import com.arsvechkarev.test.FakeScreenStateObserver
-import com.arsvechkarev.test.FakeWorldCasesInfoDataSource
+import com.arsvechkarev.test.FakeTotalInfo
+import com.arsvechkarev.test.FakeTotalInfoDataSource
 import com.arsvechkarev.test.currentState
-import com.arsvechkarev.test.hasCurrentState
 import com.arsvechkarev.test.hasStateAtPosition
 import com.arsvechkarev.test.hasStatesCount
 import com.arsvechkarev.test.state
 import core.Failure
 import core.Failure.FailureReason.NO_CONNECTION
-import core.Failure.FailureReason.TIMEOUT
 import core.Loading
 import core.RxConfigurator
-import core.transformers.WorldCasesInfoTransformer.toNewDailyCases
+import core.transformers.MapTransformer
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -28,7 +28,7 @@ import org.junit.Test
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 
-class StatsViewModelTest {
+class MapViewModelTest {
   
   @Rule
   @JvmField
@@ -52,13 +52,9 @@ class StatsViewModelTest {
     
     with(observer) {
       hasStatesCount(2)
-      hasStateAtPosition<Loading>(0)
-      hasStateAtPosition<LoadedWorldCasesInfo>(1)
-      hasCurrentState<LoadedWorldCasesInfo>()
-      val worldCasesInfo = state<LoadedWorldCasesInfo>(1).worldCasesInfo
-      assertEquals(FakeGeneralInfo, worldCasesInfo.generalInfo)
-      assertEquals(FakeDailyCases, worldCasesInfo.totalDailyCases)
-      assertEquals(toNewDailyCases(FakeDailyCases), worldCasesInfo.newDailyCases)
+      hasStateAtPosition<LoadedCountries>(1)
+      val expected = MapTransformer.transformResult(Pair(FakeTotalInfo, FakeLocationsMap))
+      assertEquals(expected, currentState<LoadedCountries>().iso2ToCountryMap)
     }
   }
   
@@ -69,14 +65,14 @@ class StatsViewModelTest {
       error = TimeoutException()
     )
     val observer = createObserver()
-  
+    
     viewModel.state.observeForever(observer)
     viewModel.startLoadingData()
-  
+    
     with(observer) {
       hasStatesCount(2)
       hasStateAtPosition<Loading>(0)
-      assertEquals(TIMEOUT, currentState<Failure>().reason)
+      assertEquals(Failure.FailureReason.TIMEOUT, currentState<Failure>().reason)
     }
   }
   
@@ -87,22 +83,21 @@ class StatsViewModelTest {
       error = UnknownHostException()
     )
     val observer = createObserver()
-  
+    
     viewModel.state.observeForever(observer)
     viewModel.startLoadingData() // Initial loading
     viewModel.startLoadingData() // Retry
-  
+    
     with(observer) {
       hasStatesCount(4)
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<Failure>(1)
       hasStateAtPosition<Loading>(2)
-      hasStateAtPosition<LoadedWorldCasesInfo>(3)
+      hasStateAtPosition<LoadedCountries>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
-      val worldCasesInfo = currentState<LoadedWorldCasesInfo>().worldCasesInfo
-      assertEquals(FakeGeneralInfo, worldCasesInfo.generalInfo)
-      assertEquals(FakeDailyCases, worldCasesInfo.totalDailyCases)
-      assertEquals(toNewDailyCases(FakeDailyCases), worldCasesInfo.newDailyCases)
+      val worldCasesInfo = currentState<LoadedCountries>().iso2ToCountryMap
+      val expected = MapTransformer.transformResult(Pair(FakeTotalInfo, FakeLocationsMap))
+      assertEquals(expected, worldCasesInfo)
     }
   }
   
@@ -125,12 +120,32 @@ class StatsViewModelTest {
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<Failure>(1)
       hasStateAtPosition<Loading>(2)
-      hasStateAtPosition<LoadedWorldCasesInfo>(3)
+      hasStateAtPosition<LoadedCountries>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
-      val worldCasesInfo = currentState<LoadedWorldCasesInfo>().worldCasesInfo
-      assertEquals(FakeGeneralInfo, worldCasesInfo.generalInfo)
-      assertEquals(FakeDailyCases, worldCasesInfo.totalDailyCases)
-      assertEquals(toNewDailyCases(FakeDailyCases), worldCasesInfo.newDailyCases)
+      val worldCasesInfo = currentState<LoadedCountries>().iso2ToCountryMap
+      val expected = MapTransformer.transformResult(Pair(FakeTotalInfo, FakeLocationsMap))
+      assertEquals(expected, worldCasesInfo)
+    }
+  }
+  
+  @Test
+  fun `Clicking on map`() {
+    val viewModel = createViewModel()
+    val observer = createObserver()
+    val countryToClick = FakeCountries[0]
+    
+    viewModel.state.observeForever(observer)
+    viewModel.startLoadingData()
+    viewModel.showCountryInfo(countryToClick)
+    
+    with(observer) {
+      hasStatesCount(3)
+      hasStateAtPosition<Loading>(0)
+      hasStateAtPosition<LoadedCountries>(1)
+      hasStateAtPosition<FoundCountry>(2)
+      val expected = MapTransformer.transformResult(Pair(FakeTotalInfo, FakeLocationsMap))
+      assertEquals(expected, state<FoundCountry>(2).iso2ToCountryMap)
+      assertEquals(countryToClick, state<FoundCountry>(2).country)
     }
   }
   
@@ -138,11 +153,14 @@ class StatsViewModelTest {
     totalRetryCount: Int = 0,
     error: Throwable = Throwable(),
     notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
-  ): StatsViewModel {
-    val generalInfoDataSource = FakeGeneralInfoDataSource(totalRetryCount, errorFactory = { error })
-    return StatsViewModel(
-      generalInfoDataSource,
-      FakeWorldCasesInfoDataSource(),
+  ): MapViewModel {
+    val totalInfoDataSource = FakeTotalInfoDataSource(
+      totalRetryCount = totalRetryCount,
+      errorFactory = { error }
+    )
+    return MapViewModel(
+      totalInfoDataSource,
+      FakeCountriesMetaInfoDataSource(),
       notifier,
       FakeSchedulers
     )

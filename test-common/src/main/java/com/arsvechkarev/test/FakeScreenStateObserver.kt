@@ -2,7 +2,8 @@ package com.arsvechkarev.test
 
 import androidx.lifecycle.Observer
 import core.BaseScreenState
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 
 class FakeScreenStateObserver : Observer<BaseScreenState> {
   
@@ -19,16 +20,16 @@ class FakeScreenStateObserver : Observer<BaseScreenState> {
 }
 
 
-fun FakeScreenStateObserver.hasStateSize(size: Int) {
-  Assert.assertTrue(states.size == size)
+fun FakeScreenStateObserver.hasStatesCount(size: Int) {
+  assertEquals(size, states.size)
 }
 
 inline fun <reified T : BaseScreenState> FakeScreenStateObserver.hasStateAtPosition(position: Int) {
-  Assert.assertTrue(states[position] is T)
+  assertTrue(states[position] is T)
 }
 
 inline fun <reified T : BaseScreenState> FakeScreenStateObserver.hasCurrentState() {
-  Assert.assertTrue(states.last() is T)
+  assertTrue(states.last() is T)
 }
 
 
