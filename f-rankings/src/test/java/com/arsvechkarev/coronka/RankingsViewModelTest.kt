@@ -18,13 +18,13 @@ import com.arsvechkarev.test.currentState
 import com.arsvechkarev.test.hasStateAtPosition
 import com.arsvechkarev.test.hasStatesCount
 import com.arsvechkarev.test.state
+import config.RxConfigurator
 import core.CountriesFilterer
 import core.CountriesFiltererImpl
 import core.Failure
 import core.Failure.FailureReason.NO_CONNECTION
 import core.Failure.FailureReason.TIMEOUT
 import core.Loading
-import core.RxConfigurator
 import core.model.DisplayableCountry
 import core.model.OptionType.RECOVERED
 import core.model.WorldRegion.EUROPE

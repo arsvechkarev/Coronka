@@ -16,11 +16,11 @@ import com.arsvechkarev.test.hasCurrentState
 import com.arsvechkarev.test.hasStateAtPosition
 import com.arsvechkarev.test.hasStatesCount
 import com.arsvechkarev.test.state
+import config.RxConfigurator
 import core.Failure
 import core.Failure.FailureReason.NO_CONNECTION
 import core.Failure.FailureReason.UNKNOWN
 import core.Loading
-import core.RxConfigurator
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Before

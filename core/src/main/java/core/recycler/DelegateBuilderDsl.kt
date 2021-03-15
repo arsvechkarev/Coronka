@@ -5,8 +5,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import com.arsvechkarev.viewdsl.ViewBuilder
 import com.arsvechkarev.viewdsl.inflate
-import core.DifferentiableItem
-import core.DisplayableItem
 import kotlin.reflect.KClass
 
 inline fun <reified T : DifferentiableItem> delegate(

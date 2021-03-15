@@ -4,8 +4,6 @@ package com.arsvechkarev.viewdsl
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
 import android.graphics.drawable.Animatable
 import android.view.View
 import android.view.View.INVISIBLE
@@ -13,12 +11,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-
-const val DURATION_SHORT = 150L
-const val DURATION_DEFAULT = 300L
-const val DURATION_MEDIUM = 500L
-const val DURATION_LONG = 800L
+import config.AnimationsConfigurator
 
 val AccelerateDecelerateInterpolator = AccelerateDecelerateInterpolator()
 val OvershootInterpolator = OvershootInterpolator()
@@ -59,7 +52,7 @@ fun View.animateVisibleIfNotAlready(andThen: () -> Unit = {}) {
 fun View.animateVisible(andThen: () -> Unit = {}) {
   alpha = 0f
   visible()
-  animate().alpha(1f).setDuration(DURATION_DEFAULT)
+  animate().alpha(1f).setDuration(AnimationsConfigurator.DurationDefault)
       .setInterpolator(AccelerateDecelerateInterpolator)
       .withEndAction(andThen)
       .start()
@@ -74,7 +67,7 @@ fun View.animateInvisibleIfNotAlready(andThen: () -> Unit = {}) {
 }
 
 fun View.animateInvisible(andThen: () -> Unit = {}) {
-  animate().alpha(0f).setDuration(DURATION_DEFAULT)
+  animate().alpha(0f).setDuration(AnimationsConfigurator.DurationDefault)
       .setInterpolator(AccelerateDecelerateInterpolator)
       .withEndAction {
         invisible()
@@ -104,18 +97,6 @@ fun animateInvisible(vararg views: View, andThen: () -> Unit = {}) {
     } else {
       view.animateInvisible()
     }
-  }
-}
-
-fun View.animateColor(startColor: Int, endColor: Int, andThen: () -> Unit = {}) {
-  ObjectAnimator.ofObject(this,
-    "backgroundColor", ArgbEvaluator(), startColor, endColor).apply {
-    duration = DURATION_DEFAULT
-    interpolator = FastOutSlowInInterpolator()
-    if (andThen != {}) {
-      doOnEnd(andThen)
-    }
-    start()
   }
 }
 

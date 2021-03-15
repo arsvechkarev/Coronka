@@ -1,6 +1,6 @@
 package com.arsvechkarev.tips.presentation
 
-import core.DisplayableItem
+import core.recycler.DisplayableItem
 
 object MainItem : DisplayableItem
 

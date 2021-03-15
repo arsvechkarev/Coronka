@@ -10,6 +10,7 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import com.arsvechkarev.viewdsl.dimen
+import core.extenstions.boringLayoutOf
 import core.extenstions.execute
 import core.extenstions.f
 import core.viewbuilding.Fonts

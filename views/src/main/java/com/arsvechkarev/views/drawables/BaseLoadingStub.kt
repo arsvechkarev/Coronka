@@ -13,6 +13,7 @@ import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
 import android.os.SystemClock
 import android.view.View
+import config.AnimationsConfigurator
 import core.extenstions.execute
 import core.extenstions.f
 import core.viewbuilding.Colors
@@ -21,7 +22,7 @@ abstract class BaseLoadingStub(
   private val backgroundColor: Int = Colors.Overlay,
   private val shineColor: Int = Colors.OverlayShine,
   private val shineColorLight: Int = Colors.OverlayShineLight,
-  private val durationMillis: Long = 1200
+  private val durationMillis: Long = AnimationsConfigurator.DurationLoadingStubIdle
 ) : Drawable(), Animatable, Runnable {
   
   private val shinePaint = Paint(Paint.ANTI_ALIAS_FLAG)

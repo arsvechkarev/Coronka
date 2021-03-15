@@ -20,6 +20,10 @@ import core.extenstions.execute
 import core.extenstions.f
 import core.viewbuilding.Colors
 
+/**
+ * NewItemView with min api 23+ uses static layout to display text to achieve better performance
+ * See [NewsItemViewApi22]
+ */
 @SuppressLint("ViewConstructor")
 @RequiresApi(23)
 class NewsItemViewApi23Plus(
@@ -180,10 +184,10 @@ class NewsItemViewApi23Plus(
   }
   
   companion object {
-  
+    
     private const val titleMaxLines = 3
     private const val descriptionMaxLines = 2
-  
+    
     private const val TEXT_FOR_MEASURE = "A\nA\nA\nA"
   }
 }

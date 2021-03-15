@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.core.widget.NestedScrollView
 
-class ScrollingView @JvmOverloads constructor(
+class CustomNestedScrollView @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0

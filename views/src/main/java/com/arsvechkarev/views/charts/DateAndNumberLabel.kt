@@ -8,7 +8,7 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import com.arsvechkarev.viewdsl.DURATION_LONG
+import config.AnimationsConfigurator
 import core.extenstions.f
 import core.extenstions.getTextHeight
 import core.extenstions.toFormattedNumber
@@ -44,7 +44,7 @@ class DateAndNumberLabel @JvmOverloads constructor(
   
   private val animator = ValueAnimator().apply {
     interpolator = AccelerateDecelerateInterpolator()
-    duration = DURATION_LONG
+    duration = AnimationsConfigurator.DurationLong
     addUpdateListener {
       val fraction = it.animatedValue as Float
       currentNumber = (fraction * resultNumber).roundToInt()

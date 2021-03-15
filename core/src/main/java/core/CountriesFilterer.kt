@@ -4,9 +4,12 @@ import core.model.Country
 import core.model.CountryMetaInfo
 import core.model.OptionType
 import core.model.WorldRegion
+import core.recycler.DifferentiableItem
 
 /**
  * Performs filtering of countries
+ *
+ * @see CountriesFiltererImpl
  */
 interface CountriesFilterer {
   

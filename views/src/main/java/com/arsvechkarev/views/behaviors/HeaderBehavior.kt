@@ -8,9 +8,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ScrollingView
 import androidx.core.view.ViewCompat
 import com.arsvechkarev.viewdsl.AccelerateDecelerateInterpolator
-import com.arsvechkarev.viewdsl.DURATION_SHORT
 import com.arsvechkarev.viewdsl.doOnEnd
 import com.arsvechkarev.viewdsl.getBehavior
+import config.AnimationsConfigurator
 import core.extenstions.assertThat
 
 /**
@@ -23,7 +23,7 @@ class HeaderBehavior(context: Context, attrs: AttributeSet? = null) :
   private var offsetFromPreviousLayout = 0
   
   private val scrollAnimator = ValueAnimator().apply {
-    duration = DURATION_SHORT
+    duration = AnimationsConfigurator.DurationShort
     interpolator = AccelerateDecelerateInterpolator
     addUpdateListener {
       val offset = it.animatedValue as Int

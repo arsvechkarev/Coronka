@@ -10,9 +10,10 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import com.arsvechkarev.viewdsl.DURATION_DEFAULT
 import com.arsvechkarev.viewdsl.Ints.dp
 import com.arsvechkarev.viewdsl.paddings
+import config.AnimationsConfigurator
+import core.extenstions.boringLayoutOf
 import core.extenstions.execute
 import core.extenstions.getTextHeight
 import core.viewbuilding.Colors
@@ -77,7 +78,7 @@ class RetryButton @JvmOverloads constructor(
   
   override fun performClick(): Boolean {
     isClickable = false
-    postDelayed({ isClickable = true }, DURATION_DEFAULT * 2)
+    postDelayed({ isClickable = true }, AnimationsConfigurator.DurationDefault * 2)
     return super.performClick()
   }
 }

@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="13">
+    <bytecodeTargetLevel target="1.7">
+      <module name="Coronka.app" target="11" />
+      <module name="Coronka.core" target="11" />
       <module name="Coronka.f-common" target="13" />
+      <module name="Coronka.f-map" target="11" />
+      <module name="Coronka.f-news" target="11" />
+      <module name="Coronka.f-rankings" target="11" />
+      <module name="Coronka.f-stats" target="11" />
+      <module name="Coronka.f-tips" target="11" />
       <module name="Coronka.storage" target="13" />
+      <module name="Coronka.test-common" target="11" />
+      <module name="Coronka.viewdsl" target="11" />
+      <module name="Coronka.views" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

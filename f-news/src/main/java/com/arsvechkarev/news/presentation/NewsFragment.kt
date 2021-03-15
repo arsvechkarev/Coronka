@@ -79,7 +79,7 @@ class NewsFragment : BaseFragment() {
         addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
       }
       child<LinearLayout>(MatchParent, MatchParent) {
-        tag(ErrorLayout)
+        tag(LayoutFailure)
         invisible()
         gravity(CENTER)
         orientation(LinearLayout.VERTICAL)
@@ -171,7 +171,7 @@ class NewsFragment : BaseFragment() {
   
   private fun renderLoading() {
     view(LoadingLayout).animateVisibleIfNotAlready()
-    animateInvisible(view(RecyclerView), view(ErrorLayout))
+    animateInvisible(view(RecyclerView), view(LayoutFailure))
   }
   
   private fun renderLoadedNews(state: LoadedNews) {
@@ -191,7 +191,7 @@ class NewsFragment : BaseFragment() {
   private fun renderFailure(state: Failure) {
     Timber.e(state.throwable, "Error")
     view(LoadingLayout).animateInvisible()
-    view(ErrorLayout).animateVisible()
+    view(LayoutFailure).animateVisible()
     textView(ErrorMessage).text(state.reason.getStringRes())
     when (state.reason) {
       TIMEOUT, UNKNOWN -> imageView(ImageFailure).image(R.drawable.image_unknown_error)
@@ -200,9 +200,9 @@ class NewsFragment : BaseFragment() {
   }
   
   companion object {
-    
+  
     const val LoadingLayout = "NewsLoadingLayout"
-    const val ErrorLayout = "NewsErrorLayout"
+    const val LayoutFailure = "NewsErrorLayout"
     const val RecyclerView = "NewsRecyclerView"
     const val ImageFailure = "NewsImageFailure"
     const val ErrorMessage = "TextErrorMessage"

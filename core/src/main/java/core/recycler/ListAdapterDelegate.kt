@@ -2,7 +2,6 @@ package core.recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import core.DifferentiableItem
 import kotlin.reflect.KClass
 
 abstract class ListAdapterDelegate<T : DifferentiableItem>(val modelClass: KClass<T>) {

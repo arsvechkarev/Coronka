@@ -1,10 +1,11 @@
 package com.arsvechkarev.coronka.tests
 
-import android.os.SystemClock.sleep
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
 import com.agoda.kakao.screen.Screen.Companion.onScreen
 import com.arsvechkarev.coronka.DataProvider
+import com.arsvechkarev.coronka.clickAndWaitForIdle
+import com.arsvechkarev.coronka.configureDurationsAndDelaysForTests
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.screen
 import com.arsvechkarev.coronka.screens.DrawerScreen
@@ -22,18 +23,21 @@ import org.junit.runner.RunWith
 class RankingsTest {
   
   @get:Rule
-  val rule = ActivityTestRule(MainActivity::class.java)
+  val rule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+    
+    override fun beforeActivityLaunched() {
+      configureDurationsAndDelaysForTests()
+    }
+  }
   
   @Test
   fun test_displaying_ranks() {
     val allCountries = DataProvider.getTotalData().countries
     val countryWithMostCases = allCountries.maxByOrNull { it.confirmed }!!
-    
-    screen<StatsScreen>().iconDrawer.click()
-    
-    screen<DrawerScreen>().textRankings.click()
-    
-    sleep(1000)
+  
+    screen<StatsScreen>().iconDrawer.clickAndWaitForIdle()
+  
+    screen<DrawerScreen>().textRankings.clickAndWaitForIdle()
     
     onScreen<RankingsScreen> {
       recyclerCountries {
@@ -52,21 +56,19 @@ class RankingsTest {
     val allCountries = DataProvider.getTotalData().countries
     val countryWithMostRecovered = allCountries.maxByOrNull { it.recovered }!!
     val countryWithLeastRecovered = allCountries.minByOrNull { it.recovered }!!
-    
-    screen<StatsScreen>().iconDrawer.click()
-    
-    screen<DrawerScreen>().textRankings.click()
-    
-    sleep(1000)
+  
+    screen<StatsScreen>().iconDrawer.clickAndWaitForIdle()
+  
+    screen<DrawerScreen>().textRankings.clickAndWaitForIdle()
     
     onScreen<RankingsScreen> {
-      fabFilter.click()
+      fabFilter.clickAndWaitForIdle()
       bottomSheet.isDisplayed()
-      bottomSheetCross.click()
+      bottomSheetCross.clickAndWaitForIdle()
       bottomSheet.isNotDisplayed()
-      fabFilter.click()
-      
-      chipRecovered.click()
+      fabFilter.clickAndWaitForIdle()
+  
+      chipRecovered.clickAndWaitForIdle()
       
       recyclerCountries {
         hasSize(allCountries.size)
@@ -81,12 +83,12 @@ class RankingsTest {
               && itemView.amount == (countryWithLeastRecovered.recovered.toFormattedNumber())
         }
       }
-      
-      chipEurope.click()
+  
+      chipEurope.clickAndWaitForIdle()
       
       recyclerCountries.hasSizeLessThan(allCountries.size)
-      
-      chipWorldwide.click()
+  
+      chipWorldwide.clickAndWaitForIdle()
       
       recyclerCountries.hasSize(allCountries.size)
     }

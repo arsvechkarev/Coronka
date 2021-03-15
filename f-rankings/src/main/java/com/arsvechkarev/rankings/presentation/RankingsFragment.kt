@@ -12,6 +12,7 @@ import com.arsvechkarev.viewdsl.animateVisible
 import com.arsvechkarev.viewdsl.background
 import com.arsvechkarev.viewdsl.dimen
 import com.arsvechkarev.viewdsl.gone
+import com.arsvechkarev.viewdsl.heightWithMargins
 import com.arsvechkarev.viewdsl.margins
 import com.arsvechkarev.viewdsl.onClick
 import com.arsvechkarev.viewdsl.setClickable
@@ -35,7 +36,6 @@ import core.Failure.FailureReason.NO_CONNECTION
 import core.Failure.FailureReason.TIMEOUT
 import core.Failure.FailureReason.UNKNOWN
 import core.Loading
-import core.extenstions.heightWithMargins
 import core.extenstions.toFormattedDecimalNumber
 import core.extenstions.toFormattedNumber
 import core.hostActivity

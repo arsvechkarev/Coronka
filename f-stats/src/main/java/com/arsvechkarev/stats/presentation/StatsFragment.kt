@@ -13,7 +13,7 @@ import com.arsvechkarev.viewdsl.gone
 import com.arsvechkarev.viewdsl.paddings
 import com.arsvechkarev.viewdsl.statusBarHeight
 import com.arsvechkarev.viewdsl.visible
-import com.arsvechkarev.views.ScrollingView
+import com.arsvechkarev.views.CustomNestedScrollView
 import com.arsvechkarev.views.behaviors.ScrollableContentBehavior
 import com.arsvechkarev.views.behaviors.TitleHeaderBehavior
 import com.arsvechkarev.views.charts.DailyCasesChart.Type.NEW_CASES
@@ -166,7 +166,8 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     statsTotalCasesChart.type = TOTAL_CASES
     statsNewCasesChart.type = NEW_CASES
     statsHeader.behavior(TitleHeaderBehavior { it.id == R.id.statsScrollingContentView })
-    statsScrollingContentView.behavior(ScrollableContentBehavior<ScrollingView>(requireContext()))
+    statsScrollingContentView.behavior(
+      ScrollableContentBehavior<CustomNestedScrollView>(requireContext()))
     statsMainInfoLoadingStub.setLoadingDrawable(MainStatsInfoLoadingStub(requireContext()))
     statsTotalCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
     statsNewCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))

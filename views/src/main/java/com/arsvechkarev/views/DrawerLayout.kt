@@ -21,6 +21,7 @@ import com.arsvechkarev.viewdsl.doOnEnd
 import com.arsvechkarev.viewdsl.isOrientationPortrait
 import com.arsvechkarev.views.DrawerLayout.DrawerState.CLOSED
 import com.arsvechkarev.views.DrawerLayout.DrawerState.OPENED
+import config.AnimationsConfigurator
 import core.HostActivity.DrawerOpenCloseListener
 import core.extenstions.assertThat
 import kotlin.math.abs
@@ -68,7 +69,7 @@ class DrawerLayout @JvmOverloads constructor(
   fun open() {
     currentState = OPENED
     post {
-      drawerViewAnimator.duration = DEFAULT_DURATION
+      drawerViewAnimator.duration = AnimationsConfigurator.DurationDefault
       drawerViewAnimator.setIntValues(drawerView.left, 0)
       drawerViewAnimator.doOnEnd {
         openCloseListeners.forEach { it.onDrawerOpened() }
@@ -80,7 +81,7 @@ class DrawerLayout @JvmOverloads constructor(
   fun close(notifyListeners: Boolean = true, andThen: () -> Unit = {}) {
     currentState = CLOSED
     post {
-      drawerViewAnimator.duration = DEFAULT_DURATION
+      drawerViewAnimator.duration = AnimationsConfigurator.DurationDefault
       drawerViewAnimator.setIntValues(drawerView.left, -slideRange)
       drawerViewAnimator.doOnEnd {
         if (notifyListeners) {
@@ -257,7 +258,7 @@ class DrawerLayout @JvmOverloads constructor(
       }
       drawerViewAnimator.duration = (timeInSeconds * 900).toLong()
     } else {
-      drawerViewAnimator.duration = DEFAULT_DURATION
+      drawerViewAnimator.duration = AnimationsConfigurator.DurationDefault
     }
     val endX = when {
       drawerView.right < slideRange * 0.15f -> -slideRange
@@ -339,7 +340,6 @@ class DrawerLayout @JvmOverloads constructor(
     const val LANDSCAPE_SLIDE_RANGE_COEFFICIENT = 0.6f
     const val FLING_VELOCITY_THRESHOLD = 0.18f
   
-    const val DEFAULT_DURATION = 250L
     const val TOUCH_SLOP_MULTIPLIER = 2
     const val INVALID_POINTER = -1
   }

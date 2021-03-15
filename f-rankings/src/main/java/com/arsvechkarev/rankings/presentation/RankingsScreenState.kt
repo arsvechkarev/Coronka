@@ -1,8 +1,8 @@
 package com.arsvechkarev.rankings.presentation
 
 import core.BaseScreenState
-import core.DifferentiableItem
 import core.model.Country
+import core.recycler.DifferentiableItem
 
 class FilteredCountries(val list: List<DifferentiableItem>) : BaseScreenState()
 

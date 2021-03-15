@@ -1,7 +1,7 @@
-package core
+package core.recycler
 
 /**
- * Item to be displayed in [RecyclerView]
+ * Item for [androidx.recyclerview.widget.RecyclerView] that can be compared to other items
  */
 interface DifferentiableItem : DisplayableItem {
   

@@ -18,6 +18,7 @@ import com.arsvechkarev.viewdsl.doOnEnd
 import com.arsvechkarev.viewdsl.getBehavior
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.HIDDEN
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.State.SHOWN
+import config.AnimationsConfigurator
 import kotlin.math.abs
 
 @Suppress("UNUSED_PARAMETER") // 'attrs' used for xml
@@ -52,7 +53,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
     bottomSheet!!.post {
       if (currentState == SHOWN || slideAnimator.isRunning) return@post
       currentState = SHOWN
-      slideAnimator.duration = DURATION_SLIDE
+      slideAnimator.duration = AnimationsConfigurator.DurationBottomSheetSlide
       slideAnimator.setIntValues(bottomSheet!!.top, parentHeight - slideRange)
       slideAnimator.doOnEnd(onShow)
       slideAnimator.start()
@@ -63,7 +64,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
     bottomSheet!!.post {
       if (currentState == HIDDEN || slideAnimator.isRunning) return@post
       currentState = HIDDEN
-      slideAnimator.duration = DURATION_SLIDE
+      slideAnimator.duration = AnimationsConfigurator.DurationBottomSheetSlide
       slideAnimator.setIntValues(bottomSheet!!.top, parentHeight)
       slideAnimator.doOnEnd(onHide)
       slideAnimator.start()
@@ -214,7 +215,7 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
         parentHeight
       }
       slideAnimator.setIntValues(bottomSheet!!.top, endY)
-      slideAnimator.duration = DURATION_SLIDE
+      slideAnimator.duration = AnimationsConfigurator.DurationBottomSheetSlide
       slideAnimator.start()
     }
     endTouch()
@@ -243,7 +244,6 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   
   companion object {
     
-    private const val DURATION_SLIDE = 225L
     private const val FLING_VELOCITY_THRESHOLD = 0.18f
     private const val INVALID_POINTER = -1
     

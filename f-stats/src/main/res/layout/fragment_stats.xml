@@ -44,7 +44,7 @@
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
-  <com.arsvechkarev.views.ScrollingView
+  <com.arsvechkarev.views.CustomNestedScrollView
     android:id="@+id/statsScrollingContentView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
 
     </LinearLayout>
 
-  </com.arsvechkarev.views.ScrollingView>
+  </com.arsvechkarev.views.CustomNestedScrollView>
 
   <LinearLayout
     android:id="@+id/statsErrorLayout"

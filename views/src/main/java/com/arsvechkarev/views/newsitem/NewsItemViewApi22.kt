@@ -11,6 +11,11 @@ import com.arsvechkarev.viewdsl.layoutWithLeftTop
 import com.arsvechkarev.viewdsl.size
 import com.arsvechkarev.viewdsl.text
 
+/**
+ * NewItemView with api 22 or lower uses text views to display text, because builder of
+ * [android.text.StaticLayout] is not available at this api level
+ * See [NewsItemViewApi23Plus]
+ */
 @SuppressLint("ViewConstructor") // Created through code
 class NewsItemViewApi22(
   image: NewsItemImage,

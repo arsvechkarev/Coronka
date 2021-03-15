@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import core.AndroidSchedulers
-import core.DifferentiableItem
 import core.Schedulers
 import core.recycler.CallbackType.ALWAYS_FALSE
 import core.recycler.CallbackType.APPENDED_LIST
@@ -42,21 +41,13 @@ abstract class ListAdapter(
   }
   
   fun addItem(item: DifferentiableItem) {
-    schedulers.mainThread().scheduleDirect {
-      data.add(item)
-      notifyItemInserted(data.size - 1)
-    }
+    data.add(item)
+    notifyItemInserted(data.size - 1)
   }
   
   fun removeLastAndAdd(list: List<DifferentiableItem>) {
     val oldSize = data.size
     data.removeLast()
-    data.addAll(list)
-    applyChanges(AppendedListDiffCallbacks(data, oldSize))
-  }
-  
-  fun addItems(list: List<DifferentiableItem>) {
-    val oldSize = data.size
     data.addAll(list)
     applyChanges(AppendedListDiffCallbacks(data, oldSize))
   }

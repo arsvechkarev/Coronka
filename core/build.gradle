@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+  api project(':config')
   api project(':viewdsl')
 
   def dependencies = rootProject.ext.applicationDependencies

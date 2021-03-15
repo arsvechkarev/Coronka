@@ -8,6 +8,7 @@ import core.model.CountryMetaInfo
 import core.model.DisplayableCountry
 import core.model.OptionType
 import core.model.WorldRegion
+import core.recycler.DifferentiableItem
 
 class CountriesFiltererImpl : CountriesFilterer {
   

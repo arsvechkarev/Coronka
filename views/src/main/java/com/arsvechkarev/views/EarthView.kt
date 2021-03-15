@@ -5,9 +5,9 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
-import com.arsvechkarev.viewdsl.DURATION_MEDIUM
 import com.arsvechkarev.viewdsl.Ints.dp
 import com.arsvechkarev.viewdsl.cancelIfRunning
+import config.AnimationsConfigurator
 import core.extenstions.execute
 import core.extenstions.i
 import kotlin.math.PI
@@ -26,7 +26,7 @@ class EarthView @JvmOverloads constructor(
   private val earth = context.getDrawable(R.drawable.ic_planet_earth)!!
   
   private val wifiAnimator = ValueAnimator().apply {
-    duration = DURATION_MEDIUM
+    duration = AnimationsConfigurator.DurationMedium
     repeatMode = ValueAnimator.REVERSE
     repeatCount = 4
     addUpdateListener {

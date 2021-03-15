@@ -12,9 +12,9 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import com.arsvechkarev.viewdsl.DURATION_MEDIUM
 import com.arsvechkarev.viewdsl.Floats.dp
 import com.arsvechkarev.viewdsl.cancelIfRunning
+import config.AnimationsConfigurator
 import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.i
@@ -57,7 +57,7 @@ class BigStatsView @JvmOverloads constructor(
   
   private var animationLinePercent = 0f
   private val animator = ValueAnimator.ofFloat(0f, 1f).apply {
-    duration = DURATION_MEDIUM
+    duration = AnimationsConfigurator.DurationMedium
     interpolator = AccelerateDecelerateInterpolator()
     addUpdateListener {
       animationLinePercent = it.animatedFraction

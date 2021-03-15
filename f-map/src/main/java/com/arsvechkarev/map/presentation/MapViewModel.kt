@@ -47,9 +47,7 @@ class MapViewModel(
           .onErrorReturn(::Failure)
           .startWith(Loading())
           .observeOn(schedulers.mainThread())
-          .smartSubscribe {
-            _state.setValue(it)
-          }
+          .smartSubscribe(_state::setValue)
     }
   }
   

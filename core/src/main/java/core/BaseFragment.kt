@@ -11,9 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.viewdsl.childView
 
-abstract class BaseFragment(
-  private val layoutResId: Int = 0
-) : Fragment(layoutResId) {
+abstract class BaseFragment(private val layoutResId: Int = 0) : Fragment(layoutResId) {
   
   private val viewsCache = HashMap<String, View>()
   

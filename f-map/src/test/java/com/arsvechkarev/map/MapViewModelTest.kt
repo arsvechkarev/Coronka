@@ -16,10 +16,10 @@ import com.arsvechkarev.test.currentState
 import com.arsvechkarev.test.hasStateAtPosition
 import com.arsvechkarev.test.hasStatesCount
 import com.arsvechkarev.test.state
+import config.RxConfigurator
 import core.Failure
 import core.Failure.FailureReason.NO_CONNECTION
 import core.Loading
-import core.RxConfigurator
 import core.transformers.MapTransformer
 import org.junit.Assert.assertEquals
 import org.junit.Before

@@ -1,9 +1,9 @@
 package com.arsvechkarev.news.presentation
 
 import core.BaseScreenState
-import core.DifferentiableItem
 import core.Failure
 import core.Loading
+import core.recycler.DifferentiableItem
 
 class LoadedNews(val news: List<DifferentiableItem>) : BaseScreenState()
 

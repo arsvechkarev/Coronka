@@ -13,6 +13,11 @@ import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 
+fun View.heightWithMargins(): Int {
+  val params = layoutParams as MarginLayoutParams
+  return measuredHeight + params.topMargin + params.bottomMargin
+}
+
 fun View.visible() {
   visibility = View.VISIBLE
 }

@@ -4,6 +4,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
 import com.agoda.kakao.screen.Screen.Companion.onScreen
 import com.arsvechkarev.coronka.DataProvider
+import com.arsvechkarev.coronka.configureDurationsAndDelaysForTests
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.screens.StatsScreen
 import core.extenstions.f
@@ -17,12 +18,18 @@ import org.junit.runner.RunWith
 class StatsTest {
   
   @get:Rule
-  val rule = ActivityTestRule(MainActivity::class.java)
+  val rule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+    
+    override fun beforeActivityLaunched() {
+      configureDurationsAndDelaysForTests()
+    }
+  }
   
   @Test
   fun test_displaying_stats() {
     val generalInfo = DataProvider.getGeneralInfo()
     val dailyCases = DataProvider.getDailyCases()
+  
     onScreen<StatsScreen> {
       iconDrawer {
         isVisible()

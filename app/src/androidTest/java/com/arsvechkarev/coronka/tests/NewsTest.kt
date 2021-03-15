@@ -1,11 +1,13 @@
 package com.arsvechkarev.coronka.tests
 
-import android.os.SystemClock.sleep
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.agoda.kakao.screen.Screen.Companion.onScreen
 import com.arsvechkarev.coronka.RetryCountWebApiFactory
+import com.arsvechkarev.coronka.clickAndWaitForIdle
+import com.arsvechkarev.coronka.configureDurationsAndDelaysForTests
+import com.arsvechkarev.coronka.idleMainThread
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.screen
 import com.arsvechkarev.coronka.screens.DrawerScreen
@@ -13,10 +15,10 @@ import com.arsvechkarev.coronka.screens.NewsScreen
 import com.arsvechkarev.coronka.screens.StatsScreen
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import core.CoreDiComponent
-import core.RxConfigurator
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.Thread.sleep
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class NewsTest {
@@ -30,27 +32,22 @@ class NewsTest {
       val applicationContext = InstrumentationRegistry.getInstrumentation().targetContext
       val webApiFactory = RetryCountWebApiFactory(1)
       CoreDiComponent.initCustom(webApiFactory, fakeNetworkAvailabilityNotifier, applicationContext)
-      RxConfigurator.configureRetryCount(0)
-      RxConfigurator.configureNetworkDelay(0)
+      configureDurationsAndDelaysForTests()
     }
   }
   
   @Test
   fun test_showing_error_and_then_normal_news() {
-    
-    screen<StatsScreen>().iconDrawer.click()
-    
-    screen<DrawerScreen>().textNews.click()
-    
-    sleep(500)
+  
+    screen<StatsScreen>().iconDrawer.clickAndWaitForIdle()
+  
+    screen<DrawerScreen>().textNews.clickAndWaitForIdle()
     
     onScreen<NewsScreen> {
       recyclerView.isNotDisplayed()
       errorLayout.isDisplayed()
-      
-      buttonRetry.click()
-      
-      sleep(500)
+  
+      buttonRetry.clickAndWaitForIdle()
       
       recyclerView.isDisplayed()
       errorLayout.isNotDisplayed()
@@ -59,21 +56,20 @@ class NewsTest {
   
   @Test
   fun test_notifying_about_network() {
-    
-    screen<StatsScreen>().iconDrawer.click()
-    
-    screen<DrawerScreen>().textNews.click()
-    
-    sleep(500)
+  
+    screen<StatsScreen>().iconDrawer.clickAndWaitForIdle()
+  
+    screen<DrawerScreen>().textNews.clickAndWaitForIdle()
     
     onScreen<NewsScreen> {
       recyclerView.isNotDisplayed()
       errorLayout.isDisplayed()
   
       fakeNetworkAvailabilityNotifier.notifyNetworkAvailable()
-      
-      sleep(1000)
-      
+  
+      idleMainThread()
+      sleep(1500) // Wait for list to be animated
+  
       recyclerView.isDisplayed()
       errorLayout.isNotDisplayed()
     }

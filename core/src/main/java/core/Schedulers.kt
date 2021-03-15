@@ -3,7 +3,7 @@ package core
 import io.reactivex.Scheduler
 
 /**
- * Scheduler for RxJava
+ * Schedulers for RxJava
  */
 interface Schedulers {
   

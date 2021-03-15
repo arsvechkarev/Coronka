@@ -1,6 +1,6 @@
 package core.model
 
-import core.DifferentiableItem
+import core.recycler.DifferentiableItem
 
 /**
  * Basic country information

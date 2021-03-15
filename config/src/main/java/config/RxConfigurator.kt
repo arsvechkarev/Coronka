@@ -1,4 +1,4 @@
-package core
+package config
 
 /**
  * Represents configuration values related to RxJava

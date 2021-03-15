@@ -1,6 +1,5 @@
 package com.arsvechkarev.rankings.presentation
 
-import core.DifferentiableItem
 import core.extenstions.assertThat
 import core.extenstions.toFormattedDecimalNumber
 import core.extenstions.toFormattedNumber
@@ -9,6 +8,7 @@ import core.model.CountryMetaInfo
 import core.model.DisplayableCountry
 import core.model.OptionType
 import core.model.WorldRegion
+import core.recycler.DifferentiableItem
 
 class CountriesFilterer(
   private val countries: List<Country>,

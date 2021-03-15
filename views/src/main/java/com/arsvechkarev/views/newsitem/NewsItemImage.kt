@@ -7,8 +7,8 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import com.arsvechkarev.viewdsl.AccelerateDecelerateInterpolator
-import com.arsvechkarev.viewdsl.DURATION_DEFAULT
 import com.arsvechkarev.views.RoundedCornersImage
+import config.AnimationsConfigurator
 import core.viewbuilding.Colors
 
 class NewsItemImage @JvmOverloads constructor(
@@ -22,7 +22,7 @@ class NewsItemImage @JvmOverloads constructor(
   private val alphaAnimator = ValueAnimator().apply {
     setFloatValues(0f, 1f)
     interpolator = AccelerateDecelerateInterpolator
-    duration = DURATION_DEFAULT
+    duration = AnimationsConfigurator.DurationDefault
     addUpdateListener {
       drawable?.alpha = (it.animatedFraction * 255).toInt()
       invalidate()

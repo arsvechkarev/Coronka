@@ -9,6 +9,7 @@ import android.text.Layout
 import android.text.TextPaint
 import android.view.View
 import com.arsvechkarev.viewdsl.rippleBackground
+import core.extenstions.boringLayoutOf
 import core.extenstions.execute
 import core.extenstions.f
 import core.extenstions.formatRankingsNumber

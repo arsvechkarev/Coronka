@@ -18,6 +18,7 @@ android {
   def configs = rootProject.ext
 
   compileSdkVersion configs.compileSdkVersion
+
   defaultConfig {
     applicationId configs.applicationId
     minSdkVersion configs.minSdkVersion
@@ -25,6 +26,11 @@ android {
     versionCode configs.versionCode
     versionName configs.versionName
     testInstrumentationRunner configs.testInstrumentationRunner
+
+  }
+
+  testOptions {
+    execution 'ANDROIDX_TEST_ORCHESTRATOR'
   }
 
   buildTypes {
@@ -34,6 +40,7 @@ android {
       signingConfig signingConfigs.release
     }
   }
+
   sourceSets {
     debug {
       java {
@@ -46,6 +53,7 @@ android {
 dependencies {
   implementation project(':core')
   implementation project(':views')
+  implementation project(':viewdsl')
   implementation project(':f-stats')
   implementation project(':f-news')
   implementation project(':f-map')
@@ -65,6 +73,7 @@ dependencies {
 
   def testDependencies = rootProject.ext.testDependencies
 
+  androidTestUtil testDependencies.androidTestOrchestrator
   androidTestImplementation project(':test-common')
   androidTestImplementation testDependencies.kakao
   androidTestImplementation testDependencies.espresso

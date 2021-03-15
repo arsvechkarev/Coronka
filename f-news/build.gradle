@@ -23,6 +23,7 @@ android {
 dependencies {
   implementation project(":core")
   implementation project(":views")
+  implementation project(':viewdsl')
 
   def dependencies = rootProject.ext.applicationDependencies
   implementation dependencies.kotlin
