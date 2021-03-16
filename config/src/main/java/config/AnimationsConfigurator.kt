@@ -2,7 +2,6 @@ package config
 
 object AnimationsConfigurator {
   
-  private var _performListAnimations = true
   private var _short = 150L
   private var _default = 300L
   private var _medium = 500L
@@ -10,7 +9,6 @@ object AnimationsConfigurator {
   private var _bottomSheetSlide = 225L
   private var _loadingStubIdle = 1200L
   
-  val performListAnimations get() = _performListAnimations
   val DurationShort get() = _short
   val DurationDefault get() = _default
   val DurationMedium get() = _medium
@@ -19,7 +17,6 @@ object AnimationsConfigurator {
   val DurationLoadingStubIdle get() = _loadingStubIdle
   
   fun resetDurations() {
-    _performListAnimations = false
     _short = 0
     _default = 0
     _medium = 0

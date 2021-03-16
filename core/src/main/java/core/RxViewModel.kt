@@ -11,15 +11,14 @@ import java.util.concurrent.atomic.AtomicBoolean
 abstract class RxViewModel : ViewModel() {
   
   private val compositeDisposable = CompositeDisposable()
-  private var isLoadingNow = AtomicBoolean(false)
+  private val isLoadingNow = AtomicBoolean(false)
   
   protected val _state = MutableLiveData<BaseScreenState>()
   val state: LiveData<BaseScreenState>
     get() = _state
   
   protected open fun rxCall(onSubscribe: () -> Disposable?) {
-    if (isLoadingNow.get()) return
-    isLoadingNow.set(true)
+    if (isLoadingNow.getAndSet(true)) return
     val disposable = onSubscribe()
     if (disposable != null) {
       compositeDisposable.add(disposable)
