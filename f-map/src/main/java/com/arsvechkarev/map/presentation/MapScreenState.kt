@@ -6,9 +6,9 @@ import core.model.CountryOnMap
 
 class LoadedCountries(
   val iso2ToCountryMap: Map<String, CountryOnMap>,
-) : BaseScreenState()
+) : BaseScreenState
 
 class FoundCountry(
   val iso2ToCountryMap: Map<String, CountryOnMap>,
   val country: Country
-) : BaseScreenState()
+) : BaseScreenState

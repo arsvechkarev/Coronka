@@ -1,12 +1,8 @@
 package com.arsvechkarev.news.list
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.arsvechkarev.news.presentation.LoadingNextPage
+import com.arsvechkarev.news.presentation.AdditionalItem
 import com.arsvechkarev.news.presentation.NewsFragment
-import com.arsvechkarev.viewdsl.childView
-import com.arsvechkarev.viewdsl.invisible
-import com.arsvechkarev.viewdsl.visible
 import core.imageloading.GlideImageLoader
 import core.imageloading.ImageLoader
 import core.model.BasicNewsItem
@@ -20,18 +16,16 @@ class NewsAdapter(
   private var onRetryItemClicked: (() -> Unit)? = null
 ) : ListAdapter(
   newsItemDelegate(fragment, imageLoader) { onNewsItemClicked?.invoke(it) },
-  loadingNextPageDelegate { onRetryItemClicked?.invoke() },
+  additionalItemDelegate { onRetryItemClicked?.invoke() },
   onReadyToLoadNextPage = onReadyToLoadNextPage
 ) {
   
-  fun changeLoadingToError() {
-    val itemView = lastHolderItemView()
-    itemView?.childView(ProgressBar)?.invisible()
-    itemView?.childView(FailureLayout)?.visible()
+  fun setLastItemAsError() {
+    setLastItem(AdditionalItem(AdditionalItem.Mode.FAILURE))
   }
   
-  fun addLoadingItem(item: LoadingNextPage) {
-    if (data.last() != item) addItem(item)
+  fun setLastItemAsLoading() {
+    setLastItem(AdditionalItem(AdditionalItem.Mode.LOADING))
   }
   
   override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
@@ -39,8 +33,13 @@ class NewsAdapter(
     onRetryItemClicked = null
   }
   
-  private fun lastHolderItemView(): View? {
-    return recyclerView?.findViewHolderForAdapterPosition(data.lastIndex)?.itemView
+  private fun setLastItem(state: AdditionalItem) {
+    if (data.lastOrNull() is AdditionalItem) {
+      data[data.lastIndex] = state
+      notifyItemChanged(data.lastIndex)
+    } else {
+      addToEnd(state)
+    }
   }
   
   companion object {

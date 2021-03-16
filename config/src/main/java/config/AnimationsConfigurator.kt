@@ -1,5 +1,8 @@
 package config
 
+/**
+ * Represents configuration values for animations
+ */
 object AnimationsConfigurator {
   
   private var _short = 150L

@@ -41,13 +41,15 @@ class MapViewModel(
         countriesMetaInfoDataSource.getLocationsMap().subscribeOn(schedulers.io()),
         { map, countries -> Pair(map, countries) }
       ).withNetworkDelay(schedulers)
+          .withRetry()
           .withRequestTimeout()
           .map<BaseScreenState> { LoadedCountries(MapTransformer.transformResult(it)) }
-          .withRetry()
           .onErrorReturn(::Failure)
-          .startWith(Loading())
+          .startWith(Loading)
           .observeOn(schedulers.mainThread())
-          .smartSubscribe(_state::setValue)
+          .smartSubscribe {
+            _state.setValue(it)
+          }
     }
   }
   

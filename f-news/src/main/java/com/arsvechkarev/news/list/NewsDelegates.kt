@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.arsvechkarev.news.R
-import com.arsvechkarev.news.presentation.LoadingNextPage
+import com.arsvechkarev.news.presentation.AdditionalItem
 import com.arsvechkarev.viewdsl.Ints.dp
 import com.arsvechkarev.viewdsl.Size.Companion.MatchParent
 import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
@@ -72,7 +72,7 @@ fun newsItemDelegate(
   }
 }
 
-fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNextPage> {
+fun additionalItemDelegate(onRetryItemClicked: () -> Unit) = delegate<AdditionalItem> {
   buildView {
     FrameLayout(MatchParent, WrapContent) {
       padding(12.dp)
@@ -109,6 +109,18 @@ fun loadingNextPageDelegate(onRetryItemClicked: () -> Unit) = delegate<LoadingNe
       itemView.childView(NewsAdapter.FailureLayout).invisible()
     }
   }
+  onBind { itemView, element ->
+    when (element.mode) {
+      AdditionalItem.Mode.FAILURE -> {
+        itemView.childView(NewsAdapter.FailureLayout).visible()
+        itemView.childView(NewsAdapter.ProgressBar).invisible()
+      }
+      AdditionalItem.Mode.LOADING -> {
+        itemView.childView(NewsAdapter.FailureLayout).invisible()
+        itemView.childView(NewsAdapter.ProgressBar).visible()
+      }
+    }
+  }
 }
 
 private fun buildNewsLayout(viewBuilder: ViewBuilder): View {
@@ -131,7 +143,7 @@ private fun buildNewsLayout(viewBuilder: ViewBuilder): View {
     return NewsItemViewApi23Plus(viewBuilder.context, titlePaint, descriptionPaint, datePaint)
   } else {
     return viewBuilder.context.withViewBuilder {
-      val textTitle = viewBuilder.TextView(style = Styles.NewsTextView) {
+      val textTitle = TextView(style = Styles.NewsTextView) {
         font(Fonts.SegoeUiBold)
         maxLines = 3
       }

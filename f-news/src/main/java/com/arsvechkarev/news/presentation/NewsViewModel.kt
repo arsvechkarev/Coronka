@@ -25,10 +25,10 @@ class NewsViewModel(
   }
   
   override fun onNetworkAvailable() {
-    if (_state.value is Failure) {
-      schedulers.mainThread().scheduleDirect(::startLoadingData)
-    } else if (_state.value is FailureLoadingNextPage) {
+    if (_state.value is FailureLoadingNextPage) {
       schedulers.mainThread().scheduleDirect(::tryLoadNextPage)
+    } else if (_state.value is Failure) {
+      schedulers.mainThread().scheduleDirect(::startLoadingData)
     }
   }
   
@@ -36,13 +36,13 @@ class NewsViewModel(
     rxCall {
       newsDataSource.requestLatestNews(currentPage)
           .subscribeOn(schedulers.io())
-          .map<BaseScreenState> { list -> LoadedNews(list) }
           .withNetworkDelay(schedulers)
-          .withRequestTimeout()
-          .observeOn(schedulers.mainThread())
           .withRetry()
-          .startWith(Loading())
+          .withRequestTimeout()
+          .map<BaseScreenState>(::LoadedNews)
+          .startWith(Loading)
           .onErrorReturn(::Failure)
+          .observeOn(schedulers.mainThread())
           .smartSubscribe(_state::setValue)
     }
   }
@@ -52,16 +52,15 @@ class NewsViewModel(
     rxCall {
       newsDataSource.requestLatestNews(++currentPage)
           .subscribeOn(schedulers.io())
-          .map<BaseScreenState> { list -> LoadedNextPage(list) }
           .withNetworkDelay(schedulers)
-          .withRequestTimeout()
-          .observeOn(schedulers.mainThread())
           .withRetry()
+          .withRequestTimeout()
+          .map<BaseScreenState>(::LoadedNextPage)
+          .observeOn(schedulers.mainThread())
           .startWith(LoadingNextPage)
-          .onErrorReturn { e ->
-            currentPage--
-            FailureLoadingNextPage(e)
-          }.smartSubscribe(_state::setValue)
+          .doOnError { currentPage-- }
+          .onErrorReturn(::FailureLoadingNextPage)
+          .smartSubscribe(_state::setValue)
     }
   }
   

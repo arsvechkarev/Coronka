@@ -1,18 +1,26 @@
 package com.arsvechkarev.news.presentation
 
 import core.BaseScreenState
-import core.Failure
-import core.Loading
 import core.recycler.DifferentiableItem
+import core.toFailureReason
 
-class LoadedNews(val news: List<DifferentiableItem>) : BaseScreenState()
+class LoadedNews(val news: List<DifferentiableItem>) : BaseScreenState
 
-class LoadedNextPage(val newNews: List<DifferentiableItem>) : BaseScreenState()
+class LoadedNextPage(val newNews: List<DifferentiableItem>) : BaseScreenState
 
-object LoadingNextPage : Loading(), DifferentiableItem {
-  override val id: String = "LoadingNextPage"
-  override fun equals(other: Any?) = other is LoadingNextPage
+class AdditionalItem(val mode: Mode) : BaseScreenState, DifferentiableItem {
+  override val id: String = "AdditionalItem"
+  override fun equals(other: Any?) = other is AdditionalItem
   override fun hashCode() = id.hashCode()
+  
+  enum class Mode {
+    LOADING, FAILURE
+  }
 }
 
-class FailureLoadingNextPage(e: Throwable) : Failure(e)
+object LoadingNextPage : BaseScreenState
+
+class FailureLoadingNextPage(val throwable: Throwable) : BaseScreenState {
+  
+  val reason = throwable.toFailureReason()
+}

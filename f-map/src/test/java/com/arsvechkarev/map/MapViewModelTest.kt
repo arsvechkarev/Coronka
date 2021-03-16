@@ -18,7 +18,8 @@ import com.arsvechkarev.test.hasStatesCount
 import com.arsvechkarev.test.state
 import config.RxConfigurator
 import core.Failure
-import core.Failure.FailureReason.NO_CONNECTION
+import core.FailureReason
+import core.FailureReason.NO_CONNECTION
 import core.Loading
 import core.transformers.MapTransformer
 import org.junit.Assert.assertEquals
@@ -58,7 +59,7 @@ class MapViewModelTest {
     }
   }
   
-  @Test
+  @Test(timeout = 1000)
   fun `Error handling`() {
     val viewModel = createViewModel(
       totalRetryCount = maxRetryCount + 1,
@@ -72,7 +73,7 @@ class MapViewModelTest {
     with(observer) {
       hasStatesCount(2)
       hasStateAtPosition<Loading>(0)
-      assertEquals(Failure.FailureReason.TIMEOUT, currentState<Failure>().reason)
+      assertEquals(FailureReason.TIMEOUT, currentState<Failure>().reason)
     }
   }
   

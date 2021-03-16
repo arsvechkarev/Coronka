@@ -48,11 +48,11 @@ class RankingsViewModel(
       totalInfoDataSource.requestTotalInfo()
           .subscribeOn(schedulers.io())
           .withNetworkDelay(schedulers)
-          .withRequestTimeout()
           .withRetry()
+          .withRequestTimeout()
           .map(::transformToScreenState)
           .onErrorReturn(::Failure)
-          .startWith(Loading())
+          .startWith(Loading)
           .observeOn(schedulers.mainThread())
           .smartSubscribe(_state::setValue)
     }

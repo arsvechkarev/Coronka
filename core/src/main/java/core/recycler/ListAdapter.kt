@@ -40,9 +40,9 @@ abstract class ListAdapter(
     }
   }
   
-  fun addItem(item: DifferentiableItem) {
+  fun addToEnd(item: DifferentiableItem) {
     data.add(item)
-    notifyItemInserted(data.size - 1)
+    notifyItemInserted(data.lastIndex)
   }
   
   fun removeLastAndAdd(list: List<DifferentiableItem>) {

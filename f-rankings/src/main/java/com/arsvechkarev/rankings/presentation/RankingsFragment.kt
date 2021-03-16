@@ -32,9 +32,9 @@ import com.arsvechkarev.views.drawables.SelectedChipsLoadingStub
 import core.BaseFragment
 import core.BaseScreenState
 import core.Failure
-import core.Failure.FailureReason.NO_CONNECTION
-import core.Failure.FailureReason.TIMEOUT
-import core.Failure.FailureReason.UNKNOWN
+import core.FailureReason.NO_CONNECTION
+import core.FailureReason.TIMEOUT
+import core.FailureReason.UNKNOWN
 import core.Loading
 import core.extenstions.toFormattedDecimalNumber
 import core.extenstions.toFormattedNumber

@@ -22,8 +22,8 @@ import config.RxConfigurator
 import core.CountriesFilterer
 import core.CountriesFiltererImpl
 import core.Failure
-import core.Failure.FailureReason.NO_CONNECTION
-import core.Failure.FailureReason.TIMEOUT
+import core.FailureReason.NO_CONNECTION
+import core.FailureReason.TIMEOUT
 import core.Loading
 import core.model.DisplayableCountry
 import core.model.OptionType.RECOVERED

@@ -47,9 +47,9 @@ import com.arsvechkarev.views.drawables.NewsListLoadingStub
 import core.BaseFragment
 import core.BaseScreenState
 import core.Failure
-import core.Failure.FailureReason.NO_CONNECTION
-import core.Failure.FailureReason.TIMEOUT
-import core.Failure.FailureReason.UNKNOWN
+import core.FailureReason.NO_CONNECTION
+import core.FailureReason.TIMEOUT
+import core.FailureReason.UNKNOWN
 import core.Loading
 import core.hostActivity
 import core.viewbuilding.Dimens.ErrorLayoutImageSize
@@ -156,17 +156,13 @@ class NewsFragment : BaseFragment() {
   
   private fun handleState(state: BaseScreenState) {
     when (state) {
-      is LoadingNextPage -> renderLoadingNextPage(state)
       is Loading -> renderLoading()
       is LoadedNews -> renderLoadedNews(state)
+      is LoadingNextPage -> renderLoadingNextPage(state)
       is LoadedNextPage -> renderLoadedNextPage(state)
       is FailureLoadingNextPage -> renderFailureLoadingNextPage()
       is Failure -> renderFailure(state)
     }
-  }
-  
-  private fun renderLoadingNextPage(state: LoadingNextPage) {
-    newsAdapter.addLoadingItem(state)
   }
   
   private fun renderLoading() {
@@ -180,12 +176,18 @@ class NewsFragment : BaseFragment() {
     newsAdapter.submitList(state.news)
   }
   
+  private fun renderLoadingNextPage(state: LoadingNextPage) {
+    view!!.post { // Posting in case recycler is currently computing layout
+      newsAdapter.setLastItemAsLoading()
+    }
+  }
+  
   private fun renderLoadedNextPage(state: LoadedNextPage) {
     newsAdapter.removeLastAndAdd(state.newNews)
   }
   
   private fun renderFailureLoadingNextPage() {
-    newsAdapter.changeLoadingToError()
+    newsAdapter.setLastItemAsError()
   }
   
   private fun renderFailure(state: Failure) {

@@ -43,11 +43,11 @@ class StatsViewModel(
             .subscribeOn(schedulers.io()),
         { info, cases -> WorldCasesInfo(info, cases.first, cases.second) }
       ).withNetworkDelay(schedulers)
-          .withRequestTimeout()
           .map<BaseScreenState> { info -> LoadedWorldCasesInfo(info) }
           .withRetry()
+          .withRequestTimeout()
           .onErrorReturn(::Failure)
-          .startWith(Loading())
+          .startWith(Loading)
           .observeOn(schedulers.mainThread())
           .smartSubscribe(_state::setValue)
     }

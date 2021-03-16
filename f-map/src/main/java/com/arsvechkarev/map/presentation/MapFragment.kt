@@ -16,9 +16,9 @@ import com.arsvechkarev.viewdsl.visible
 import com.arsvechkarev.views.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import core.BaseScreenState
 import core.Failure
-import core.Failure.FailureReason.NO_CONNECTION
-import core.Failure.FailureReason.TIMEOUT
-import core.Failure.FailureReason.UNKNOWN
+import core.FailureReason.NO_CONNECTION
+import core.FailureReason.TIMEOUT
+import core.FailureReason.UNKNOWN
 import core.Loading
 import core.hostActivity
 import core.model.Country
