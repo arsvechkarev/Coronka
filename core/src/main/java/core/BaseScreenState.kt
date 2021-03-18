@@ -15,7 +15,7 @@ interface BaseScreenState
 object Loading : BaseScreenState
 
 /**
- *
+ * Represents failure state
  */
 class Failure(val throwable: Throwable) : BaseScreenState {
   

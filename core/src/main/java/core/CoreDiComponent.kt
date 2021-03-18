@@ -8,12 +8,13 @@ import core.datasources.CountriesMetaInfoDataSource
 import core.datasources.CountriesMetaInfoDataSourceImpl
 import core.datasources.TotalInfoDataSource
 import core.datasources.TotalInfoDataSourceImpl
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 object CoreDiComponent {
   
-  private lateinit var webApiFactory: WebApi.Factory
-  
-  val webApi: WebApi get() = webApiFactory.create()
+  lateinit var webApiFactory: WebApi.Factory
+    private set
   
   lateinit var totalInfoDataSource: TotalInfoDataSource
     private set
@@ -37,7 +38,14 @@ object CoreDiComponent {
       applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     )
     val database = CountriesMetaInfoDatabase(applicationContext)
-    init(RxWebApiFactory, notifier, database)
+    val okHttpWebApiFactory = OkHttpWebApiFactory(createOkHttpClient())
+    init(okHttpWebApiFactory, notifier, database)
+  }
+  
+  private fun createOkHttpClient(): OkHttpClient {
+    return OkHttpClient.Builder()
+        .callTimeout(20, TimeUnit.SECONDS)
+        .build()
   }
   
   private fun init(
@@ -45,8 +53,8 @@ object CoreDiComponent {
     notifier: NetworkAvailabilityNotifier,
     database: Database
   ) {
-    CoreDiComponent.webApiFactory = webApiFactory
-    totalInfoDataSource = TotalInfoDataSourceImpl(webApi)
+    this.webApiFactory = webApiFactory
+    totalInfoDataSource = TotalInfoDataSourceImpl(webApiFactory.create())
     countriesMetaInfoDataSource = CountriesMetaInfoDataSourceImpl(database)
     networkAvailabilityNotifier = notifier
   }

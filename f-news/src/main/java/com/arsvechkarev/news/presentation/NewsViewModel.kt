@@ -32,6 +32,10 @@ class NewsViewModel(
     }
   }
   
+  override fun isItemLoading(item: Any?): Boolean {
+    return item is Loading || item is LoadingNextPage
+  }
+  
   fun startLoadingData() {
     rxCall {
       newsDataSource.requestLatestNews(currentPage)

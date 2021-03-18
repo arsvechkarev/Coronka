@@ -7,7 +7,7 @@ import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.news.presentation.NewsViewModel
 import core.AndroidSchedulers
 import core.CoreDiComponent.networkAvailabilityNotifier
-import core.CoreDiComponent.webApi
+import core.CoreDiComponent.webApiFactory
 import core.datasources.NewYorkTimesNewsDataSourceImpl
 import core.datetime.EnglishTimeFormatter
 
@@ -22,6 +22,7 @@ object NewsModuleInjector {
       return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
           val formatter = EnglishTimeFormatter
+          val webApi = webApiFactory.create()
           val repository = NewYorkTimesNewsDataSourceImpl(webApi, formatter,
             BuildConfig.NYT_API_KEY)
           return NewsViewModel(repository, networkAvailabilityNotifier, AndroidSchedulers) as T

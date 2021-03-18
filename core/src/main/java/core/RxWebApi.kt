@@ -1,30 +1,35 @@
 package core
 
 import io.reactivex.Observable
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.URL
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
-object RxWebApiFactory : WebApi.Factory {
-  override fun create(): WebApi = RxWebApi
+class OkHttpWebApiFactory(private val client: OkHttpClient) : WebApi.Factory {
+  
+  override fun create(): WebApi {
+    return OkHttpWebApi(client)
+  }
 }
 
-object RxWebApi : WebApi {
+class OkHttpWebApi(private val client: OkHttpClient) : WebApi {
   
   override fun request(url: String) = Observable.create<String> { emitter ->
     try {
-      val stringBuilder = StringBuilder()
-      val urlInstance = URL(url)
-      BufferedReader(InputStreamReader(urlInstance.openStream())).use {
-        while (true) {
-          val line = it.readLine() ?: break
-          stringBuilder.append(line)
+      val request: Request = Request.Builder()
+          .url(url)
+          .build()
+      client.newCall(request).execute().use { response ->
+        if (emitter.isDisposed) return@create
+        if (!response.isSuccessful && !emitter.isDisposed) {
+          emitter.onError(HttpException(response))
+          emitter.onComplete()
+          return@create
         }
+        response.body()!!.use { body ->
+          emitter.onNext(body.string())
+        }
+        emitter.onComplete()
       }
-      if (!emitter.isDisposed) {
-        emitter.onNext(stringBuilder.toString())
-      }
-      emitter.onComplete()
     } catch (e: Throwable) {
       if (!emitter.isDisposed) {
         emitter.onError(e)

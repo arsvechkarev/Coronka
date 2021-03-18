@@ -1,7 +1,7 @@
 package core.transformers
 
+import com.google.gson.JsonParser
 import core.model.DailyCase
-import org.json.JSONArray
 
 object WorldCasesInfoTransformer {
   
@@ -11,11 +11,11 @@ object WorldCasesInfoTransformer {
   
   fun toDailyCases(json: String): List<DailyCase> {
     val dailyCases = ArrayList<DailyCase>()
-    val array = JSONArray(json)
-    for (i in array.length() - MAX_CASES until array.length()) {
-      val obj = array.getJSONObject(i)
-      val cases = obj.getInt(CONFIRMED)
-      val date = obj.getString(DATE)
+    val array = JsonParser().parse(json).asJsonArray
+    for (i in array.size() - MAX_CASES until array.size()) {
+      val obj = array.get(i).asJsonObject
+      val cases = obj.get(CONFIRMED).asInt
+      val date = obj.get(DATE).asString
       val dailyCase = DailyCase(cases, date)
       dailyCases.add(dailyCase)
     }

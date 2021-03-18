@@ -20,6 +20,8 @@ dependencies {
   implementation dependencies.appCompat
   implementation dependencies.coordinatorLayout
   implementation dependencies.recyclerView
+  implementation dependencies.retrofit
+  implementation dependencies.retrofitGsonConverter
   implementation dependencies.rxJava
   implementation dependencies.rxAndroid
   implementation dependencies.glide

@@ -6,7 +6,7 @@ import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.stats.presentation.StatsViewModel
 import core.AndroidSchedulers
 import core.CoreDiComponent.networkAvailabilityNotifier
-import core.CoreDiComponent.webApi
+import core.CoreDiComponent.webApiFactory
 import core.datasources.GeneralInfoDataSourceImpl
 import core.datasources.WorldCasesInfoDataSourceImpl
 
@@ -20,6 +20,7 @@ object StatsModuleInjector {
     get() {
       return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+          val webApi = webApiFactory.create()
           val generalInfoDataSourceImpl = GeneralInfoDataSourceImpl(webApi)
           val worldCasesInfoDataSourceImpl = WorldCasesInfoDataSourceImpl(webApi)
           return StatsViewModel(generalInfoDataSourceImpl, worldCasesInfoDataSourceImpl,

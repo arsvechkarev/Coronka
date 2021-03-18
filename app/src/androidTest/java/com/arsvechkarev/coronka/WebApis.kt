@@ -9,7 +9,7 @@ import io.reactivex.Observable
 import java.net.UnknownHostException
 import core.datasources.GeneralInfoDataSourceImpl.Companion.URL as GENERAL_INFO_URL
 import core.datasources.TotalInfoDataSourceImpl.Companion.URL as ALL_COUNTIES_URL
-import core.datasources.WorldCasesInfoDataSourceImpl.Companion.URL as WORLD_CASES_URL
+import core.datasources.WorldCasesInfoDataSource.Companion.URL as WORLD_CASES_URL
 
 object FakeWebApi : WebApi, WebApi.Factory {
   

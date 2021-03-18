@@ -1,22 +1,28 @@
 ext {
 
+  glide_version = "4.11.0"
+  retrofit_version = "2.9.0"
+
   applicationDependencies = [
-      kotlin             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
-      appCompat          : "androidx.appcompat:appcompat:1.1.0",
-      timber             : "com.jakewharton.timber:timber:4.7.1",
-      constraintLayout   : "androidx.constraintlayout:constraintlayout:1.1.0",
-      coordinatorLayout  : "androidx.coordinatorlayout:coordinatorlayout:1.1.0",
-      lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:2.1.0",
-      googleMaps         : "com.google.android.gms:play-services-maps:17.0.0",
-      recyclerView       : "androidx.recyclerview:recyclerview:1.1.0",
-      rxJava             : "io.reactivex.rxjava2:rxjava:2.2.19",
-      rxAndroid          : "io.reactivex.rxjava2:rxandroid:2.1.1",
-      mpAndroidChart     : "com.github.PhilJay:MPAndroidChart:v3.1.0",
-      glide              : "com.github.bumptech.glide:glide:4.11.0",
-      glideApt           : "com.github.bumptech.glide:compiler:4.11.0",
-      threeTenAbp        : "com.jakewharton.threetenabp:threetenabp:1.2.4",
-      googleServicesAuth : "com.google.android.gms:play-services-auth:18.1.0",
-      flexboxLayout      : "com.google.android:flexbox:2.0.1",
+      kotlin               : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+      appCompat            : "androidx.appcompat:appcompat:1.1.0",
+      timber               : "com.jakewharton.timber:timber:4.7.1",
+      constraintLayout     : "androidx.constraintlayout:constraintlayout:1.1.0",
+      coordinatorLayout    : "androidx.coordinatorlayout:coordinatorlayout:1.1.0",
+      lifecycleExtensions  : "androidx.lifecycle:lifecycle-extensions:2.1.0",
+      retrofit             : "com.squareup.retrofit2:retrofit:$retrofit_version",
+      retrofitGsonConverter: "com.squareup.retrofit2:converter-gson:$retrofit_version",
+      gson                 : "com.google.code.gson:gson:2.8.6",
+      googleMaps           : "com.google.android.gms:play-services-maps:17.0.0",
+      recyclerView         : "androidx.recyclerview:recyclerview:1.1.0",
+      rxJava               : "io.reactivex.rxjava2:rxjava:2.2.19",
+      rxAndroid            : "io.reactivex.rxjava2:rxandroid:2.1.1",
+      mpAndroidChart       : "com.github.PhilJay:MPAndroidChart:v3.1.0",
+      glide                : "com.github.bumptech.glide:glide:$glide_version",
+      glideApt             : "com.github.bumptech.glide:compiler:$glide_version",
+      threeTenAbp          : "com.jakewharton.threetenabp:threetenabp:1.2.4",
+      googleServicesAuth   : "com.google.android.gms:play-services-auth:18.1.0",
+      flexboxLayout        : "com.google.android:flexbox:2.0.1",
   ]
 
 
