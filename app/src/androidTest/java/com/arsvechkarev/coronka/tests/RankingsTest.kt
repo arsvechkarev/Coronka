@@ -25,7 +25,7 @@ class RankingsTest {
   @get:Rule
   val rule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
     
-    override fun beforeActivityLaunched() {
+    override fun afterActivityLaunched() {
       configureDurationsAndDelaysForTests()
     }
   }

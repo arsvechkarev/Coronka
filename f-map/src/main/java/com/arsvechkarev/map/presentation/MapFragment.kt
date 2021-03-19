@@ -4,8 +4,8 @@ import android.view.ViewGroup.MarginLayoutParams
 import androidx.lifecycle.Observer
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapModuleInjector
-import com.arsvechkarev.map.uils.BaseMapFragment
-import com.arsvechkarev.map.uils.MapHelper
+import com.arsvechkarev.map.utils.BaseMapFragment
+import com.arsvechkarev.map.utils.MapHelper
 import com.arsvechkarev.viewdsl.animateInvisible
 import com.arsvechkarev.viewdsl.animateVisible
 import com.arsvechkarev.viewdsl.gone

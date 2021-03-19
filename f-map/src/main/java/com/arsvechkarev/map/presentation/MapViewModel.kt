@@ -14,8 +14,11 @@ import core.extenstions.withRequestTimeout
 import core.extenstions.withRetry
 import core.model.Country
 import core.model.CountryOnMap
+import core.model.Location
+import core.model.TotalInfo
 import core.transformers.MapTransformer
 import io.reactivex.Observable
+import io.reactivex.Single
 
 class MapViewModel(
   private val totalInfoDataSource: TotalInfoDataSource,
@@ -36,20 +39,28 @@ class MapViewModel(
   
   fun startLoadingData() {
     rxCall {
-      Observable.zip(
-        totalInfoDataSource.requestTotalInfo().subscribeOn(schedulers.io()),
-        countriesMetaInfoDataSource.getLocationsMap().subscribeOn(schedulers.io()),
-        { map, countries -> Pair(map, countries) }
-      ).withNetworkDelay(schedulers)
+      Single.zip(
+        totalInfoDataSource.requestTotalInfo().subscribeOn(schedulers.io())
+            .map(Result.Companion::success)
+            .onErrorReturn(Result.Companion::failure),
+        countriesMetaInfoDataSource.getLocationsMap().subscribeOn(schedulers.io())
+            .map(Result.Companion::success)
+            .onErrorReturn(Result.Companion::failure),
+        { map, countries -> mapToScreenState(map, countries) }
+      ).toObservable()
+          .withNetworkDelay(schedulers)
+          .flatMap { item ->
+            when (item) {
+              is Failure -> Observable.error(item.throwable)
+              else -> Observable.just(item)
+            }
+          }
           .withRetry()
-          .withRequestTimeout()
-          .map<BaseScreenState> { LoadedCountries(MapTransformer.transformResult(it)) }
+          .withRequestTimeout(schedulers)
           .onErrorReturn(::Failure)
           .startWith(Loading)
           .observeOn(schedulers.mainThread())
-          .smartSubscribe {
-            _state.setValue(it)
-          }
+          .smartSubscribe(_state::setValue)
     }
   }
   
@@ -58,6 +69,15 @@ class MapViewModel(
       is LoadedCountries -> notifyFoundCountry(state.iso2ToCountryMap, country)
       is FoundCountry -> notifyFoundCountry(state.iso2ToCountryMap, country)
     }
+  }
+  
+  private fun mapToScreenState(
+    resultTotalInfo: Result<TotalInfo>,
+    resultCountries: Result<Map<String, Location>>
+  ): BaseScreenState {
+    val totalInfo = resultTotalInfo.getOrElse { return Failure(it) }
+    val locationsMap = resultCountries.getOrElse { return Failure(it) }
+    return LoadedCountries(MapTransformer.transformResult(totalInfo, locationsMap))
   }
   
   private fun notifyFoundCountry(

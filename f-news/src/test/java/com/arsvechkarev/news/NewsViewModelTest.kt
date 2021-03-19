@@ -7,8 +7,6 @@ import com.arsvechkarev.news.presentation.LoadedNextPage
 import com.arsvechkarev.news.presentation.LoadingNextPage
 import com.arsvechkarev.news.presentation.NewsViewModel
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
-import com.arsvechkarev.test.FakeNewListPages
-import com.arsvechkarev.test.FakeNewYorkTimesNewsDataSource
 import com.arsvechkarev.test.FakeSchedulers
 import com.arsvechkarev.test.FakeScreenStateObserver
 import com.arsvechkarev.test.currentState

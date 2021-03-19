@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.arsvechkarev.news.BuildConfig
 import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.news.presentation.NewsViewModel
+import com.arsvechkarev.news.repository.NewYorkTimesNewsDataSourceImpl
 import core.AndroidSchedulers
 import core.CoreDiComponent.networkAvailabilityNotifier
 import core.CoreDiComponent.webApiFactory
-import core.datasources.NewYorkTimesNewsDataSourceImpl
 import core.datetime.EnglishTimeFormatter
 
 object NewsModuleInjector {

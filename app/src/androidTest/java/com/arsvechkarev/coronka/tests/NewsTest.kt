@@ -28,7 +28,7 @@ class NewsTest {
   @get:Rule
   val rule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
     
-    override fun beforeActivityLaunched() {
+    override fun afterActivityLaunched() {
       val applicationContext = InstrumentationRegistry.getInstrumentation().targetContext
       val webApiFactory = RetryCountWebApiFactory(1)
       CoreDiComponent.initCustom(webApiFactory, fakeNetworkAvailabilityNotifier, applicationContext)
@@ -47,8 +47,8 @@ class NewsTest {
       recyclerView.isNotDisplayed()
       errorLayout.isDisplayed()
   
-      buttonRetry.clickAndWaitForIdle()
-      
+      buttonRetry.click()
+  
       recyclerView.isDisplayed()
       errorLayout.isNotDisplayed()
     }

@@ -12,7 +12,7 @@ import core.extenstions.intOfColumn
 import core.extenstions.stringOfColumn
 import core.model.CountryMetaInfo
 import core.model.Location
-import io.reactivex.Observable
+import io.reactivex.Single
 
 /**
  * Data source for retrieving countries meta information
@@ -26,9 +26,9 @@ interface CountriesMetaInfoDataSource {
   
   /**
    * Returns countries map with keys as **iso2** and values as **[Location]**
-   * wrapped as [Observable]
+   * wrapped as [Single]
    */
-  fun getLocationsMap(): Observable<Map<String, Location>>
+  fun getLocationsMap(): Single<Map<String, Location>>
 }
 
 class CountriesMetaInfoDataSourceImpl(
@@ -50,7 +50,7 @@ class CountriesMetaInfoDataSourceImpl(
       }
     })
   
-  override fun getLocationsMap() = Observable.fromCallable<Map<String, Location>> lb@{
+  override fun getLocationsMap() = Single.fromCallable<Map<String, Location>> lb@{
     return@lb database.query(
       sql = "SELECT $iso2, $lat, $lng FROM $TABLE_NAME WHERE $lat IS NOT NULL",
       converter = {

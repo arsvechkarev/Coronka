@@ -1,4 +1,4 @@
-package com.arsvechkarev.map.uils
+package com.arsvechkarev.map.utils
 
 import com.google.android.gms.maps.GoogleMap
 import java.util.concurrent.CountDownLatch

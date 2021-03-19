@@ -54,12 +54,12 @@ class MapViewModelTest {
     with(observer) {
       hasStatesCount(2)
       hasStateAtPosition<LoadedCountries>(1)
-      val expected = MapTransformer.transformResult(Pair(FakeTotalInfo, FakeLocationsMap))
+      val expected = MapTransformer.transformResult(FakeTotalInfo, FakeLocationsMap)
       assertEquals(expected, currentState<LoadedCountries>().iso2ToCountryMap)
     }
   }
   
-  @Test(timeout = 1000)
+  @Test
   fun `Error handling`() {
     val viewModel = createViewModel(
       totalRetryCount = maxRetryCount + 1,
@@ -97,7 +97,7 @@ class MapViewModelTest {
       hasStateAtPosition<LoadedCountries>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
       val worldCasesInfo = currentState<LoadedCountries>().iso2ToCountryMap
-      val expected = MapTransformer.transformResult(Pair(FakeTotalInfo, FakeLocationsMap))
+      val expected = MapTransformer.transformResult(FakeTotalInfo, FakeLocationsMap)
       assertEquals(expected, worldCasesInfo)
     }
   }
@@ -124,7 +124,7 @@ class MapViewModelTest {
       hasStateAtPosition<LoadedCountries>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
       val worldCasesInfo = currentState<LoadedCountries>().iso2ToCountryMap
-      val expected = MapTransformer.transformResult(Pair(FakeTotalInfo, FakeLocationsMap))
+      val expected = MapTransformer.transformResult(FakeTotalInfo, FakeLocationsMap)
       assertEquals(expected, worldCasesInfo)
     }
   }
@@ -144,7 +144,7 @@ class MapViewModelTest {
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<LoadedCountries>(1)
       hasStateAtPosition<FoundCountry>(2)
-      val expected = MapTransformer.transformResult(Pair(FakeTotalInfo, FakeLocationsMap))
+      val expected = MapTransformer.transformResult(FakeTotalInfo, FakeLocationsMap)
       assertEquals(expected, state<FoundCountry>(2).iso2ToCountryMap)
       assertEquals(countryToClick, state<FoundCountry>(2).country)
     }

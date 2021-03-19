@@ -1,4 +1,4 @@
-package com.arsvechkarev.map.uils
+package com.arsvechkarev.map.utils
 
 import android.os.Bundle
 import android.view.LayoutInflater

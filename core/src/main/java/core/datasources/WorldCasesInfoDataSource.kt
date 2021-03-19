@@ -1,10 +1,9 @@
 package core.datasources
 
 import core.WebApi
-import core.datasources.WorldCasesInfoDataSource.Companion.URL
 import core.model.DailyCase
 import core.transformers.WorldCasesInfoTransformer
-import io.reactivex.Observable
+import io.reactivex.Single
 
 /**
  * Data source for retrieving world cases info
@@ -12,10 +11,9 @@ import io.reactivex.Observable
 interface WorldCasesInfoDataSource {
   
   /**
-   * Returns list of daily cases wrapped as [Observable]
+   * Returns list of daily cases wrapped as [Single]
    */
-  fun requestWorldDailyCases(): Observable<List<DailyCase>>
-  
+  fun requestWorldDailyCases(): Single<List<DailyCase>>
   
   companion object {
     
@@ -25,7 +23,8 @@ interface WorldCasesInfoDataSource {
 
 class WorldCasesInfoDataSourceImpl(private val webApi: WebApi) : WorldCasesInfoDataSource {
   
-  override fun requestWorldDailyCases(): Observable<List<DailyCase>> {
-    return webApi.request(URL).map(WorldCasesInfoTransformer::toDailyCases)
+  override fun requestWorldDailyCases(): Single<List<DailyCase>> {
+    return webApi.request(WorldCasesInfoDataSource.URL)
+        .map(WorldCasesInfoTransformer::toDailyCases)
   }
 }

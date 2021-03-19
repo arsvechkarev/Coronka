@@ -1,4 +1,4 @@
-package com.arsvechkarev.map.uils
+package com.arsvechkarev.map.utils
 
 import android.content.Context
 import android.graphics.Bitmap

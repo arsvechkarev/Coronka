@@ -20,7 +20,6 @@ import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
 import com.arsvechkarev.viewdsl.Size.IntSize
 import com.arsvechkarev.viewdsl.animateInvisible
 import com.arsvechkarev.viewdsl.animateVisible
-import com.arsvechkarev.viewdsl.animateVisibleIfNotAlready
 import com.arsvechkarev.viewdsl.background
 import com.arsvechkarev.viewdsl.behavior
 import com.arsvechkarev.viewdsl.gone
@@ -166,7 +165,7 @@ class NewsFragment : BaseFragment() {
   }
   
   private fun renderLoading() {
-    view(LoadingLayout).animateVisibleIfNotAlready()
+    view(LoadingLayout).animateVisible()
     animateInvisible(view(RecyclerView), view(LayoutFailure))
   }
   

@@ -1,7 +1,5 @@
 package com.arsvechkarev.stats.presentation
 
-import com.arsvechkarev.stats.presentation.SuccessOrError.Error
-import com.arsvechkarev.stats.presentation.SuccessOrError.Success
 import core.BaseScreenState
 import core.Failure
 import core.Loading
@@ -11,7 +9,6 @@ import core.RxViewModel
 import core.Schedulers
 import core.datasources.GeneralInfoDataSource
 import core.datasources.WorldCasesInfoDataSource
-import core.extenstions.assertThat
 import core.extenstions.withNetworkDelay
 import core.extenstions.withRequestTimeout
 import core.extenstions.withRetry
@@ -20,6 +17,7 @@ import core.model.GeneralInfo
 import core.model.WorldCasesInfo
 import core.transformers.WorldCasesInfoTransformer.toNewDailyCases
 import io.reactivex.Observable
+import io.reactivex.Single
 
 class StatsViewModel(
   private val generalInfoDataSource: GeneralInfoDataSource,
@@ -40,21 +38,26 @@ class StatsViewModel(
   
   fun startLoadingData() {
     rxCall {
-      Observable.zip(
+      Single.zip(
         generalInfoDataSource.requestGeneralInfo()
-            .map<SuccessOrError>(SuccessOrError::Success)
-            .onErrorReturn(SuccessOrError::Error)
-            .subscribeOn(schedulers.io()),
+            .subscribeOn(schedulers.io())
+            .map(Result.Companion::success)
+            .onErrorReturn(Result.Companion::failure),
         worldCasesInfoDataSource.requestWorldDailyCases()
-            .map<SuccessOrError> { dailyCases ->
-              Success(Pair(dailyCases, toNewDailyCases(dailyCases)))
-            }
-            .onErrorReturn(SuccessOrError::Error)
-            .subscribeOn(schedulers.io()),
+            .subscribeOn(schedulers.io())
+            .map(Result.Companion::success)
+            .onErrorReturn(Result.Companion::failure),
         { info, cases -> mapToScreenState(info, cases) }
-      ).withNetworkDelay(schedulers)
+      ).toObservable()
+          .withNetworkDelay(schedulers)
+          .flatMap { item ->
+            when (item) {
+              is Failure -> Observable.error(item.throwable)
+              else -> Observable.just(item)
+            }
+          }
           .withRetry()
-          .withRequestTimeout()
+          .withRequestTimeout(schedulers)
           .onErrorReturn(::Failure)
           .startWith(Loading)
           .observeOn(schedulers.mainThread())
@@ -63,14 +66,13 @@ class StatsViewModel(
   }
   
   @Suppress("UNCHECKED_CAST")
-  private fun mapToScreenState(info: SuccessOrError, cases: SuccessOrError): BaseScreenState {
-    if (info is Error) return Failure(info.throwable)
-    if (cases is Error) return Failure(cases.throwable)
-    assertThat(info is Success<*>)
-    assertThat(cases is Success<*>)
-    val generalInfo = info.value as GeneralInfo
-    val casesPair = cases.value as Pair<List<DailyCase>, List<DailyCase>>
-    val worldCasesInfo = WorldCasesInfo(generalInfo, casesPair.first, casesPair.second)
+  private fun mapToScreenState(
+    resultInfo: Result<GeneralInfo>,
+    resultCases: Result<List<DailyCase>>
+  ): BaseScreenState {
+    val generalInfo = resultInfo.getOrElse { return Failure(it) }
+    val cases = resultCases.getOrElse { return Failure(it) }
+    val worldCasesInfo = WorldCasesInfo(generalInfo, cases, toNewDailyCases(cases))
     return LoadedWorldCasesInfo(worldCasesInfo)
   }
   

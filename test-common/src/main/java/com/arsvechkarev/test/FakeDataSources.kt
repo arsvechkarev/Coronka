@@ -2,7 +2,6 @@ package com.arsvechkarev.test
 
 import core.datasources.CountriesMetaInfoDataSource
 import core.datasources.GeneralInfoDataSource
-import core.datasources.NewYorkTimesNewsDataSource
 import core.datasources.TotalInfoDataSource
 import core.datasources.WorldCasesInfoDataSource
 import core.model.Country
@@ -10,14 +9,13 @@ import core.model.CountryMetaInfo
 import core.model.DailyCase
 import core.model.GeneralInfo
 import core.model.Location
-import core.model.NewsItemWithPicture
 import core.model.TotalInfo
 import core.model.WorldRegion.ASIA
 import core.model.WorldRegion.EUROPE
 import core.model.WorldRegion.NORTH_AMERICA
 import core.model.WorldRegion.OCEANIA
 import core.model.WorldRegion.SOUTH_AMERICA
-import io.reactivex.Observable
+import io.reactivex.Single
 import java.net.UnknownHostException
 
 val FakeGeneralInfo = GeneralInfo(115887454, 2573769, 91562289)
@@ -44,25 +42,6 @@ val FakeLocationsMap = mapOf(
   "IN" to Location(7.0, 4.9),
   "BR" to Location(2.59, 12.87),
   "AU" to Location(8.0, 2.13),
-)
-
-val FakeNewListPages = listOf(
-  listOf(
-    NewsItemWithPicture("_id1", "news1", "desc1",
-      "url1", "", "https://image1"),
-  ),
-  listOf(
-    NewsItemWithPicture("_id2", "news2", "desc2",
-      "url2", "", "https://image2"),
-  ),
-  listOf(
-    NewsItemWithPicture("_id3", "news3", "desc3",
-      "url3", "", "https://image3"),
-  ),
-  listOf(
-    NewsItemWithPicture("_id4", "news4", "desc4",
-      "url4", "", "https://image4"),
-  )
 )
 
 val FakeCountries = listOf(
@@ -103,8 +82,8 @@ class FakeCountriesMetaInfoDataSource : CountriesMetaInfoDataSource {
     return FakeMetaInfoMap
   }
   
-  override fun getLocationsMap(): Observable<Map<String, Location>> {
-    return Observable.just(FakeLocationsMap)
+  override fun getLocationsMap(): Single<Map<String, Location>> {
+    return Single.just(FakeLocationsMap)
   }
 }
 
@@ -115,47 +94,13 @@ class FakeGeneralInfoDataSource(
   
   private var retryCount = 0
   
-  override fun requestGeneralInfo() = Observable.create<GeneralInfo> { emitter ->
+  override fun requestGeneralInfo() = Single.create<GeneralInfo> { emitter ->
     if (retryCount < totalRetryCount) {
       retryCount++
       emitter.onError(errorFactory())
       return@create
     }
-    emitter.onNext(FakeGeneralInfo)
-    emitter.onComplete()
-  }
-}
-
-class FakeNewYorkTimesNewsDataSource(
-  private val totalRetryCount: Int = 0,
-  private val errorFactory: () -> Throwable = { UnknownHostException() }
-) : NewYorkTimesNewsDataSource {
-  
-  private var nextThrowable: Throwable? = null
-  
-  private var retryCount = 0
-  
-  fun setNextCallAsError(throwable: Throwable) {
-    this.nextThrowable = throwable
-  }
-  
-  override val maxPages: Int = 4
-  
-  override fun requestLatestNews(page: Int) = Observable.create<List<NewsItemWithPicture>> { emitter ->
-    if (nextThrowable != null) {
-      emitter.onError(nextThrowable!!)
-      nextThrowable = null
-      return@create
-    }
-    if (retryCount < totalRetryCount) {
-      retryCount++
-      emitter.onError(errorFactory())
-      return@create
-    }
-    if (page in 0 until maxPages) {
-      emitter.onNext(FakeNewListPages[page])
-    }
-    emitter.onComplete()
+    emitter.onSuccess(FakeGeneralInfo)
   }
 }
 
@@ -166,14 +111,13 @@ class FakeTotalInfoDataSource(
   
   private var retryCount = 0
   
-  override fun requestTotalInfo() = Observable.create<TotalInfo> { emitter ->
+  override fun requestTotalInfo() = Single.create<TotalInfo> { emitter ->
     if (retryCount < totalRetryCount) {
       retryCount++
       emitter.onError(errorFactory())
       return@create
     }
-    emitter.onNext(FakeTotalInfo)
-    emitter.onComplete()
+    emitter.onSuccess(FakeTotalInfo)
   }
 }
 
@@ -184,13 +128,12 @@ class FakeWorldCasesInfoDataSource(
   
   private var retryCount = 0
   
-  override fun requestWorldDailyCases() = Observable.create<List<DailyCase>> { emitter ->
+  override fun requestWorldDailyCases() = Single.create<List<DailyCase>> { emitter ->
     if (retryCount < totalRetryCount) {
       retryCount++
       emitter.onError(errorFactory())
       return@create
     }
-    emitter.onNext(FakeDailyCases)
-    emitter.onComplete()
+    emitter.onSuccess(FakeDailyCases)
   }
 }

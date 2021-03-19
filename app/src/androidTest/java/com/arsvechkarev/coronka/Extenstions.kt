@@ -15,7 +15,7 @@ import core.extenstions.assertThat
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 
-fun Any.idleMainThread() {
+fun idleMainThread() {
   InstrumentationRegistry.getInstrumentation().waitForIdleSync()
 }
 

@@ -14,6 +14,6 @@ fun <T> Observable<T>.withNetworkDelay(schedulers: Schedulers): Observable<T> {
   return delay(delay, TimeUnit.MILLISECONDS, schedulers.computation(), true)
 }
 
-fun <T> Observable<T>.withRequestTimeout(): Observable<T> {
-  return timeout(RxConfigurator.requestTimeout, TimeUnit.MILLISECONDS)
+fun <T> Observable<T>.withRequestTimeout(schedulers: Schedulers): Observable<T> {
+  return timeout(RxConfigurator.requestTimeout, TimeUnit.MILLISECONDS, schedulers.computation())
 }

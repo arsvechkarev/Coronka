@@ -46,10 +46,11 @@ class RankingsViewModel(
   fun startLoadingData() {
     rxCall {
       totalInfoDataSource.requestTotalInfo()
+          .toObservable()
           .subscribeOn(schedulers.io())
           .withNetworkDelay(schedulers)
           .withRetry()
-          .withRequestTimeout()
+          .withRequestTimeout(schedulers)
           .map(::transformToScreenState)
           .onErrorReturn(::Failure)
           .startWith(Loading)

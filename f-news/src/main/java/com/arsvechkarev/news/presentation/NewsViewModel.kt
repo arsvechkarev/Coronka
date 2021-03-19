@@ -1,5 +1,6 @@
 package com.arsvechkarev.news.presentation
 
+import com.arsvechkarev.news.repository.NewYorkTimesNewsDataSource
 import core.BaseScreenState
 import core.Failure
 import core.Loading
@@ -7,7 +8,6 @@ import core.NetworkAvailabilityNotifier
 import core.NetworkListener
 import core.RxViewModel
 import core.Schedulers
-import core.datasources.NewYorkTimesNewsDataSource
 import core.extenstions.withNetworkDelay
 import core.extenstions.withRequestTimeout
 import core.extenstions.withRetry
@@ -39,10 +39,11 @@ class NewsViewModel(
   fun startLoadingData() {
     rxCall {
       newsDataSource.requestLatestNews(currentPage)
+          .toObservable()
           .subscribeOn(schedulers.io())
           .withNetworkDelay(schedulers)
           .withRetry()
-          .withRequestTimeout()
+          .withRequestTimeout(schedulers)
           .map<BaseScreenState>(::LoadedNews)
           .startWith(Loading)
           .onErrorReturn(::Failure)
@@ -55,10 +56,11 @@ class NewsViewModel(
     if (currentPage >= newsDataSource.maxPages) return
     rxCall {
       newsDataSource.requestLatestNews(++currentPage)
+          .toObservable()
           .subscribeOn(schedulers.io())
           .withNetworkDelay(schedulers)
           .withRetry()
-          .withRequestTimeout()
+          .withRequestTimeout(schedulers)
           .map<BaseScreenState>(::LoadedNextPage)
           .observeOn(schedulers.mainThread())
           .startWith(LoadingNextPage)

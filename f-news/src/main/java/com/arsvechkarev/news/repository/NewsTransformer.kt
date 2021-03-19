@@ -1,4 +1,4 @@
-package core.transformers
+package com.arsvechkarev.news.repository
 
 import core.TimeFormatter
 import core.model.NewsItemWithPicture
@@ -39,6 +39,6 @@ object NewsTransformer {
         news.add(NewsItemWithPicture(id, title, description, webUrl, formattedDate, imageUrl))
       }
     }
-    return news.distinctBy { it.title }
+    return news
   }
 }
