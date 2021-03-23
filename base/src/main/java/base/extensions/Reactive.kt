@@ -17,3 +17,7 @@ fun <T> Observable<T>.withNetworkDelay(schedulers: Schedulers): Observable<T> {
 fun <T> Observable<T>.withRequestTimeout(): Observable<T> {
   return timeout(RxConfigurator.requestTimeout, TimeUnit.MILLISECONDS)
 }
+
+fun <T> Observable<T>.startWithIf(element: T, condition: () -> Boolean): Observable<T> {
+  return if (condition()) startWith(element) else this
+}

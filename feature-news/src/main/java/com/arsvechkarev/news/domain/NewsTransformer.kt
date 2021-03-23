@@ -3,7 +3,6 @@ package com.arsvechkarev.news.domain
 import core.DateTimeFormatter
 import core.model.NewsItemWithPicture
 import org.json.JSONObject
-import timber.log.Timber
 
 object NewsTransformer {
   
@@ -35,7 +34,6 @@ object NewsTransformer {
       if (multimediaItem != null) {
         val imagePath = multimediaItem.getString(URL)
         val imageUrl = "$IMAGE_URL_PREFIX$imagePath"
-        Timber.d("$i: title='$title', id='$id',date='$date', imageUrl='$imageUrl'")
         news.add(NewsItemWithPicture(id, title, description, webUrl, formattedDate, imageUrl))
       }
     }

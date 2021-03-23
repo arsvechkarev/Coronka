@@ -10,7 +10,7 @@ class FakeNewsModule : NewsModule {
   
   override val newYorkTimesNewsRepository = object : NewYorkTimesNewsRepository {
     
-    override val maxPages = 2
+    override val maxPagesCount = 2
     
     private var errorCount = 0
     

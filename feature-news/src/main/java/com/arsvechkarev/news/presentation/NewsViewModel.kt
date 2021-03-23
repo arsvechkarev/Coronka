@@ -1,6 +1,7 @@
 package com.arsvechkarev.news.presentation
 
 import base.RxViewModel
+import base.extensions.startWithIf
 import base.extensions.withNetworkDelay
 import base.extensions.withRequestTimeout
 import base.extensions.withRetry
@@ -53,7 +54,6 @@ class NewsViewModel(
   }
   
   fun tryLoadNextPage() {
-    if (currentPage >= newsRepository.maxPages) return
     rxCall {
       newsRepository.requestLatestNews(++currentPage)
           .toObservable()
@@ -63,7 +63,7 @@ class NewsViewModel(
           .withRequestTimeout()
           .map<BaseScreenState>(::LoadedNextPage)
           .observeOn(schedulers.mainThread())
-          .startWith(LoadingNextPage)
+          .startWithIf(LoadingNextPage) { currentPage < newsRepository.maxPagesCount }
           .doOnError { currentPage-- }
           .onErrorReturn(::FailureLoadingNextPage)
           .smartSubscribe(_state::setValue)

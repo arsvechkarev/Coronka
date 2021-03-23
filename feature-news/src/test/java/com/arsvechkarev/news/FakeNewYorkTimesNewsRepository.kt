@@ -37,7 +37,7 @@ class FakeNewYorkTimesNewsRepository(
     this.nextThrowable = throwable
   }
   
-  override val maxPages: Int = 4
+  override val maxPagesCount: Int = 4
   
   override fun requestLatestNews(page: Int) = Maybe.create<List<NewsItemWithPicture>> { emitter ->
     if (nextThrowable != null) {
@@ -50,7 +50,7 @@ class FakeNewYorkTimesNewsRepository(
       emitter.onError(errorFactory())
       return@create
     }
-    if (page in 0 until maxPages) {
+    if (page in 0 until maxPagesCount) {
       emitter.onSuccess(FakeNewListPages[page])
     } else {
       emitter.onComplete()

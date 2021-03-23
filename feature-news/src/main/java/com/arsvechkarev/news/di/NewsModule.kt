@@ -14,9 +14,9 @@ interface NewsModule : Module {
 class DefaultNewsModule(
   private val webApi: WebApi,
   private val dateTimeFormatter: DateTimeFormatter,
-  private val newYorkTimesApi: String
+  private val newYorkTimesApiKey: String
 ) : NewsModule {
   
   override val newYorkTimesNewsRepository: NewYorkTimesNewsRepository
-    get() = NewYorkTimesNewsDataRepositoryImpl(webApi, dateTimeFormatter, newYorkTimesApi)
+    get() = NewYorkTimesNewsDataRepositoryImpl(webApi, dateTimeFormatter, newYorkTimesApiKey)
 }
