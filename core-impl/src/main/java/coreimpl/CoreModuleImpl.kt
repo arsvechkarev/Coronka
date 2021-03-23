@@ -2,6 +2,7 @@ package coreimpl
 
 import android.content.Context
 import android.net.ConnectivityManager
+import core.WebApi
 import core.di.CoreModule
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
@@ -21,7 +22,10 @@ class CoreModuleImpl(applicationContext: Context) : CoreModule {
       .callTimeout(20, TimeUnit.SECONDS)
       .build()
   
-  override val webApiFactory = OkHttpWebApiFactory(okHttpClient)
+  override val webApi: WebApi = OkHttpWebApi(okHttpClient)
   
   override val imageLoader = GlideImageLoader
+  
+  override val dateTimeFormatter = EnglishDateTimeFormatter(applicationContext,
+    ThreeTenAbpDateTimeCreator)
 }

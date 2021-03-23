@@ -1,4 +1,4 @@
-package com.arsvechkarev.news.di
+package com.arsvechkarev.news.list
 
 import android.content.Context
 import com.bumptech.glide.GlideBuilder

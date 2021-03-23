@@ -9,7 +9,6 @@ import com.arsvechkarev.viewdsl.ContextHolder
 import com.jakewharton.threetenabp.AndroidThreeTen
 import core.di.CoreComponent
 import coreimpl.CoreModuleImpl
-import coreimpl.DateTimeFormatterModuleImpl
 
 open class CoronkaBaseApplication : Application() {
   
@@ -24,9 +23,8 @@ open class CoronkaBaseApplication : Application() {
   
   open fun initializeDiComponents() {
     val coreModule = CoreModuleImpl(applicationContext)
-    val dateTimeFormatterModule = DateTimeFormatterModuleImpl(applicationContext)
     val commonFeaturesModule = CommonFeaturesModuleImpl(coreModule)
-    CoreComponent.initialize(coreModule, dateTimeFormatterModule)
+    CoreComponent.initialize(coreModule)
     CommonFeaturesComponent.initialize(commonFeaturesModule)
   }
 }

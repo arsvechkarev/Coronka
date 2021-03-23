@@ -27,15 +27,6 @@ enum class FailureReason {
   UNKNOWN;
 }
 
-/**
- * Converter from [FailureReason] to String message that could be displayed on the screen
- */
-interface FailureReasonToMessageConverter {
-  
-  /** Returns message for [reason] */
-  fun getMessageForReason(reason: FailureReason): String
-}
-
 fun Throwable.toFailureReason() = when (this) {
   is TimeoutException -> FailureReason.TIMEOUT
   is UnknownHostException -> FailureReason.NO_CONNECTION

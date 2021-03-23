@@ -28,9 +28,9 @@ android {
     testInstrumentationRunner configs.testInstrumentationRunner
   }
 
-  testOptions {
-    execution 'ANDROIDX_TEST_ORCHESTRATOR'
-  }
+//  testOptions {
+//    execution 'ANDROIDX_TEST_ORCHESTRATOR'
+//  }
 
   buildTypes {
     release {
@@ -50,16 +50,16 @@ android {
 }
 
 dependencies {
-  implementation project(":api-core")
+  implementation project(':api-core')
   implementation project(':core-impl')
   implementation project(':base')
-  implementation project(":viewdsl")
-  implementation project(":features-common")
-  implementation project(":feature-stats")
-  implementation project(":feature-news")
-  implementation project(":feature-map")
-  implementation project(":feature-tips")
-  implementation project(":feature-rankings")
+  implementation project(':viewdsl')
+  implementation project(':features-common')
+  implementation project(':feature-stats')
+  implementation project(':feature-news')
+  implementation project(':feature-map')
+  implementation project(':feature-tips')
+  implementation project(':feature-rankings')
 
   def dependencies = rootProject.ext.applicationDependencies
 

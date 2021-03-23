@@ -4,7 +4,7 @@ import base.RxViewModel
 import base.extensions.withNetworkDelay
 import base.extensions.withRequestTimeout
 import base.extensions.withRetry
-import com.arsvechkarev.news.domain.NewYorkTimesNewsDataSource
+import com.arsvechkarev.news.domain.NewYorkTimesNewsRepository
 import core.BaseScreenState
 import core.Failure
 import core.Loading
@@ -13,7 +13,7 @@ import core.NetworkListener
 import core.Schedulers
 
 class NewsViewModel(
-  private val newsDataSource: NewYorkTimesNewsDataSource,
+  private val newsRepository: NewYorkTimesNewsRepository,
   private val networkAvailabilityNotifier: NetworkAvailabilityNotifier,
   private val schedulers: Schedulers
 ) : RxViewModel(), NetworkListener {
@@ -38,7 +38,7 @@ class NewsViewModel(
   
   fun startLoadingData() {
     rxCall {
-      newsDataSource.requestLatestNews(currentPage)
+      newsRepository.requestLatestNews(currentPage)
           .toObservable()
           .subscribeOn(schedulers.io())
           .withNetworkDelay(schedulers)
@@ -53,9 +53,9 @@ class NewsViewModel(
   }
   
   fun tryLoadNextPage() {
-    if (currentPage >= newsDataSource.maxPages) return
+    if (currentPage >= newsRepository.maxPages) return
     rxCall {
-      newsDataSource.requestLatestNews(++currentPage)
+      newsRepository.requestLatestNews(++currentPage)
           .toObservable()
           .subscribeOn(schedulers.io())
           .withNetworkDelay(schedulers)

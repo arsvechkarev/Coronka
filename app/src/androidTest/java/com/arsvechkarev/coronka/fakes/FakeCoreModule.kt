@@ -4,6 +4,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import api.threading.Threader
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.test.FakeSchedulers
+import core.DateTimeFormatter
 import core.ImageLoader
 import core.NetworkAvailabilityNotifier
 import core.Schedulers
@@ -12,8 +13,10 @@ import core.di.CoreModule
 import core.di.DatabaseCreator
 import coreimpl.AndroidSchedulers
 import coreimpl.AssetsDatabaseCreator
+import coreimpl.EnglishDateTimeFormatter
 import coreimpl.GlideImageLoader
 import coreimpl.SchedulersThreader
+import coreimpl.ThreeTenAbpDateTimeCreator
 import okhttp3.OkHttpClient
 
 open class FakeCoreModule : CoreModule {
@@ -25,6 +28,8 @@ open class FakeCoreModule : CoreModule {
   override val databaseCreator: DatabaseCreator = AssetsDatabaseCreator(context)
   override val networkAvailabilityNotifier: NetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
   override val okHttpClient: OkHttpClient = OkHttpClient()
-  override val webApiFactory: WebApi.Factory = FakeWebApi
+  override val webApi: WebApi = FakeWebApi
   override val imageLoader: ImageLoader = GlideImageLoader
+  override val dateTimeFormatter: DateTimeFormatter = EnglishDateTimeFormatter(context,
+    ThreeTenAbpDateTimeCreator)
 }

@@ -2,34 +2,23 @@ package core.di
 
 object CoreComponent {
   
-  private var _coreModule: CoreModule? = null
-  private var _failureReasonToMessageModule: FailureReasonToMessageModule? = null
-  private var _dateTimeFormatterModule: DateTimeFormatterModule? = null
+  private lateinit var _coreModule: CoreModule
   
-  val coreModule: CoreModule
-    get() = _coreModule ?: error("create() hasn't been called")
+  val threader get() = _coreModule.threader
   
-  val threader get() = _coreModule!!.threader
+  val schedulers get() = _coreModule.schedulers
   
-  val schedulers get() = _coreModule!!.schedulers
+  val networkAvailabilityNotifier get() = _coreModule.networkAvailabilityNotifier
   
-  val networkAvailabilityNotifier get() = _coreModule!!.networkAvailabilityNotifier
+  val okHttpClient get() = _coreModule.okHttpClient
   
-  val okHttpClient get() = _coreModule!!.okHttpClient
+  val webApi get() = _coreModule.webApi
   
-  val webApiFactory get() = _coreModule!!.webApiFactory
+  val imageLoader get() = _coreModule.imageLoader
   
-  val imageLoader get() = _coreModule!!.imageLoader
+  val dateTimeFormatter get() = _coreModule.dateTimeFormatter
   
-  val failureReasonToMessageConverter get() = _failureReasonToMessageModule!!.failureReasonToMessageConverter
-  
-  val dateTimeFormatter get() = _dateTimeFormatterModule!!.timeFormatter
-  
-  fun initialize(
-    coreModule: CoreModule,
-    dateTimeFormatterModule: DateTimeFormatterModule
-  ) {
+  fun initialize(coreModule: CoreModule) {
     _coreModule = coreModule
-    _dateTimeFormatterModule = dateTimeFormatterModule
   }
 }

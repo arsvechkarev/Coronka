@@ -13,9 +13,10 @@ class CommonFeaturesModuleImpl(
 ) : CommonFeaturesModule {
   
   override val totalInfoDataSource: TotalInfoDataSource =
-      TotalInfoDataSourceImpl(coreModule.webApiFactory.create())
+      TotalInfoDataSourceImpl(coreModule.webApi)
   
-  override val countriesMetaInfoRepository: CountriesMetaInfoRepository =
-      CountriesMetaInfoRepositoryImpl(coreModule.databaseCreator.provideDatabase(DATABASE_NAME,
-        DATABASE_VERSION))
+  override val countriesMetaInfoRepository: CountriesMetaInfoRepository by lazy {
+    val database = coreModule.databaseCreator.provideDatabase(DATABASE_NAME, DATABASE_VERSION)
+    CountriesMetaInfoRepositoryImpl(database)
+  }
 }

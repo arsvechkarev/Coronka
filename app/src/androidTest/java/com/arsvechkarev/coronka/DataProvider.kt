@@ -21,7 +21,7 @@ object DataProvider {
   val newsData by lazy { context.readAssetsFile("news_data.json") }
   val generalInfoData by lazy { context.readAssetsFile("general_info_data.json") }
   
-  fun getTotalData(): TotalInfo {
+  fun getTotalInfo(): TotalInfo {
     return AllCountriesTransformer.toTotalData(allCountriesData)
   }
   

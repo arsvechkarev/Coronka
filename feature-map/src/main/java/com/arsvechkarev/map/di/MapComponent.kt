@@ -16,14 +16,11 @@ object MapComponent {
     return ViewModelProviders.of(fragment, mapViewModelFactory).get(MapViewModel::class.java)
   }
   
-  private val mapViewModelFactory: ViewModelProvider.Factory
-    get() {
-      return object : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-          @Suppress("UNCHECKED_CAST")
-          return MapViewModel(totalInfoDataSource, countriesMetaInfoRepository,
-            networkAvailabilityNotifier, schedulers) as T
-        }
-      }
+  private val mapViewModelFactory = object : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+      @Suppress("UNCHECKED_CAST")
+      return MapViewModel(totalInfoDataSource, countriesMetaInfoRepository,
+        networkAvailabilityNotifier, schedulers) as T
     }
+  }
 }

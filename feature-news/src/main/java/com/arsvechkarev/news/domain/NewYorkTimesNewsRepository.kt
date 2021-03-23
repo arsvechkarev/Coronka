@@ -11,7 +11,7 @@ import timber.log.Timber
 /**
  * Data source for retrieving list of [NewsItemWithPicture]
  */
-interface NewYorkTimesNewsDataSource {
+interface NewYorkTimesNewsRepository {
   
   /**
    * Returns max amount of pages for list
@@ -24,11 +24,11 @@ interface NewYorkTimesNewsDataSource {
   fun requestLatestNews(page: Int): Maybe<List<NewsItemWithPicture>>
 }
 
-class NewYorkTimesNewsDataSourceImpl(
+class NewYorkTimesNewsDataRepositoryImpl(
   private val webApi: WebApi,
   private val formatter: DateTimeFormatter,
   private val nytApiKey: String
-) : NewYorkTimesNewsDataSource {
+) : NewYorkTimesNewsRepository {
   
   override val maxPages: Int = 50
   

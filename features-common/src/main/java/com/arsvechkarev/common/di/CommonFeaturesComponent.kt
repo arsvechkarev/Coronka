@@ -2,11 +2,11 @@ package com.arsvechkarev.common.di
 
 object CommonFeaturesComponent {
   
-  private var commonFeaturesModule: CommonFeaturesModule? = null
+  private lateinit var commonFeaturesModule: CommonFeaturesModule
   
-  val totalInfoDataSource by lazy { commonFeaturesModule!!.totalInfoDataSource }
+  val totalInfoDataSource get() = commonFeaturesModule.totalInfoDataSource
   
-  val countriesMetaInfoRepository by lazy { commonFeaturesModule!!.countriesMetaInfoRepository }
+  val countriesMetaInfoRepository get() = commonFeaturesModule.countriesMetaInfoRepository
   
   fun initialize(commonFeaturesModule: CommonFeaturesModule) {
     this.commonFeaturesModule = commonFeaturesModule

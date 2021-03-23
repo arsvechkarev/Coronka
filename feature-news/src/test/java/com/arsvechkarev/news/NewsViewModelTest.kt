@@ -150,7 +150,7 @@ class NewsViewModelTest {
   
   @Test
   fun `Testing paging errors`() {
-    val newsDataSource = FakeNewYorkTimesNewsDataSource()
+    val newsDataSource = FakeNewYorkTimesNewsRepository()
     val viewModel = NewsViewModel(newsDataSource, FakeNetworkAvailabilityNotifier(), FakeSchedulers)
     val observer = createObserver()
     
@@ -176,7 +176,7 @@ class NewsViewModelTest {
     totalRetryCount: Int = 0,
     error: Throwable = Throwable(),
     notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier(),
-    newsDataSource: FakeNewYorkTimesNewsDataSource = FakeNewYorkTimesNewsDataSource(
+    newsDataSource: FakeNewYorkTimesNewsRepository = FakeNewYorkTimesNewsRepository(
       totalRetryCount = totalRetryCount,
       errorFactory = { error }
     )
