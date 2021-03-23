@@ -2,9 +2,14 @@ package com.arsvechkarev.coronka
 
 import android.app.Application
 import androidx.annotation.CallSuper
+import base.resources.Fonts
+import com.arsvechkarev.common.di.CommonFeaturesComponent
+import com.arsvechkarev.common.di.CommonFeaturesModuleImpl
 import com.arsvechkarev.viewdsl.ContextHolder
 import com.jakewharton.threetenabp.AndroidThreeTen
-import core.viewbuilding.Fonts
+import core.di.CoreComponent
+import coreimpl.CoreModuleImpl
+import coreimpl.DateTimeFormatterModuleImpl
 
 open class CoronkaBaseApplication : Application() {
   
@@ -14,5 +19,14 @@ open class CoronkaBaseApplication : Application() {
     ContextHolder.init(applicationContext)
     Fonts.init(applicationContext)
     AndroidThreeTen.init(applicationContext)
+    initializeDiComponents()
+  }
+  
+  open fun initializeDiComponents() {
+    val coreModule = CoreModuleImpl(applicationContext)
+    val dateTimeFormatterModule = DateTimeFormatterModuleImpl(applicationContext)
+    val commonFeaturesModule = CommonFeaturesModuleImpl(coreModule)
+    CoreComponent.initialize(coreModule, dateTimeFormatterModule)
+    CommonFeaturesComponent.initialize(commonFeaturesModule)
   }
 }

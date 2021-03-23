@@ -1,9 +1,9 @@
 package com.arsvechkarev.test
 
-import core.datasources.CountriesMetaInfoDataSource
-import core.datasources.GeneralInfoDataSource
-import core.datasources.TotalInfoDataSource
-import core.datasources.WorldCasesInfoDataSource
+import com.arsvechkarev.common.domain.CountriesMetaInfoRepository
+import com.arsvechkarev.common.domain.GeneralInfoDataSource
+import com.arsvechkarev.common.domain.TotalInfoDataSource
+import com.arsvechkarev.common.domain.WorldCasesInfoDataSource
 import core.model.Country
 import core.model.CountryMetaInfo
 import core.model.DailyCase
@@ -76,7 +76,7 @@ val FakeDailyCases = listOf<DailyCase>(
   DailyCase(1_030_000, "March 6")
 )
 
-class FakeCountriesMetaInfoDataSource : CountriesMetaInfoDataSource {
+class FakeCountriesMetaInfoDataSource : CountriesMetaInfoRepository {
   
   override fun getCountriesMetaInfoSync(): Map<String, CountryMetaInfo> {
     return FakeMetaInfoMap

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base.resources>
+  <dimen name="stats_corners_bg_stats_content">40dp</dimen>
+  <dimen name="stats_header_height">150dp</dimen>
+
+  <dimen name="stats_image_doctor_width">180dp</dimen>
+  <dimen name="stats_image_doctor_height">140dp</dimen>
+  <dimen name="stats_image_doctor_margin">16dp</dimen>
+
+  <dimen name="stats_title_margin_start">176dp</dimen>
+  <dimen name="stats_three_elements_layout_m_horizontal">24dp</dimen>
+  <dimen name="stats_three_elements_layout_m_vertical">24dp</dimen>
+
+  <dimen name="stats_header_m_start">16dp</dimen>
+  <dimen name="stats_header_m_top">8dp</dimen>
+
+  <dimen name="stats_chart_height">300dp</dimen>
+  <dimen name="stats_chart_layout_margin">24dp</dimen>
+  <dimen name="stats_chart_margin">16dp</dimen>
+</base.resources>

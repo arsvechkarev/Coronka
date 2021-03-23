@@ -5,15 +5,15 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import base.BaseFragment
+import base.Navigator
+import base.views.DrawerLayout
 import com.arsvechkarev.coronka.R
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
-import com.arsvechkarev.views.DrawerLayout
-import core.BaseFragment
-import core.Navigator
 import kotlin.reflect.KClass
 
 class MainNavigator(
@@ -34,6 +34,7 @@ class MainNavigator(
     }
     val tag = fragmentClass.java.name
     val fragment = fragmentManager.findFragmentByTag(tag) ?: fragmentClass.java.newInstance()
+    require(fragment is BaseFragment)
     val transaction = fragmentManager.beginTransaction()
     val fragmentName = fragment.getNameForStack()
     if (currentFragment != null) {
@@ -54,9 +55,11 @@ class MainNavigator(
       stack.add(fragmentName)
       transaction.add(R.id.fragmentContainer, fragment, fragmentName)
     }
-    drawerLayout.addOpenCloseListener((fragment as BaseFragment).drawerOpenCloseListener)
+    drawerLayout.addOpenCloseListener(fragment.drawerOpenCloseListener)
     transaction.runOnCommit {
-      drawerLayout.respondToTouches = true
+      if (fragment.enableTouchesOnDrawerWhenFragmentAppears) {
+        drawerLayout.respondToTouches = true
+      }
     }
     transaction.commit()
     currentFragment = fragment

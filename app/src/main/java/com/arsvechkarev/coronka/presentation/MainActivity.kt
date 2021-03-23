@@ -3,6 +3,13 @@ package com.arsvechkarev.coronka.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import base.BaseActivity
+import base.HostActivity
+import base.Navigator
+import base.resources.Colors
+import base.views.DrawerGroupLinearLayout
+import base.views.DrawerLayout
+import base.views.DrawerLayout.DrawerState.OPENED
 import com.arsvechkarev.coronka.di.MainModuleInjector
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.news.presentation.NewsFragment
@@ -10,13 +17,6 @@ import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
 import com.arsvechkarev.viewdsl.Densities
-import com.arsvechkarev.views.DrawerGroupLinearLayout
-import com.arsvechkarev.views.DrawerLayout
-import com.arsvechkarev.views.DrawerLayout.DrawerState.OPENED
-import core.BaseActivity
-import core.HostActivity
-import core.Navigator
-import core.viewbuilding.Colors
 
 class MainActivity : BaseActivity(), HostActivity {
   

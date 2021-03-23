@@ -12,6 +12,7 @@ ext {
       lifecycleExtensions  : "androidx.lifecycle:lifecycle-extensions:2.1.0",
       retrofit             : "com.squareup.retrofit2:retrofit:$retrofit_version",
       retrofitGsonConverter: "com.squareup.retrofit2:converter-gson:$retrofit_version",
+      retrofitRxJavaAdapter: "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version",
       gson                 : "com.google.code.gson:gson:2.8.6",
       googleMaps           : "com.google.android.gms:play-services-maps:17.0.0",
       recyclerView         : "androidx.recyclerview:recyclerview:1.1.0",

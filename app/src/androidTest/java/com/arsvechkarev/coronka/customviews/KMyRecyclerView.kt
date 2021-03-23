@@ -11,7 +11,6 @@ import com.agoda.kakao.common.assertions.BaseAssertions
 import com.agoda.kakao.common.builders.ViewBuilder
 import com.agoda.kakao.common.views.KBaseView
 import com.arsvechkarev.coronka.matches
-import core.extenstions.assertThat
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 
@@ -54,7 +53,7 @@ fun recyclerScrollAction(position: Int): ViewAction = object : ViewAction {
   override fun getDescription(): String = "Scroll recycler view to position $position"
   
   override fun perform(uiController: UiController, view: View) {
-    assertThat(view is RecyclerView)
+    require(view is RecyclerView)
     view.scrollToPosition(position)
     uiController.loopMainThreadUntilIdle()
   }

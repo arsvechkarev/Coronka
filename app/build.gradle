@@ -26,7 +26,6 @@ android {
     versionCode configs.versionCode
     versionName configs.versionName
     testInstrumentationRunner configs.testInstrumentationRunner
-    testInstrumentationRunnerArguments clearPackageData: 'true'
   }
 
   testOptions {
@@ -51,23 +50,28 @@ android {
 }
 
 dependencies {
-  implementation project(':core')
-  implementation project(':views')
-  implementation project(':viewdsl')
-  implementation project(':f-stats')
-  implementation project(':f-news')
-  implementation project(':f-map')
-  implementation project(':f-tips')
-  implementation project(':f-rankings')
+  implementation project(":api-core")
+  implementation project(':core-impl')
+  implementation project(':base')
+  implementation project(":viewdsl")
+  implementation project(":features-common")
+  implementation project(":feature-stats")
+  implementation project(":feature-news")
+  implementation project(":feature-map")
+  implementation project(":feature-tips")
+  implementation project(":feature-rankings")
 
   def dependencies = rootProject.ext.applicationDependencies
+
   implementation dependencies.kotlin
   implementation dependencies.appCompat
   implementation dependencies.lifecycleExtensions
+  implementation dependencies.retrofit
   implementation dependencies.constraintLayout
   implementation dependencies.coordinatorLayout
   implementation dependencies.threeTenAbp
   implementation dependencies.mpAndroidChart
+  implementation dependencies.gson
   implementation dependencies.rxJava
   implementation dependencies.googleMaps
 

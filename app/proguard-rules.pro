@@ -16,7 +16,7 @@
     <init>(...);
 }
 
--keep class * extends core.RxViewModel {
+-keep class * extends base.RxViewModel {
     <init>();
 }
 

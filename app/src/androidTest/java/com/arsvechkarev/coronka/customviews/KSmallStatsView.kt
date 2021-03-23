@@ -2,11 +2,11 @@ package com.arsvechkarev.coronka.customviews
 
 import android.view.View
 import androidx.test.espresso.DataInteraction
+import base.views.SmallStatsView
 import com.agoda.kakao.common.assertions.BaseAssertions
 import com.agoda.kakao.common.builders.ViewBuilder
 import com.agoda.kakao.common.views.KBaseView
 import com.arsvechkarev.coronka.matches
-import com.arsvechkarev.views.SmallStatsView
 import org.hamcrest.Matcher
 
 class KSmallStatsView : KBaseView<KGeneralStatsView>, SmallStatsViewAssertions {

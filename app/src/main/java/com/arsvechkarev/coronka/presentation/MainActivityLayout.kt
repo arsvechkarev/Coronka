@@ -11,6 +11,14 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import base.resources.Colors.GradientHeaderEnd
+import base.resources.Colors.GradientHeaderStart
+import base.resources.Dimens.LogoIconSize
+import base.resources.Styles
+import base.resources.Styles.BoldTextView
+import base.resources.TextSizes
+import base.views.DrawerGroupLinearLayout
+import base.views.DrawerLayout
 import com.arsvechkarev.coronka.R
 import com.arsvechkarev.viewdsl.Ints.dp
 import com.arsvechkarev.viewdsl.Size.Companion.MatchParent
@@ -29,14 +37,6 @@ import com.arsvechkarev.viewdsl.tag
 import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.textSize
 import com.arsvechkarev.viewdsl.withViewBuilder
-import com.arsvechkarev.views.DrawerGroupLinearLayout
-import com.arsvechkarev.views.DrawerLayout
-import core.viewbuilding.Colors.GradientHeaderEnd
-import core.viewbuilding.Colors.GradientHeaderStart
-import core.viewbuilding.Dimens.LogoIconSize
-import core.viewbuilding.Styles
-import core.viewbuilding.Styles.BoldTextView
-import core.viewbuilding.TextSizes
 
 const val DrawerLayout = "DrawerLayout"
 const val DrawerGroupLinearLayout = "DrawerGroupLinearLayout"

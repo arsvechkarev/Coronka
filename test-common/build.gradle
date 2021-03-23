@@ -9,11 +9,11 @@ android {
 }
 
 dependencies {
-  implementation project(":core")
-
-  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation project(':api-core')
+  implementation project(":features-common")
 
   def appDependencies = rootProject.ext.applicationDependencies
+  implementation appDependencies.kotlin
   implementation appDependencies.rxJava
   implementation appDependencies.appCompat
 

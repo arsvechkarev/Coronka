@@ -1,9 +1,9 @@
 package com.arsvechkarev.coronka.di
 
 import androidx.fragment.app.Fragment
+import base.Navigator
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.presentation.MainNavigator
-import core.Navigator
 
 object MainModuleInjector {
   

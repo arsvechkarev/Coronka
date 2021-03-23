@@ -1,0 +1,30 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  defaultConfig {
+    minSdkVersion rootProject.ext.minSdkVersion
+  }
+}
+
+dependencies {
+  implementation project(':api-core')
+  implementation project(':base')
+  implementation project(':recycler')
+  implementation project(':viewdsl')
+  implementation project(':features-common')
+
+  def dependencies = rootProject.ext.applicationDependencies
+  implementation dependencies.kotlin
+  implementation dependencies.appCompat
+  implementation dependencies.coordinatorLayout
+  implementation dependencies.constraintLayout
+  implementation dependencies.flexboxLayout
+  implementation dependencies.lifecycleExtensions
+  implementation dependencies.recyclerView
+  implementation dependencies.rxJava
+
+  testImplementation project(":test-common")
+}

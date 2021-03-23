@@ -10,17 +10,22 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/api-core" />
+            <option value="$PROJECT_DIR$/api-recycler" />
+            <option value="$PROJECT_DIR$/api-threading" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/config" />
-            <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/f-map" />
-            <option value="$PROJECT_DIR$/f-news" />
-            <option value="$PROJECT_DIR$/f-rankings" />
-            <option value="$PROJECT_DIR$/f-stats" />
-            <option value="$PROJECT_DIR$/f-tips" />
+            <option value="$PROJECT_DIR$/core-impl" />
+            <option value="$PROJECT_DIR$/feature-map" />
+            <option value="$PROJECT_DIR$/feature-news" />
+            <option value="$PROJECT_DIR$/feature-rankings" />
+            <option value="$PROJECT_DIR$/feature-stats" />
+            <option value="$PROJECT_DIR$/feature-tips" />
+            <option value="$PROJECT_DIR$/features-common" />
+            <option value="$PROJECT_DIR$/recycler" />
             <option value="$PROJECT_DIR$/test-common" />
             <option value="$PROJECT_DIR$/viewdsl" />
-            <option value="$PROJECT_DIR$/views" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

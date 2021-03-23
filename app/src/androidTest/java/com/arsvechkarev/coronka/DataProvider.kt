@@ -1,15 +1,16 @@
 package com.arsvechkarev.coronka
 
 import androidx.test.platform.app.InstrumentationRegistry
-import com.arsvechkarev.news.repository.NewsTransformer
-import core.datetime.EnglishTimeFormatter
+import com.arsvechkarev.common.domain.transformers.AllCountriesTransformer
+import com.arsvechkarev.common.domain.transformers.WorldCasesInfoTransformer
+import com.arsvechkarev.news.domain.NewsTransformer
+import com.google.gson.Gson
 import core.model.DailyCase
 import core.model.GeneralInfo
 import core.model.NewsItemWithPicture
 import core.model.TotalInfo
-import core.transformers.AllCountriesTransformer
-import core.transformers.GeneralInfoTransformer
-import core.transformers.WorldCasesInfoTransformer
+import coreimpl.EnglishDateTimeFormatter
+import coreimpl.ThreeTenAbpDateTimeCreator
 
 object DataProvider {
   
@@ -29,10 +30,11 @@ object DataProvider {
   }
   
   fun getGeneralInfo(): GeneralInfo {
-    return GeneralInfoTransformer.toGeneralInfo(generalInfoData)
+    return Gson().fromJson<GeneralInfo>(generalInfoData, GeneralInfo::class.java)
   }
   
   fun getNews(): List<NewsItemWithPicture> {
-    return NewsTransformer.toNewsItems(EnglishTimeFormatter, newsData)
+    return NewsTransformer.toNewsItems(
+      EnglishDateTimeFormatter(context, ThreeTenAbpDateTimeCreator), newsData)
   }
 }

@@ -32,7 +32,6 @@ inline fun <reified T : BaseScreenState> FakeScreenStateObserver.hasCurrentState
   assertTrue(states.last() is T)
 }
 
-
 fun <T : BaseScreenState> FakeScreenStateObserver.currentState(): T {
   @Suppress("UNCHECKED_CAST")
   return _currentState as T

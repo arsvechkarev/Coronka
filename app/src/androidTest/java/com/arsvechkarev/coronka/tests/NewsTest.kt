@@ -4,9 +4,10 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.agoda.kakao.screen.Screen.Companion.onScreen
-import com.arsvechkarev.coronka.RetryCountWebApiFactory
 import com.arsvechkarev.coronka.clickAndWaitForIdle
 import com.arsvechkarev.coronka.configureDurationsAndDelaysForTests
+import com.arsvechkarev.coronka.fakes.FakeCoreModule
+import com.arsvechkarev.coronka.fakes.RetryCountWebApiFactory
 import com.arsvechkarev.coronka.idleMainThread
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.screen
@@ -14,7 +15,8 @@ import com.arsvechkarev.coronka.screens.DrawerScreen
 import com.arsvechkarev.coronka.screens.NewsScreen
 import com.arsvechkarev.coronka.screens.StatsScreen
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
-import core.CoreDiComponent
+import core.di.CoreComponent
+import coreimpl.DateTimeFormatterModuleImpl
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,8 +32,12 @@ class NewsTest {
     
     override fun afterActivityLaunched() {
       val applicationContext = InstrumentationRegistry.getInstrumentation().targetContext
-      val webApiFactory = RetryCountWebApiFactory(1)
-      CoreDiComponent.initCustom(webApiFactory, fakeNetworkAvailabilityNotifier, applicationContext)
+      val retryCountWebApiFactory = RetryCountWebApiFactory(1)
+      val coreModule = object : FakeCoreModule() {
+        override val webApiFactory = retryCountWebApiFactory
+        override val networkAvailabilityNotifier = fakeNetworkAvailabilityNotifier
+      }
+      CoreComponent.initialize(coreModule, DateTimeFormatterModuleImpl(applicationContext))
       configureDurationsAndDelaysForTests()
     }
   }

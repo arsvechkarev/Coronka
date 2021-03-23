@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="?colorBackgroundLight">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/statsHeader"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/stats_header_height">
+
+    <ImageView
+      android:id="@+id/statsIconDrawer"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/icon_drawer_margin"
+      android:layout_marginTop="@dimen/icon_drawer_margin"
+      android:src="@drawable/ic_drawer"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+      android:id="@+id/imageDoctor"
+      android:layout_width="@dimen/stats_image_doctor_width"
+      android:layout_height="@dimen/stats_image_doctor_height"
+      android:layout_marginStart="@dimen/stats_image_doctor_margin"
+      android:layout_marginTop="@dimen/stats_image_doctor_margin"
+      android:src="@drawable/image_doctor"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/stats_title_margin_start"
+      android:gravity="center"
+      android:text="@string/title_stats"
+      android:textSize="@dimen/text_header"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <base.views.CustomNestedScrollView
+    android:id="@+id/statsScrollingContentView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/stats_image_doctor_height">
+
+    <LinearLayout
+      android:id="@+id/statsContentView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/bg_stats_content"
+      android:orientation="vertical">
+
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/stats_three_elements_layout_m_horizontal"
+        android:layout_marginVertical="@dimen/stats_three_elements_layout_m_vertical">
+
+        <View
+          android:id="@+id/statsMainInfoLoadingStub"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+
+        <base.views.generalstatsviews.MainGeneralStatsView
+          android:id="@+id/statsGeneralStatsView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+
+      </FrameLayout>
+
+      <TextView
+        android:id="@+id/statsTitleTotalCases"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/stats_header_m_start"
+        android:layout_marginTop="@dimen/stats_header_m_top"
+        android:text="@string/text_total_cases"
+        android:textSize="@dimen/text_h1"/>
+
+      <FrameLayout
+        android:id="@+id/statsTotalCasesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/stats_chart_height"
+        android:layout_margin="@dimen/stats_chart_layout_margin"
+        android:background="@drawable/bg_overlay_corners_small">
+
+        <View
+          android:id="@+id/statsTotalCasesLoadingStub"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+
+        <base.views.charts.DailyCasesChart
+          android:id="@+id/statsTotalCasesChart"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_margin="@dimen/stats_chart_margin"
+          android:visibility="invisible"/>
+
+        <base.views.charts.DateAndNumberLabel
+          android:id="@+id/statsTotalCasesLabel"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/stats_chart_margin"
+          android:visibility="invisible"/>
+
+      </FrameLayout>
+
+      <TextView
+        android:id="@+id/statsTitleNewCases"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/stats_header_m_start"
+        android:layout_marginTop="@dimen/stats_header_m_top"
+        android:text="@string/text_new_cases"
+        android:textSize="@dimen/text_h1"/>
+
+      <FrameLayout
+        android:id="@+id/statsNewCasesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/stats_chart_height"
+        android:layout_margin="@dimen/stats_chart_layout_margin"
+        android:background="@drawable/bg_overlay_corners_small">
+
+        <View
+          android:id="@+id/statsNewCasesLoadingStub"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+
+        <base.views.charts.DailyCasesChart
+          android:id="@+id/statsNewCasesChart"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_margin="@dimen/stats_chart_margin"
+          android:visibility="invisible"/>
+
+        <base.views.charts.DateAndNumberLabel
+          android:id="@+id/statsNewCasesLabel"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/stats_chart_margin"
+          android:visibility="invisible"/>
+
+      </FrameLayout>
+
+    </LinearLayout>
+
+  </base.views.CustomNestedScrollView>
+
+  <LinearLayout
+    android:id="@+id/statsErrorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/stats_header_height"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <ImageView
+      android:id="@+id/statsImageFailure"
+      android:layout_width="@dimen/error_layout_image_height"
+      android:layout_height="@dimen/error_layout_image_height"
+      android:layout_margin="@dimen/error_layout_text_margin"
+      android:layout_marginBottom="@dimen/error_layout_text_margin"
+      android:src="@drawable/image_unknown_error"/>
+
+    <TextView
+      android:id="@+id/statsErrorMessage"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/error_layout_text_margin"
+      android:layout_marginEnd="@dimen/error_layout_text_margin"
+      android:layout_marginBottom="@dimen/error_layout_text_margin"
+      android:gravity="center"
+      android:textSize="@dimen/text_h2"/>
+
+    <base.views.RetryButton
+      android:id="@+id/statsRetryButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+
+  </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

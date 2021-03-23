@@ -11,7 +11,6 @@ import com.agoda.kakao.screen.Screen
 import com.arsvechkarev.viewdsl.ContextHolder
 import config.AnimationsConfigurator
 import config.RxConfigurator
-import core.extenstions.assertThat
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 
@@ -52,7 +51,7 @@ inline fun <reified T : View> ViewInteractionDelegate.matches(
     }
     
     override fun matches(item: Any): Boolean {
-      assertThat(item is T)
+      require(item is T)
       return matcher(item)
     }
   }))
