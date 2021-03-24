@@ -1,15 +1,16 @@
 package com.arsvechkarev.test
 
-import com.arsvechkarev.common.domain.CountriesMetaInfoRepository
 import com.arsvechkarev.common.domain.GeneralInfoDataSource
 import com.arsvechkarev.common.domain.TotalInfoDataSource
 import com.arsvechkarev.common.domain.WorldCasesInfoDataSource
+import com.arsvechkarev.common.repository.CountriesMetaInfoRepository
 import core.model.Country
 import core.model.CountryMetaInfo
 import core.model.DailyCase
 import core.model.GeneralInfo
 import core.model.Location
 import core.model.TotalInfo
+import core.model.WorldCasesInfo
 import core.model.WorldRegion.ASIA
 import core.model.WorldRegion.EUROPE
 import core.model.WorldRegion.NORTH_AMERICA
@@ -67,7 +68,16 @@ val FakeCountries = listOf(
 
 val FakeTotalInfo = TotalInfo(FakeCountries, FakeGeneralInfo)
 
-val FakeDailyCases = listOf<DailyCase>(
+val FakeTotalDailyCases = listOf<DailyCase>(
+  DailyCase(650_000, "March 1"),
+  DailyCase(685_000, "March 2"),
+  DailyCase(920_000, "March 3"),
+  DailyCase(946_000, "March 4"),
+  DailyCase(999_000, "March 5"),
+  DailyCase(1_030_000, "March 6")
+)
+
+val FakeNewDailyCases = listOf<DailyCase>(
   DailyCase(650_000, "March 1"),
   DailyCase(685_000, "March 2"),
   DailyCase(920_000, "March 3"),
@@ -128,12 +138,12 @@ class FakeWorldCasesInfoDataSource(
   
   private var retryCount = 0
   
-  override fun requestWorldDailyCases() = Single.create<List<DailyCase>> { emitter ->
+  override fun requestWorldDailyCases(): Single<WorldCasesInfo> = Single.create { emitter ->
     if (retryCount < totalRetryCount) {
       retryCount++
       emitter.onError(errorFactory())
       return@create
     }
-    emitter.onSuccess(FakeDailyCases)
+    emitter.onSuccess(WorldCasesInfo(FakeTotalDailyCases, FakeNewDailyCases))
   }
 }

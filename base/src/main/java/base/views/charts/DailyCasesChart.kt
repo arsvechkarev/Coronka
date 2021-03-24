@@ -72,9 +72,9 @@ class DailyCasesChart @JvmOverloads constructor(
     setScaleEnabled(false)
   }
   
-  fun update(dailyCases: List<DailyCase>, offset: Int = 0) {
+  fun update(dailyCases: List<DailyCase>) {
     this._dailyCases = dailyCases
-    val entries = createEntries(dailyCases, offset)
+    val entries = createEntries(dailyCases)
     val lineDataSet = LineDataSet(entries, "")
     lineDataSet.apply {
       setDrawCircles(false)
@@ -115,12 +115,10 @@ class DailyCasesChart @JvmOverloads constructor(
     return super.onTouchEvent(event)
   }
   
-  private fun createEntries(dailyCases: List<DailyCase>, offset: Int): List<BarEntry> {
+  private fun createEntries(dailyCases: List<DailyCase>): List<BarEntry> {
     val entries = ArrayList<BarEntry>()
     dailyCases.forEachIndexed { i, case ->
-      if (i >= offset) {
-        entries.add(BarEntry(i.toFloat(), case.cases.toFloat()))
-      }
+      entries.add(BarEntry(i.toFloat(), case.cases.toFloat()))
     }
     return entries
   }

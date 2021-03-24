@@ -1,6 +1,6 @@
 package com.arsvechkarev.stats.presentation
 
 import core.BaseScreenState
-import core.model.WorldCasesInfo
+import core.model.MainStatistics
 
-class LoadedWorldCasesInfo(val worldCasesInfo: WorldCasesInfo) : BaseScreenState
+class LoadedMainStatistics(val mainStatistics: MainStatistics) : BaseScreenState

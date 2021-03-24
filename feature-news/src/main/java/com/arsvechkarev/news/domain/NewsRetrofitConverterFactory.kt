@@ -3,6 +3,7 @@ package com.arsvechkarev.news.domain
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import core.DateTimeFormatter
+import core.JsonConverter
 import core.model.NewsItemWithPicture
 import okhttp3.ResponseBody
 import retrofit2.Converter
@@ -10,7 +11,7 @@ import retrofit2.Retrofit
 import java.lang.reflect.Type
 
 class NewsRetrofitConverterFactory(
-  private val newsJsonConverter: NewsJsonConverter
+  private val converter: JsonConverter<List<NewsItemWithPicture>>
 ) : Converter.Factory() {
   
   override fun responseBodyConverter(
@@ -23,16 +24,15 @@ class NewsRetrofitConverterFactory(
     if (type != expectedType) {
       return null
     }
-    return Converter<ResponseBody, List<NewsItemWithPicture>> { value: ResponseBody ->
-      newsJsonConverter.convert(value.string())
-    }
+    return Converter { converter.convert(it.string()) }
   }
 }
 
-/** Converts json string to list of [NewsItemWithPicture] */
-class NewsJsonConverter(private val dateTimeFormatter: DateTimeFormatter) {
+class NewsJsonConverter(
+  private val dateTimeFormatter: DateTimeFormatter
+) : JsonConverter<List<NewsItemWithPicture>> {
   
-  fun convert(json: String): List<NewsItemWithPicture> {
+  override fun convert(json: String): List<NewsItemWithPicture> {
     val news = ArrayList<NewsItemWithPicture>()
     val outerObject = JsonParser.parseString(json).asJsonObject
     val array = outerObject.get(RESPONSE).asJsonObject.get(DOCS).asJsonArray
@@ -54,18 +54,18 @@ class NewsJsonConverter(private val dateTimeFormatter: DateTimeFormatter) {
     return news
   }
   
-  companion object {
+  private companion object {
     
-    private const val RESPONSE = "response"
-    private const val DOCS = "docs"
-    private const val ID = "_id"
-    private const val HEADLINE = "headline"
-    private const val MAIN = "main"
-    private const val LEAD_PARAGRAPH = "lead_paragraph"
-    private const val WEB_URL = "web_url"
-    private const val PUB_DATE = "pub_date"
-    private const val MULTIMEDIA = "multimedia"
-    private const val URL = "url"
-    private const val IMAGE_URL_PREFIX = "https://static01.nyt.com/"
+    const val RESPONSE = "response"
+    const val DOCS = "docs"
+    const val ID = "_id"
+    const val HEADLINE = "headline"
+    const val MAIN = "main"
+    const val LEAD_PARAGRAPH = "lead_paragraph"
+    const val WEB_URL = "web_url"
+    const val PUB_DATE = "pub_date"
+    const val MULTIMEDIA = "multimedia"
+    const val URL = "url"
+    const val IMAGE_URL_PREFIX = "https://static01.nyt.com/"
   }
 }

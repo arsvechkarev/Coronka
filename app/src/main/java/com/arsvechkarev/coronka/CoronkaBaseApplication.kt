@@ -8,7 +8,7 @@ import com.arsvechkarev.common.di.CommonFeaturesModuleImpl
 import com.arsvechkarev.viewdsl.ContextHolder
 import com.jakewharton.threetenabp.AndroidThreeTen
 import core.di.CoreComponent
-import coreimpl.CoreModuleImpl
+import coreimpl.DefaultCoreModule
 
 open class CoronkaBaseApplication : Application() {
   
@@ -22,7 +22,7 @@ open class CoronkaBaseApplication : Application() {
   }
   
   open fun initializeDiComponents() {
-    val coreModule = CoreModuleImpl(applicationContext)
+    val coreModule = DefaultCoreModule(applicationContext)
     val commonFeaturesModule = CommonFeaturesModuleImpl(coreModule)
     CoreComponent.initialize(coreModule)
     CommonFeaturesComponent.initialize(commonFeaturesModule)

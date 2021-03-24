@@ -1,4 +1,4 @@
-package com.arsvechkarev.common.domain
+package com.arsvechkarev.common.repository
 
 /**
  * A schema for database with countries meta information: iso2, population,

@@ -5,8 +5,8 @@ import base.extensions.f
 import base.extensions.withNetworkDelay
 import base.extensions.withRequestTimeout
 import base.extensions.withRetry
-import com.arsvechkarev.common.domain.CountriesMetaInfoRepository
 import com.arsvechkarev.common.domain.TotalInfoDataSource
+import com.arsvechkarev.common.repository.CountriesMetaInfoRepository
 import com.arsvechkarev.rankings.domain.CountriesFilterer
 import core.BaseScreenState
 import core.Failure

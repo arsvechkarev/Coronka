@@ -18,6 +18,6 @@ interface GeneralInfoDataSource {
   companion object {
     
     /** Base url for retrofit */
-    const val BASE_URL = "https://coronavirus-19-api.herokuapp.com"
+    const val BASE_URL = "https://coronavirus-19-api.herokuapp.com/"
   }
 }

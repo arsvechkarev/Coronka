@@ -5,13 +5,11 @@ import android.net.ConnectivityManager
 import core.WebApi
 import core.di.CoreModule
 import okhttp3.OkHttpClient
-import retrofit2.CallAdapter
-import retrofit2.Converter
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class CoreModuleImpl(applicationContext: Context) : CoreModule {
+class DefaultCoreModule(applicationContext: Context) : CoreModule {
   
   override val schedulers = AndroidSchedulers
   
@@ -33,7 +31,7 @@ class CoreModuleImpl(applicationContext: Context) : CoreModule {
   override val dateTimeFormatter = EnglishDateTimeFormatter(applicationContext,
     ThreeTenAbpDateTimeCreator)
   
-  override val rxJava2CallAdapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create()
+  override val rxJava2CallAdapterFactory: RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.create()
   
-  override val gsonConverterFactory: Converter.Factory = GsonConverterFactory.create()
+  override val gsonConverterFactory: GsonConverterFactory = GsonConverterFactory.create()
 }

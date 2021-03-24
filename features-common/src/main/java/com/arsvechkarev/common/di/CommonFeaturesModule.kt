@@ -1,7 +1,7 @@
 package com.arsvechkarev.common.di
 
-import com.arsvechkarev.common.domain.CountriesMetaInfoRepository
 import com.arsvechkarev.common.domain.TotalInfoDataSource
+import com.arsvechkarev.common.repository.CountriesMetaInfoRepository
 
 interface CommonFeaturesModule {
   

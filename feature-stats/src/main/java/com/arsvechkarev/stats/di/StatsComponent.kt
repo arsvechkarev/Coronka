@@ -9,7 +9,6 @@ import core.di.CoreComponent.networkAvailabilityNotifier
 import core.di.CoreComponent.okHttpClient
 import core.di.CoreComponent.rxJava2CallAdapterFactory
 import core.di.CoreComponent.schedulers
-import core.di.CoreComponent.webApi
 import core.di.ModuleInterceptorManager.interceptModuleOrDefault
 
 object StatsComponent {
@@ -21,11 +20,11 @@ object StatsComponent {
   private val statsViewModelFactory = object : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
       val statsModule = interceptModuleOrDefault<StatsModule> {
-        DefaultStatsModule(rxJava2CallAdapterFactory, gsonConverterFactory, okHttpClient, webApi)
+        DefaultStatsModule(rxJava2CallAdapterFactory, gsonConverterFactory,
+          okHttpClient, schedulers)
       }
       @Suppress("UNCHECKED_CAST")
-      return StatsViewModel(statsModule.generalInfoDataSource, statsModule.worldCasesInfoDataSource,
-        networkAvailabilityNotifier, schedulers) as T
+      return StatsViewModel(statsModule.statsUseCase, networkAvailabilityNotifier, schedulers) as T
     }
   }
 }

@@ -1,15 +1,16 @@
 package com.arsvechkarev.stats
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.arsvechkarev.common.domain.transformers.WorldCasesInfoTransformer.toNewDailyCases
-import com.arsvechkarev.stats.presentation.LoadedWorldCasesInfo
+import com.arsvechkarev.stats.domain.DefaultStatsUseCase
+import com.arsvechkarev.stats.presentation.LoadedMainStatistics
 import com.arsvechkarev.stats.presentation.StatsViewModel
-import com.arsvechkarev.test.FakeDailyCases
 import com.arsvechkarev.test.FakeGeneralInfo
 import com.arsvechkarev.test.FakeGeneralInfoDataSource
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
+import com.arsvechkarev.test.FakeNewDailyCases
 import com.arsvechkarev.test.FakeSchedulers
 import com.arsvechkarev.test.FakeScreenStateObserver
+import com.arsvechkarev.test.FakeTotalDailyCases
 import com.arsvechkarev.test.FakeWorldCasesInfoDataSource
 import com.arsvechkarev.test.currentState
 import com.arsvechkarev.test.hasCurrentState
@@ -53,12 +54,12 @@ class StatsViewModelTest {
     with(observer) {
       hasStatesCount(2)
       hasStateAtPosition<Loading>(0)
-      hasStateAtPosition<LoadedWorldCasesInfo>(1)
-      hasCurrentState<LoadedWorldCasesInfo>()
-      val worldCasesInfo = state<LoadedWorldCasesInfo>(1).worldCasesInfo
-      assertEquals(FakeGeneralInfo, worldCasesInfo.generalInfo)
-      assertEquals(FakeDailyCases, worldCasesInfo.totalDailyCases)
-      assertEquals(toNewDailyCases(FakeDailyCases), worldCasesInfo.newDailyCases)
+      hasStateAtPosition<LoadedMainStatistics>(1)
+      hasCurrentState<LoadedMainStatistics>()
+      val statisticsInfo = state<LoadedMainStatistics>(1).mainStatistics
+      assertEquals(FakeGeneralInfo, statisticsInfo.generalInfo)
+      assertEquals(FakeTotalDailyCases, statisticsInfo.worldCasesInfo.totalDailyCases)
+      assertEquals(FakeNewDailyCases, statisticsInfo.worldCasesInfo.newDailyCases)
     }
   }
   
@@ -97,12 +98,12 @@ class StatsViewModelTest {
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<Failure>(1)
       hasStateAtPosition<Loading>(2)
-      hasStateAtPosition<LoadedWorldCasesInfo>(3)
+      hasStateAtPosition<LoadedMainStatistics>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
-      val worldCasesInfo = currentState<LoadedWorldCasesInfo>().worldCasesInfo
-      assertEquals(FakeGeneralInfo, worldCasesInfo.generalInfo)
-      assertEquals(FakeDailyCases, worldCasesInfo.totalDailyCases)
-      assertEquals(toNewDailyCases(FakeDailyCases), worldCasesInfo.newDailyCases)
+      val mainStatistics = currentState<LoadedMainStatistics>().mainStatistics
+      assertEquals(FakeGeneralInfo, mainStatistics.generalInfo)
+      assertEquals(FakeTotalDailyCases, mainStatistics.worldCasesInfo.totalDailyCases)
+      assertEquals(FakeNewDailyCases, mainStatistics.worldCasesInfo.newDailyCases)
     }
   }
   
@@ -125,12 +126,12 @@ class StatsViewModelTest {
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<Failure>(1)
       hasStateAtPosition<Loading>(2)
-      hasStateAtPosition<LoadedWorldCasesInfo>(3)
+      hasStateAtPosition<LoadedMainStatistics>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
-      val worldCasesInfo = currentState<LoadedWorldCasesInfo>().worldCasesInfo
-      assertEquals(FakeGeneralInfo, worldCasesInfo.generalInfo)
-      assertEquals(FakeDailyCases, worldCasesInfo.totalDailyCases)
-      assertEquals(toNewDailyCases(FakeDailyCases), worldCasesInfo.newDailyCases)
+      val mainStatistics = currentState<LoadedMainStatistics>().mainStatistics
+      assertEquals(FakeGeneralInfo, mainStatistics.generalInfo)
+      assertEquals(FakeTotalDailyCases, mainStatistics.worldCasesInfo.totalDailyCases)
+      assertEquals(FakeNewDailyCases, mainStatistics.worldCasesInfo.newDailyCases)
     }
   }
   
@@ -140,12 +141,9 @@ class StatsViewModelTest {
     notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
   ): StatsViewModel {
     val generalInfoDataSource = FakeGeneralInfoDataSource(totalRetryCount, errorFactory = { error })
-    return StatsViewModel(
-      generalInfoDataSource,
-      FakeWorldCasesInfoDataSource(),
-      notifier,
-      FakeSchedulers
-    )
+    val fakeStatsUseCase = DefaultStatsUseCase(generalInfoDataSource,
+      FakeWorldCasesInfoDataSource(), FakeSchedulers)
+    return StatsViewModel(fakeStatsUseCase, notifier, FakeSchedulers)
   }
   
   private fun createObserver(): FakeScreenStateObserver {

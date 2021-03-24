@@ -4,8 +4,8 @@ import base.RxViewModel
 import base.extensions.withNetworkDelay
 import base.extensions.withRequestTimeout
 import base.extensions.withRetry
-import com.arsvechkarev.common.domain.CountriesMetaInfoRepository
 import com.arsvechkarev.common.domain.TotalInfoDataSource
+import com.arsvechkarev.common.repository.CountriesMetaInfoRepository
 import com.arsvechkarev.map.utils.MapTransformer
 import core.BaseScreenState
 import core.Failure

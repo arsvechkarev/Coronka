@@ -6,17 +6,14 @@ import base.extensions.f
 import base.extensions.toFormattedNumber
 import base.extensions.toFormattedTextLabelDate
 import com.agoda.kakao.screen.Screen.Companion.onScreen
-import com.arsvechkarev.common.domain.GeneralInfoDataSource
-import com.arsvechkarev.common.domain.WorldCasesInfoDataSource
 import com.arsvechkarev.coronka.DataProvider
 import com.arsvechkarev.coronka.configureDurationsAndDelaysForTests
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.screens.StatsScreen
 import com.arsvechkarev.stats.di.StatsModule
+import com.arsvechkarev.stats.domain.StatsUseCase
 import core.di.ModuleInterceptorManager
-import core.model.DailyCase
-import core.model.GeneralInfo
-import io.reactivex.Single
+import io.reactivex.Observable
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,16 +22,9 @@ import org.junit.runner.RunWith
 class StatsTest {
   
   private val fakeStatsModule = object : StatsModule {
-    
-    override val generalInfoDataSource = object : GeneralInfoDataSource {
-      override fun requestGeneralInfo(): Single<GeneralInfo> {
-        return Single.just(DataProvider.getGeneralInfo())
-      }
-    }
-    override val worldCasesInfoDataSource = object : WorldCasesInfoDataSource {
-      override fun requestWorldDailyCases(): Single<List<DailyCase>> {
-        return Single.just(DataProvider.getDailyCases())
-      }
+  
+    override val statsUseCase = StatsUseCase {
+      Observable.just(DataProvider.getWorldCasesInfo())
     }
   }
   

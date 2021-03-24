@@ -18,8 +18,6 @@ import coreimpl.GlideImageLoader
 import coreimpl.SchedulersThreader
 import coreimpl.ThreeTenAbpDateTimeCreator
 import okhttp3.OkHttpClient
-import retrofit2.CallAdapter
-import retrofit2.Converter
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -37,7 +35,7 @@ open class FakeCoreModule : CoreModule {
   override val dateTimeFormatter: DateTimeFormatter = EnglishDateTimeFormatter(context,
     ThreeTenAbpDateTimeCreator)
   
-  override val rxJava2CallAdapterFactory: CallAdapter.Factory = RxJava2CallAdapterFactory.create()
+  override val rxJava2CallAdapterFactory: RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.create()
   
-  override val gsonConverterFactory: Converter.Factory = GsonConverterFactory.create()
+  override val gsonConverterFactory: GsonConverterFactory = GsonConverterFactory.create()
 }

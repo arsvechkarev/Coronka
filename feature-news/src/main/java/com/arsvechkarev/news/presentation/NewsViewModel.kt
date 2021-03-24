@@ -47,8 +47,6 @@ class NewsViewModel(
           .withRequestTimeout()
           .map<BaseScreenState>(::LoadedNews)
           .startWith(Loading)
-          .doOnNext { println(it) }
-          .doOnError { println(it) }
           .onErrorReturn(::Failure)
           .observeOn(schedulers.mainThread())
           .smartSubscribe(_state::setValue)
@@ -66,8 +64,6 @@ class NewsViewModel(
           .map<BaseScreenState>(::LoadedNextPage)
           .observeOn(schedulers.mainThread())
           .startWithIf(LoadingNextPage) { currentPage < newsUseCase.maxPagesCount }
-          .doOnNext { println(it) }
-          .doOnError { println(it) }
           .doOnError { currentPage-- }
           .onErrorReturn(::FailureLoadingNextPage)
           .smartSubscribe(_state::setValue)

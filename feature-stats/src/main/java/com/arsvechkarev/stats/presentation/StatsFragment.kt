@@ -31,7 +31,7 @@ import core.FailureReason.TIMEOUT
 import core.FailureReason.UNKNOWN
 import core.Loading
 import core.model.GeneralInfo
-import core.model.WorldCasesInfo
+import core.model.MainStatistics
 import kotlinx.android.synthetic.main.fragment_stats.statsContentView
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorLayout
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorMessage
@@ -93,11 +93,11 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
       is Loading -> {
         updateContentView(putLoading = true)
       }
-      is LoadedWorldCasesInfo -> {
+      is LoadedMainStatistics -> {
         hostActivity.enableTouchesOnDrawer()
         toggleScrollingContent(enable = true)
-        renderGeneralInfo(state.worldCasesInfo.generalInfo)
-        renderCharts(state.worldCasesInfo)
+        renderGeneralInfo(state.mainStatistics.generalInfo)
+        renderCharts(state.mainStatistics)
       }
       is Failure -> {
         renderFailure(state)
@@ -105,9 +105,9 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     }
   }
   
-  private fun renderCharts(info: WorldCasesInfo) {
-    statsTotalCasesChart.update(info.totalDailyCases, offset = 1)
-    statsNewCasesChart.update(info.newDailyCases)
+  private fun renderCharts(mainStatistics: MainStatistics) {
+    statsTotalCasesChart.update(mainStatistics.worldCasesInfo.totalDailyCases)
+    statsNewCasesChart.update(mainStatistics.worldCasesInfo.newDailyCases)
     statsTotalCasesChart.animateVisible(andThen = { statsTotalCasesLoadingStub.background = null })
     statsNewCasesChart.animateVisible(andThen = { statsNewCasesLoadingStub.background = null })
     statsTotalCasesLabel.animateVisible()

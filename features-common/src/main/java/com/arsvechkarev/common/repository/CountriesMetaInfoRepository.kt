@@ -1,14 +1,14 @@
-package com.arsvechkarev.common.domain
+package com.arsvechkarev.common.repository
 
 import base.extensions.collectToMap
 import base.extensions.intOfColumn
 import base.extensions.stringOfColumn
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseSchema.TABLE_NAME
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseSchema.iso2
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseSchema.lat
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseSchema.lng
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseSchema.population
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseSchema.world_region
+import com.arsvechkarev.common.repository.CountriesMetaInfoDatabaseSchema.TABLE_NAME
+import com.arsvechkarev.common.repository.CountriesMetaInfoDatabaseSchema.iso2
+import com.arsvechkarev.common.repository.CountriesMetaInfoDatabaseSchema.lat
+import com.arsvechkarev.common.repository.CountriesMetaInfoDatabaseSchema.lng
+import com.arsvechkarev.common.repository.CountriesMetaInfoDatabaseSchema.population
+import com.arsvechkarev.common.repository.CountriesMetaInfoDatabaseSchema.world_region
 import core.Database
 import core.model.CountryMetaInfo
 import core.model.Location
