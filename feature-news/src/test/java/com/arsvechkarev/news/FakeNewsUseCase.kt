@@ -1,6 +1,6 @@
 package com.arsvechkarev.news
 
-import com.arsvechkarev.news.domain.NewYorkTimesNewsRepository
+import com.arsvechkarev.news.domain.NewsUseCase
 import core.model.NewsItemWithPicture
 import io.reactivex.Maybe
 import java.net.UnknownHostException
@@ -24,10 +24,10 @@ val FakeNewListPages = listOf(
   )
 )
 
-class FakeNewYorkTimesNewsRepository(
+class FakeNewsUseCase(
   private val totalRetryCount: Int = 0,
   private val errorFactory: () -> Throwable = { UnknownHostException() }
-) : NewYorkTimesNewsRepository {
+) : NewsUseCase {
   
   private var nextThrowable: Throwable? = null
   

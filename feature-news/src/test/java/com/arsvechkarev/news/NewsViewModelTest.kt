@@ -150,16 +150,17 @@ class NewsViewModelTest {
   
   @Test
   fun `Testing paging errors`() {
-    val newsDataSource = FakeNewYorkTimesNewsRepository()
-    val viewModel = NewsViewModel(newsDataSource, FakeNetworkAvailabilityNotifier(), FakeSchedulers)
+    val fakeNewYorkTimesUseCase = FakeNewsUseCase()
+    val viewModel = NewsViewModel(fakeNewYorkTimesUseCase,
+      FakeNetworkAvailabilityNotifier(), FakeSchedulers)
     val observer = createObserver()
-    
+  
     viewModel.state.observeForever(observer)
     viewModel.startLoadingData()
-    newsDataSource.setNextCallAsError(UnknownHostException())
+    fakeNewYorkTimesUseCase.setNextCallAsError(UnknownHostException())
     RxConfigurator.configureRetryCount(0)
     viewModel.tryLoadNextPage()
-    
+  
     with(observer) {
       hasStatesCount(4)
       hasStateAtPosition<Loading>(0)
@@ -176,7 +177,7 @@ class NewsViewModelTest {
     totalRetryCount: Int = 0,
     error: Throwable = Throwable(),
     notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier(),
-    newsDataSource: FakeNewYorkTimesNewsRepository = FakeNewYorkTimesNewsRepository(
+    newsDataSource: FakeNewsUseCase = FakeNewsUseCase(
       totalRetryCount = totalRetryCount,
       errorFactory = { error }
     )

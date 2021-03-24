@@ -33,9 +33,10 @@ dependencies {
   implementation dependencies.coordinatorLayout
   implementation dependencies.lifecycleExtensions
   implementation dependencies.recyclerView
+  implementation dependencies.gson
   implementation dependencies.retrofit
+  implementation dependencies.retrofitRxJavaAdapter
   implementation dependencies.rxJava
-  implementation dependencies.mpAndroidChart
   implementation dependencies.threeTenAbp
   implementation dependencies.glide
   kapt dependencies.glideApt

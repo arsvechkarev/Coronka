@@ -5,7 +5,7 @@ import base.extensions.startWithIf
 import base.extensions.withNetworkDelay
 import base.extensions.withRequestTimeout
 import base.extensions.withRetry
-import com.arsvechkarev.news.domain.NewYorkTimesNewsRepository
+import com.arsvechkarev.news.domain.NewsUseCase
 import core.BaseScreenState
 import core.Failure
 import core.Loading
@@ -14,7 +14,7 @@ import core.NetworkListener
 import core.Schedulers
 
 class NewsViewModel(
-  private val newsRepository: NewYorkTimesNewsRepository,
+  private val newsUseCase: NewsUseCase,
   private val networkAvailabilityNotifier: NetworkAvailabilityNotifier,
   private val schedulers: Schedulers
 ) : RxViewModel(), NetworkListener {
@@ -39,7 +39,7 @@ class NewsViewModel(
   
   fun startLoadingData() {
     rxCall {
-      newsRepository.requestLatestNews(currentPage)
+      newsUseCase.requestLatestNews(currentPage)
           .toObservable()
           .subscribeOn(schedulers.io())
           .withNetworkDelay(schedulers)
@@ -47,6 +47,8 @@ class NewsViewModel(
           .withRequestTimeout()
           .map<BaseScreenState>(::LoadedNews)
           .startWith(Loading)
+          .doOnNext { println(it) }
+          .doOnError { println(it) }
           .onErrorReturn(::Failure)
           .observeOn(schedulers.mainThread())
           .smartSubscribe(_state::setValue)
@@ -55,7 +57,7 @@ class NewsViewModel(
   
   fun tryLoadNextPage() {
     rxCall {
-      newsRepository.requestLatestNews(++currentPage)
+      newsUseCase.requestLatestNews(++currentPage)
           .toObservable()
           .subscribeOn(schedulers.io())
           .withNetworkDelay(schedulers)
@@ -63,7 +65,9 @@ class NewsViewModel(
           .withRequestTimeout()
           .map<BaseScreenState>(::LoadedNextPage)
           .observeOn(schedulers.mainThread())
-          .startWithIf(LoadingNextPage) { currentPage < newsRepository.maxPagesCount }
+          .startWithIf(LoadingNextPage) { currentPage < newsUseCase.maxPagesCount }
+          .doOnNext { println(it) }
+          .doOnError { println(it) }
           .doOnError { currentPage-- }
           .onErrorReturn(::FailureLoadingNextPage)
           .smartSubscribe(_state::setValue)

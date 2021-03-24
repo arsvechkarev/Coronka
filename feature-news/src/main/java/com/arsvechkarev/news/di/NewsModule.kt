@@ -1,22 +1,35 @@
 package com.arsvechkarev.news.di
 
-import com.arsvechkarev.news.domain.NewYorkTimesNewsDataRepositoryImpl
-import com.arsvechkarev.news.domain.NewYorkTimesNewsRepository
-import core.DateTimeFormatter
-import core.WebApi
+import com.arsvechkarev.news.domain.DefaultNewsUseCase
+import com.arsvechkarev.news.domain.NewsApi
+import com.arsvechkarev.news.domain.NewsRetrofitConverterFactory
+import com.arsvechkarev.news.domain.NewsUseCase
 import core.di.Module
+import okhttp3.OkHttpClient
+import retrofit2.CallAdapter
+import retrofit2.Retrofit
 
 interface NewsModule : Module {
   
-  val newYorkTimesNewsRepository: NewYorkTimesNewsRepository
+  val newsUseCase: NewsUseCase
 }
 
 class DefaultNewsModule(
-  private val webApi: WebApi,
-  private val dateTimeFormatter: DateTimeFormatter,
-  private val newYorkTimesApiKey: String
+  okHttpClient: OkHttpClient,
+  rxJava2CallAdapterFactory: CallAdapter.Factory,
+  converterFactory: NewsRetrofitConverterFactory,
+  newYorkTimesApiKey: String
 ) : NewsModule {
   
-  override val newYorkTimesNewsRepository: NewYorkTimesNewsRepository
-    get() = NewYorkTimesNewsDataRepositoryImpl(webApi, dateTimeFormatter, newYorkTimesApiKey)
+  private val newYorkTimesApi by lazy {
+    Retrofit.Builder()
+        .client(okHttpClient)
+        .baseUrl("https://api.nytimes.com/")
+        .addCallAdapterFactory(rxJava2CallAdapterFactory)
+        .addConverterFactory(converterFactory)
+        .build()
+        .create(NewsApi::class.java)
+  }
+  
+  override val newsUseCase = DefaultNewsUseCase(newYorkTimesApi, newYorkTimesApiKey)
 }

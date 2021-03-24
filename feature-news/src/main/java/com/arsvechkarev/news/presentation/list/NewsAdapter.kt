@@ -1,4 +1,4 @@
-package com.arsvechkarev.news.list
+package com.arsvechkarev.news.presentation.list
 
 import androidx.recyclerview.widget.RecyclerView
 import api.threading.Threader

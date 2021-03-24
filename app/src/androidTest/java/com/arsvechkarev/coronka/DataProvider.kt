@@ -3,7 +3,7 @@ package com.arsvechkarev.coronka
 import androidx.test.platform.app.InstrumentationRegistry
 import com.arsvechkarev.common.domain.transformers.AllCountriesTransformer
 import com.arsvechkarev.common.domain.transformers.WorldCasesInfoTransformer
-import com.arsvechkarev.news.domain.NewsTransformer
+import com.arsvechkarev.news.domain.NewsJsonConverter
 import com.google.gson.Gson
 import core.model.DailyCase
 import core.model.GeneralInfo
@@ -34,7 +34,8 @@ object DataProvider {
   }
   
   fun getNews(): List<NewsItemWithPicture> {
-    return NewsTransformer.toNewsItems(
-      EnglishDateTimeFormatter(context, ThreeTenAbpDateTimeCreator), newsData)
+    val dateTimeFormatter = EnglishDateTimeFormatter(context, ThreeTenAbpDateTimeCreator)
+    val newsJsonConverter = NewsJsonConverter(dateTimeFormatter)
+    return newsJsonConverter.convert(newsData)
   }
 }

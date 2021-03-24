@@ -1,4 +1,4 @@
-package com.arsvechkarev.news.list
+package com.arsvechkarev.news.presentation.list
 
 import android.graphics.Paint
 import android.os.Build

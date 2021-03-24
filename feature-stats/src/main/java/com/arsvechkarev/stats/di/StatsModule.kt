@@ -18,15 +18,18 @@ interface StatsModule : Module {
 }
 
 class DefaultStatsModule(
-  okHttpClient: OkHttpClient, webApi: WebApi,
+  rxJava2CallAdapterFactory: RxJava2CallAdapterFactory,
+  gsonConverterFactory: GsonConverterFactory,
+  okHttpClient: OkHttpClient,
+  webApi: WebApi,
 ) : StatsModule {
   
   override val generalInfoDataSource: GeneralInfoDataSource by lazy {
     Retrofit.Builder()
         .client(okHttpClient)
         .baseUrl(GeneralInfoDataSource.BASE_URL)
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(rxJava2CallAdapterFactory)
+        .addConverterFactory(gsonConverterFactory)
         .build()
         .create(GeneralInfoDataSource::class.java)
   }

@@ -18,6 +18,10 @@ object CoreComponent {
   
   val dateTimeFormatter get() = _coreModule.dateTimeFormatter
   
+  val rxJava2CallAdapterFactory get() = _coreModule.rxJava2CallAdapterFactory
+  
+  val gsonConverterFactory get() = _coreModule.gsonConverterFactory
+  
   fun initialize(coreModule: CoreModule) {
     _coreModule = coreModule
   }
