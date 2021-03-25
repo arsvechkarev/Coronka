@@ -160,7 +160,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   }
   
   private fun renderShowCountryInfo(state: ShowCountryInfo) {
-    val country = state.country
+    val country = state.countryFullInfo.country
     rankingsDialogTitle.text(country.name)
     rankingsDialogGeneralView.updateData(
       country.confirmed,
@@ -173,8 +173,9 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
       rankingsChipOptionType, rankingsChipWorldRegion)
     rankingsTextNewConfirmed.text(country.newConfirmed.toFormattedNumber())
     rankingsTextNewDeaths.text(country.newDeaths.toFormattedNumber())
-    rankingsTextDeathRate.text(state.deathRate.toFormattedDecimalNumber())
-    rankingsTextPercentInCountry.text(state.percentInCountry.toFormattedDecimalNumber())
+    rankingsTextDeathRate.text(state.countryFullInfo.deathRate.toFormattedDecimalNumber())
+    rankingsTextPercentInCountry.text(
+      state.countryFullInfo.percentInCountry.toFormattedDecimalNumber())
     rankingsDialog.animateVisible()
   }
   

@@ -9,7 +9,7 @@ import com.arsvechkarev.viewdsl.id
 import com.arsvechkarev.viewdsl.onClick
 import com.arsvechkarev.viewdsl.paddingsRes
 import com.arsvechkarev.viewdsl.tag
-import core.model.DisplayableCountry
+import core.model.ui.DisplayableCountry
 
 class RankingsAdapter(
   onClick: (DisplayableCountry) -> Unit,

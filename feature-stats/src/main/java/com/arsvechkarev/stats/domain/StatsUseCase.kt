@@ -6,9 +6,9 @@ import base.extensions.withRetry
 import com.arsvechkarev.common.domain.GeneralInfoDataSource
 import com.arsvechkarev.common.domain.WorldCasesInfoDataSource
 import core.Schedulers
-import core.model.GeneralInfo
-import core.model.MainStatistics
-import core.model.WorldCasesInfo
+import core.model.data.GeneralInfo
+import core.model.data.MainStatistics
+import core.model.data.WorldCasesInfo
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -36,14 +36,15 @@ class DefaultStatsUseCase(
           .subscribeOn(schedulers.io())
           .map(Result.Companion::success)
           .onErrorReturn(Result.Companion::failure),
-      { info, cases -> mapToResult(info, cases)() })
-        .flatMapObservable { result ->
+      { info, cases -> mapToResult(info, cases)() }
+    ).toObservable()
+        .withNetworkDelay(schedulers)
+        .flatMap { result ->
           result.fold(
             onSuccess = { worldCasesInfo -> Observable.just(worldCasesInfo) },
             onFailure = { throwable -> Observable.error(throwable) }
           )
         }
-        .withNetworkDelay(schedulers)
         .withRetry()
         .withRequestTimeout()
   }

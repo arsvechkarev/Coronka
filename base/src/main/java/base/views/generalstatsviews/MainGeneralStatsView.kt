@@ -15,7 +15,7 @@ import base.extensions.getTextHeight
 import base.extensions.i
 import base.resources.Colors
 import base.resources.Fonts
-import core.model.GeneralInfo
+import core.model.data.GeneralInfo
 
 class MainGeneralStatsView @JvmOverloads constructor(
   context: Context,

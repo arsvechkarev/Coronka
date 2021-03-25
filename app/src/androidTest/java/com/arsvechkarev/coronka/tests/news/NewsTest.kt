@@ -1,6 +1,7 @@
 package com.arsvechkarev.coronka.tests.news
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.agoda.kakao.screen.Screen.Companion.onScreen
 import com.arsvechkarev.coronka.clickAndWaitForIdle
@@ -15,7 +16,10 @@ import com.arsvechkarev.coronka.screens.StatsScreen
 import com.arsvechkarev.news.di.NewsModule
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import core.di.CoreComponent
-import core.di.ModuleInterceptorManager
+import core.di.ModuleInterceptorManager.addInterceptorForModule
+import core.model.mappers.NewsItemsMapper
+import coreimpl.EnglishDateTimeFormatter
+import coreimpl.ThreeTenAbpDateTimeCreator
 import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
@@ -36,7 +40,11 @@ class NewsTest {
         override val networkAvailabilityNotifier = fakeNetworkAvailabilityNotifier
       }
       CoreComponent.initialize(coreModule)
-      ModuleInterceptorManager.addInterceptorForModule<NewsModule> { FakeNewsModule() }
+      addInterceptorForModule<NewsModule> lb@{
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val dateTimeFormatter = EnglishDateTimeFormatter(context, ThreeTenAbpDateTimeCreator)
+        return@lb FakeNewsModule(NewsItemsMapper(dateTimeFormatter))
+      }
       configureDurationsAndDelaysForTests()
     }
   }

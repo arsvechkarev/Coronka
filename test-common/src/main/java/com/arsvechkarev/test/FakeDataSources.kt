@@ -1,21 +1,22 @@
 package com.arsvechkarev.test
 
+import com.arsvechkarev.common.domain.CountriesDataSource
 import com.arsvechkarev.common.domain.GeneralInfoDataSource
-import com.arsvechkarev.common.domain.TotalInfoDataSource
 import com.arsvechkarev.common.domain.WorldCasesInfoDataSource
 import com.arsvechkarev.common.repository.CountriesMetaInfoRepository
-import core.model.Country
-import core.model.CountryMetaInfo
-import core.model.DailyCase
-import core.model.GeneralInfo
-import core.model.Location
-import core.model.TotalInfo
-import core.model.WorldCasesInfo
 import core.model.WorldRegion.ASIA
 import core.model.WorldRegion.EUROPE
 import core.model.WorldRegion.NORTH_AMERICA
 import core.model.WorldRegion.OCEANIA
 import core.model.WorldRegion.SOUTH_AMERICA
+import core.model.data.CountriesWrapper
+import core.model.data.CountryEntity
+import core.model.data.CountryMetaInfo
+import core.model.data.GeneralInfo
+import core.model.data.Location
+import core.model.data.WorldCasesInfo
+import core.model.mappers.CountryEntitiesToCountriesMapper
+import core.model.ui.DailyCase
 import io.reactivex.Single
 import java.net.UnknownHostException
 
@@ -45,28 +46,28 @@ val FakeLocationsMap = mapOf(
   "AU" to Location(8.0, 2.13),
 )
 
-val FakeCountries = listOf(
-  Country(0, "USA", "united states", "US",
-    25_000_000, 200_000, 12_000_000, 23_000, 2_230),
-  Country(1, "Canada", "canada", "CA",
-    2_000_000, 20_000, 1_500_045, 8_100, 400),
-  Country(2, "United Kingdom", "united kingdom", "UK",
-    3_210_000, 200_000, 2_062_000, 15_060, 650),
-  Country(3, "France", "france", "FR",
-    1_500_000, 15_600, 1_221_000, 7_300, 306),
-  Country(4, "Germany", "germany", "DE",
-    1_200_000, 12_460, 950_600, 6_000, 390),
-  Country(5, "China", "China", "CN",
-    750_000, 22_690, 611_000, 3_200, 90),
-  Country(6, "India", "india", "IN",
-    8_000_000, 120_030, 6_260_000, 213_000, 19_230),
-  Country(7, "Brazil", "brazil", "BR",
-    6_000_000, 110_200, 4_230_000, 210_600, 23_230),
-  Country(8, "Australia", "australia", "AU",
-    620_000, 18_500, 450_000, 2_000, 236),
+val FakeCountryEntities = listOf(
+  CountryEntity("0", "USA", "united states", "US", 25_000_000,
+    200_000, 12_000_000, 23_000, 2_230, 500, ""),
+  CountryEntity("1", "Canada", "canada", "CA", 2_000_000,
+    20_000, 1_500_045, 8_100, 400, 100, ""),
+  CountryEntity("2", "United Kingdom", "united kingdom", "UK", 3_210_000,
+    200_000, 2_062_000, 15_060, 650, 150, ""),
+  CountryEntity("3", "France", "france", "FR", 1_500_000,
+    15_600, 1_221_000, 7_300, 306, 75, ""),
+  CountryEntity("4", "Germany", "germany", "DE", 1_200_000,
+    12_460, 950_600, 6_000, 390, 80, ""),
+  CountryEntity("5", "China", "China", "CN", 750_000,
+    22_690, 611_000, 3_200, 90, 15, ""),
+  CountryEntity("6", "India", "india", "IN", 8_000_000,
+    120_030, 6_260_000, 213_000, 19_230, 4500, ""),
+  CountryEntity("7", "Brazil", "brazil", "BR", 6_000_000,
+    110_200, 4_230_000, 210_600, 23_230, 5200, ""),
+  CountryEntity("8", "Australia", "australia", "AU", 620_000,
+    18_500, 450_000, 2_000, 236, 40, ""),
 )
 
-val FakeTotalInfo = TotalInfo(FakeCountries, FakeGeneralInfo)
+val FakeCountries = CountryEntitiesToCountriesMapper().map(FakeCountryEntities)
 
 val FakeTotalDailyCases = listOf<DailyCase>(
   DailyCase(650_000, "March 1"),
@@ -86,10 +87,10 @@ val FakeNewDailyCases = listOf<DailyCase>(
   DailyCase(1_030_000, "March 6")
 )
 
-class FakeCountriesMetaInfoDataSource : CountriesMetaInfoRepository {
+class FakeCountriesMetaInfoRepository : CountriesMetaInfoRepository {
   
-  override fun getCountriesMetaInfoSync(): Map<String, CountryMetaInfo> {
-    return FakeMetaInfoMap
+  override fun getCountriesMetaInfo(): Single<Map<String, CountryMetaInfo>> {
+    return Single.just(FakeMetaInfoMap)
   }
   
   override fun getLocationsMap(): Single<Map<String, Location>> {
@@ -114,20 +115,20 @@ class FakeGeneralInfoDataSource(
   }
 }
 
-class FakeTotalInfoDataSource(
+class FakeCountriesDataSource(
   private val totalRetryCount: Int = 0,
   private val errorFactory: () -> Throwable = { UnknownHostException() }
-) : TotalInfoDataSource {
+) : CountriesDataSource {
   
   private var retryCount = 0
   
-  override fun requestTotalInfo() = Single.create<TotalInfo> { emitter ->
+  override fun requestCountries() = Single.create<CountriesWrapper> { emitter ->
     if (retryCount < totalRetryCount) {
       retryCount++
       emitter.onError(errorFactory())
       return@create
     }
-    emitter.onSuccess(FakeTotalInfo)
+    emitter.onSuccess(CountriesWrapper(FakeCountryEntities))
   }
 }
 

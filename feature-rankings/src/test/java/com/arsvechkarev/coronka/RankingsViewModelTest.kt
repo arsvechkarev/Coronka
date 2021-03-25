@@ -3,6 +3,7 @@ package com.arsvechkarev.coronka
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.arsvechkarev.rankings.domain.CountriesFilterer
 import com.arsvechkarev.rankings.domain.CountriesFiltererImpl
+import com.arsvechkarev.rankings.domain.DefaultRankingsInteractor
 import com.arsvechkarev.rankings.presentation.FilteredCountries
 import com.arsvechkarev.rankings.presentation.LoadedCountries
 import com.arsvechkarev.rankings.presentation.RankingsViewModel
@@ -10,12 +11,12 @@ import com.arsvechkarev.rankings.presentation.RankingsViewModel.Companion.Defaul
 import com.arsvechkarev.rankings.presentation.RankingsViewModel.Companion.DefaultWorldRegion
 import com.arsvechkarev.rankings.presentation.ShowCountryInfo
 import com.arsvechkarev.test.FakeCountries
-import com.arsvechkarev.test.FakeCountriesMetaInfoDataSource
+import com.arsvechkarev.test.FakeCountriesDataSource
+import com.arsvechkarev.test.FakeCountriesMetaInfoRepository
 import com.arsvechkarev.test.FakeMetaInfoMap
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.test.FakeSchedulers
 import com.arsvechkarev.test.FakeScreenStateObserver
-import com.arsvechkarev.test.FakeTotalInfoDataSource
 import com.arsvechkarev.test.currentState
 import com.arsvechkarev.test.hasStateAtPosition
 import com.arsvechkarev.test.hasStatesCount
@@ -25,9 +26,10 @@ import core.Failure
 import core.FailureReason.NO_CONNECTION
 import core.FailureReason.TIMEOUT
 import core.Loading
-import core.model.DisplayableCountry
 import core.model.OptionType.RECOVERED
 import core.model.WorldRegion.EUROPE
+import core.model.mappers.CountryEntitiesToCountriesMapper
+import core.model.ui.DisplayableCountry
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -193,7 +195,7 @@ class RankingsViewModelTest {
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<LoadedCountries>(1)
       hasStateAtPosition<ShowCountryInfo>(2)
-      currentState<ShowCountryInfo>().country == FakeCountries[countryIndex]
+      currentState<ShowCountryInfo>().countryFullInfo.country == FakeCountries[countryIndex]
     }
   }
   
@@ -203,12 +205,13 @@ class RankingsViewModelTest {
     countriesFilterer: CountriesFilterer = CountriesFiltererImpl(),
     notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
   ): RankingsViewModel {
-    val totalInfoDataSource = FakeTotalInfoDataSource(totalRetryCount, errorFactory = { error })
-    val countriesMetaInfoDataSource = FakeCountriesMetaInfoDataSource()
+    val fakeCountriesDataSource = FakeCountriesDataSource(totalRetryCount, errorFactory = { error })
+    val fakeCountriesMetaInfoRepository = FakeCountriesMetaInfoRepository()
     return RankingsViewModel(
-      totalInfoDataSource,
-      countriesMetaInfoDataSource,
-      countriesFilterer,
+      DefaultRankingsInteractor(
+        fakeCountriesDataSource, fakeCountriesMetaInfoRepository, countriesFilterer,
+        CountryEntitiesToCountriesMapper(), FakeSchedulers
+      ),
       notifier,
       FakeSchedulers
     )

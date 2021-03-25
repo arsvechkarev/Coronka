@@ -1,6 +1,6 @@
 package com.arsvechkarev.common.domain
 
-import core.model.WorldCasesInfo
+import core.model.data.WorldCasesInfo
 import io.reactivex.Single
 import retrofit2.http.GET
 

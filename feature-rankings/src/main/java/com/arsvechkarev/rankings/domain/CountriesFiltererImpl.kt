@@ -3,11 +3,11 @@ package com.arsvechkarev.rankings.domain
 import api.recycler.DifferentiableItem
 import base.extensions.toFormattedDecimalNumber
 import base.extensions.toFormattedNumber
-import core.model.Country
-import core.model.CountryMetaInfo
-import core.model.DisplayableCountry
 import core.model.OptionType
 import core.model.WorldRegion
+import core.model.data.CountryMetaInfo
+import core.model.domain.Country
+import core.model.ui.DisplayableCountry
 
 class CountriesFiltererImpl : CountriesFilterer {
   

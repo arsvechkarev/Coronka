@@ -1,18 +1,18 @@
 package com.arsvechkarev.map
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.arsvechkarev.map.domain.DefaultMapInteractor
 import com.arsvechkarev.map.presentation.FoundCountry
 import com.arsvechkarev.map.presentation.LoadedCountries
 import com.arsvechkarev.map.presentation.MapViewModel
 import com.arsvechkarev.map.utils.MapTransformer
 import com.arsvechkarev.test.FakeCountries
-import com.arsvechkarev.test.FakeCountriesMetaInfoDataSource
+import com.arsvechkarev.test.FakeCountriesDataSource
+import com.arsvechkarev.test.FakeCountriesMetaInfoRepository
 import com.arsvechkarev.test.FakeLocationsMap
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.test.FakeSchedulers
 import com.arsvechkarev.test.FakeScreenStateObserver
-import com.arsvechkarev.test.FakeTotalInfo
-import com.arsvechkarev.test.FakeTotalInfoDataSource
 import com.arsvechkarev.test.currentState
 import com.arsvechkarev.test.hasStateAtPosition
 import com.arsvechkarev.test.hasStatesCount
@@ -22,6 +22,7 @@ import core.Failure
 import core.FailureReason
 import core.FailureReason.NO_CONNECTION
 import core.Loading
+import core.model.mappers.CountryEntitiesToCountriesMapper
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -54,8 +55,8 @@ class MapViewModelTest {
     with(observer) {
       hasStatesCount(2)
       hasStateAtPosition<LoadedCountries>(1)
-      val expected = MapTransformer.transformResult(FakeTotalInfo, FakeLocationsMap)
-      assertEquals(expected, currentState<LoadedCountries>().iso2ToCountryMap)
+      val expected = MapTransformer().transformResult(FakeCountries, FakeLocationsMap)
+      assertEquals(expected, currentState<LoadedCountries>().iso2ToCountryMapMetaInfo)
     }
   }
   
@@ -96,8 +97,8 @@ class MapViewModelTest {
       hasStateAtPosition<Loading>(2)
       hasStateAtPosition<LoadedCountries>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
-      val worldCasesInfo = currentState<LoadedCountries>().iso2ToCountryMap
-      val expected = MapTransformer.transformResult(FakeTotalInfo, FakeLocationsMap)
+      val worldCasesInfo = currentState<LoadedCountries>().iso2ToCountryMapMetaInfo
+      val expected = MapTransformer().transformResult(FakeCountries, FakeLocationsMap)
       assertEquals(expected, worldCasesInfo)
     }
   }
@@ -123,8 +124,8 @@ class MapViewModelTest {
       hasStateAtPosition<Loading>(2)
       hasStateAtPosition<LoadedCountries>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
-      val worldCasesInfo = currentState<LoadedCountries>().iso2ToCountryMap
-      val expected = MapTransformer.transformResult(FakeTotalInfo, FakeLocationsMap)
+      val worldCasesInfo = currentState<LoadedCountries>().iso2ToCountryMapMetaInfo
+      val expected = MapTransformer().transformResult(FakeCountries, FakeLocationsMap)
       assertEquals(expected, worldCasesInfo)
     }
   }
@@ -137,15 +138,15 @@ class MapViewModelTest {
     
     viewModel.state.observeForever(observer)
     viewModel.startLoadingData()
-    viewModel.showCountryInfo(countryToClick)
+    viewModel.showCountryInfo(countryToClick.id)
     
     with(observer) {
       hasStatesCount(3)
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<LoadedCountries>(1)
       hasStateAtPosition<FoundCountry>(2)
-      val expected = MapTransformer.transformResult(FakeTotalInfo, FakeLocationsMap)
-      assertEquals(expected, state<FoundCountry>(2).iso2ToCountryMap)
+      val expected = MapTransformer().transformResult(FakeCountries, FakeLocationsMap)
+      assertEquals(expected, state<FoundCountry>(2).iso2ToCountryMapMetaInfo)
       assertEquals(countryToClick, state<FoundCountry>(2).country)
     }
   }
@@ -155,13 +156,18 @@ class MapViewModelTest {
     error: Throwable = Throwable(),
     notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
   ): MapViewModel {
-    val totalInfoDataSource = FakeTotalInfoDataSource(
+    val fakeCountriesDataSource = FakeCountriesDataSource(
       totalRetryCount = totalRetryCount,
       errorFactory = { error }
     )
+    val mapInteractor = DefaultMapInteractor(
+      fakeCountriesDataSource,
+      FakeCountriesMetaInfoRepository(),
+      CountryEntitiesToCountriesMapper(),
+      FakeSchedulers
+    )
     return MapViewModel(
-      totalInfoDataSource,
-      FakeCountriesMetaInfoDataSource(),
+      mapInteractor,
       notifier,
       FakeSchedulers
     )

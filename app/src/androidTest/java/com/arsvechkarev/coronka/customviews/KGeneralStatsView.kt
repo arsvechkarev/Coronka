@@ -8,7 +8,7 @@ import com.agoda.kakao.common.assertions.BaseAssertions
 import com.agoda.kakao.common.builders.ViewBuilder
 import com.agoda.kakao.common.views.KBaseView
 import com.arsvechkarev.coronka.matches
-import core.model.GeneralInfo
+import core.model.data.GeneralInfo
 import org.hamcrest.Matcher
 
 class KGeneralStatsView : KBaseView<KGeneralStatsView>, GeneralStatsViewAssertions {

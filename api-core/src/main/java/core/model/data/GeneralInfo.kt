@@ -1,9 +1,9 @@
-package core.model
+package core.model.data
 
 import com.google.gson.annotations.SerializedName
 
 /**
- * Total information about cases in the world
+ * General information about cases in the world
  */
 data class GeneralInfo(
   @SerializedName("cases") val confirmed: Int,

@@ -6,13 +6,13 @@ import com.arsvechkarev.news.presentation.AdditionalItem
 import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.recycler.ListAdapter
 import core.ImageLoader
-import core.model.BasicNewsItem
+import core.model.ui.NewsDifferentiableItem
 
 class NewsAdapter(
   fragment: NewsFragment,
   imageLoader: ImageLoader,
   threader: Threader,
-  private var onNewsItemClicked: ((BasicNewsItem) -> Unit)? = null,
+  private var onNewsItemClicked: ((NewsDifferentiableItem) -> Unit)? = null,
   onReadyToLoadNextPage: () -> Unit,
   private var onRetryItemClicked: (() -> Unit)? = null
 ) : ListAdapter(threader, onReadyToLoadNextPage) {

@@ -1,25 +1,25 @@
 package com.arsvechkarev.news
 
 import com.arsvechkarev.news.domain.NewsUseCase
-import core.model.NewsItemWithPicture
+import core.model.ui.NewsDifferentiableItem
 import io.reactivex.Maybe
 import java.net.UnknownHostException
 
-val FakeNewListPages = listOf(
+val FakeNewsListPages = listOf(
   listOf(
-    NewsItemWithPicture("_id1", "news1", "desc1",
+    NewsDifferentiableItem("_id1", "news1", "desc1",
       "url1", "", "https://image1"),
   ),
   listOf(
-    NewsItemWithPicture("_id2", "news2", "desc2",
+    NewsDifferentiableItem("_id2", "news2", "desc2",
       "url2", "", "https://image2"),
   ),
   listOf(
-    NewsItemWithPicture("_id3", "news3", "desc3",
+    NewsDifferentiableItem("_id3", "news3", "desc3",
       "url3", "", "https://image3"),
   ),
   listOf(
-    NewsItemWithPicture("_id4", "news4", "desc4",
+    NewsDifferentiableItem("_id4", "news4", "desc4",
       "url4", "", "https://image4"),
   )
 )
@@ -39,7 +39,7 @@ class FakeNewsUseCase(
   
   override val maxPagesCount: Int = 4
   
-  override fun requestLatestNews(page: Int) = Maybe.create<List<NewsItemWithPicture>> { emitter ->
+  override fun requestLatestNews(page: Int) = Maybe.create<List<NewsDifferentiableItem>> { emitter ->
     if (nextThrowable != null) {
       emitter.onError(nextThrowable!!)
       nextThrowable = null
@@ -51,7 +51,7 @@ class FakeNewsUseCase(
       return@create
     }
     if (page in 0 until maxPagesCount) {
-      emitter.onSuccess(FakeNewListPages[page])
+      emitter.onSuccess(FakeNewsListPages[page])
     } else {
       emitter.onComplete()
     }

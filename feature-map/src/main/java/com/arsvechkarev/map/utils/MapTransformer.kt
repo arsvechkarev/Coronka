@@ -1,16 +1,19 @@
 package com.arsvechkarev.map.utils
 
-import core.model.CountryOnMap
-import core.model.Location
-import core.model.TotalInfo
+import core.model.data.Location
+import core.model.domain.Country
+import core.model.ui.CountryOnMapMetaInfo
 
-object MapTransformer {
+class MapTransformer {
   
-  fun transformResult(totalInfo: TotalInfo, locationsMap: Map<String, Location>): Map<String, CountryOnMap> {
-    val map = HashMap<String, CountryOnMap>()
-    for (country in totalInfo.countries) {
+  fun transformResult(
+    countries: List<Country>,
+    locationsMap: Map<String, Location>
+  ): Map<String, CountryOnMapMetaInfo> {
+    val map = HashMap<String, CountryOnMapMetaInfo>()
+    for (country in countries) {
       val location = locationsMap[country.iso2] ?: continue
-      map[country.iso2] = CountryOnMap(country, location)
+      map[country.iso2] = CountryOnMapMetaInfo(country.id, country.confirmed, location)
     }
     return map
   }

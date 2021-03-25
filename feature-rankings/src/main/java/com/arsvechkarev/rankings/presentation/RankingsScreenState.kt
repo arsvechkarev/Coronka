@@ -2,14 +2,10 @@ package com.arsvechkarev.rankings.presentation
 
 import api.recycler.DifferentiableItem
 import core.BaseScreenState
-import core.model.Country
+import core.model.ui.CountryFullInfo
 
 class FilteredCountries(val list: List<DifferentiableItem>) : BaseScreenState
 
 class LoadedCountries(val list: List<DifferentiableItem>) : BaseScreenState
 
-class ShowCountryInfo(
-  val country: Country,
-  val deathRate: Float,
-  val percentInCountry: Float
-) : BaseScreenState
+class ShowCountryInfo(val countryFullInfo: CountryFullInfo) : BaseScreenState

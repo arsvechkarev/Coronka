@@ -1,10 +1,12 @@
 package com.arsvechkarev.news.domain
 
-import core.model.NewsItemWithPicture
+import core.Mapper
+import core.model.data.NewsItem
+import core.model.ui.NewsDifferentiableItem
 import io.reactivex.Maybe
 
 /**
- * Use case for retrieving list of [NewsItemWithPicture]
+ * Use case for retrieving list of [NewsItem]
  */
 interface NewsUseCase {
   
@@ -14,13 +16,15 @@ interface NewsUseCase {
   val maxPagesCount: Int
   
   /**
-   * Returns list of [NewsItemWithPicture] wrapped as [Maybe]
+   * Returns list of [NewsItem] wrapped as [Maybe]
    */
-  fun requestLatestNews(page: Int): Maybe<List<NewsItemWithPicture>>
+  fun requestLatestNews(page: Int): Maybe<List<NewsDifferentiableItem>>
 }
 
 class DefaultNewsUseCase(
-  private val newsApi: NewsApi, newYorkTimesApiKey: String,
+  private val newsApi: NewsApi,
+  newYorkTimesApiKey: String,
+  private val newsMapper: Mapper<List<NewsItem>, List<NewsDifferentiableItem>>,
 ) : NewsUseCase {
   
   override val maxPagesCount = 50
@@ -32,11 +36,13 @@ class DefaultNewsUseCase(
     "sort" to "newest",
   )
   
-  override fun requestLatestNews(page: Int): Maybe<List<NewsItemWithPicture>> {
+  override fun requestLatestNews(page: Int): Maybe<List<NewsDifferentiableItem>> {
     if (page > maxPagesCount) {
       return Maybe.empty()
     }
     params["page"] = page.toString()
-    return newsApi.requestLatestNews(HashMap(params)).toMaybe()
+    return newsApi.requestLatestNews(HashMap(params))
+        .map { list -> newsMapper.map(list) }
+        .toMaybe()
   }
 }

@@ -30,8 +30,8 @@ import core.FailureReason.NO_CONNECTION
 import core.FailureReason.TIMEOUT
 import core.FailureReason.UNKNOWN
 import core.Loading
-import core.model.GeneralInfo
-import core.model.MainStatistics
+import core.model.data.GeneralInfo
+import core.model.data.MainStatistics
 import kotlinx.android.synthetic.main.fragment_stats.statsContentView
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorLayout
 import kotlinx.android.synthetic.main.fragment_stats.statsErrorMessage

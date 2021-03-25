@@ -1,10 +1,10 @@
 package com.arsvechkarev.rankings.domain
 
 import api.recycler.DifferentiableItem
-import core.model.Country
-import core.model.CountryMetaInfo
 import core.model.OptionType
 import core.model.WorldRegion
+import core.model.data.CountryMetaInfo
+import core.model.domain.Country
 
 /**
  * Performs filtering of countries

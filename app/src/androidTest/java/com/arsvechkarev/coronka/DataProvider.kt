@@ -1,16 +1,16 @@
 package com.arsvechkarev.coronka
 
 import androidx.test.platform.app.InstrumentationRegistry
-import com.arsvechkarev.common.domain.transformers.AllCountriesTransformer
 import com.arsvechkarev.news.domain.NewsJsonConverter
+import com.arsvechkarev.stats.domain.WorldInfoJsonConverter
 import com.google.gson.Gson
-import core.model.DailyCase
-import core.model.GeneralInfo
-import core.model.MainStatistics
-import core.model.NewsItemWithPicture
-import core.model.TotalInfo
-import coreimpl.EnglishDateTimeFormatter
-import coreimpl.ThreeTenAbpDateTimeCreator
+import core.model.data.CountriesWrapper
+import core.model.data.GeneralInfo
+import core.model.data.MainStatistics
+import core.model.data.NewsItem
+import core.model.domain.Country
+import core.model.mappers.CountryEntitiesToCountriesMapper
+import core.model.ui.DailyCase
 
 object DataProvider {
   
@@ -21,26 +21,27 @@ object DataProvider {
   private val newsData by lazy { context.readAssetsFile("news_data.json") }
   private val generalInfoData by lazy { context.readAssetsFile("general_info_data.json") }
   
-  fun getWorldCasesInfo(): MainStatistics {
-    val newDailyCases = WorldCasesInfoTransformer.toNewDailyCases(getDailyCases())
-    return MainStatistics(getGeneralInfo(), getDailyCases(), newDailyCases)
+  fun getMainStatistics(): MainStatistics {
+    val worldCasesInfo = WorldInfoJsonConverter().convert(worldCasesData)
+    return MainStatistics(getGeneralInfo(), worldCasesInfo)
   }
   
-  fun getTotalInfo(): TotalInfo {
-    return AllCountriesTransformer.toTotalData(allCountriesData)
+  fun getAllCountriesInfo(): List<Country> {
+    val countriesWrapper = Gson().fromJson<CountriesWrapper>(allCountriesData,
+      CountriesWrapper::class.java)
+    return CountryEntitiesToCountriesMapper().map(countriesWrapper.countries)
   }
   
   fun getDailyCases(): List<DailyCase> {
-    return WorldCasesInfoTransformer.toDailyCases(worldCasesData)
+    return WorldInfoJsonConverter().convert(worldCasesData).totalDailyCases
   }
   
   fun getGeneralInfo(): GeneralInfo {
     return Gson().fromJson<GeneralInfo>(generalInfoData, GeneralInfo::class.java)
   }
   
-  fun getNews(): List<NewsItemWithPicture> {
-    val dateTimeFormatter = EnglishDateTimeFormatter(context, ThreeTenAbpDateTimeCreator)
-    val newsJsonConverter = NewsJsonConverter(dateTimeFormatter)
+  fun getNews(): List<NewsItem> {
+    val newsJsonConverter = NewsJsonConverter()
     return newsJsonConverter.convert(newsData)
   }
 }

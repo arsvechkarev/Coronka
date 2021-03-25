@@ -23,7 +23,7 @@ import core.FailureReason.TIMEOUT
 import core.FailureReason.UNKNOWN
 import core.Loading
 import core.di.CoreComponent.threader
-import core.model.Country
+import core.model.ui.CountryOnMapMetaInfo
 import kotlinx.android.synthetic.main.fragment_map.mapEarthView
 import kotlinx.android.synthetic.main.fragment_map.mapIconDrawer
 import kotlinx.android.synthetic.main.fragment_map.mapImageFailure
@@ -41,7 +41,7 @@ import kotlinx.android.synthetic.main.fragment_map.mapTextViewCountryName
 class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   
   private lateinit var mapHelper: MapHelper
-  private var viewModel: MapViewModel? = null
+  private lateinit var viewModel: MapViewModel
   
   override val enableTouchesOnDrawerWhenFragmentAppears: Boolean = false
   
@@ -97,7 +97,7 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
     mapLayoutLoading.animateInvisible()
     mapView.animateVisible()
     mapHelper.toggleMap(enable = true)
-    mapHelper.drawCountries(state.iso2ToCountryMap)
+    mapHelper.drawCountries(state.iso2ToCountryMapMetaInfo)
   }
   
   private fun renderFoundCountry(state: FoundCountry) {
@@ -131,14 +131,14 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
     mapLayoutLoading.animateInvisible()
   }
   
-  private fun onCountrySelected(country: Country) {
-    viewModel!!.showCountryInfo(country)
+  private fun onCountrySelected(countryOnMapMetaInfo: CountryOnMapMetaInfo) {
+    viewModel.showCountryInfo(countryOnMapMetaInfo.id)
   }
   
   private fun setupViews() {
     mapLayoutCountryInfo.asBottomSheet.allowMultipleFingers = false
-    mapTextRetry.setOnClickListener { viewModel!!.startLoadingData() }
-    mapTextRetryUnknown.setOnClickListener { viewModel!!.startLoadingData() }
+    mapTextRetry.setOnClickListener { viewModel.startLoadingData() }
+    mapTextRetryUnknown.setOnClickListener { viewModel.startLoadingData() }
     mapIconDrawer.setOnClickListener {
       hostActivity.openDrawer()
       hostActivity.enableTouchesOnDrawer()

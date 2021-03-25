@@ -1,4 +1,4 @@
-package core.model
+package core.model.data
 
 /** Basic statistics about coronavirus */
 class MainStatistics(

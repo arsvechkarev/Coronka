@@ -3,10 +3,14 @@ package com.arsvechkarev.coronka.tests.news
 import com.arsvechkarev.coronka.DataProvider
 import com.arsvechkarev.news.di.NewsModule
 import com.arsvechkarev.news.domain.NewsUseCase
-import core.model.NewsItemWithPicture
+import core.Mapper
+import core.model.data.NewsItem
+import core.model.ui.NewsDifferentiableItem
 import io.reactivex.Maybe
 
-class FakeNewsModule : NewsModule {
+class FakeNewsModule(
+  private val newsItemsMapper: Mapper<List<NewsItem>, List<NewsDifferentiableItem>>
+) : NewsModule {
   
   override val newsUseCase = object : NewsUseCase {
     
@@ -14,12 +18,13 @@ class FakeNewsModule : NewsModule {
     
     private var errorCount = 0
     
-    override fun requestLatestNews(page: Int): Maybe<List<NewsItemWithPicture>> {
+    override fun requestLatestNews(page: Int): Maybe<List<NewsDifferentiableItem>> {
       if (errorCount < 1) {
         errorCount++
         return Maybe.error(Throwable())
       }
-      return Maybe.just(DataProvider.getNews())
+      val news = DataProvider.getNews()
+      return Maybe.just(newsItemsMapper.map(news))
     }
   }
 }

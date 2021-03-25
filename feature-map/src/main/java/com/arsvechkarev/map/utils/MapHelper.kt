@@ -7,36 +7,35 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
-import core.model.Country
-import core.model.CountryOnMap
+import core.model.ui.CountryOnMapMetaInfo
 
 class MapHelper(
   private val context: Context,
   mapView: MapView,
-  private val onCountrySelected: (Country) -> Unit,
+  private val onCountrySelected: (CountryOnMapMetaInfo) -> Unit,
   private val threader: Threader
 ) {
   
   private val mapHolder = MapHolder()
   private val countriesDrawer = CountriesDrawer(mapHolder, context)
   
-  private var currentCountry: CountryOnMap? = null
+  private var currentCountryMetaInfo: CountryOnMapMetaInfo? = null
   private var currentMarker: Marker? = null
   
   init {
     mapView.getMapAsync(::initMap)
   }
   
-  fun drawCountries(iso2ToCountryMap: Map<String, CountryOnMap>) {
+  fun drawCountries(iso2ToCountryMapMetaInfo: Map<String, CountryOnMapMetaInfo>) {
     mapHolder.execute {
-      countriesDrawer.draw(iso2ToCountryMap)
+      countriesDrawer.draw(iso2ToCountryMapMetaInfo)
       setOnMarkerClickListener lb@{ newMarker ->
-        val newCountry = iso2ToCountryMap.getValue(newMarker.tag as String)
-        if (currentCountry == newCountry) return@lb true
-        countriesDrawer.drawSelection(currentMarker, currentCountry, newMarker, newCountry)
+        val newCountry = iso2ToCountryMapMetaInfo.getValue(newMarker.tag as String)
+        if (currentCountryMetaInfo == newCountry) return@lb true
+        countriesDrawer.drawSelection(currentMarker, currentCountryMetaInfo, newMarker, newCountry)
         currentMarker = newMarker
-        currentCountry = newCountry
-        onCountrySelected(newCountry.country)
+        currentCountryMetaInfo = newCountry
+        onCountrySelected(newCountry)
         return@lb false
       }
     }

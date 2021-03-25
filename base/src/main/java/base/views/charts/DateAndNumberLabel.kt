@@ -17,7 +17,7 @@ import base.resources.Fonts
 import base.resources.TextSizes
 import config.AnimationsConfigurator
 import core.di.CoreComponent
-import core.model.DailyCase
+import core.model.ui.DailyCase
 import kotlin.math.roundToInt
 
 class DateAndNumberLabel @JvmOverloads constructor(

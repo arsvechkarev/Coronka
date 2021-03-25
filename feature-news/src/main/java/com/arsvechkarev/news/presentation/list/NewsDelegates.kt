@@ -44,13 +44,13 @@ import com.arsvechkarev.viewdsl.textColor
 import com.arsvechkarev.viewdsl.visible
 import com.arsvechkarev.viewdsl.withViewBuilder
 import core.ImageLoader
-import core.model.NewsItemWithPicture
+import core.model.ui.NewsDifferentiableItem
 
 fun newsItemDelegate(
   fragment: Fragment,
   imageLoader: ImageLoader,
-  onNewsItemClicked: (NewsItemWithPicture) -> Unit
-) = delegate<NewsItemWithPicture> {
+  onNewsItemClicked: (NewsDifferentiableItem) -> Unit
+) = delegate<NewsDifferentiableItem> {
   view(::buildNewsLayout)
   onInitViewHolder {
     itemView.onClick { onNewsItemClicked.invoke(item) }
@@ -61,7 +61,7 @@ fun newsItemDelegate(
   }
   onBind { itemView, item ->
     require(itemView is NewsItemView)
-    itemView.setData(item.title, item.description, item.publishedDate)
+    itemView.setData(item.title, item.description, item.formattedDate)
     val width = itemView.context.resources.displayMetrics.widthPixels
     val size = NewsItemsUtils.getImageSize(width)
     imageLoader.load(fragment, item.imageUrl, itemView, size, size)

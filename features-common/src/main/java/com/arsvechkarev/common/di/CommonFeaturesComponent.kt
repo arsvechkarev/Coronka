@@ -4,7 +4,7 @@ object CommonFeaturesComponent {
   
   private lateinit var commonFeaturesModule: CommonFeaturesModule
   
-  val totalInfoDataSource get() = commonFeaturesModule.totalInfoDataSource
+  val countriesDataSource get() = commonFeaturesModule.countriesDataSource
   
   val countriesMetaInfoRepository get() = commonFeaturesModule.countriesMetaInfoRepository
   

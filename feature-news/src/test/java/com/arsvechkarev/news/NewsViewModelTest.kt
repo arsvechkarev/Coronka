@@ -54,7 +54,7 @@ class NewsViewModelTest {
       hasStateAtPosition<LoadedNews>(1)
       hasCurrentState<LoadedNews>()
       val news = state<LoadedNews>(1).news
-      assertArrayEquals(FakeNewListPages[0].toTypedArray(), news.toTypedArray())
+      assertArrayEquals(FakeNewsListPages[0].toTypedArray(), news.toTypedArray())
     }
   }
   
@@ -96,7 +96,7 @@ class NewsViewModelTest {
       hasStateAtPosition<LoadedNews>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
       val news = state<LoadedNews>(3).news
-      assertArrayEquals(FakeNewListPages[0].toTypedArray(), news.toTypedArray())
+      assertArrayEquals(FakeNewsListPages[0].toTypedArray(), news.toTypedArray())
     }
   }
   
@@ -121,7 +121,7 @@ class NewsViewModelTest {
       hasStateAtPosition<Loading>(2)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
       val news = state<LoadedNews>(3).news
-      assertArrayEquals(FakeNewListPages[0].toTypedArray(), news.toTypedArray())
+      assertArrayEquals(FakeNewsListPages[0].toTypedArray(), news.toTypedArray())
     }
   }
   
@@ -142,9 +142,9 @@ class NewsViewModelTest {
       hasStateAtPosition<LoadedNextPage>(3)
       
       val news = state<LoadedNews>(1).news
-      assertArrayEquals(FakeNewListPages[0].toTypedArray(), news.toTypedArray())
+      assertArrayEquals(FakeNewsListPages[0].toTypedArray(), news.toTypedArray())
       val newNews = state<LoadedNextPage>(3).newNews
-      assertArrayEquals(FakeNewListPages[1].toTypedArray(), newNews.toTypedArray())
+      assertArrayEquals(FakeNewsListPages[1].toTypedArray(), newNews.toTypedArray())
     }
   }
   
@@ -168,7 +168,7 @@ class NewsViewModelTest {
       hasStateAtPosition<LoadingNextPage>(2)
       hasStateAtPosition<FailureLoadingNextPage>(3)
       val news = state<LoadedNews>(1).news
-      assertArrayEquals(FakeNewListPages[0].toTypedArray(), news.toTypedArray())
+      assertArrayEquals(FakeNewsListPages[0].toTypedArray(), news.toTypedArray())
       assertEquals(NO_CONNECTION, currentState<FailureLoadingNextPage>().reason)
     }
   }

@@ -24,7 +24,7 @@ class StatsTest {
   private val fakeStatsModule = object : StatsModule {
   
     override val statsUseCase = StatsUseCase {
-      Observable.just(DataProvider.getWorldCasesInfo())
+      Observable.just(DataProvider.getMainStatistics())
     }
   }
   

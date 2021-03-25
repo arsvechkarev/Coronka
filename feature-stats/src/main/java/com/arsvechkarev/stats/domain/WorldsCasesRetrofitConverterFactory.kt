@@ -3,8 +3,8 @@ package com.arsvechkarev.stats.domain
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import core.JsonConverter
-import core.model.DailyCase
-import core.model.WorldCasesInfo
+import core.model.data.WorldCasesInfo
+import core.model.ui.DailyCase
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit

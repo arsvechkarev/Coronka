@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import core.model.CountryOnMap
+import core.model.ui.CountryOnMapMetaInfo
 import kotlin.math.max
 import kotlin.math.pow
 
@@ -25,7 +25,7 @@ class CountriesDrawer(
   
   private val minBitmapSize: Float
   private val maxBitmapSize: Float
-  private val countriesToSizes = HashMap<Int, Int>()
+  private val countriesIdsToSizes = HashMap<String, Int>()
   private val circlePaint = Paint(ANTI_ALIAS_FLAG)
   private val strokePaint = Paint(ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.STROKE
@@ -39,9 +39,9 @@ class CountriesDrawer(
     strokePaint.strokeWidth = minBitmapSize / 10
   }
   
-  fun draw(iso2ToCountryMap: Map<String, CountryOnMap>) {
-    val maxCountryOnMap = iso2ToCountryMap.values.maxByOrNull { it.country.confirmed }!!
-    iso2ToCountryMap.iterate { iso2, countryOnMap ->
+  fun draw(iso2ToCountryMapMetaInfo: Map<String, CountryOnMapMetaInfo>) {
+    val maxCountryOnMap = iso2ToCountryMapMetaInfo.values.maxByOrNull { it.confirmed }!!
+    iso2ToCountryMapMetaInfo.iterate { iso2, countryOnMap ->
       val location = countryOnMap.location
       val latLng = LatLng(location.lat, location.lng)
       val bitmap = createMarkerBitmap(countryOnMap, maxCountryOnMap)
@@ -58,23 +58,23 @@ class CountriesDrawer(
   
   fun drawSelection(
     oldMarker: Marker?,
-    oldCountry: CountryOnMap?,
+    oldCountryMetaInfo: CountryOnMapMetaInfo?,
     newMarker: Marker,
-    newCountry: CountryOnMap
+    newCountryMetaInfo: CountryOnMapMetaInfo
   ) {
-    if (oldMarker != null && oldCountry != null) {
-      drawMarker(oldMarker, oldCountry, MapCircleDefault, MapCircleStrokeDefault)
+    if (oldMarker != null && oldCountryMetaInfo != null) {
+      drawMarker(oldMarker, oldCountryMetaInfo, MapCircleDefault, MapCircleStrokeDefault)
     }
-    drawMarker(newMarker, newCountry, MapCircleSelected, MapCircleStrokeSelected)
+    drawMarker(newMarker, newCountryMetaInfo, MapCircleSelected, MapCircleStrokeSelected)
   }
   
   private fun createMarkerBitmap(
-    countryOnMap: CountryOnMap,
-    maxCountry: CountryOnMap
+    countryOnMapMetaInfo: CountryOnMapMetaInfo,
+    maxCountryMetaInfo: CountryOnMapMetaInfo
   ): Bitmap {
-    val bitmapSize = transformCasesToSize(countryOnMap.country.confirmed,
-      maxCountry.country.confirmed)
-    countriesToSizes[countryOnMap.country.id] = bitmapSize
+    val bitmapSize = transformCasesToSize(countryOnMapMetaInfo.confirmed,
+      maxCountryMetaInfo.confirmed)
+    countriesIdsToSizes[countryOnMapMetaInfo.id] = bitmapSize
     val bitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888)
     val tempCanvas = Canvas(bitmap)
     drawCircle(tempCanvas, MapCircleDefault, MapCircleStrokeDefault)
@@ -83,11 +83,11 @@ class CountriesDrawer(
   
   private fun drawMarker(
     marker: Marker,
-    countryOnMap: CountryOnMap,
+    countryOnMapMetaInfo: CountryOnMapMetaInfo,
     circleColor: Int,
     strokeColor: Int
   ) {
-    val oldMarkerSize = countriesToSizes.getValue(countryOnMap.country.id)
+    val oldMarkerSize = countriesIdsToSizes.getValue(countryOnMapMetaInfo.id)
     val bitmap = Bitmap.createBitmap(oldMarkerSize, oldMarkerSize, Bitmap.Config.ARGB_8888)
     val tempCanvas = Canvas(bitmap)
     drawCircle(tempCanvas, circleColor, strokeColor)

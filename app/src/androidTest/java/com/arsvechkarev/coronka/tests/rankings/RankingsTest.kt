@@ -31,7 +31,7 @@ class RankingsTest {
   
   @Test
   fun test_displaying_ranks() {
-    val allCountries = DataProvider.getTotalInfo().countries
+    val allCountries = DataProvider.getAllCountriesInfo()
     val countryWithMostCases = allCountries.maxByOrNull { it.confirmed }!!
   
     screen<StatsScreen>().iconDrawer.clickAndWaitForIdle()
@@ -52,7 +52,7 @@ class RankingsTest {
   
   @Test
   fun test_filtering() {
-    val allCountries = DataProvider.getTotalInfo().countries
+    val allCountries = DataProvider.getAllCountriesInfo()
     val countryWithMostRecovered = allCountries.maxByOrNull { it.recovered }!!
     val countryWithLeastRecovered = allCountries.minByOrNull { it.recovered }!!
   

@@ -1,4 +1,4 @@
-package core.model
+package core.model.data
 
 /** Location of a country */
 data class Location(

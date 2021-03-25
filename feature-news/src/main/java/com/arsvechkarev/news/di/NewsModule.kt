@@ -1,12 +1,15 @@
 package com.arsvechkarev.news.di
 
+import com.arsvechkarev.news.BuildConfig
 import com.arsvechkarev.news.domain.DefaultNewsUseCase
 import com.arsvechkarev.news.domain.NewsApi
-import com.arsvechkarev.news.domain.NewsRetrofitConverterFactory
 import com.arsvechkarev.news.domain.NewsUseCase
+import core.di.CoreComponent.dateTimeFormatter
+import core.di.CoreComponent.gsonConverterFactory
+import core.di.CoreComponent.okHttpClient
+import core.di.CoreComponent.rxJava2CallAdapterFactory
 import core.di.Module
-import okhttp3.OkHttpClient
-import retrofit2.CallAdapter
+import core.model.mappers.NewsItemsMapper
 import retrofit2.Retrofit
 
 interface NewsModule : Module {
@@ -14,22 +17,18 @@ interface NewsModule : Module {
   val newsUseCase: NewsUseCase
 }
 
-class DefaultNewsModule(
-  okHttpClient: OkHttpClient,
-  rxJava2CallAdapterFactory: CallAdapter.Factory,
-  converterFactory: NewsRetrofitConverterFactory,
-  newYorkTimesApiKey: String
-) : NewsModule {
+object DefaultNewsModule : NewsModule {
   
   private val newYorkTimesApi by lazy {
     Retrofit.Builder()
         .client(okHttpClient)
         .baseUrl("https://api.nytimes.com/")
         .addCallAdapterFactory(rxJava2CallAdapterFactory)
-        .addConverterFactory(converterFactory)
+        .addConverterFactory(gsonConverterFactory)
         .build()
         .create(NewsApi::class.java)
   }
   
-  override val newsUseCase = DefaultNewsUseCase(newYorkTimesApi, newYorkTimesApiKey)
+  override val newsUseCase = DefaultNewsUseCase(newYorkTimesApi, BuildConfig.NYT_API_KEY,
+    NewsItemsMapper(dateTimeFormatter))
 }

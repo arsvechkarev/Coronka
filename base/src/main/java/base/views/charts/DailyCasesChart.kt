@@ -23,7 +23,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import core.model.DailyCase
+import core.model.ui.DailyCase
 
 class DailyCasesChart @JvmOverloads constructor(
   context: Context,
