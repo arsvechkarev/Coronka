@@ -1,11 +1,11 @@
 package com.arsvechkarev.common.di
 
 import com.arsvechkarev.common.domain.CountriesDataSource
-import com.arsvechkarev.common.repository.CountriesMetaInfoRepository
+import core.Database
 
 interface CommonFeaturesModule {
   
-  val countriesDataSource: CountriesDataSource
+  val countriesInformationDatabase: Database
   
-  val countriesMetaInfoRepository: CountriesMetaInfoRepository
+  val countriesDataSource: CountriesDataSource
 }

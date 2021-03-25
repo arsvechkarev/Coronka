@@ -1,11 +1,9 @@
 package com.arsvechkarev.stats
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.arsvechkarev.stats.domain.DefaultStatsUseCase
+import com.arsvechkarev.stats.domain.StatsUseCase
 import com.arsvechkarev.stats.presentation.LoadedMainStatistics
 import com.arsvechkarev.stats.presentation.StatsViewModel
-import com.arsvechkarev.test.FakeGeneralInfo
-import com.arsvechkarev.test.FakeGeneralInfoDataSource
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.test.FakeNewDailyCases
 import com.arsvechkarev.test.FakeSchedulers
@@ -141,7 +139,7 @@ class StatsViewModelTest {
     notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
   ): StatsViewModel {
     val generalInfoDataSource = FakeGeneralInfoDataSource(totalRetryCount, errorFactory = { error })
-    val fakeStatsUseCase = DefaultStatsUseCase(generalInfoDataSource,
+    val fakeStatsUseCase = StatsUseCase(generalInfoDataSource,
       FakeWorldCasesInfoDataSource(), FakeSchedulers)
     return StatsViewModel(fakeStatsUseCase, notifier, FakeSchedulers)
   }

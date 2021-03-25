@@ -1,8 +1,8 @@
 package com.arsvechkarev.map.di
 
 import com.arsvechkarev.common.di.CommonFeaturesComponent.countriesDataSource
-import com.arsvechkarev.common.di.CommonFeaturesComponent.countriesMetaInfoRepository
-import com.arsvechkarev.map.domain.DefaultMapInteractor
+import com.arsvechkarev.common.di.CommonFeaturesComponent.countriesInformationDatabase
+import com.arsvechkarev.map.domain.DatabaseLocationsMapDataSource
 import com.arsvechkarev.map.domain.MapInteractor
 import core.di.CoreComponent.schedulers
 import core.di.Module
@@ -15,9 +15,9 @@ interface MapModule : Module {
 
 object DefaultMapModule : MapModule {
   
-  override val mapInteractor: DefaultMapInteractor
-    get() = DefaultMapInteractor(
-      countriesDataSource, countriesMetaInfoRepository,
+  override val mapInteractor: MapInteractor
+    get() = MapInteractor(
+      countriesDataSource, DatabaseLocationsMapDataSource(countriesInformationDatabase),
       CountryEntitiesToCountriesMapper(), schedulers
     )
 }

@@ -1,4 +1,4 @@
-package com.arsvechkarev.common.domain
+package com.arsvechkarev.stats.domain
 
 import core.model.data.GeneralInfo
 import io.reactivex.Single
@@ -7,11 +7,8 @@ import retrofit2.http.GET
 /**
  * Data source for retrieving [GeneralInfo]
  */
-interface GeneralInfoDataSource {
+fun interface GeneralInfoDataSource {
   
-  /**
-   * Returns list of [GeneralInfo] wrapped as [Single]
-   */
   @GET("/all")
   fun requestGeneralInfo(): Single<GeneralInfo>
   

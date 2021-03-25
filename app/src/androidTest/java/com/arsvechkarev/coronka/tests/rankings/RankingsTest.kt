@@ -14,6 +14,9 @@ import com.arsvechkarev.coronka.screen
 import com.arsvechkarev.coronka.screens.DrawerScreen
 import com.arsvechkarev.coronka.screens.RankingsScreen
 import com.arsvechkarev.coronka.screens.StatsScreen
+import com.arsvechkarev.rankings.di.RankingsModule
+import core.di.ModuleInterceptorManager
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,21 +24,26 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4ClassRunner::class)
 class RankingsTest {
   
-  @get:Rule
-  val rule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+  companion object {
     
-    override fun afterActivityLaunched() {
+    @JvmStatic
+    @BeforeClass
+    fun setup() {
       configureDurationsAndDelaysForTests()
+      ModuleInterceptorManager.addInterceptorForModule<RankingsModule> { FakeRankingsModule }
     }
   }
   
+  @get:Rule
+  val rule = ActivityTestRule<MainActivity>(MainActivity::class.java)
+  
   @Test
   fun test_displaying_ranks() {
-    val allCountries = DataProvider.getAllCountriesInfo()
+    val allCountries = DataProvider.getAllCountries()
     val countryWithMostCases = allCountries.maxByOrNull { it.confirmed }!!
-  
+    
     screen<StatsScreen>().iconDrawer.clickAndWaitForIdle()
-  
+    
     screen<DrawerScreen>().textRankings.clickAndWaitForIdle()
     
     onScreen<RankingsScreen> {
@@ -52,7 +60,7 @@ class RankingsTest {
   
   @Test
   fun test_filtering() {
-    val allCountries = DataProvider.getAllCountriesInfo()
+    val allCountries = DataProvider.getAllCountries()
     val countryWithMostRecovered = allCountries.maxByOrNull { it.recovered }!!
     val countryWithLeastRecovered = allCountries.minByOrNull { it.recovered }!!
   

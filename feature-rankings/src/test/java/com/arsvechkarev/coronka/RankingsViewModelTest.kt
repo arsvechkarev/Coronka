@@ -1,9 +1,9 @@
 package com.arsvechkarev.coronka
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import api.recycler.DifferentiableItem
 import com.arsvechkarev.rankings.domain.CountriesFilterer
-import com.arsvechkarev.rankings.domain.CountriesFiltererImpl
-import com.arsvechkarev.rankings.domain.DefaultRankingsInteractor
+import com.arsvechkarev.rankings.domain.RankingsInteractor
 import com.arsvechkarev.rankings.presentation.FilteredCountries
 import com.arsvechkarev.rankings.presentation.LoadedCountries
 import com.arsvechkarev.rankings.presentation.RankingsViewModel
@@ -12,8 +12,6 @@ import com.arsvechkarev.rankings.presentation.RankingsViewModel.Companion.Defaul
 import com.arsvechkarev.rankings.presentation.ShowCountryInfo
 import com.arsvechkarev.test.FakeCountries
 import com.arsvechkarev.test.FakeCountriesDataSource
-import com.arsvechkarev.test.FakeCountriesMetaInfoRepository
-import com.arsvechkarev.test.FakeMetaInfoMap
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.test.FakeSchedulers
 import com.arsvechkarev.test.FakeScreenStateObserver
@@ -26,8 +24,12 @@ import core.Failure
 import core.FailureReason.NO_CONNECTION
 import core.FailureReason.TIMEOUT
 import core.Loading
+import core.model.OptionType
 import core.model.OptionType.RECOVERED
+import core.model.WorldRegion
 import core.model.WorldRegion.EUROPE
+import core.model.data.CountryMetaInfo
+import core.model.domain.Country
 import core.model.mappers.CountryEntitiesToCountriesMapper
 import core.model.ui.DisplayableCountry
 import org.junit.Assert.assertArrayEquals
@@ -56,7 +58,7 @@ class RankingsViewModelTest {
   fun `Basic flow`() {
     val viewModel = createViewModel()
     val observer = createObserver()
-    val countriesFilterer = CountriesFiltererImpl()
+    val countriesFilterer = CountriesFilterer()
     
     viewModel.state.observeForever(observer)
     viewModel.startLoadingData()
@@ -65,7 +67,7 @@ class RankingsViewModelTest {
       hasStatesCount(2)
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<LoadedCountries>(1)
-      val expectedCountries = countriesFilterer.filterInitial(FakeCountries, FakeMetaInfoMap,
+      val expectedCountries = countriesFilterer.prepareAndFilter(FakeCountries, FakeMetaInfoMap,
         DefaultWorldRegion, DefaultOptionType)
       val loadedCountries = currentState<LoadedCountries>().list
       assertArrayEquals(expectedCountries.toTypedArray(), loadedCountries.toTypedArray())
@@ -92,14 +94,14 @@ class RankingsViewModelTest {
   
   @Test
   fun `Testing retry`() {
-    val countriesFilterer = CountriesFiltererImpl()
+    val countriesFilterer = CountriesFilterer()
     val viewModel = createViewModel(
       totalRetryCount = maxRetryCount + 1,
       error = UnknownHostException()
     )
     val observer = createObserver()
-    
-    val initialFilteredList = countriesFilterer.filterInitial(
+  
+    val initialFilteredList = countriesFilterer.prepareAndFilter(
       FakeCountries, FakeMetaInfoMap, DefaultWorldRegion, DefaultOptionType
     )
     viewModel.state.observeForever(observer)
@@ -121,7 +123,7 @@ class RankingsViewModelTest {
   
   @Test
   fun `Testing network availability callback`() {
-    val countriesFilterer = CountriesFiltererImpl()
+    val countriesFilterer = CountriesFilterer()
     val notifier = FakeNetworkAvailabilityNotifier()
     val viewModel = createViewModel(
       totalRetryCount = maxRetryCount + 1,
@@ -129,8 +131,8 @@ class RankingsViewModelTest {
       notifier = notifier
     )
     val observer = createObserver()
-    
-    val initialFilteredList = countriesFilterer.filterInitial(
+  
+    val initialFilteredList = countriesFilterer.prepareAndFilter(
       FakeCountries, FakeMetaInfoMap, DefaultWorldRegion, DefaultOptionType
     )
     viewModel.state.observeForever(observer)
@@ -151,13 +153,13 @@ class RankingsViewModelTest {
   
   @Test
   fun `Test filtering`() {
-    val countriesFilterer = CountriesFiltererImpl()
+    val countriesFilterer = CountriesFilterer()
     val viewModel = createViewModel()
     val observer = createObserver()
     val worldRegion = EUROPE
     val optionType = RECOVERED
-    
-    val filteredList = countriesFilterer.filterInitial(
+  
+    val filteredList = countriesFilterer.prepareAndFilter(
       FakeCountries, FakeMetaInfoMap, worldRegion, optionType
     )
     viewModel.state.observeForever(observer)
@@ -176,11 +178,11 @@ class RankingsViewModelTest {
   
   @Test
   fun `Test showing country`() {
-    val countriesFilterer = CountriesFiltererImpl()
+    val countriesFilterer = CountriesFilterer()
     val viewModel = createViewModel()
     val observer = createObserver()
-    
-    val filteredList = countriesFilterer.filterInitial(
+  
+    val filteredList = countriesFilterer.prepareAndFilter(
       FakeCountries, FakeMetaInfoMap, DefaultWorldRegion, DefaultOptionType
     )
     val countryIndex = 5
@@ -202,14 +204,14 @@ class RankingsViewModelTest {
   private fun createViewModel(
     totalRetryCount: Int = 0,
     error: Throwable = Throwable(),
-    countriesFilterer: CountriesFilterer = CountriesFiltererImpl(),
+    countriesFilterer: CountriesFilterer = CountriesFilterer(),
     notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
   ): RankingsViewModel {
     val fakeCountriesDataSource = FakeCountriesDataSource(totalRetryCount, errorFactory = { error })
-    val fakeCountriesMetaInfoRepository = FakeCountriesMetaInfoRepository()
+    val fakeCountriesMetaInfoDataSource = FakeCountriesMetaInfoDataSource()
     return RankingsViewModel(
-      DefaultRankingsInteractor(
-        fakeCountriesDataSource, fakeCountriesMetaInfoRepository, countriesFilterer,
+      RankingsInteractor(
+        fakeCountriesDataSource, fakeCountriesMetaInfoDataSource, countriesFilterer,
         CountryEntitiesToCountriesMapper(), FakeSchedulers
       ),
       notifier,
@@ -219,5 +221,15 @@ class RankingsViewModelTest {
   
   private fun createObserver(): FakeScreenStateObserver {
     return FakeScreenStateObserver()
+  }
+  
+  private fun CountriesFilterer.prepareAndFilter(
+    countries: List<Country>,
+    countriesMetaInfo: Map<String, CountryMetaInfo>,
+    worldRegion: WorldRegion,
+    optionType: OptionType
+  ): List<DifferentiableItem> {
+    prepare(countries, countriesMetaInfo)
+    return filter(worldRegion, optionType)
   }
 }

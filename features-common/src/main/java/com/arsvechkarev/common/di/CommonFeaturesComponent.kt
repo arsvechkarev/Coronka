@@ -4,9 +4,9 @@ object CommonFeaturesComponent {
   
   private lateinit var commonFeaturesModule: CommonFeaturesModule
   
-  val countriesDataSource get() = commonFeaturesModule.countriesDataSource
+  val countriesInformationDatabase get() = commonFeaturesModule.countriesInformationDatabase
   
-  val countriesMetaInfoRepository get() = commonFeaturesModule.countriesMetaInfoRepository
+  val countriesDataSource get() = commonFeaturesModule.countriesDataSource
   
   fun initialize(commonFeaturesModule: CommonFeaturesModule) {
     this.commonFeaturesModule = commonFeaturesModule

@@ -36,6 +36,7 @@ dependencies {
   implementation dependencies.gson
   implementation dependencies.retrofit
   implementation dependencies.retrofitRxJavaAdapter
+  implementation dependencies.retrofitGsonConverter
   implementation dependencies.rxJava
   implementation dependencies.threeTenAbp
   implementation dependencies.glide

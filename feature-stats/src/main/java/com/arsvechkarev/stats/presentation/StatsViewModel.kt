@@ -26,7 +26,7 @@ class StatsViewModel(
   
   fun startLoadingData() {
     rxCall {
-      statsUseCase.getWorldCasesInfo()
+      statsUseCase.getMainStatistics()
           .subscribeOn(schedulers.io())
           .map<BaseScreenState>(::LoadedMainStatistics)
           .onErrorReturn(::Failure)

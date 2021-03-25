@@ -11,9 +11,8 @@ import com.arsvechkarev.coronka.configureDurationsAndDelaysForTests
 import com.arsvechkarev.coronka.presentation.MainActivity
 import com.arsvechkarev.coronka.screens.StatsScreen
 import com.arsvechkarev.stats.di.StatsModule
-import com.arsvechkarev.stats.domain.StatsUseCase
 import core.di.ModuleInterceptorManager
-import io.reactivex.Observable
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,26 +20,24 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4ClassRunner::class)
 class StatsTest {
   
-  private val fakeStatsModule = object : StatsModule {
-  
-    override val statsUseCase = StatsUseCase {
-      Observable.just(DataProvider.getMainStatistics())
+  companion object {
+    
+    @BeforeClass
+    @JvmStatic
+    fun setup() {
+      configureDurationsAndDelaysForTests()
+      ModuleInterceptorManager.addInterceptorForModule<StatsModule> { FakeStatsModule }
     }
   }
   
   @get:Rule
-  val rule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
-    
-    override fun beforeActivityLaunched() {
-      configureDurationsAndDelaysForTests()
-      ModuleInterceptorManager.addInterceptorForModule<StatsModule> { fakeStatsModule }
-    }
-  }
+  val rule = ActivityTestRule<MainActivity>(MainActivity::class.java)
   
   @Test
   fun test_displaying_stats() {
     val generalInfo = DataProvider.getGeneralInfo()
     val dailyCases = DataProvider.getDailyCases()
+    val newCases = DataProvider.getNewCases()
     
     onScreen<StatsScreen> {
       iconDrawer {
@@ -58,19 +55,18 @@ class StatsTest {
       }
       totalCasesChart {
         hasEntryForIndex(
-          lastIndex - 1,
+          lastIndex,
           lastIndex.f,
           lastDailyCase.cases.f,
         )
       }
-      val beforeLastDailyCase = dailyCases[lastIndex - 1]
-      val newCaseNumber = lastDailyCase.cases - beforeLastDailyCase.cases
+      val newCaseNumber = newCases.last().cases
       newCasesLabel {
         hasDateText(lastDailyCase.date.toFormattedTextLabelDate())
         hasNumberText(newCaseNumber.toFormattedNumber())
       }
       newCasesChart {
-        hasEntryForIndex(lastIndex - 1, (lastIndex - 1).f, newCaseNumber.f)
+        hasEntryForIndex(lastIndex, lastIndex.f, newCaseNumber.f)
       }
     }
   }

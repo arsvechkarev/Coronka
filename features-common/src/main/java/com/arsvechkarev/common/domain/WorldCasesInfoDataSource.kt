@@ -7,7 +7,7 @@ import retrofit2.http.GET
 /**
  * Data source for retrieving world cases info
  */
-interface WorldCasesInfoDataSource {
+fun interface WorldCasesInfoDataSource {
   
   @GET("/arsvechkarev/coronavirus-data/main/daily_cases.json")
   fun requestWorldDailyCases(): Single<WorldCasesInfo>

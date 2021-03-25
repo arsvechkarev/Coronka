@@ -1,50 +1,14 @@
 package com.arsvechkarev.test
 
 import com.arsvechkarev.common.domain.CountriesDataSource
-import com.arsvechkarev.common.domain.GeneralInfoDataSource
 import com.arsvechkarev.common.domain.WorldCasesInfoDataSource
-import com.arsvechkarev.common.repository.CountriesMetaInfoRepository
-import core.model.WorldRegion.ASIA
-import core.model.WorldRegion.EUROPE
-import core.model.WorldRegion.NORTH_AMERICA
-import core.model.WorldRegion.OCEANIA
-import core.model.WorldRegion.SOUTH_AMERICA
 import core.model.data.CountriesWrapper
 import core.model.data.CountryEntity
-import core.model.data.CountryMetaInfo
-import core.model.data.GeneralInfo
-import core.model.data.Location
 import core.model.data.WorldCasesInfo
 import core.model.mappers.CountryEntitiesToCountriesMapper
 import core.model.ui.DailyCase
 import io.reactivex.Single
 import java.net.UnknownHostException
-
-val FakeGeneralInfo = GeneralInfo(115887454, 2573769, 91562289)
-
-val FakeMetaInfoMap = mapOf(
-  "US" to CountryMetaInfo("US", 320_000_000, NORTH_AMERICA.letters!!),
-  "CA" to CountryMetaInfo("CA", 40_000_000, NORTH_AMERICA.letters!!),
-  "UK" to CountryMetaInfo("UK", 62_000_000, EUROPE.letters!!),
-  "FR" to CountryMetaInfo("FR", 31_000_000, EUROPE.letters!!),
-  "DE" to CountryMetaInfo("DE", 53_000_000, EUROPE.letters!!),
-  "CN" to CountryMetaInfo("CN", 1232_000_000, ASIA.letters!!),
-  "IN" to CountryMetaInfo("IN", 1124_000_000, ASIA.letters!!),
-  "BR" to CountryMetaInfo("BR", 351_000_000, SOUTH_AMERICA.letters!!),
-  "AU" to CountryMetaInfo("AU", 23_000_000, OCEANIA.letters!!),
-)
-
-val FakeLocationsMap = mapOf(
-  "US" to Location(2.36, 2.0),
-  "CA" to Location(1.898, 6.2),
-  "UK" to Location(3.0, 3.1),
-  "FR" to Location(12.0, 4.86),
-  "DE" to Location(9.0, 3.34),
-  "CN" to Location(6.2, 1.0),
-  "IN" to Location(7.0, 4.9),
-  "BR" to Location(2.59, 12.87),
-  "AU" to Location(8.0, 2.13),
-)
 
 val FakeCountryEntities = listOf(
   CountryEntity("0", "USA", "united states", "US", 25_000_000,
@@ -86,34 +50,6 @@ val FakeNewDailyCases = listOf<DailyCase>(
   DailyCase(999_000, "March 5"),
   DailyCase(1_030_000, "March 6")
 )
-
-class FakeCountriesMetaInfoRepository : CountriesMetaInfoRepository {
-  
-  override fun getCountriesMetaInfo(): Single<Map<String, CountryMetaInfo>> {
-    return Single.just(FakeMetaInfoMap)
-  }
-  
-  override fun getLocationsMap(): Single<Map<String, Location>> {
-    return Single.just(FakeLocationsMap)
-  }
-}
-
-class FakeGeneralInfoDataSource(
-  private val totalRetryCount: Int = 0,
-  private val errorFactory: () -> Throwable = { UnknownHostException() }
-) : GeneralInfoDataSource {
-  
-  private var retryCount = 0
-  
-  override fun requestGeneralInfo() = Single.create<GeneralInfo> { emitter ->
-    if (retryCount < totalRetryCount) {
-      retryCount++
-      emitter.onError(errorFactory())
-      return@create
-    }
-    emitter.onSuccess(FakeGeneralInfo)
-  }
-}
 
 class FakeCountriesDataSource(
   private val totalRetryCount: Int = 0,

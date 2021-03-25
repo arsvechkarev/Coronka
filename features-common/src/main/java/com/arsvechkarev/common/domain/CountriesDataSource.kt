@@ -7,11 +7,8 @@ import retrofit2.http.GET
 /**
  * Data source for retrieving [CountriesWrapper]
  */
-interface CountriesDataSource {
+fun interface CountriesDataSource {
   
-  /**
-   * Returns [CountriesWrapper] wrapped as [Single]
-   */
   @GET("/summary")
   fun requestCountries(): Single<CountriesWrapper>
   

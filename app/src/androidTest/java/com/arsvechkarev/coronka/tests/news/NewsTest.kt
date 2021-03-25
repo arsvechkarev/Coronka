@@ -36,6 +36,7 @@ class NewsTest {
     @BeforeClass
     @JvmStatic
     fun setup() {
+      configureDurationsAndDelaysForTests()
       val coreModule = object : FakeCoreModule() {
         override val networkAvailabilityNotifier = fakeNetworkAvailabilityNotifier
       }
@@ -45,7 +46,6 @@ class NewsTest {
         val dateTimeFormatter = EnglishDateTimeFormatter(context, ThreeTenAbpDateTimeCreator)
         return@lb FakeNewsModule(NewsItemsMapper(dateTimeFormatter))
       }
-      configureDurationsAndDelaysForTests()
     }
   }
   

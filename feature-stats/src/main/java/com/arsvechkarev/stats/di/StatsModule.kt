@@ -1,8 +1,7 @@
 package com.arsvechkarev.stats.di
 
-import com.arsvechkarev.common.domain.GeneralInfoDataSource
 import com.arsvechkarev.common.domain.WorldCasesInfoDataSource
-import com.arsvechkarev.stats.domain.DefaultStatsUseCase
+import com.arsvechkarev.stats.domain.GeneralInfoDataSource
 import com.arsvechkarev.stats.domain.StatsUseCase
 import com.arsvechkarev.stats.domain.WorldInfoJsonConverter
 import com.arsvechkarev.stats.domain.WorldsCasesRetrofitConverterFactory
@@ -41,6 +40,6 @@ object DefaultStatsModule : StatsModule {
   }
   
   override val statsUseCase by lazy {
-    DefaultStatsUseCase(generalInfoDataSource, worldCasesInfoDataSource, schedulers)
+    StatsUseCase(generalInfoDataSource, worldCasesInfoDataSource, schedulers)
   }
 }

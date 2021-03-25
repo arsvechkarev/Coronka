@@ -1,15 +1,13 @@
 package com.arsvechkarev.map
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.arsvechkarev.map.domain.DefaultMapInteractor
+import com.arsvechkarev.map.domain.MapInteractor
 import com.arsvechkarev.map.presentation.FoundCountry
 import com.arsvechkarev.map.presentation.LoadedCountries
 import com.arsvechkarev.map.presentation.MapViewModel
 import com.arsvechkarev.map.utils.MapTransformer
 import com.arsvechkarev.test.FakeCountries
 import com.arsvechkarev.test.FakeCountriesDataSource
-import com.arsvechkarev.test.FakeCountriesMetaInfoRepository
-import com.arsvechkarev.test.FakeLocationsMap
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.test.FakeSchedulers
 import com.arsvechkarev.test.FakeScreenStateObserver
@@ -160,9 +158,9 @@ class MapViewModelTest {
       totalRetryCount = totalRetryCount,
       errorFactory = { error }
     )
-    val mapInteractor = DefaultMapInteractor(
+    val mapInteractor = MapInteractor(
       fakeCountriesDataSource,
-      FakeCountriesMetaInfoRepository(),
+      FakeLocationsDataSource(),
       CountryEntitiesToCountriesMapper(),
       FakeSchedulers
     )

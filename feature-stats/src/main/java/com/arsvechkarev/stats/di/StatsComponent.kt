@@ -18,7 +18,8 @@ object StatsComponent {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
       val statsModule = interceptModuleOrDefault<StatsModule> { DefaultStatsModule }
       @Suppress("UNCHECKED_CAST")
-      return StatsViewModel(statsModule.statsUseCase, networkAvailabilityNotifier, schedulers) as T
+      return StatsViewModel(statsModule.statsUseCase, networkAvailabilityNotifier,
+        schedulers) as T
     }
   }
 }
