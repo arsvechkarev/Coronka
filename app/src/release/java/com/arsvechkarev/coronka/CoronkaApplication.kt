@@ -7,7 +7,7 @@ class CoronkaApplication : CoronkaBaseApplication() {
   
   override fun onCreate() {
     super.onCreate()
-    Timber.plant(ReleaseTree)
+    Timber.plant(Timber.DebugTree())
   }
   
   object ReleaseTree : Timber.Tree() {

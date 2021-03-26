@@ -1,5 +1,8 @@
 package core.model.data
 
+import androidx.annotation.Keep
+
+@Keep
 data class NewsItem(
   val id: String,
   val title: String,

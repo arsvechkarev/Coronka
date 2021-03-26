@@ -1,10 +1,5 @@
 package base.resources
 
-import android.content.res.ColorStateList
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.RippleDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RoundRectShape
 import android.text.TextUtils
 import android.view.Gravity
 import android.widget.TextView
@@ -40,27 +35,6 @@ object Styles {
   val NewsTextView: TextView.() -> Unit = {
     apply(BaseTextView)
     ellipsize = TextUtils.TruncateAt.END
-  }
-  
-  val ClickableTextView: TextView.() -> Unit = {
-    apply(BoldTextView)
-    val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.BL_TR, intArrayOf(
-      Colors.SignInButtonStart, Colors.SignInButtonEnd))
-    val r = 60.dp.toFloat()
-    val outerRadii = floatArrayOf(r, r, r, r, r, r, r, r)
-    gradientDrawable.cornerRadii = outerRadii
-    val roundRectShape = RoundRectShape(outerRadii, null, null)
-    val maskRect = ShapeDrawable().apply {
-      shape = roundRectShape
-      paint.color = Colors.Ripple
-    }
-    val colorStateList = ColorStateList.valueOf(Colors.Ripple)
-    background(RippleDrawable(colorStateList, gradientDrawable, maskRect))
-    paddingVertical(8.dp)
-    paddingHorizontal(24.dp)
-    textSize(TextSizes.H3)
-    isClickable = true
-    isFocusable = true
   }
   
   val DrawerTextView: TextView.() -> Unit = {

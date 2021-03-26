@@ -53,10 +53,6 @@ inline fun TextView.textColor(color: Int) {
   setTextColor(color)
 }
 
-inline fun TextView.drawablePadding(padding: Int) {
-  compoundDrawablePadding = padding
-}
-
 inline fun TextView.font(font: Typeface) {
   typeface = font
 }

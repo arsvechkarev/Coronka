@@ -22,7 +22,7 @@ interface NewsUseCase {
 }
 
 class DefaultNewsUseCase(
-  private val newsApi: NewsApi,
+  private val newDataSource: NewDataSource,
   newYorkTimesApiKey: String,
   private val newsMapper: Mapper<List<NewsItem>, List<NewsDifferentiableItem>>,
 ) : NewsUseCase {
@@ -41,7 +41,7 @@ class DefaultNewsUseCase(
       return Maybe.empty()
     }
     params["page"] = page.toString()
-    return newsApi.requestLatestNews(HashMap(params))
+    return newDataSource.requestLatestNews(HashMap(params))
         .map { list -> newsMapper.map(list) }
         .toMaybe()
   }

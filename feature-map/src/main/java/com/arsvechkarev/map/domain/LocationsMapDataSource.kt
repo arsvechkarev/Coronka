@@ -2,10 +2,10 @@ package com.arsvechkarev.map.domain
 
 import base.extensions.collectToMap
 import base.extensions.stringOfColumn
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseConstants.TABLE_NAME
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseConstants.iso2
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseConstants.lat
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseConstants.lng
+import com.arsvechkarev.featurescommon.domain.CountriesMetaInfoDatabaseConstants.TABLE_NAME
+import com.arsvechkarev.featurescommon.domain.CountriesMetaInfoDatabaseConstants.iso2
+import com.arsvechkarev.featurescommon.domain.CountriesMetaInfoDatabaseConstants.lat
+import com.arsvechkarev.featurescommon.domain.CountriesMetaInfoDatabaseConstants.lng
 import core.Database
 import core.model.data.Location
 import io.reactivex.Single

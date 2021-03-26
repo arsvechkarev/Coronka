@@ -1,6 +1,6 @@
 package com.arsvechkarev.stats.di
 
-import com.arsvechkarev.common.domain.WorldCasesInfoDataSource
+import com.arsvechkarev.featurescommon.domain.WorldCasesInfoDataSource
 import com.arsvechkarev.stats.domain.GeneralInfoDataSource
 import com.arsvechkarev.stats.domain.StatsUseCase
 import com.arsvechkarev.stats.domain.WorldInfoJsonConverter

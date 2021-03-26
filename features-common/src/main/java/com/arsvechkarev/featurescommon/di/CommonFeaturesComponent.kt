@@ -1,4 +1,4 @@
-package com.arsvechkarev.common.di
+package com.arsvechkarev.featurescommon.di
 
 object CommonFeaturesComponent {
   

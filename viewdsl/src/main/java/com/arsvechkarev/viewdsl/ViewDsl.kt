@@ -5,7 +5,6 @@ import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.ColorInt
@@ -71,27 +70,6 @@ fun View.layoutGravity(gravity: Int) {
 
 fun View.margin(value: Int) {
   margins(value, value, value, value)
-}
-
-fun View.marginVertical(value: Int) {
-  margins(0, value, 0, value)
-}
-
-fun View.marginHorizontal(value: Int) {
-  margins(value, 0, value, 0)
-}
-
-fun View.marginsRes(
-  @DimenRes start: Int = 0,
-  @DimenRes top: Int = 0,
-  @DimenRes end: Int = 0,
-  @DimenRes bottom: Int = 0) {
-  margins(
-    if (start == 0) 0 else dimen(start).toInt(),
-    if (top == 0) 0 else dimen(top).toInt(),
-    if (end == 0) 0 else dimen(end).toInt(),
-    if (bottom == 0) 0 else dimen(bottom).toInt()
-  )
 }
 
 fun View.margins(
@@ -161,10 +139,6 @@ fun onClick(vararg views: View, action: (View) -> Unit) {
   views.forEach { it.setOnClickListener(action) }
 }
 
-fun setEnabled(isEnabled: Boolean, vararg views: View) {
-  views.forEach { it.isEnabled = isEnabled }
-}
-
 fun setClickable(isClickable: Boolean, vararg views: View) {
   views.forEach { it.isClickable = isClickable }
 }
@@ -215,10 +189,6 @@ fun View.childView(tag: String): View {
 
 fun View.childTextView(tag: String): TextView {
   return findViewWithTag(tag) as TextView
-}
-
-fun View.childImageView(tag: String): ImageView {
-  return findViewWithTag(tag) as ImageView
 }
 
 @Suppress("UNCHECKED_CAST")

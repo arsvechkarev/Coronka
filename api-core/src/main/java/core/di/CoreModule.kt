@@ -5,7 +5,6 @@ import core.DateTimeFormatter
 import core.ImageLoader
 import core.NetworkAvailabilityNotifier
 import core.Schedulers
-import core.WebApi
 import okhttp3.OkHttpClient
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -21,8 +20,6 @@ interface CoreModule : Module {
   val networkAvailabilityNotifier: NetworkAvailabilityNotifier
   
   val okHttpClient: OkHttpClient
-  
-  val webApi: WebApi
   
   val imageLoader: ImageLoader
   

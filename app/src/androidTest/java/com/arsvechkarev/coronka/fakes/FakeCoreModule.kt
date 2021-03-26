@@ -8,7 +8,6 @@ import core.DateTimeFormatter
 import core.ImageLoader
 import core.NetworkAvailabilityNotifier
 import core.Schedulers
-import core.WebApi
 import core.di.CoreModule
 import core.di.DatabaseCreator
 import coreimpl.AndroidSchedulers
@@ -30,7 +29,6 @@ open class FakeCoreModule : CoreModule {
   override val databaseCreator: DatabaseCreator = AssetsDatabaseCreator(context)
   override val networkAvailabilityNotifier: NetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
   override val okHttpClient: OkHttpClient = OkHttpClient()
-  override val webApi: WebApi = FakeWebApi
   override val imageLoader: ImageLoader = GlideImageLoader
   override val dateTimeFormatter: DateTimeFormatter = EnglishDateTimeFormatter(context,
     ThreeTenAbpDateTimeCreator)

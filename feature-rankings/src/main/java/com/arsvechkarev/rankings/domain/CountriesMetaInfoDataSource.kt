@@ -3,10 +3,10 @@ package com.arsvechkarev.rankings.domain
 import base.extensions.collectToMap
 import base.extensions.intOfColumn
 import base.extensions.stringOfColumn
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseConstants.TABLE_NAME
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseConstants.iso2
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseConstants.population
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseConstants.world_region
+import com.arsvechkarev.featurescommon.domain.CountriesMetaInfoDatabaseConstants.TABLE_NAME
+import com.arsvechkarev.featurescommon.domain.CountriesMetaInfoDatabaseConstants.iso2
+import com.arsvechkarev.featurescommon.domain.CountriesMetaInfoDatabaseConstants.population
+import com.arsvechkarev.featurescommon.domain.CountriesMetaInfoDatabaseConstants.world_region
 import core.Database
 import core.model.data.CountryMetaInfo
 import io.reactivex.Single

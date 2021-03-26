@@ -1,8 +1,8 @@
-package com.arsvechkarev.common.di
+package com.arsvechkarev.featurescommon.di
 
-import com.arsvechkarev.common.domain.CountriesDataSource
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseConstants.DATABASE_NAME
-import com.arsvechkarev.common.domain.CountriesMetaInfoDatabaseConstants.DATABASE_VERSION
+import com.arsvechkarev.featurescommon.domain.CountriesDataSource
+import com.arsvechkarev.featurescommon.domain.CountriesMetaInfoDatabaseConstants.DATABASE_NAME
+import com.arsvechkarev.featurescommon.domain.CountriesMetaInfoDatabaseConstants.DATABASE_VERSION
 import core.di.CoreModule
 import retrofit2.Retrofit
 

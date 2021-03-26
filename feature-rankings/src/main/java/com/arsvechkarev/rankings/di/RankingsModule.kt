@@ -1,7 +1,7 @@
 package com.arsvechkarev.rankings.di
 
-import com.arsvechkarev.common.di.CommonFeaturesComponent.countriesDataSource
-import com.arsvechkarev.common.di.CommonFeaturesComponent.countriesInformationDatabase
+import com.arsvechkarev.featurescommon.di.CommonFeaturesComponent.countriesDataSource
+import com.arsvechkarev.featurescommon.di.CommonFeaturesComponent.countriesInformationDatabase
 import com.arsvechkarev.rankings.domain.CountriesFilterer
 import com.arsvechkarev.rankings.domain.DatabaseCountriesMetaInfoDataSource
 import com.arsvechkarev.rankings.domain.RankingsInteractor

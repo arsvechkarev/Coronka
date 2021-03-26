@@ -11,11 +11,17 @@ import retrofit2.http.QueryMap
  * @see NewsJsonConverter
  * @see NewsRetrofitConverterFactory
  */
-interface NewsApi {
+fun interface NewDataSource {
   
   /**
    * Returns list of [NewsItem] with params from [queryMap]
    */
   @GET("/svc/search/v2/articlesearch.json")
   fun requestLatestNews(@QueryMap queryMap: Map<String, String>): Single<List<NewsItem>>
+  
+  companion object {
+    
+    /** Base url for retrofit */
+    const val BASE_URL = "https://api.nytimes.com/"
+  }
 }

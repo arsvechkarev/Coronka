@@ -6,12 +6,6 @@ fun Cursor.stringOfColumn(columnName: String): String = getString(getColumnIndex
 
 fun Cursor.intOfColumn(columnName: String): Int = getInt(getColumnIndex(columnName))
 
-inline fun Cursor.iterate(block: Cursor.() -> Unit) {
-  while (moveToNext()) {
-    block(this)
-  }
-}
-
 inline fun <T> Cursor.collectToList(block: Cursor.() -> T): List<T> {
   val list = ArrayList<T>()
   while (moveToNext()) {

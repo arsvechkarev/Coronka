@@ -1,8 +1,8 @@
 package com.arsvechkarev.coronka
 
-import com.arsvechkarev.common.di.CommonFeaturesComponent
-import com.arsvechkarev.common.di.CommonFeaturesModuleImpl
 import com.arsvechkarev.coronka.fakes.FakeCoreModule
+import com.arsvechkarev.featurescommon.di.CommonFeaturesComponent
+import com.arsvechkarev.featurescommon.di.CommonFeaturesModuleImpl
 import core.di.CoreComponent
 import timber.log.Timber
 

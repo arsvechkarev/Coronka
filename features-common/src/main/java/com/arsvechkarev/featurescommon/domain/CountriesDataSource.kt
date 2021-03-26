@@ -1,4 +1,4 @@
-package com.arsvechkarev.common.domain
+package com.arsvechkarev.featurescommon.domain
 
 import core.model.data.CountriesWrapper
 import io.reactivex.Single

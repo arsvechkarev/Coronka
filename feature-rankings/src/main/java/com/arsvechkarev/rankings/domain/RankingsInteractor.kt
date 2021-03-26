@@ -2,7 +2,7 @@ package com.arsvechkarev.rankings.domain
 
 import api.recycler.DifferentiableItem
 import base.extensions.f
-import com.arsvechkarev.common.domain.CountriesDataSource
+import com.arsvechkarev.featurescommon.domain.CountriesDataSource
 import core.ResultHolder
 import core.Schedulers
 import core.fold

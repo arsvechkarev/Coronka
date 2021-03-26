@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 
 interface Navigator : LifecycleObserver {
   
-  fun switchTo(fragmentClass: KClass<out base.BaseFragment>)
+  fun switchTo(fragmentClass: KClass<out BaseFragment>)
   
   fun handleOnDrawerItemClicked(tag: String)
   

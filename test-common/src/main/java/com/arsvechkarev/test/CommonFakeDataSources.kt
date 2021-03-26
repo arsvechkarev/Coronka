@@ -1,7 +1,7 @@
 package com.arsvechkarev.test
 
-import com.arsvechkarev.common.domain.CountriesDataSource
-import com.arsvechkarev.common.domain.WorldCasesInfoDataSource
+import com.arsvechkarev.featurescommon.domain.CountriesDataSource
+import com.arsvechkarev.featurescommon.domain.WorldCasesInfoDataSource
 import core.model.data.CountriesWrapper
 import core.model.data.CountryEntity
 import core.model.data.WorldCasesInfo

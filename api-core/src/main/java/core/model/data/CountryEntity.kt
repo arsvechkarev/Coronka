@@ -1,5 +1,6 @@
 package core.model.data
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -9,6 +10,7 @@ import com.google.gson.annotations.SerializedName
  * @param iso2 Country ISO code, like "US", "FR", "UK", etc
  * @param date Date in format **2021-03-04T11:51:53.806Z**
  */
+@Keep
 data class CountryEntity(
   @SerializedName("ID") val id: String,
   @SerializedName("Country") val name: String,

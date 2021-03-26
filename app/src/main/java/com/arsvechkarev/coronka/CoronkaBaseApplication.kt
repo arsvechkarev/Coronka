@@ -3,8 +3,8 @@ package com.arsvechkarev.coronka
 import android.app.Application
 import androidx.annotation.CallSuper
 import base.resources.Fonts
-import com.arsvechkarev.common.di.CommonFeaturesComponent
-import com.arsvechkarev.common.di.CommonFeaturesModuleImpl
+import com.arsvechkarev.featurescommon.di.CommonFeaturesComponent
+import com.arsvechkarev.featurescommon.di.CommonFeaturesModuleImpl
 import com.arsvechkarev.viewdsl.ContextHolder
 import com.jakewharton.threetenabp.AndroidThreeTen
 import core.di.CoreComponent

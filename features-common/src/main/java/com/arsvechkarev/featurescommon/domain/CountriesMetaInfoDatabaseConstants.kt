@@ -1,4 +1,4 @@
-package com.arsvechkarev.common.domain
+package com.arsvechkarev.featurescommon.domain
 
 /**
  * Constants for database with countries meta information

@@ -2,10 +2,11 @@ package com.arsvechkarev.news.di
 
 import com.arsvechkarev.news.BuildConfig
 import com.arsvechkarev.news.domain.DefaultNewsUseCase
-import com.arsvechkarev.news.domain.NewsApi
+import com.arsvechkarev.news.domain.NewDataSource
+import com.arsvechkarev.news.domain.NewsJsonConverter
+import com.arsvechkarev.news.domain.NewsRetrofitConverterFactory
 import com.arsvechkarev.news.domain.NewsUseCase
 import core.di.CoreComponent.dateTimeFormatter
-import core.di.CoreComponent.gsonConverterFactory
 import core.di.CoreComponent.okHttpClient
 import core.di.CoreComponent.rxJava2CallAdapterFactory
 import core.di.Module
@@ -22,11 +23,11 @@ object DefaultNewsModule : NewsModule {
   private val newYorkTimesApi by lazy {
     Retrofit.Builder()
         .client(okHttpClient)
-        .baseUrl("https://api.nytimes.com/")
+        .baseUrl(NewDataSource.BASE_URL)
         .addCallAdapterFactory(rxJava2CallAdapterFactory)
-        .addConverterFactory(gsonConverterFactory)
+        .addConverterFactory(NewsRetrofitConverterFactory(NewsJsonConverter()))
         .build()
-        .create(NewsApi::class.java)
+        .create(NewDataSource::class.java)
   }
   
   override val newsUseCase = DefaultNewsUseCase(newYorkTimesApi, BuildConfig.NYT_API_KEY,

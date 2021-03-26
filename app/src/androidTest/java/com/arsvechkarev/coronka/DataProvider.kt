@@ -18,7 +18,7 @@ object DataProvider {
   
   private val allCountriesData by lazy { context.readAssetsFile("all_countries_data.json") }
   private val worldCasesData by lazy { context.readAssetsFile("world_cases_data.json") }
-  private val newsData by lazy { context.readAssetsFile("news_data.json") }
+  private val newsData by lazy { context.readAssetsFile("news_data2.json") }
   private val generalInfoData by lazy { context.readAssetsFile("general_info_data.json") }
   
   fun getWorldCasesInfo(): WorldCasesInfo {

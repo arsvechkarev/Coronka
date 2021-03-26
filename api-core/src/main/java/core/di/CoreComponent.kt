@@ -12,8 +12,6 @@ object CoreComponent {
   
   val okHttpClient get() = _coreModule.okHttpClient
   
-  val webApi get() = _coreModule.webApi
-  
   val imageLoader get() = _coreModule.imageLoader
   
   val dateTimeFormatter get() = _coreModule.dateTimeFormatter

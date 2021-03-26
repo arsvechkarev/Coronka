@@ -1,7 +1,7 @@
 package com.arsvechkarev.map.di
 
-import com.arsvechkarev.common.di.CommonFeaturesComponent.countriesDataSource
-import com.arsvechkarev.common.di.CommonFeaturesComponent.countriesInformationDatabase
+import com.arsvechkarev.featurescommon.di.CommonFeaturesComponent.countriesDataSource
+import com.arsvechkarev.featurescommon.di.CommonFeaturesComponent.countriesInformationDatabase
 import com.arsvechkarev.map.domain.DatabaseLocationsMapDataSource
 import com.arsvechkarev.map.domain.MapInteractor
 import core.di.CoreComponent.schedulers

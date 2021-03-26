@@ -3,7 +3,7 @@ package com.arsvechkarev.stats.domain
 import base.extensions.withNetworkDelay
 import base.extensions.withRequestTimeout
 import base.extensions.withRetry
-import com.arsvechkarev.common.domain.WorldCasesInfoDataSource
+import com.arsvechkarev.featurescommon.domain.WorldCasesInfoDataSource
 import core.Schedulers
 import core.model.data.GeneralInfo
 import core.model.data.MainStatistics

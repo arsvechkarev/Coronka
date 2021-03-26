@@ -3,7 +3,7 @@ package com.arsvechkarev.map.domain
 import base.extensions.withNetworkDelay
 import base.extensions.withRequestTimeout
 import base.extensions.withRetry
-import com.arsvechkarev.common.domain.CountriesDataSource
+import com.arsvechkarev.featurescommon.domain.CountriesDataSource
 import core.Mapper
 import core.Schedulers
 import core.model.data.CountriesWrapper

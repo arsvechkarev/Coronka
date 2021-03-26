@@ -1,6 +1,6 @@
-package com.arsvechkarev.common.di
+package com.arsvechkarev.featurescommon.di
 
-import com.arsvechkarev.common.domain.CountriesDataSource
+import com.arsvechkarev.featurescommon.domain.CountriesDataSource
 import core.Database
 
 interface CommonFeaturesModule {

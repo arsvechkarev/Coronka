@@ -1,8 +1,8 @@
 package com.arsvechkarev.coronka.tests.rankings
 
-import com.arsvechkarev.common.di.CommonFeaturesComponent
-import com.arsvechkarev.common.domain.CountriesDataSource
 import com.arsvechkarev.coronka.DataProvider
+import com.arsvechkarev.featurescommon.di.CommonFeaturesComponent
+import com.arsvechkarev.featurescommon.domain.CountriesDataSource
 import com.arsvechkarev.rankings.di.RankingsModule
 import com.arsvechkarev.rankings.domain.CountriesFilterer
 import com.arsvechkarev.rankings.domain.DatabaseCountriesMetaInfoDataSource

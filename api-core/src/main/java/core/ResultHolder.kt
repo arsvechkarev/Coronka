@@ -17,8 +17,6 @@ class ResultHolder<T> private constructor(@PublishedApi internal val value: Any)
     if (isSuccess) return value as T else throw value as Throwable
   }
   
-  fun getOrNull(): T? = if (isSuccess) value as T else null
-  
   companion object {
     
     fun <T : Any> success(value: T): ResultHolder<T> {
