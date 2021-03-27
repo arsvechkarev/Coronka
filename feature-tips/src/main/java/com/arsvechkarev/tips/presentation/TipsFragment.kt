@@ -114,6 +114,11 @@ class TipsFragment : BaseFragment() {
       setHasFixedSize(true)
       this.adapter = adapter
     }
+    hostActivity.enableTouchesOnDrawer()
+  }
+  
+  override fun onHiddenChanged(hidden: Boolean) {
+    if (hidden) hostActivity.enableTouchesOnDrawer()
   }
   
   override fun onDrawerOpened() {

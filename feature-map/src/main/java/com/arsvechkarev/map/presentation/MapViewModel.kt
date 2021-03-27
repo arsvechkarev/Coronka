@@ -21,11 +21,21 @@ class MapViewModel(
   
   override fun onNetworkAvailable() {
     if (_state.value is Failure) {
-      schedulers.mainThread().scheduleDirect(::startLoadingData)
+      schedulers.mainThread().scheduleDirect(::retryLoadingData)
     }
   }
   
   fun startLoadingData() {
+    if (state.value != null) return
+    performLoadingData()
+  }
+  
+  fun retryLoadingData() {
+    if (state.value !is Failure) return
+    performLoadingData()
+  }
+  
+  private fun performLoadingData() {
     rxCall {
       mapInteractor.requestCountriesMap()
           .map<BaseScreenState>(::LoadedCountries)

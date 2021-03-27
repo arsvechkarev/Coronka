@@ -1,5 +1,10 @@
 package com.arsvechkarev.stats.presentation
 
+import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import base.BaseFragment
 import base.behaviors.ScrollableContentBehavior
@@ -52,9 +57,10 @@ import timber.log.Timber
 
 class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   
-  private var viewModel: StatsViewModel? = null
+  private lateinit var viewModel: StatsViewModel
   
   override fun onInit() {
+    Timber.d("Logggging StatsFragment onInit")
     viewModel = StatsComponent.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
@@ -62,12 +68,18 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     statsHeader.paddings(top = requireContext().statusBarHeight)
     initViews()
     initClickListeners()
+    hostActivity.enableTouchesOnDrawer()
+  }
+  
+  override fun onHiddenChanged(hidden: Boolean) {
+    Timber.d("Logggging StatsFragment onHiddenChanged, isHidden=$hidden")
+    if (hidden) hostActivity.enableTouchesOnDrawer()
   }
   
   override fun onDrawerOpened() = toggleScrollingContent(false)
   
   override fun onDrawerClosed() {
-    val state = viewModel?.state?.value
+    val state = viewModel.state.value
     if (state is Loading || state is Failure) {
       toggleScrollingContent(false)
     } else {
@@ -84,6 +96,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   }
   
   override fun onDestroyView() {
+    Timber.d("Logggging StatsFragment onDestroyView")
     super.onDestroyView()
     (statsMainInfoLoadingStub.background as? MainStatsInfoLoadingStub)?.release()
   }
@@ -160,7 +173,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     statsIconDrawer.setOnClickListener { hostActivity.openDrawer() }
     statsTotalCasesChart.onDailyCaseClicked { statsTotalCasesLabel.drawCase(it) }
     statsNewCasesChart.onDailyCaseClicked { statsNewCasesLabel.drawCase(it) }
-    statsRetryButton.setOnClickListener { viewModel!!.startLoadingData() }
+    statsRetryButton.setOnClickListener { viewModel.retryLoadingData() }
   }
   
   private fun initViews() {
@@ -172,5 +185,50 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     statsMainInfoLoadingStub.setLoadingDrawable(MainStatsInfoLoadingStub(requireContext()))
     statsTotalCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
     statsNewCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
+  }
+  
+  override fun onAttach(context: Context) {
+    super.onAttach(context)
+    Timber.d("Logggging StatsFragment onAttach")
+  }
+  
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    Timber.d("Logggging StatsFragment onCreate")
+  }
+  
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    Timber.d("Logggging StatsFragment onCreateView")
+    return super.onCreateView(inflater, container, savedInstanceState)
+  }
+  
+  override fun onStart() {
+    super.onStart()
+    Timber.d("Logggging StatsFragment onStart")
+  }
+  
+  override fun onResume() {
+    super.onResume()
+    Timber.d("Logggging StatsFragment onResume")
+  }
+  
+  override fun onPause() {
+    super.onPause()
+    Timber.d("Logggging StatsFragment onPause")
+  }
+  
+  override fun onStop() {
+    super.onStop()
+    Timber.d("Logggging StatsFragment onStop")
+  }
+  
+  override fun onDestroy() {
+    super.onDestroy()
+    Timber.d("Logggging StatsFragment onDestroy")
+  }
+  
+  override fun onDetach() {
+    super.onDetach()
+    Timber.d("Logggging StatsFragment onDetach")
   }
 }

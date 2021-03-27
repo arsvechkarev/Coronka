@@ -1,9 +1,13 @@
 package com.arsvechkarev.news.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.view.Gravity.CENTER
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -101,7 +105,7 @@ class NewsFragment : BaseFragment() {
         }
         child<RetryButton>(WrapContent, WrapContent) {
           tag(ButtonRetry)
-          onClick { viewModel?.startLoadingData() }
+          onClick { viewModel.retryLoadingData() }
         }
       }
       child<FrameLayout>(MatchParent, IntSize(GradientHeaderHeight + StatusBarHeight)) {
@@ -123,7 +127,7 @@ class NewsFragment : BaseFragment() {
     }
   }
   
-  private var viewModel: NewsViewModel? = null
+  private lateinit var viewModel: NewsViewModel
   
   private val newsAdapter = NewsComponent.provideAdapter(this,
     onNewsItemClicked = { newsItem ->
@@ -132,10 +136,10 @@ class NewsFragment : BaseFragment() {
       startActivity(intent)
     },
     onReadyToLoadNextPage = {
-      viewModel?.tryLoadNextPage()
+      viewModel.tryLoadNextPage()
     },
     onRetryItemClicked = {
-      viewModel?.tryLoadNextPage()
+      viewModel.retryLoadingNextPage()
     }
   )
   
@@ -144,6 +148,13 @@ class NewsFragment : BaseFragment() {
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
     }
+    hostActivity.enableTouchesOnDrawer()
+    Timber.d("Logggging NewsFragment onInit")
+  }
+  
+  override fun onHiddenChanged(hidden: Boolean) {
+    Timber.d("Logggging NewsFragment onHiddenChanged $hidden")
+    if (hidden) hostActivity.enableTouchesOnDrawer()
   }
   
   override fun onOrientationBecameLandscape() {
@@ -201,8 +212,58 @@ class NewsFragment : BaseFragment() {
     }
   }
   
-  companion object {
+  override fun onAttach(context: Context) {
+    super.onAttach(context)
+    Timber.d("Logggging NewsFragment onAttach")
+  }
   
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    Timber.d("Logggging NewsFragment onCreate")
+  }
+  
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    Timber.d("Logggging NewsFragment onCreateView")
+    return super.onCreateView(inflater, container, savedInstanceState)
+  }
+  
+  override fun onStart() {
+    super.onStart()
+    Timber.d("Logggging NewsFragment onStart")
+  }
+  
+  override fun onResume() {
+    super.onResume()
+    Timber.d("Logggging NewsFragment onResume")
+  }
+  
+  override fun onPause() {
+    super.onPause()
+    Timber.d("Logggging NewsFragment onPause")
+  }
+  
+  override fun onStop() {
+    super.onStop()
+    Timber.d("Logggging NewsFragment onStop")
+  }
+  
+  override fun onDestroyView() {
+    super.onDestroyView()
+    Timber.d("Logggging NewsFragment onDestroyView")
+  }
+  
+  override fun onDestroy() {
+    super.onDestroy()
+    Timber.d("Logggging NewsFragment onDestroy")
+  }
+  
+  override fun onDetach() {
+    super.onDetach()
+    Timber.d("Logggging NewsFragment onDetach")
+  }
+  
+  companion object {
+    
     const val LoadingLayout = "NewsLoadingLayout"
     const val LayoutFailure = "NewsErrorLayout"
     const val RecyclerView = "NewsRecyclerView"

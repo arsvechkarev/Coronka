@@ -6,7 +6,7 @@ package config
 object RxConfigurator {
   
   private var _networkDelay = 800L
-  private var _requestTimeout = 150000L
+  private var _requestTimeout = 15000L
   private var _retryCount = 3L
   
   /** Fake network delay to so that loading wouldn't flash */

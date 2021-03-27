@@ -43,8 +43,6 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   private lateinit var mapHelper: MapHelper
   private lateinit var viewModel: MapViewModel
   
-  override val enableTouchesOnDrawerWhenFragmentAppears: Boolean = false
-  
   override fun onInit() {
     mapHelper = MapHelper(requireContext(), mapView, ::onCountrySelected, threader)
     viewModel = MapComponent.provideViewModel(this).also { model ->
@@ -137,8 +135,8 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   
   private fun setupViews() {
     mapLayoutCountryInfo.asBottomSheet.allowMultipleFingers = false
-    mapTextRetry.setOnClickListener { viewModel.startLoadingData() }
-    mapTextRetryUnknown.setOnClickListener { viewModel.startLoadingData() }
+    mapTextRetry.setOnClickListener { viewModel.retryLoadingData() }
+    mapTextRetryUnknown.setOnClickListener { viewModel.retryLoadingData() }
     mapIconDrawer.setOnClickListener {
       hostActivity.openDrawer()
       hostActivity.enableTouchesOnDrawer()

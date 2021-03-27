@@ -103,6 +103,11 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     setupChips()
     setupDrawables()
     rankingsDialog.setPadding(0, requireContext().statusBarHeight, 0, 0)
+    hostActivity.enableTouchesOnDrawer()
+  }
+  
+  override fun onHiddenChanged(hidden: Boolean) {
+    if (hidden) hostActivity.enableTouchesOnDrawer()
   }
   
   override fun onDrawerOpened() = toggleItems(false)
@@ -199,7 +204,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
   
   private fun setupClickListeners() {
     rankingsIconDrawer.setOnClickListener { hostActivity.openDrawer() }
-    rankingsRetryButton.setOnClickListener { viewModel.startLoadingData() }
+    rankingsRetryButton.setOnClickListener { viewModel.retryLoadingData() }
     onClick(rankingsFabFilter, rankingsChipOptionType, rankingsChipWorldRegion) {
       rankingsBottomSheet.asBottomSheet.show()
     }

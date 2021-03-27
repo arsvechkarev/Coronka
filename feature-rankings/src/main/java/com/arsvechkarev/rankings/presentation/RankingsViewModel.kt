@@ -27,23 +27,18 @@ class RankingsViewModel(
   
   override fun onNetworkAvailable() {
     if (_state.value is Failure) {
-      schedulers.mainThread().scheduleDirect(::startLoadingData)
+      schedulers.mainThread().scheduleDirect(::retryLoadingData)
     }
   }
   
   fun startLoadingData() {
-    rxCall {
-      rankingsInteractor.requestCountries(DefaultWorldRegion, DefaultOptionType)
-          .subscribeOn(schedulers.io())
-          .withNetworkDelay(schedulers)
-          .withRetry()
-          .withRequestTimeout()
-          .map<BaseScreenState>(::LoadedCountries)
-          .onErrorReturn(::Failure)
-          .startWith(Loading)
-          .observeOn(schedulers.mainThread())
-          .smartSubscribe(_state::setValue)
-    }
+    if (state.value != null) return
+    performLoadingData()
+  }
+  
+  fun retryLoadingData() {
+    if (state.value !is Failure) return
+    performLoadingData()
   }
   
   fun filter(worldRegion: WorldRegion, optionType: OptionType) {
@@ -61,6 +56,21 @@ class RankingsViewModel(
           .subscribe { countryFullInfo ->
             _state.value = ShowCountryInfo(countryFullInfo)
           }
+    }
+  }
+  
+  private fun performLoadingData() {
+    rxCall {
+      rankingsInteractor.requestCountries(DefaultWorldRegion, DefaultOptionType)
+          .subscribeOn(schedulers.io())
+          .withNetworkDelay(schedulers)
+          .withRetry()
+          .withRequestTimeout()
+          .map<BaseScreenState>(::LoadedCountries)
+          .onErrorReturn(::Failure)
+          .startWith(Loading)
+          .observeOn(schedulers.mainThread())
+          .smartSubscribe(_state::setValue)
     }
   }
   

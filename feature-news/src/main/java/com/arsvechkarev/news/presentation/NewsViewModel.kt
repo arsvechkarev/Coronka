@@ -12,6 +12,7 @@ import core.Loading
 import core.NetworkAvailabilityNotifier
 import core.NetworkListener
 import core.Schedulers
+import timber.log.Timber
 
 class NewsViewModel(
   private val newsUseCase: NewsUseCase,
@@ -22,14 +23,15 @@ class NewsViewModel(
   private var currentPage = 0
   
   init {
+    Timber.d("Logggging NewsViewModel initBlock, state=${state.value}")
     networkAvailabilityNotifier.registerListener(this)
   }
   
   override fun onNetworkAvailable() {
     if (_state.value is FailureLoadingNextPage) {
-      schedulers.mainThread().scheduleDirect(::tryLoadNextPage)
+      schedulers.mainThread().scheduleDirect(::retryLoadingNextPage)
     } else if (_state.value is Failure) {
-      schedulers.mainThread().scheduleDirect(::startLoadingData)
+      schedulers.mainThread().scheduleDirect(::retryLoadingData)
     }
   }
   
@@ -38,6 +40,25 @@ class NewsViewModel(
   }
   
   fun startLoadingData() {
+    if (state.value != null) return
+    performLoadingData()
+  }
+  
+  fun tryLoadNextPage() {
+    if (state.value is LoadingNextPage) return
+    performLoadingNextPage()
+  }
+  
+  fun retryLoadingData() {
+    performLoadingData()
+  }
+  
+  fun retryLoadingNextPage() {
+    if (state.value !is FailureLoadingNextPage) return
+    performLoadingNextPage()
+  }
+  
+  private fun performLoadingData() {
     rxCall {
       newsUseCase.requestLatestNews(currentPage)
           .toObservable()
@@ -53,7 +74,7 @@ class NewsViewModel(
     }
   }
   
-  fun tryLoadNextPage() {
+  private fun performLoadingNextPage() {
     rxCall {
       newsUseCase.requestLatestNews(++currentPage)
           .toObservable()
@@ -71,6 +92,7 @@ class NewsViewModel(
   }
   
   override fun onCleared() {
+    Timber.d("Logggging NewsViewModel onCleared")
     networkAvailabilityNotifier.unregisterListener(this)
   }
 }

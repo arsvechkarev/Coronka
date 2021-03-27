@@ -83,11 +83,11 @@ class MapViewModelTest {
       error = UnknownHostException()
     )
     val observer = createObserver()
-    
+  
     viewModel.state.observeForever(observer)
-    viewModel.startLoadingData() // Initial loading
-    viewModel.startLoadingData() // Retry
-    
+    viewModel.startLoadingData()
+    viewModel.retryLoadingData()
+  
     with(observer) {
       hasStatesCount(4)
       hasStateAtPosition<Loading>(0)

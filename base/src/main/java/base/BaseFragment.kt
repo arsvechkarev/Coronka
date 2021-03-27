@@ -47,8 +47,6 @@ abstract class BaseFragment(private val layoutResId: Int = 0) : Fragment(layoutR
   /**
    * If set to true, the on each fragment appearance touches on navigation drawer will be enabled
    */
-  open val enableTouchesOnDrawerWhenFragmentAppears: Boolean = true
-  
   abstract fun onInit()
   
   open fun buildLayout(): View? = null
@@ -83,4 +81,8 @@ abstract class BaseFragment(private val layoutResId: Int = 0) : Fragment(layoutR
   fun textView(tag: String) = viewAs<TextView>(tag)
   
   fun editText(tag: String) = viewAs<EditText>(tag)
+  
+  override fun toString(): String {
+    return "frag{${this.javaClass.name}}"
+  }
 }

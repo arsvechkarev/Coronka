@@ -1,5 +1,6 @@
 package com.arsvechkarev.coronka.presentation
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -19,12 +20,27 @@ import kotlin.reflect.KClass
 class MainNavigator(
   private var supportFragmentManager: FragmentManager?,
   private var drawerLayout: DrawerLayout?,
+  private var onGoToMainFragment: () -> Unit,
   private var onFragmentAppeared: (Fragment) -> Unit
 ) : Navigator, LifecycleObserver {
   
   private val stack = ArrayList<String>() // Stack of current fragment names
   
   private var currentFragment: BaseFragment? = null
+  
+  fun initializeWithState(savedInstanceState: Bundle?) {
+    require(stack.isEmpty())
+    if (savedInstanceState != null) {
+      stack.addAll(savedInstanceState.getStringArrayList(STACK_KEY)!!)
+      currentFragment = supportFragmentManager!!.getFragmentByName(stack.last())!!
+    } else {
+      onGoToMainFragment()
+    }
+  }
+  
+  fun onSaveInstanceState(outState: Bundle) {
+    outState.putStringArrayList(STACK_KEY, stack)
+  }
   
   override fun switchTo(fragmentClass: KClass<out BaseFragment>) {
     val fragmentManager = supportFragmentManager ?: return
@@ -56,11 +72,6 @@ class MainNavigator(
       transaction.add(R.id.fragmentContainer, fragment, fragmentName)
     }
     drawerLayout.addOpenCloseListener(fragment.drawerOpenCloseListener)
-    transaction.runOnCommit {
-      if (fragment.enableTouchesOnDrawerWhenFragmentAppears) {
-        drawerLayout.respondToTouches = true
-      }
-    }
     transaction.commit()
     currentFragment = fragment
   }
@@ -78,18 +89,32 @@ class MainNavigator(
   }
   
   override fun allowBackPress(): Boolean {
+    println("qwerty stack = $stack")
+    println("qwerty currentFragment = $currentFragment")
     if (stack.isEmpty()) return true
     if (currentFragment?.allowBackPress() == true) {
       if (stack.size == 1) return true
       val fragmentManager = supportFragmentManager ?: return true
-      val last = fragmentManager.getFragmentByName(stack.removeLast()) ?: return true
-      val newFragment = fragmentManager.getFragmentByName(stack.last()) ?: return true
+      val last = fragmentManager.getFragmentByName(stack.removeLast())!!
+      println("qwerty last frag name = $last")
+      val newFragment = fragmentManager.getFragmentByName(stack.last()) ?: run {
+        println("qwerty last creating new fragment")
+        Class.forName(stack.last()).newInstance() as BaseFragment
+      }
+      println("qwerty newFragment = $newFragment")
+      println("qwerty newFragment.isAdded = ${newFragment.isAdded}")
       currentFragment = newFragment
       onFragmentAppeared(newFragment)
-      fragmentManager.beginTransaction()
-          .show(newFragment)
-          .hide(last)
-          .commit()
+      if (!newFragment.isAdded) {
+        fragmentManager.beginTransaction()
+            .add(R.id.fragmentContainer, newFragment, newFragment.getNameForStack())
+            .commit()
+      } else {
+        fragmentManager.beginTransaction()
+            .show(newFragment)
+            .hide(last)
+            .commit()
+      }
     }
     return false
   }
@@ -98,8 +123,9 @@ class MainNavigator(
   fun onDestroy() {
     drawerLayout = null
     supportFragmentManager = null
-    onFragmentAppeared = {}
     currentFragment = null
+    onFragmentAppeared = {}
+    onGoToMainFragment = {}
   }
   
   private fun Fragment.getNameForStack() = this::class.java.name
@@ -114,5 +140,10 @@ class MainNavigator(
     val temp = this[i]
     this[i] = this[j]
     this[j] = temp
+  }
+  
+  companion object {
+    
+    const val STACK_KEY = "STACK_KEY"
   }
 }
