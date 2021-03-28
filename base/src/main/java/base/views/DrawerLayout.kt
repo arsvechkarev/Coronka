@@ -135,9 +135,9 @@ class DrawerLayout @JvmOverloads constructor(
     if (!respondToTouches) return false
     when (event.actionMasked) {
       ACTION_DOWN -> {
+        activePointerId = event.getPointerId(0)
         if (handleDownOutsideEvent(event)) return true
         initVelocityTrackerIfNeeded()
-        activePointerId = event.getPointerId(0)
         latestX = event.x
       }
       ACTION_POINTER_DOWN -> {
@@ -178,8 +178,8 @@ class DrawerLayout @JvmOverloads constructor(
     initVelocityTrackerIfNeeded()
     when (event.actionMasked) {
       ACTION_DOWN -> {
-        if (handleDownOutsideEvent(event)) return true
         activePointerId = event.getPointerId(0)
+        if (handleDownOutsideEvent(event)) return true
         isHoldingFinger = true
         latestX = event.x
         velocityTracker?.addMovement(event)

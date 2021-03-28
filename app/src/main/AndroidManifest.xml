@@ -15,6 +15,7 @@
       android:value="@string/google_maps_key"/>
 
     <activity android:name="com.arsvechkarev.coronka.presentation.MainActivity"
+      android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
       android:windowSoftInputMode="adjustResize">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>

@@ -9,18 +9,13 @@ import androidx.lifecycle.OnLifecycleEvent
 import base.BaseFragment
 import base.Navigator
 import base.extensions.transaction
-import base.views.DrawerLayout
+import com.arsvechkarev.coronka.BuildConfig
 import com.arsvechkarev.coronka.R
-import com.arsvechkarev.map.presentation.MapFragment
-import com.arsvechkarev.news.presentation.NewsFragment
-import com.arsvechkarev.rankings.presentation.RankingsFragment
-import com.arsvechkarev.stats.presentation.StatsFragment
-import com.arsvechkarev.tips.presentation.TipsFragment
+import timber.log.Timber
 import kotlin.reflect.KClass
 
 class MainNavigator(
   private var supportFragmentManager: FragmentManager?,
-  private var drawerLayout: DrawerLayout?,
   private var onGoToMainFragment: () -> Unit,
   private var onFragmentAppeared: (Fragment) -> Unit
 ) : Navigator, LifecycleObserver {
@@ -45,7 +40,6 @@ class MainNavigator(
   
   override fun switchTo(fragmentClass: KClass<out BaseFragment>) {
     val fragmentManager = supportFragmentManager ?: return
-    val drawerLayout = drawerLayout ?: return
     if (currentFragment?.javaClass?.name == fragmentClass.java.name) {
       return
     }
@@ -57,34 +51,18 @@ class MainNavigator(
     if (currentFragment != null) {
       transaction.hide(currentFragment!!)
       if (!fragment.isAdded) {
-        stack.add(fragmentName)
         transaction.add(R.id.fragmentContainer, fragment, fragmentName)
       } else {
-        if (stack.contains(fragmentName)) {
-          stack.swap(fragmentName, currentFragment!!.getNameForStack())
-        } else {
-          stack.add(fragmentName)
-        }
+        stack.remove(fragmentName)
         transaction.show(fragment)
       }
     } else {
-      stack.add(fragmentName)
       transaction.add(R.id.fragmentContainer, fragment, fragmentName)
     }
+    stack.add(fragmentName)
+    printScreens()
     transaction.commit()
     currentFragment = fragment
-  }
-  
-  override fun handleOnDrawerItemClicked(tag: String) {
-    drawerLayout?.close(andThen = {
-      when (tag) {
-        TextStatistics -> switchTo(StatsFragment::class)
-        TextNews -> switchTo(NewsFragment::class)
-        TextMap -> switchTo(MapFragment::class)
-        TextRankings -> switchTo(RankingsFragment::class)
-        TextTips -> switchTo(TipsFragment::class)
-      }
-    })
   }
   
   override fun allowBackPress(): Boolean {
@@ -97,6 +75,7 @@ class MainNavigator(
           ?: stack.last().toFragmentInstance()
       currentFragment = newFragment
       onFragmentAppeared(newFragment)
+      printScreens()
       fragmentManager.transaction {
         if (!newFragment.isAdded) {
           add(R.id.fragmentContainer, newFragment, newFragment.getNameForStack())
@@ -111,7 +90,6 @@ class MainNavigator(
   
   @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
   fun onDestroy() {
-    drawerLayout = null
     supportFragmentManager = null
     currentFragment = null
     onFragmentAppeared = {}
@@ -126,12 +104,14 @@ class MainNavigator(
     return fragments.find { it.getNameForStack() == fragmentClassName } as? BaseFragment
   }
   
-  private fun <T> ArrayList<T>.swap(e1: T, e2: T) {
-    val i = indexOf(e1)
-    val j = indexOf(e2)
-    val temp = this[i]
-    this[i] = this[j]
-    this[j] = temp
+  private fun printScreens() {
+    if (!BuildConfig.DEBUG) return
+    val builder = StringBuilder()
+    stack.forEachIndexed { i, fragmentClassName: String ->
+      val stackName = fragmentClassName.substringAfterLast(".")
+      builder.append("\r$i: ").append(stackName).append("\n")
+    }
+    Timber.d("Screens: \n$builder")
   }
   
   companion object {

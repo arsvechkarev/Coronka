@@ -7,7 +7,5 @@ interface Navigator : LifecycleObserver {
   
   fun switchTo(fragmentClass: KClass<out BaseFragment>)
   
-  fun handleOnDrawerItemClicked(tag: String)
-  
   fun allowBackPress(): Boolean
 }

@@ -21,8 +21,7 @@ import core.di.CoreComponent.drawerStateSendingChannel
 class MainActivity : BaseActivity(), HostActivity {
   
   private val navigator by lazy {
-    MainModuleInjector.provideNavigator(this, DrawerLayoutTag,
-      onGoToMainFragment = ::goToMainFragment,
+    MainModuleInjector.provideNavigator(this, onGoToMainFragment = ::goToMainFragment,
       onFragmentAppeared = ::setSelectedMenuItem
     )
   }
@@ -75,7 +74,8 @@ class MainActivity : BaseActivity(), HostActivity {
   private fun initListeners() {
     val onDrawerItemClick: (v: View) -> Unit = { view ->
       viewAs<DrawerGroupLinearLayout>(DrawerGroupLinearLayout).onTextViewClicked(view)
-      navigator.handleOnDrawerItemClicked(view.tag as String)
+      val tag = view.tag as String
+      handleScreenToGoTo(tag)
     }
     view(TextStatistics).setOnClickListener(onDrawerItemClick)
     view(TextNews).setOnClickListener(onDrawerItemClick)
@@ -95,6 +95,18 @@ class MainActivity : BaseActivity(), HostActivity {
     }
     val drawerGroupLayout = viewAs<DrawerGroupLinearLayout>(DrawerGroupLinearLayout)
     drawerGroupLayout.setSelectedMenuItem(tag)
+  }
+  
+  private fun handleScreenToGoTo(tag: String) {
+    viewAs<DrawerLayout>(DrawerLayoutTag).close(andThen = {
+      when (tag) {
+        TextStatistics -> navigator.switchTo(StatsFragment::class)
+        TextNews -> navigator.switchTo(NewsFragment::class)
+        TextMap -> navigator.switchTo(MapFragment::class)
+        TextRankings -> navigator.switchTo(RankingsFragment::class)
+        TextTips -> navigator.switchTo(TipsFragment::class)
+      }
+    })
   }
   
   private fun goToMainFragment() {

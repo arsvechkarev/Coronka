@@ -8,13 +8,11 @@ object MainModuleInjector {
   
   fun provideNavigator(
     activity: MainActivity,
-    drawerLayoutTag: String,
     onGoToMainFragment: () -> Unit,
     onFragmentAppeared: (Fragment) -> Unit,
   ): MainNavigator {
     val mainNavigator = MainNavigator(
       activity.supportFragmentManager,
-      activity.window.decorView.findViewWithTag(drawerLayoutTag),
       onGoToMainFragment,
       onFragmentAppeared
     )
