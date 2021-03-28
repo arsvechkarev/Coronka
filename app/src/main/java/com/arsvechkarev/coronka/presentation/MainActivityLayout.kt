@@ -40,6 +40,7 @@ import com.arsvechkarev.viewdsl.textSize
 import com.arsvechkarev.viewdsl.withViewBuilder
 
 private val DrawerLayoutId = View.generateViewId()
+private val DrawerGroupLinearLayoutId = View.generateViewId()
 
 const val DrawerLayoutTag = "DrawerLayout"
 const val DrawerGroupLinearLayout = "DrawerGroupLinearLayout"
@@ -65,6 +66,7 @@ fun Context.buildMainActivityLayout() = withViewBuilder {
     child<ScrollView, LayoutParams>(MatchParent, MatchParent) {
       isFillViewport = true
       child<DrawerGroupLinearLayout, LayoutParams>(MatchParent, MatchParent) {
+        id(DrawerGroupLinearLayoutId)
         tag(DrawerGroupLinearLayout)
         paddings(top = StatusBarHeight)
         orientation(LinearLayout.VERTICAL)

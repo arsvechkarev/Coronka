@@ -232,15 +232,6 @@ class DrawerLayout @JvmOverloads constructor(
     }
   }
   
-  private fun setStateWithoutAnimation(drawerState: DrawerState) {
-    when (drawerState) {
-      OPENED -> {
-        drawerView.left = 0
-      }
-      CLOSED -> drawerView.left = -slideRange
-    }
-  }
-  
   private fun onPointerUp(event: MotionEvent) {
     val actionIndex = event.actionIndex
     if (event.getPointerId(actionIndex) == activePointerId) {
@@ -249,7 +240,6 @@ class DrawerLayout @JvmOverloads constructor(
       latestX = event.getX(newIndex)
     }
   }
-  
   
   private fun handleDownOutsideEvent(event: MotionEvent): Boolean {
     if (currentState == OPENED && event.x > drawerView.right) {

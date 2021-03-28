@@ -98,7 +98,7 @@ class MainActivity : BaseActivity(), HostActivity {
   }
   
   private fun goToMainFragment() {
-    view(TextStatistics).isSelected = true
+    viewAs<DrawerGroupLinearLayout>(DrawerGroupLinearLayout).setSelectedMenuItem(TextStatistics)
     navigator.switchTo(StatsFragment::class)
   }
 }
