@@ -2,7 +2,8 @@ package coreimpl
 
 import android.annotation.SuppressLint
 import android.net.ConnectivityManager
-import android.net.ConnectivityManager.OnNetworkActiveListener
+import android.net.Network
+import android.net.NetworkRequest
 import core.NetworkAvailabilityNotifier
 import core.NetworkListener
 
@@ -11,15 +12,19 @@ class AndroidNetworkAvailabilityNotifier(
   private val connectivityManager: ConnectivityManager
 ) : NetworkAvailabilityNotifier {
   
-  private val listeners = HashMap<NetworkListener, OnNetworkActiveListener>()
+  private val listeners = HashMap<NetworkListener, ConnectivityManager.NetworkCallback>()
   
   override fun registerListener(listener: NetworkListener) {
-    val newListener = OnNetworkActiveListener { listener.onNetworkAvailable() }
+    val newListener = object : ConnectivityManager.NetworkCallback() {
+      override fun onAvailable(network: Network) {
+        listener.onNetworkAvailable()
+      }
+    }
     listeners[listener] = newListener
-    connectivityManager.addDefaultNetworkActiveListener(newListener)
+    connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), newListener)
   }
   
   override fun unregisterListener(listener: NetworkListener) {
-    connectivityManager.removeDefaultNetworkActiveListener(listeners.getValue(listener))
+    connectivityManager.unregisterNetworkCallback(listeners.getValue(listener))
   }
 }
