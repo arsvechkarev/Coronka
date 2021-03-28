@@ -69,11 +69,24 @@
   <string name="text_fever">Fever</string>
   <string name="text_cough">Cough</string>
 
-  <string name="hint_edit_text_email">Email</string>
+  <string name="text_date_time_just_now">Just now</string>
+  <string name="text_date_time_n_minutes_ago">%1$d minutes ago</string>
+  <string name="text_date_time_n_hours_ago">%1$d hours ago</string>
+  <string name="text_date_time_n_days_ago">%1$d days ago</string>
+  <string name="text_date_time_n_weeks_ago">%1$d weeks ago</string>
+  <string name="text_date_time_one_hour_ago">1 hour ago</string>
+  <string name="text_date_time_one_minute_ago">1 minute ago</string>
 
-  <string name="text_visit_who">
-    More information: &lt;br>
-    &lt;a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019">
-    World Health Organization&lt;/a>
-  </string>
+  <string name="month_january">January</string>
+  <string name="month_february">February</string>
+  <string name="month_march">March</string>
+  <string name="month_april">April</string>
+  <string name="month_may">May</string>
+  <string name="month_june">June</string>
+  <string name="month_july">July</string>
+  <string name="month_august">August</string>
+  <string name="month_september">September</string>
+  <string name="month_october">October</string>
+  <string name="month_november">November</string>
+  <string name="month_december">December</string>
 </resources>

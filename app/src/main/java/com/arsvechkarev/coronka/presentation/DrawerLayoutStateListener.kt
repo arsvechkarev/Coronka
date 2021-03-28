@@ -9,12 +9,10 @@ class DrawerLayoutStateListener(
 ) : DrawerOpenCloseListener {
   
   override fun onDrawerOpened() {
-    println("drawer_Opened")
     drawerStateSendingChannel.send(DrawerState(isOpened = true))
   }
   
   override fun onDrawerClosed() {
-    println("drawer_Closed")
     drawerStateSendingChannel.send(DrawerState(isOpened = false))
   }
 }
