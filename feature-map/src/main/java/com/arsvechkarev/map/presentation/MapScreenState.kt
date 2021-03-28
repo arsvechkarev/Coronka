@@ -6,9 +6,9 @@ import core.model.ui.CountryOnMapMetaInfo
 
 class LoadedCountries(
   val iso2ToCountryMapMetaInfo: Map<String, CountryOnMapMetaInfo>,
-) : BaseScreenState
+) : BaseScreenState()
 
 class FoundCountry(
   val iso2ToCountryMapMetaInfo: Map<String, CountryOnMapMetaInfo>,
   val country: Country
-) : BaseScreenState
+) : BaseScreenState()

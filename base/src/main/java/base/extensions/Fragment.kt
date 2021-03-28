@@ -16,4 +16,3 @@ fun FragmentManager.transaction(block: FragmentTransaction.() -> Unit) {
 fun <T> Fragment.subscribeToChannel(receiving: RxReceivingChannel<T>, onReceive: (T) -> Unit) {
   lifecycle.addObserver(StartStopRxReceiver(receiving, onReceive))
 }
-

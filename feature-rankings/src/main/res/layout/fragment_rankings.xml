@@ -94,13 +94,13 @@
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <View
-    android:id="@+id/rankingsListLoadingStub"
+    android:id="@+id/rankingsListLayoutLoading"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="base.behaviors.ViewUnderHeaderBehavior"/>
 
   <LinearLayout
-    android:id="@+id/rankingsErrorLayout"
+    android:id="@+id/rankingsLayoutFailure"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/rankings_header_height"
@@ -146,14 +146,14 @@
     app:layout_behavior="base.behaviors.HidingButtonBehavior"/>
 
   <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/rankingsBottomSheet"
+    android:id="@+id/rankingsFilterDialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_sheet"
     app:layout_behavior="base.behaviors.BottomSheetBehavior">
 
     <TextView
-      android:id="@+id/rankingsBottomSheetTitle"
+      android:id="@+id/rankingsFilterDialogTitle"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/rankings_bottom_sheet_title_m_start"
@@ -165,7 +165,7 @@
       app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
-      android:id="@+id/rankingsBottomSheetCross"
+      android:id="@+id/rankingsFilterDialogCross"
       android:layout_width="@dimen/icon_large_size"
       android:layout_height="@dimen/icon_large_size"
       android:layout_margin="@dimen/rankings_bottom_sheet_cross_margin"
@@ -175,7 +175,7 @@
       app:srcCompat="@drawable/ic_cross"/>
 
     <com.google.android.flexbox.FlexboxLayout
-      android:id="@+id/rankingsBottomSheetLayoutWorldRegion"
+      android:id="@+id/rankingsFilterDialogLayoutWorldRegion"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="@dimen/rankings_bottom_sheet_flexbox_m_horizontal"
@@ -185,7 +185,7 @@
       app:flexWrap="wrap"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/rankingsBottomSheetTitle">
+      app:layout_constraintTop_toBottomOf="@id/rankingsFilterDialogTitle">
 
       <base.views.Chip
         android:id="@+id/chipWorldwide"
@@ -239,7 +239,7 @@
     </com.google.android.flexbox.FlexboxLayout>
 
     <com.google.android.flexbox.FlexboxLayout
-      android:id="@+id/rankingsBottomSheetLayoutOptionTypes"
+      android:id="@+id/rankingsFilterDialogLayoutOptionTypes"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginHorizontal="@dimen/rankings_bottom_sheet_flexbox_m_horizontal"
@@ -253,7 +253,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/rankingsBottomSheetLayoutWorldRegion">
+      app:layout_constraintTop_toBottomOf="@id/rankingsFilterDialogLayoutWorldRegion">
 
       <base.views.Chip
         android:id="@+id/chipConfirmed"
@@ -280,7 +280,7 @@
         app:colorFill="?colorDeaths"/>
 
       <base.views.Chip
-        android:id="@+id/chipPercentByCountry"
+        android:id="@+id/chipPercentInCountry"
         style="@style/Chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -311,7 +311,7 @@
       android:layout_height="wrap_content">
 
       <ImageView
-        android:id="@+id/rankingsDialogIconBack"
+        android:id="@+id/rankingsCountryFullInfoDialogIconBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/icon_drawer_margin"
@@ -331,7 +331,7 @@
         android:textSize="@dimen/text_dialog_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rankingsDialogIconBack"/>
+        app:layout_constraintTop_toBottomOf="@id/rankingsCountryFullInfoDialogIconBack"/>
 
       <base.views.generalstatsviews.CountryGeneralStatsView
         android:id="@+id/rankingsDialogGeneralView"
@@ -386,7 +386,7 @@
         app:layout_constraintTop_toBottomOf="@id/rankingsTitleDeathRate"/>
 
       <TextView
-        android:id="@+id/rankingsTextNewConfirmed"
+        android:id="@+id/rankingsDialogTextNewConfirmed"
         style="@style/TextViewDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -398,7 +398,7 @@
         app:layout_constraintTop_toTopOf="@id/rankingsTitleNewConfirmed"/>
 
       <TextView
-        android:id="@+id/rankingsTextNewDeaths"
+        android:id="@+id/rankingsDialogTextNewDeaths"
         style="@style/TextViewDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -410,7 +410,7 @@
         app:layout_constraintTop_toTopOf="@id/rankingsTitleNewDeaths"/>
 
       <TextView
-        android:id="@+id/rankingsTextDeathRate"
+        android:id="@+id/rankingsDialogTextDeathRate"
         style="@style/TextViewDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -422,7 +422,7 @@
         app:layout_constraintTop_toTopOf="@id/rankingsTitleDeathRate"/>
 
       <TextView
-        android:id="@+id/rankingsTextPercentInCountry"
+        android:id="@+id/rankingsDialogTextPercentInCountry"
         style="@style/TextViewDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

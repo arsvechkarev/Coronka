@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import core.BaseScreenState
 import core.Loading
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import java.util.concurrent.atomic.AtomicBoolean
@@ -47,6 +48,18 @@ abstract class RxViewModel : ViewModel() {
         isLoadingNow.set(false)
       }
       onNext(item)
+    }
+  }
+  
+  /**
+   * Same as [smartSubscribe], but with [Single]
+   */
+  protected open fun <T> Single<T>.smartSubscribe(
+    onSuccess: (T) -> Unit
+  ): Disposable {
+    return subscribe { item ->
+      isLoadingNow.set(false)
+      onSuccess(item)
     }
   }
   

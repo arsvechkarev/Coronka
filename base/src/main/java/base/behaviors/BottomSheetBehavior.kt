@@ -50,24 +50,29 @@ class BottomSheetBehavior(context: Context, attrs: AttributeSet? = null) :
   var onShow: () -> Unit = {}
   
   fun show() {
-    bottomSheet!!.post {
-      if (currentState == SHOWN || slideAnimator.isRunning) return@post
-      currentState = SHOWN
-      slideAnimator.duration = AnimationsConfigurator.DurationBottomSheetSlide
-      slideAnimator.setIntValues(bottomSheet!!.top, parentHeight - slideRange)
-      slideAnimator.doOnEnd(onShow)
-      slideAnimator.start()
-    }
+    if (currentState == SHOWN || slideAnimator.isRunning) return
+    currentState = SHOWN
+    slideAnimator.duration = AnimationsConfigurator.DurationBottomSheetSlide
+    slideAnimator.setIntValues(bottomSheet!!.top, parentHeight - slideRange)
+    slideAnimator.doOnEnd(onShow)
+    slideAnimator.start()
   }
   
   fun hide() {
-    bottomSheet!!.post {
-      if (currentState == HIDDEN || slideAnimator.isRunning) return@post
-      currentState = HIDDEN
-      slideAnimator.duration = AnimationsConfigurator.DurationBottomSheetSlide
-      slideAnimator.setIntValues(bottomSheet!!.top, parentHeight)
-      slideAnimator.doOnEnd(onHide)
-      slideAnimator.start()
+    if (currentState == HIDDEN || slideAnimator.isRunning) return
+    currentState = HIDDEN
+    slideAnimator.duration = AnimationsConfigurator.DurationBottomSheetSlide
+    slideAnimator.setIntValues(bottomSheet!!.top, parentHeight)
+    slideAnimator.doOnEnd(onHide)
+    slideAnimator.start()
+  }
+  
+  fun setStateImmediately(state: State) {
+    if (currentState == state) return
+    currentState = state
+    when (state) {
+      SHOWN -> bottomSheet!!.top = parentHeight - slideRange
+      HIDDEN -> bottomSheet!!.top
     }
   }
   

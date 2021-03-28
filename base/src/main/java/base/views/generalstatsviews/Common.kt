@@ -1,6 +1,7 @@
 package base.views.generalstatsviews
 
 import android.graphics.Paint
+import base.resources.TextSizes
 
 fun getTextSizeFor(
   text1: String,
@@ -21,6 +22,9 @@ fun getTextSizeFor(
 fun calculateTextSize(width: Int, text: String, paint: Paint) {
   paint.textSize = 10f
   while (true) {
+    if (paint.textSize > TextSizes.H1) {
+      break
+    }
     val titleTextWidth = paint.measureText(text)
     if (titleTextWidth > width - getTextHorizontalMargin(width) * 2f) {
       break

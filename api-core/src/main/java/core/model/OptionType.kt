@@ -6,5 +6,5 @@ enum class OptionType {
   RECOVERED,
   DEATHS,
   DEATH_RATE,
-  PERCENT_BY_COUNTRY
+  PERCENT_IN_COUNTRY
 }

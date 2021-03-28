@@ -4,15 +4,15 @@ import api.recycler.DifferentiableItem
 import core.BaseScreenState
 import core.toFailureReason
 
-class LoadedNews(val news: List<DifferentiableItem>) : BaseScreenState
+class LoadedNews(val news: List<DifferentiableItem>) : BaseScreenState()
 
-class LoadedNewNews(val news: List<DifferentiableItem>) : BaseScreenState
+class LoadedNewNews(val news: List<DifferentiableItem>) : BaseScreenState()
 
-class LoadingNextPage(val list: List<DifferentiableItem>) : BaseScreenState
+class LoadingNextPage(val list: List<DifferentiableItem>) : BaseScreenState()
 
 class FailureLoadingNextPage(
   val list: List<DifferentiableItem>, val throwable: Throwable
-) : BaseScreenState {
+) : BaseScreenState() {
   
   val reason = throwable.toFailureReason()
 }

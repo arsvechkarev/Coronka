@@ -2,7 +2,7 @@ package com.arsvechkarev.rankings.presentation
 
 import base.views.Chip
 
-class ChipGroup(vararg chips: Chip) {
+class ChipGroup(private vararg val chips: Chip) {
   
   private var currentChip = chips[0]
   
@@ -20,5 +20,11 @@ class ChipGroup(vararg chips: Chip) {
         }
       }
     }
+  }
+  
+  fun setSelectedChipById(chipId: Int) {
+    val chip = chips.find { it.id == chipId }!!
+    currentChip = chip
+    currentChip.isSelected = true
   }
 }

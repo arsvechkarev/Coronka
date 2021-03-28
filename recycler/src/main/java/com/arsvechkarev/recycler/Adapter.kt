@@ -33,7 +33,8 @@ abstract class Adapter : RecyclerView.Adapter<ViewHolder>() {
     notifyDataSetChanged()
   }
   
-  fun changeListAndScrollToTop(list: List<DisplayableItem>) {
+  fun changeListWithCrossFadeAnimation(list: List<DisplayableItem>) {
+    if (list === data) return
     val alwaysFalseCallback = AlwaysFalseCallback(data, list)
     data = list
     val diffResult = DiffUtil.calculateDiff(alwaysFalseCallback)

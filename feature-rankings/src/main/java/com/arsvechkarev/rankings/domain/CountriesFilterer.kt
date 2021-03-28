@@ -52,7 +52,7 @@ class CountriesFilterer {
     worldRegion: WorldRegion,
     optionType: OptionType
   ): MutableList<DifferentiableItem> {
-    if (optionType == OptionType.PERCENT_BY_COUNTRY) {
+    if (optionType == OptionType.PERCENT_IN_COUNTRY) {
       return performPercentByCountryFiltering(worldRegion)
     }
     val items = ArrayList<DifferentiableItem>()

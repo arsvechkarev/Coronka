@@ -1,5 +1,6 @@
 package com.arsvechkarev.rankings.presentation
 
+import api.recycler.DifferentiableItem
 import base.RxViewModel
 import base.extensions.withNetworkDelay
 import base.extensions.withRequestTimeout
@@ -10,8 +11,10 @@ import core.Failure
 import core.Loading
 import core.NetworkAvailabilityNotifier
 import core.NetworkListener
+import core.markAsOld
 import core.model.OptionType
 import core.model.WorldRegion
+import core.model.ui.CountryFullInfo
 import core.model.ui.DisplayableCountry
 import core.rx.Schedulers
 
@@ -41,22 +44,56 @@ class RankingsViewModel(
     performLoadingData()
   }
   
-  fun filter(worldRegion: WorldRegion, optionType: OptionType) {
+  fun onCountryClicked(country: DisplayableCountry) {
+    val currentState = state.value
+    require(currentState is Success)
+    if (currentState.showFilterDialog || currentState.countryFullInfo != null) {
+      return
+    }
     rxCall {
-      rankingsInteractor.filterCountries(worldRegion, optionType)
-          .subscribeOn(schedulers.computation())
-          .observeOn(schedulers.mainThread())
-          .smartSubscribe { list -> _state.value = FilteredCountries(list) }
+      rankingsInteractor.getCountryFullInfo(country)
+          .smartSubscribe { countryFullInfo ->
+            updateSuccessState(showFilterDialog = false, countryFullInfo = countryFullInfo)
+          }
     }
   }
   
-  fun onCountryClicked(country: DisplayableCountry) {
-    rxCall {
-      rankingsInteractor.getCountryFullInfo(country)
-          .subscribe { countryFullInfo ->
-            _state.value = ShowCountryInfo(countryFullInfo)
-          }
+  fun onFilterDialogShow() {
+    updateSuccessState(showFilterDialog = true)
+  }
+  
+  fun onFilterDialogHide() {
+    updateSuccessState(showFilterDialog = false)
+  }
+  
+  fun onCountryFullInfoDialogBackClicked() {
+    updateSuccessState(countryFullInfo = null)
+  }
+  
+  fun onNewOptionTypeSelected(optionType: OptionType) {
+    filter(currentSuccessState().worldRegion, optionType)
+  }
+  
+  fun onWorldRegionSelected(worldRegion: WorldRegion) {
+    filter(worldRegion, currentSuccessState().optionType)
+  }
+  
+  fun onDestroy() {
+    _state.markAsOld()
+  }
+  
+  fun allowBackPress(): Boolean {
+    val currentState = state.value
+    if (currentState !is Success) return true
+    if (currentState.countryFullInfo != null) {
+      updateSuccessState(countryFullInfo = null)
+      return false
     }
+    if (currentState.showFilterDialog) {
+      updateSuccessState(showFilterDialog = false)
+      return false
+    }
+    return true
   }
   
   private fun performLoadingData() {
@@ -66,13 +103,51 @@ class RankingsViewModel(
           .withNetworkDelay(schedulers)
           .withRetry()
           .withRequestTimeout()
-          .map<BaseScreenState>(::LoadedCountries)
+          .map<BaseScreenState> { countries ->
+            Success(
+              countries = countries,
+              isListChanged = true,
+              worldRegion = DefaultWorldRegion,
+              optionType = DefaultOptionType,
+              showFilterDialog = false,
+              countryFullInfo = null
+            )
+          }
           .onErrorReturn(::Failure)
           .startWith(Loading)
           .observeOn(schedulers.mainThread())
           .smartSubscribe(_state::setValue)
     }
   }
+  
+  private fun filter(worldRegion: WorldRegion, optionType: OptionType) {
+    require(state.value is Success)
+    rxCall {
+      rankingsInteractor.filterCountries(worldRegion, optionType)
+          .subscribeOn(schedulers.computation())
+          .observeOn(schedulers.mainThread())
+          .smartSubscribe { list ->
+            updateSuccessState(
+              countries = list, isListChanged = true,
+              worldRegion = worldRegion, optionType = optionType
+            )
+          }
+    }
+  }
+  
+  private fun updateSuccessState(
+    countries: List<DifferentiableItem> = currentSuccessState().countries,
+    isListChanged: Boolean = false,
+    worldRegion: WorldRegion = currentSuccessState().worldRegion,
+    optionType: OptionType = currentSuccessState().optionType,
+    showFilterDialog: Boolean = currentSuccessState().showFilterDialog,
+    countryFullInfo: CountryFullInfo? = currentSuccessState().countryFullInfo,
+  ) {
+    _state.value = Success(countries, isListChanged, worldRegion, optionType,
+      showFilterDialog, countryFullInfo)
+  }
+  
+  private fun currentSuccessState() = state.value as Success
   
   override fun onCleared() {
     networkAvailabilityNotifier.unregisterListener(this)
