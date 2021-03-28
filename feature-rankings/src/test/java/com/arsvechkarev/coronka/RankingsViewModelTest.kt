@@ -4,12 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import api.recycler.DifferentiableItem
 import com.arsvechkarev.rankings.domain.CountriesFilterer
 import com.arsvechkarev.rankings.domain.RankingsInteractor
-import com.arsvechkarev.rankings.presentation.FilteredCountries
-import com.arsvechkarev.rankings.presentation.LoadedCountries
 import com.arsvechkarev.rankings.presentation.RankingsViewModel
 import com.arsvechkarev.rankings.presentation.RankingsViewModel.Companion.DefaultOptionType
 import com.arsvechkarev.rankings.presentation.RankingsViewModel.Companion.DefaultWorldRegion
-import com.arsvechkarev.rankings.presentation.ShowCountryInfo
+import com.arsvechkarev.rankings.presentation.Success
 import com.arsvechkarev.test.FakeCountries
 import com.arsvechkarev.test.FakeCountriesDataSource
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
@@ -34,6 +32,8 @@ import core.model.mappers.CountryEntitiesToCountriesMapper
 import core.model.ui.DisplayableCountry
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -66,11 +66,32 @@ class RankingsViewModelTest {
     with(observer) {
       hasStatesCount(2)
       hasStateAtPosition<Loading>(0)
-      hasStateAtPosition<LoadedCountries>(1)
+      hasStateAtPosition<Success>(1)
       val expectedCountries = countriesFilterer.prepareAndFilter(FakeCountries, FakeMetaInfoMap,
         DefaultWorldRegion, DefaultOptionType)
-      val loadedCountries = currentState<LoadedCountries>().list
+      val loadedCountries = currentState<Success>().countries
       assertArrayEquals(expectedCountries.toTypedArray(), loadedCountries.toTypedArray())
+    }
+  }
+  
+  @Test
+  fun `Testing filter dialog states`() {
+    val viewModel = createViewModel()
+    val observer = createObserver()
+    
+    viewModel.state.observeForever(observer)
+    viewModel.startLoadingData()
+    viewModel.onFilterDialogShow()
+    
+    with(observer) {
+      hasStatesCount(3)
+      hasStateAtPosition<Loading>(0)
+      hasStateAtPosition<Success>(1).apply {
+        assertFalse(showFilterDialog)
+      }
+      hasStateAtPosition<Success>(2).apply {
+        assertTrue(showFilterDialog)
+      }
     }
   }
   
@@ -113,9 +134,9 @@ class RankingsViewModelTest {
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<Failure>(1)
       hasStateAtPosition<Loading>(2)
-      hasStateAtPosition<LoadedCountries>(3)
+      hasStateAtPosition<Success>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
-      val list = currentState<LoadedCountries>().list
+      val list = currentState<Success>().countries
       assertArrayEquals(initialFilteredList.toTypedArray(), list.toTypedArray())
     }
   }
@@ -144,9 +165,9 @@ class RankingsViewModelTest {
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<Failure>(1)
       hasStateAtPosition<Loading>(2)
-      hasStateAtPosition<LoadedCountries>(3)
+      hasStateAtPosition<Success>(3)
       assertEquals(NO_CONNECTION, state<Failure>(1).reason)
-      val list = currentState<LoadedCountries>().list
+      val list = currentState<Success>().countries
       assertArrayEquals(initialFilteredList.toTypedArray(), list.toTypedArray())
     }
   }
@@ -164,14 +185,16 @@ class RankingsViewModelTest {
     )
     viewModel.state.observeForever(observer)
     viewModel.startLoadingData()
-    viewModel.filter(worldRegion, optionType)
-    
+    viewModel.onNewOptionTypeSelected(optionType)
+    viewModel.onNewWorldRegionSelected(worldRegion)
+  
     with(observer) {
-      hasStatesCount(3)
+      hasStatesCount(4)
       hasStateAtPosition<Loading>(0)
-      hasStateAtPosition<LoadedCountries>(1)
-      hasStateAtPosition<FilteredCountries>(2)
-      val list = currentState<FilteredCountries>().list
+      hasStateAtPosition<Success>(1)
+      hasStateAtPosition<Success>(2)
+      hasStateAtPosition<Success>(3)
+      val list = currentState<Success>().countries
       assertArrayEquals(filteredList.toTypedArray(), list.toTypedArray())
     }
   }
@@ -195,9 +218,9 @@ class RankingsViewModelTest {
     with(observer) {
       hasStatesCount(3)
       hasStateAtPosition<Loading>(0)
-      hasStateAtPosition<LoadedCountries>(1)
-      hasStateAtPosition<ShowCountryInfo>(2)
-      currentState<ShowCountryInfo>().countryFullInfo.country == FakeCountries[countryIndex]
+      hasStateAtPosition<Success>(1)
+      hasStateAtPosition<Success>(2)
+      currentState<Success>().countryFullInfo!!.country == FakeCountries[countryIndex]
     }
   }
   

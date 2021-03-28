@@ -59,10 +59,12 @@ class RankingsViewModel(
   }
   
   fun onFilterDialogShow() {
+    if (currentSuccessState().showFilterDialog) return
     updateSuccessState(showFilterDialog = true)
   }
   
   fun onFilterDialogHide() {
+    if (!currentSuccessState().showFilterDialog) return
     updateSuccessState(showFilterDialog = false)
   }
   
@@ -74,7 +76,7 @@ class RankingsViewModel(
     filter(currentSuccessState().worldRegion, optionType)
   }
   
-  fun onWorldRegionSelected(worldRegion: WorldRegion) {
+  fun onNewWorldRegionSelected(worldRegion: WorldRegion) {
     filter(worldRegion, currentSuccessState().optionType)
   }
   

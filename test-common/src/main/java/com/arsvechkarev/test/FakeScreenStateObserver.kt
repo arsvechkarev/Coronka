@@ -24,8 +24,9 @@ fun FakeScreenStateObserver.hasStatesCount(size: Int) {
   assertEquals(size, states.size)
 }
 
-inline fun <reified T : BaseScreenState> FakeScreenStateObserver.hasStateAtPosition(position: Int) {
+inline fun <reified T : BaseScreenState> FakeScreenStateObserver.hasStateAtPosition(position: Int): T {
   assertTrue(states[position] is T)
+  return states[position] as T
 }
 
 inline fun <reified T : BaseScreenState> FakeScreenStateObserver.hasCurrentState() {

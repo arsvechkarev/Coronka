@@ -110,7 +110,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     ChipHelper(
       groupOptionTypes, groupWorldRegions,
       onOptionTypeSelected = viewModel::onNewOptionTypeSelected,
-      onWorldRegionSelected = viewModel::onWorldRegionSelected
+      onWorldRegionSelected = viewModel::onNewWorldRegionSelected
     )
   }
   

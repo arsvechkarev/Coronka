@@ -6,10 +6,6 @@ import core.model.OptionType
 import core.model.WorldRegion
 import core.model.ui.CountryFullInfo
 
-class FilteredCountries(val list: List<DifferentiableItem>) : BaseScreenState()
-
-class LoadedCountries(val list: List<DifferentiableItem>) : BaseScreenState()
-
 class Success(
   val countries: List<DifferentiableItem>,
   val isListChanged: Boolean,
@@ -18,5 +14,3 @@ class Success(
   val showFilterDialog: Boolean,
   val countryFullInfo: CountryFullInfo?
 ) : BaseScreenState()
-
-class ShowCountryInfo(val countryFullInfo: CountryFullInfo) : BaseScreenState()
