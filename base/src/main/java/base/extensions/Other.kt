@@ -2,6 +2,10 @@ package base.extensions
 
 import kotlin.random.Random
 
+fun <T> T.ifTrue(condition: (T) -> Boolean, action: T.() -> Unit) {
+  if (condition(this)) action(this)
+}
+
 inline val Int.f get() = toFloat()
 inline val Float.i get() = toInt()
 

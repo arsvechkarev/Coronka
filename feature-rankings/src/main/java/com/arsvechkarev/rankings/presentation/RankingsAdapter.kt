@@ -1,9 +1,8 @@
-package com.arsvechkarev.rankings.list
+package com.arsvechkarev.rankings.presentation
 
-import api.threading.Threader
 import base.views.SmallStatsView
 import com.arsvechkarev.rankings.R
-import com.arsvechkarev.recycler.ListAdapter
+import com.arsvechkarev.recycler.Adapter
 import com.arsvechkarev.recycler.delegate
 import com.arsvechkarev.viewdsl.id
 import com.arsvechkarev.viewdsl.onClick
@@ -11,10 +10,7 @@ import com.arsvechkarev.viewdsl.paddingsRes
 import com.arsvechkarev.viewdsl.tag
 import core.model.ui.DisplayableCountry
 
-class RankingsAdapter(
-  onClick: (DisplayableCountry) -> Unit,
-  threader: Threader
-) : ListAdapter(threader) {
+class RankingsAdapter(onClick: (DisplayableCountry) -> Unit) : Adapter() {
   
   init {
     addDelegates(

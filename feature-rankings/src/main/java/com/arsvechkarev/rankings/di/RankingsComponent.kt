@@ -2,12 +2,11 @@ package com.arsvechkarev.rankings.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.arsvechkarev.rankings.list.RankingsAdapter
+import com.arsvechkarev.rankings.presentation.RankingsAdapter
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.rankings.presentation.RankingsViewModel
 import core.di.CoreComponent.networkAvailabilityNotifier
 import core.di.CoreComponent.schedulers
-import core.di.CoreComponent.threader
 import core.di.ModuleInterceptorManager.interceptModuleOrDefault
 import core.model.ui.DisplayableCountry
 
@@ -18,7 +17,7 @@ object RankingsComponent {
   }
   
   fun provideAdapter(onClick: (DisplayableCountry) -> Unit): RankingsAdapter {
-    return RankingsAdapter(onClick, threader)
+    return RankingsAdapter(onClick)
   }
   
   @Suppress("UNCHECKED_CAST")

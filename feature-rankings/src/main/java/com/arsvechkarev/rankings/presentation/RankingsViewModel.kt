@@ -10,10 +10,10 @@ import core.Failure
 import core.Loading
 import core.NetworkAvailabilityNotifier
 import core.NetworkListener
-import core.Schedulers
 import core.model.OptionType
 import core.model.WorldRegion
 import core.model.ui.DisplayableCountry
+import core.rx.Schedulers
 
 class RankingsViewModel(
   private val rankingsInteractor: RankingsInteractor,

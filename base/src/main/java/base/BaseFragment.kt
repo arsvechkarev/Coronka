@@ -14,11 +14,6 @@ abstract class BaseFragment(private val layoutResId: Int = 0) : Fragment(layoutR
   
   private val viewsCache = HashMap<String, View>()
   
-  val drawerOpenCloseListener = object : HostActivity.DrawerOpenCloseListener {
-    override fun onDrawerClosed() = this@BaseFragment.onDrawerClosed()
-    override fun onDrawerOpened() = this@BaseFragment.onDrawerOpened()
-  }
-  
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return if (layoutResId == 0) {
       buildLayout() ?: super.onCreateView(inflater, container, savedInstanceState)
@@ -44,16 +39,9 @@ abstract class BaseFragment(private val layoutResId: Int = 0) : Fragment(layoutR
     }
   }
   
-  /**
-   * If set to true, the on each fragment appearance touches on navigation drawer will be enabled
-   */
   abstract fun onInit()
   
   open fun buildLayout(): View? = null
-  
-  open fun onDrawerOpened() = Unit
-  
-  open fun onDrawerClosed() = Unit
   
   open fun onOrientationBecamePortrait() = Unit
   

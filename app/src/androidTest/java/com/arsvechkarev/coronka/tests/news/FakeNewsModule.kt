@@ -18,7 +18,7 @@ class FakeNewsModule(
     
     private var errorCount = 0
     
-    override fun requestLatestNews(page: Int): Maybe<List<NewsDifferentiableItem>> {
+    override fun requestNews(page: Int): Maybe<List<NewsDifferentiableItem>> {
       if (errorCount < 1) {
         errorCount++
         return Maybe.error(Throwable())

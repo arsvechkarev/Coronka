@@ -9,6 +9,7 @@ import com.arsvechkarev.viewdsl.ContextHolder
 import com.jakewharton.threetenabp.AndroidThreeTen
 import core.di.CoreComponent
 import coreimpl.DefaultCoreModule
+import coreimpl.DefaultDrawerStateModule
 
 open class CoronkaBaseApplication : Application() {
   
@@ -24,7 +25,7 @@ open class CoronkaBaseApplication : Application() {
   open fun initializeDiComponents() {
     val coreModule = DefaultCoreModule(applicationContext)
     val commonFeaturesModule = CommonFeaturesModuleImpl(coreModule)
-    CoreComponent.initialize(coreModule)
+    CoreComponent.initialize(coreModule, DefaultDrawerStateModule)
     CommonFeaturesComponent.initialize(commonFeaturesModule)
   }
 }

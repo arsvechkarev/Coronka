@@ -6,21 +6,22 @@ import core.toFailureReason
 
 class LoadedNews(val news: List<DifferentiableItem>) : BaseScreenState
 
-class LoadedNextPage(val newNews: List<DifferentiableItem>) : BaseScreenState
+class LoadedNewNews(val news: List<DifferentiableItem>) : BaseScreenState
 
-class AdditionalItem(val mode: Mode) : BaseScreenState, DifferentiableItem {
+class LoadingNextPage(val list: List<DifferentiableItem>) : BaseScreenState
+
+class FailureLoadingNextPage(
+  val list: List<DifferentiableItem>, val throwable: Throwable
+) : BaseScreenState {
+  
+  val reason = throwable.toFailureReason()
+}
+
+data class AdditionalItem(var mode: Mode) : DifferentiableItem {
+  
   override val id: String = "AdditionalItem"
-  override fun equals(other: Any?) = other is AdditionalItem
-  override fun hashCode() = id.hashCode()
   
   enum class Mode {
     LOADING, FAILURE
   }
-}
-
-object LoadingNextPage : BaseScreenState
-
-class FailureLoadingNextPage(val throwable: Throwable) : BaseScreenState {
-  
-  val reason = throwable.toFailureReason()
 }

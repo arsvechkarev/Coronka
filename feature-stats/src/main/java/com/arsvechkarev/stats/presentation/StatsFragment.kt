@@ -1,10 +1,5 @@
 package com.arsvechkarev.stats.presentation
 
-import android.content.Context
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import base.BaseFragment
 import base.behaviors.ScrollableContentBehavior
@@ -13,6 +8,7 @@ import base.drawables.BaseLoadingStub.Companion.setLoadingDrawable
 import base.drawables.MainStatsInfoLoadingStub
 import base.drawables.StatsGraphLoadingStub
 import base.extensions.getMessageRes
+import base.extensions.subscribeToChannel
 import base.hostActivity
 import base.views.CustomNestedScrollView
 import base.views.charts.DailyCasesChart.Type.NEW_CASES
@@ -35,6 +31,7 @@ import core.FailureReason.NO_CONNECTION
 import core.FailureReason.TIMEOUT
 import core.FailureReason.UNKNOWN
 import core.Loading
+import core.di.CoreComponent.drawerStateReceivingChannel
 import core.model.data.GeneralInfo
 import core.model.data.MainStatistics
 import kotlinx.android.synthetic.main.fragment_stats.statsContentView
@@ -60,7 +57,6 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   private lateinit var viewModel: StatsViewModel
   
   override fun onInit() {
-    Timber.d("Logggging StatsFragment onInit")
     viewModel = StatsComponent.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
@@ -69,16 +65,18 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     initViews()
     initClickListeners()
     hostActivity.enableTouchesOnDrawer()
+    subscribeToChannel(drawerStateReceivingChannel) { drawerState ->
+      if (drawerState.isOpened) onDrawerOpened() else onDrawerClosed()
+    }
   }
   
   override fun onHiddenChanged(hidden: Boolean) {
-    Timber.d("Logggging StatsFragment onHiddenChanged, isHidden=$hidden")
     if (hidden) hostActivity.enableTouchesOnDrawer()
   }
   
-  override fun onDrawerOpened() = toggleScrollingContent(false)
+  private fun onDrawerOpened() = toggleScrollingContent(false)
   
-  override fun onDrawerClosed() {
+  private fun onDrawerClosed() {
     val state = viewModel.state.value
     if (state is Loading || state is Failure) {
       toggleScrollingContent(false)
@@ -96,7 +94,6 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   }
   
   override fun onDestroyView() {
-    Timber.d("Logggging StatsFragment onDestroyView")
     super.onDestroyView()
     (statsMainInfoLoadingStub.background as? MainStatsInfoLoadingStub)?.release()
   }
@@ -185,50 +182,5 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     statsMainInfoLoadingStub.setLoadingDrawable(MainStatsInfoLoadingStub(requireContext()))
     statsTotalCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
     statsNewCasesLoadingStub.setLoadingDrawable(StatsGraphLoadingStub(requireContext()))
-  }
-  
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-    Timber.d("Logggging StatsFragment onAttach")
-  }
-  
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    Timber.d("Logggging StatsFragment onCreate")
-  }
-  
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    Timber.d("Logggging StatsFragment onCreateView")
-    return super.onCreateView(inflater, container, savedInstanceState)
-  }
-  
-  override fun onStart() {
-    super.onStart()
-    Timber.d("Logggging StatsFragment onStart")
-  }
-  
-  override fun onResume() {
-    super.onResume()
-    Timber.d("Logggging StatsFragment onResume")
-  }
-  
-  override fun onPause() {
-    super.onPause()
-    Timber.d("Logggging StatsFragment onPause")
-  }
-  
-  override fun onStop() {
-    super.onStop()
-    Timber.d("Logggging StatsFragment onStop")
-  }
-  
-  override fun onDestroy() {
-    super.onDestroy()
-    Timber.d("Logggging StatsFragment onDestroy")
-  }
-  
-  override fun onDetach() {
-    super.onDetach()
-    Timber.d("Logggging StatsFragment onDetach")
   }
 }

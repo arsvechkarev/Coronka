@@ -7,7 +7,7 @@ import core.Failure
 import core.Loading
 import core.NetworkAvailabilityNotifier
 import core.NetworkListener
-import core.Schedulers
+import core.rx.Schedulers
 
 class MapViewModel(
   private val mapInteractor: MapInteractor,

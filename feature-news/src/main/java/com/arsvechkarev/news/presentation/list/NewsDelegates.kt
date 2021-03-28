@@ -23,7 +23,7 @@ import base.views.newsitem.NewsItemViewApi23Plus
 import base.views.newsitem.NewsItemsUtils
 import com.arsvechkarev.news.R
 import com.arsvechkarev.news.presentation.AdditionalItem
-import com.arsvechkarev.recycler.delegate
+import com.arsvechkarev.recycler.listDelegate
 import com.arsvechkarev.viewdsl.Ints.dp
 import com.arsvechkarev.viewdsl.Size.Companion.MatchParent
 import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
@@ -50,7 +50,7 @@ fun newsItemDelegate(
   fragment: Fragment,
   imageLoader: ImageLoader,
   onNewsItemClicked: (NewsDifferentiableItem) -> Unit
-) = delegate<NewsDifferentiableItem> {
+) = listDelegate<NewsDifferentiableItem> {
   view(::buildNewsLayout)
   onInitViewHolder {
     itemView.onClick { onNewsItemClicked.invoke(item) }
@@ -68,14 +68,14 @@ fun newsItemDelegate(
   }
 }
 
-fun additionalItemDelegate(onRetryItemClicked: () -> Unit) = delegate<AdditionalItem> {
+fun additionalItemDelegate(onRetryItemClicked: () -> Unit) = listDelegate<AdditionalItem> {
   view { parent ->
     parent.withViewBuilder {
       FrameLayout(MatchParent, WrapContent) {
         padding(12.dp)
         child<LinearLayout>(WrapContent, WrapContent) {
           invisible()
-          tag(NewsAdapter.FailureLayout)
+          tag(NewsAdapter.LayoutFailure)
           orientation(LinearLayout.HORIZONTAL)
           layoutGravity(Gravity.CENTER)
           gravity(Gravity.CENTER)
@@ -103,18 +103,16 @@ fun additionalItemDelegate(onRetryItemClicked: () -> Unit) = delegate<Additional
   onInitViewHolder {
     itemView.childView(NewsAdapter.RetryButton).onClick {
       onRetryItemClicked.invoke()
-      itemView.childView(NewsAdapter.ProgressBar).visible()
-      itemView.childView(NewsAdapter.FailureLayout).invisible()
     }
   }
   onBind { itemView, element ->
     when (element.mode) {
       AdditionalItem.Mode.FAILURE -> {
-        itemView.childView(NewsAdapter.FailureLayout).visible()
+        itemView.childView(NewsAdapter.LayoutFailure).visible()
         itemView.childView(NewsAdapter.ProgressBar).invisible()
       }
       AdditionalItem.Mode.LOADING -> {
-        itemView.childView(NewsAdapter.FailureLayout).invisible()
+        itemView.childView(NewsAdapter.LayoutFailure).invisible()
         itemView.childView(NewsAdapter.ProgressBar).visible()
       }
     }

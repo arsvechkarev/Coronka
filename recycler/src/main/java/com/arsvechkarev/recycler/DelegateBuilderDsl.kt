@@ -8,7 +8,7 @@ import api.recycler.DifferentiableItem
 import api.recycler.DisplayableItem
 import kotlin.reflect.KClass
 
-inline fun <reified T : DifferentiableItem> delegate(
+inline fun <reified T : DifferentiableItem> listDelegate(
   block: DelegateBuilder<T>.() -> Unit
 ): DslListAdapterDelegate<T> {
   val builder = DelegateBuilder<T>().apply(block)

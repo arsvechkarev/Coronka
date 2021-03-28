@@ -2,8 +2,8 @@ package com.arsvechkarev.news
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.arsvechkarev.news.presentation.FailureLoadingNextPage
+import com.arsvechkarev.news.presentation.LoadedNewNews
 import com.arsvechkarev.news.presentation.LoadedNews
-import com.arsvechkarev.news.presentation.LoadedNextPage
 import com.arsvechkarev.news.presentation.LoadingNextPage
 import com.arsvechkarev.news.presentation.NewsViewModel
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
@@ -139,12 +139,13 @@ class NewsViewModelTest {
       hasStateAtPosition<Loading>(0)
       hasStateAtPosition<LoadedNews>(1)
       hasStateAtPosition<LoadingNextPage>(2)
-      hasStateAtPosition<LoadedNextPage>(3)
-      
+      hasStateAtPosition<LoadedNewNews>(3)
+  
       val news = state<LoadedNews>(1).news
       assertArrayEquals(FakeNewsListPages[0].toTypedArray(), news.toTypedArray())
-      val newNews = state<LoadedNextPage>(3).newNews
-      assertArrayEquals(FakeNewsListPages[1].toTypedArray(), newNews.toTypedArray())
+      val newNews = state<LoadedNewNews>(3).news
+      val newList = FakeNewsListPages[0] + FakeNewsListPages[1]
+      assertArrayEquals(newList.toTypedArray(), newNews.toTypedArray())
     }
   }
   

@@ -7,8 +7,7 @@ import core.Failure
 import core.Loading
 import core.NetworkAvailabilityNotifier
 import core.NetworkListener
-import core.Schedulers
-import timber.log.Timber
+import core.rx.Schedulers
 
 class StatsViewModel(
   private val statsUseCase: StatsUseCase,
@@ -17,7 +16,6 @@ class StatsViewModel(
 ) : RxViewModel(), NetworkListener {
   
   init {
-    Timber.d("Logggging StatsViewModel initBlock, state=${state.value}")
     networkAvailabilityNotifier.registerListener(this)
   }
   
@@ -50,7 +48,6 @@ class StatsViewModel(
   }
   
   override fun onCleared() {
-    Timber.d("Logggging StatsViewModel onCleared")
     networkAvailabilityNotifier.unregisterListener(this)
   }
 }

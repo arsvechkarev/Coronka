@@ -1,13 +1,9 @@
 package com.arsvechkarev.news.presentation
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.view.Gravity.CENTER
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -24,6 +20,7 @@ import base.drawables.BaseLoadingStub.Companion.setLoadingDrawable
 import base.drawables.GradientHeaderDrawable
 import base.drawables.NewsListLoadingStub
 import base.extensions.getMessageRes
+import base.extensions.ifTrue
 import base.hostActivity
 import base.resources.Dimens.ErrorLayoutImageSize
 import base.resources.Dimens.ErrorLayoutTextPadding
@@ -35,12 +32,11 @@ import base.resources.TextSizes
 import base.views.RetryButton
 import com.arsvechkarev.news.R
 import com.arsvechkarev.news.di.NewsComponent
-import com.arsvechkarev.recycler.CallbackType
 import com.arsvechkarev.viewdsl.Size.Companion.MatchParent
 import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
 import com.arsvechkarev.viewdsl.Size.IntSize
-import com.arsvechkarev.viewdsl.animateInvisible
-import com.arsvechkarev.viewdsl.animateVisible
+import com.arsvechkarev.viewdsl.animateInvisibleIfNeeded
+import com.arsvechkarev.viewdsl.animateVisibleIfNeeded
 import com.arsvechkarev.viewdsl.background
 import com.arsvechkarev.viewdsl.behavior
 import com.arsvechkarev.viewdsl.gone
@@ -70,7 +66,7 @@ class NewsFragment : BaseFragment() {
   override fun buildLayout() = withViewBuilder {
     CoordinatorLayout(MatchParent, MatchParent) {
       child<View>(MatchParent, MatchParent) {
-        tag(LoadingLayout)
+        tag(LayoutLoading)
         behavior(ViewUnderHeaderBehavior())
         setLoadingDrawable(NewsListLoadingStub())
       }
@@ -149,11 +145,9 @@ class NewsFragment : BaseFragment() {
       model.startLoadingData()
     }
     hostActivity.enableTouchesOnDrawer()
-    Timber.d("Logggging NewsFragment onInit")
   }
   
   override fun onHiddenChanged(hidden: Boolean) {
-    Timber.d("Logggging NewsFragment onHiddenChanged $hidden")
     if (hidden) hostActivity.enableTouchesOnDrawer()
   }
   
@@ -169,42 +163,46 @@ class NewsFragment : BaseFragment() {
     when (state) {
       is Loading -> renderLoading()
       is LoadedNews -> renderLoadedNews(state)
-      is LoadingNextPage -> renderLoadingNextPage()
-      is LoadedNextPage -> renderLoadedNextPage(state)
-      is FailureLoadingNextPage -> renderFailureLoadingNextPage()
+      is LoadingNextPage -> renderLoadingNextPage(state)
+      is LoadedNewNews -> renderLoadedNewNews(state)
+      is FailureLoadingNextPage -> renderFailureLoadingNextPage(state)
       is Failure -> renderFailure(state)
     }
   }
   
   private fun renderLoading() {
-    view(LoadingLayout).animateVisible()
-    animateInvisible(view(RecyclerView), view(LayoutFailure))
+    showOnly(view(LayoutLoading))
   }
   
   private fun renderLoadedNews(state: LoadedNews) {
-    view(LoadingLayout).animateInvisible()
-    view(RecyclerView).animateVisible()
-    newsAdapter.submitList(state.news, CallbackType.TWO_LISTS)
+    showOnly(view(RecyclerView))
+    newsAdapter.submitList(state.news)
   }
   
-  private fun renderLoadingNextPage() {
-    view!!.post { // Posting in case recycler is currently computing layout
-      newsAdapter.setLastItemAsLoading()
+  private fun renderLoadingNextPage(state: LoadingNextPage) {
+    showOnly(view(RecyclerView))
+    requireView().post { // Posting in case recycler is currently computing layout
+      newsAdapter.submitList(state.list)
+      // Notifying last item changed, because it can be the same list with changed AdditionalItem
+      newsAdapter.notifyItemChanged(state.list.lastIndex)
     }
   }
   
-  private fun renderLoadedNextPage(state: LoadedNextPage) {
-    newsAdapter.removeLastAndAdd(state.newNews)
+  private fun renderLoadedNewNews(state: LoadedNewNews) {
+    showOnly(view(RecyclerView))
+    newsAdapter.submitList(state.news)
   }
   
-  private fun renderFailureLoadingNextPage() {
-    newsAdapter.setLastItemAsError()
+  private fun renderFailureLoadingNextPage(state: FailureLoadingNextPage) {
+    showOnly(view(RecyclerView))
+    newsAdapter.submitList(state.list)
+    // Notifying last item changed, because it can be the same list with changed AdditionalItem
+    newsAdapter.notifyItemChanged(state.list.lastIndex)
   }
   
   private fun renderFailure(state: Failure) {
-    Timber.e(state.throwable, "Error")
-    view(LoadingLayout).animateInvisible()
-    view(LayoutFailure).animateVisible()
+    showOnly(view(LayoutFailure))
+    Timber.e(state.throwable)
     textView(ErrorMessage).text(state.reason.getMessageRes())
     when (state.reason) {
       TIMEOUT, UNKNOWN -> imageView(ImageFailure).image(R.drawable.image_unknown_error)
@@ -212,59 +210,16 @@ class NewsFragment : BaseFragment() {
     }
   }
   
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-    Timber.d("Logggging NewsFragment onAttach")
-  }
-  
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    Timber.d("Logggging NewsFragment onCreate")
-  }
-  
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    Timber.d("Logggging NewsFragment onCreateView")
-    return super.onCreateView(inflater, container, savedInstanceState)
-  }
-  
-  override fun onStart() {
-    super.onStart()
-    Timber.d("Logggging NewsFragment onStart")
-  }
-  
-  override fun onResume() {
-    super.onResume()
-    Timber.d("Logggging NewsFragment onResume")
-  }
-  
-  override fun onPause() {
-    super.onPause()
-    Timber.d("Logggging NewsFragment onPause")
-  }
-  
-  override fun onStop() {
-    super.onStop()
-    Timber.d("Logggging NewsFragment onStop")
-  }
-  
-  override fun onDestroyView() {
-    super.onDestroyView()
-    Timber.d("Logggging NewsFragment onDestroyView")
-  }
-  
-  override fun onDestroy() {
-    super.onDestroy()
-    Timber.d("Logggging NewsFragment onDestroy")
-  }
-  
-  override fun onDetach() {
-    super.onDetach()
-    Timber.d("Logggging NewsFragment onDetach")
+  private fun showOnly(view: View) {
+    view(RecyclerView).ifTrue({ it !== view }, { animateInvisibleIfNeeded() })
+    view(LayoutFailure).ifTrue({ it !== view }, { animateInvisibleIfNeeded() })
+    view(LayoutLoading).ifTrue({ it !== view }, { animateInvisibleIfNeeded() })
+    view.animateVisibleIfNeeded()
   }
   
   companion object {
     
-    const val LoadingLayout = "NewsLoadingLayout"
+    const val LayoutLoading = "NewsLoadingLayout"
     const val LayoutFailure = "NewsErrorLayout"
     const val RecyclerView = "NewsRecyclerView"
     const val ImageFailure = "NewsImageFailure"

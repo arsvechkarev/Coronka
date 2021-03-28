@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import base.BaseFragment
 import base.Navigator
+import base.extensions.transaction
 import base.views.DrawerLayout
 import com.arsvechkarev.coronka.R
 import com.arsvechkarev.map.presentation.MapFragment
@@ -54,7 +55,6 @@ class MainNavigator(
     val transaction = fragmentManager.beginTransaction()
     val fragmentName = fragment.getNameForStack()
     if (currentFragment != null) {
-      drawerLayout.removeOpenCloseListener(currentFragment!!.drawerOpenCloseListener)
       transaction.hide(currentFragment!!)
       if (!fragment.isAdded) {
         stack.add(fragmentName)
@@ -71,7 +71,6 @@ class MainNavigator(
       stack.add(fragmentName)
       transaction.add(R.id.fragmentContainer, fragment, fragmentName)
     }
-    drawerLayout.addOpenCloseListener(fragment.drawerOpenCloseListener)
     transaction.commit()
     currentFragment = fragment
   }
@@ -89,31 +88,22 @@ class MainNavigator(
   }
   
   override fun allowBackPress(): Boolean {
-    println("qwerty stack = $stack")
-    println("qwerty currentFragment = $currentFragment")
     if (stack.isEmpty()) return true
     if (currentFragment?.allowBackPress() == true) {
       if (stack.size == 1) return true
       val fragmentManager = supportFragmentManager ?: return true
-      val last = fragmentManager.getFragmentByName(stack.removeLast())!!
-      println("qwerty last frag name = $last")
-      val newFragment = fragmentManager.getFragmentByName(stack.last()) ?: run {
-        println("qwerty last creating new fragment")
-        Class.forName(stack.last()).newInstance() as BaseFragment
-      }
-      println("qwerty newFragment = $newFragment")
-      println("qwerty newFragment.isAdded = ${newFragment.isAdded}")
+      val lastFragment = fragmentManager.getFragmentByName(stack.removeLast())!!
+      val newFragment = fragmentManager.getFragmentByName(stack.last())
+          ?: stack.last().toFragmentInstance()
       currentFragment = newFragment
       onFragmentAppeared(newFragment)
-      if (!newFragment.isAdded) {
-        fragmentManager.beginTransaction()
-            .add(R.id.fragmentContainer, newFragment, newFragment.getNameForStack())
-            .commit()
-      } else {
-        fragmentManager.beginTransaction()
-            .show(newFragment)
-            .hide(last)
-            .commit()
+      fragmentManager.transaction {
+        if (!newFragment.isAdded) {
+          add(R.id.fragmentContainer, newFragment, newFragment.getNameForStack())
+        } else {
+          show(newFragment)
+          hide(lastFragment)
+        }
       }
     }
     return false
@@ -129,6 +119,8 @@ class MainNavigator(
   }
   
   private fun Fragment.getNameForStack() = this::class.java.name
+  
+  private fun String.toFragmentInstance() = Class.forName(this).newInstance() as BaseFragment
   
   private fun FragmentManager.getFragmentByName(fragmentClassName: String): BaseFragment? {
     return fragments.find { it.getNameForStack() == fragmentClassName } as? BaseFragment

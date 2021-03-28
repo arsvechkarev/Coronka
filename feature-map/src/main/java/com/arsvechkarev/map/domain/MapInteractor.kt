@@ -5,12 +5,12 @@ import base.extensions.withRequestTimeout
 import base.extensions.withRetry
 import com.arsvechkarev.featurescommon.domain.CountriesDataSource
 import core.Mapper
-import core.Schedulers
 import core.model.data.CountriesWrapper
 import core.model.data.CountryEntity
 import core.model.data.Location
 import core.model.domain.Country
 import core.model.ui.CountryOnMapMetaInfo
+import core.rx.Schedulers
 import io.reactivex.Observable
 import io.reactivex.Single
 

@@ -18,7 +18,7 @@ interface NewsUseCase {
   /**
    * Returns list of [NewsItem] wrapped as [Maybe]
    */
-  fun requestLatestNews(page: Int): Maybe<List<NewsDifferentiableItem>>
+  fun requestNews(page: Int): Maybe<List<NewsDifferentiableItem>>
 }
 
 class DefaultNewsUseCase(
@@ -36,7 +36,7 @@ class DefaultNewsUseCase(
     "sort" to "newest",
   )
   
-  override fun requestLatestNews(page: Int): Maybe<List<NewsDifferentiableItem>> {
+  override fun requestNews(page: Int): Maybe<List<NewsDifferentiableItem>> {
     if (page > maxPagesCount) {
       return Maybe.empty()
     }

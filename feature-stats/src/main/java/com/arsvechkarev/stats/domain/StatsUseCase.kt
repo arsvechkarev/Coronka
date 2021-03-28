@@ -4,10 +4,10 @@ import base.extensions.withNetworkDelay
 import base.extensions.withRequestTimeout
 import base.extensions.withRetry
 import com.arsvechkarev.featurescommon.domain.WorldCasesInfoDataSource
-import core.Schedulers
 import core.model.data.GeneralInfo
 import core.model.data.MainStatistics
 import core.model.data.WorldCasesInfo
+import core.rx.Schedulers
 import io.reactivex.Observable
 import io.reactivex.Single
 

@@ -1,6 +1,6 @@
 package com.arsvechkarev.test
 
-import core.Schedulers
+import core.rx.Schedulers
 import io.reactivex.schedulers.Schedulers as RxSchedulers
 
 object FakeSchedulers : Schedulers {

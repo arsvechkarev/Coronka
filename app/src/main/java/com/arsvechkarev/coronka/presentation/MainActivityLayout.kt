@@ -27,6 +27,7 @@ import com.arsvechkarev.viewdsl.backgroundColor
 import com.arsvechkarev.viewdsl.backgroundGradient
 import com.arsvechkarev.viewdsl.drawables
 import com.arsvechkarev.viewdsl.gravity
+import com.arsvechkarev.viewdsl.id
 import com.arsvechkarev.viewdsl.image
 import com.arsvechkarev.viewdsl.margins
 import com.arsvechkarev.viewdsl.orientation
@@ -38,7 +39,9 @@ import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.textSize
 import com.arsvechkarev.viewdsl.withViewBuilder
 
-const val DrawerLayout = "DrawerLayout"
+private val DrawerLayoutId = View.generateViewId()
+
+const val DrawerLayoutTag = "DrawerLayout"
 const val DrawerGroupLinearLayout = "DrawerGroupLinearLayout"
 const val TextStatistics = "TextStatistics"
 const val TextNews = "TextNews"
@@ -48,7 +51,8 @@ const val TextTips = "TextTips"
 
 fun Context.buildMainActivityLayout() = withViewBuilder {
   DrawerLayout(context).apply {
-    tag(DrawerLayout)
+    id(DrawerLayoutId)
+    tag(DrawerLayoutTag)
     size(MatchParent, MatchParent)
     child<FrameLayout, LayoutParams>(MatchParent, MatchParent) {
       id = R.id.fragmentContainer

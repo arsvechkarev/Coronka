@@ -1,6 +1,6 @@
 package coreimpl
 
-import core.Schedulers
+import core.rx.Schedulers
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers as RxSchedulers

@@ -1,10 +1,12 @@
 package core.di
 
+/**
+ * Di component that provides feature-independent dependencies
+ */
 object CoreComponent {
   
   private lateinit var _coreModule: CoreModule
-  
-  val threader get() = _coreModule.threader
+  private lateinit var _drawerStateModule: DrawerStateModule
   
   val schedulers get() = _coreModule.schedulers
   
@@ -20,7 +22,15 @@ object CoreComponent {
   
   val gsonConverterFactory get() = _coreModule.gsonConverterFactory
   
-  fun initialize(coreModule: CoreModule) {
+  val drawerStateSendingChannel get() = _drawerStateModule.drawerStateSendingChannel
+  
+  val drawerStateReceivingChannel get() = _drawerStateModule.drawerStateReceivingChannel
+  
+  fun initialize(
+    coreModule: CoreModule,
+    drawerStateModule: DrawerStateModule
+  ) {
     _coreModule = coreModule
+    _drawerStateModule = drawerStateModule
   }
 }

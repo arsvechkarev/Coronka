@@ -13,13 +13,13 @@ import base.drawables.GradientHeaderDrawable
 import base.drawables.RankingsListLoadingStub
 import base.drawables.SelectedChipsLoadingStub
 import base.extensions.getMessageRes
+import base.extensions.subscribeToChannel
 import base.extensions.toFormattedDecimalNumber
 import base.extensions.toFormattedNumber
 import base.hostActivity
 import base.views.Chip
 import com.arsvechkarev.rankings.R
 import com.arsvechkarev.rankings.di.RankingsComponent
-import com.arsvechkarev.recycler.CallbackType
 import com.arsvechkarev.viewdsl.Size.Companion.WrapContent
 import com.arsvechkarev.viewdsl.animateInvisible
 import com.arsvechkarev.viewdsl.animateVisible
@@ -41,6 +41,7 @@ import core.FailureReason.NO_CONNECTION
 import core.FailureReason.TIMEOUT
 import core.FailureReason.UNKNOWN
 import core.Loading
+import core.di.CoreComponent
 import kotlinx.android.synthetic.main.fragment_rankings.chipAfrica
 import kotlinx.android.synthetic.main.fragment_rankings.chipAsia
 import kotlinx.android.synthetic.main.fragment_rankings.chipConfirmed
@@ -104,15 +105,14 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     setupDrawables()
     rankingsDialog.setPadding(0, requireContext().statusBarHeight, 0, 0)
     hostActivity.enableTouchesOnDrawer()
+    subscribeToChannel(CoreComponent.drawerStateReceivingChannel) { drawerState ->
+      toggleItems(enable = drawerState.isClosed)
+    }
   }
   
   override fun onHiddenChanged(hidden: Boolean) {
     if (hidden) hostActivity.enableTouchesOnDrawer()
   }
-  
-  override fun onDrawerOpened() = toggleItems(false)
-  
-  override fun onDrawerClosed() = toggleItems(true)
   
   override fun onOrientationBecameLandscape() {
     rankingsImageFailure.gone()
@@ -154,13 +154,13 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     stopLoadingStubs()
     animateVisible(rankingsRecyclerView, rankingsChipWorldRegion,
       rankingsChipOptionType, rankingsDivider)
-    adapter.submitList(state.list, CallbackType.ALWAYS_FALSE)
+    adapter.changeListAndScrollToTop(state.list)
   }
   
   private fun renderFiltered(state: FilteredCountries) {
     rankingsFabFilter.isClickable = true
     rankingsHeaderLayout.asHeader.animateScrollToTop(andThen = {
-      adapter.submitList(state.list, CallbackType.ALWAYS_FALSE)
+      adapter.changeListAndScrollToTop(state.list)
     })
   }
   

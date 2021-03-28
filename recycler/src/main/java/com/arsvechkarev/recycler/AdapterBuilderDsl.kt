@@ -10,7 +10,7 @@ fun adapter(block: AdapterBuilder.() -> Unit): RecyclerView.Adapter<RecyclerView
 
 class AdapterBuilder {
   
-  private val delegates = ArrayList<DslAdapterDelegate<DisplayableItem>>()
+  private val delegates = ArrayList<DslAdapterDelegate<out DisplayableItem>>()
   private val data = ArrayList<DisplayableItem>()
   
   fun <T : DisplayableItem> delegate(
@@ -26,7 +26,8 @@ class AdapterBuilder {
   }
   
   internal fun build(): RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    val adapter = object : Adapter(delegates) {}
+    val adapter = object : Adapter() {}
+    adapter.addDelegates(delegates)
     adapter.submitList(data)
     return adapter
   }

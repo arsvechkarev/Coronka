@@ -18,6 +18,7 @@ import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import core.di.CoreComponent
 import core.di.ModuleInterceptorManager.addInterceptorForModule
 import core.model.mappers.NewsItemsMapper
+import coreimpl.DefaultDrawerStateModule
 import coreimpl.EnglishDateTimeFormatter
 import coreimpl.ThreeTenAbpDateTimeCreator
 import org.junit.BeforeClass
@@ -40,7 +41,7 @@ class NewsTest {
       val coreModule = object : FakeCoreModule() {
         override val networkAvailabilityNotifier = fakeNetworkAvailabilityNotifier
       }
-      CoreComponent.initialize(coreModule)
+      CoreComponent.initialize(coreModule, DefaultDrawerStateModule)
       addInterceptorForModule<NewsModule> lb@{
         val context = InstrumentationRegistry.getInstrumentation().context
         val dateTimeFormatter = EnglishDateTimeFormatter(context, ThreeTenAbpDateTimeCreator)

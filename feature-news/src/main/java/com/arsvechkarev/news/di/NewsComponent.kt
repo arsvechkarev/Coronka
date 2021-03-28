@@ -19,8 +19,8 @@ object NewsComponent {
     onReadyToLoadNextPage: () -> Unit,
     onRetryItemClicked: () -> Unit,
   ): NewsAdapter {
-    return NewsAdapter(fragment, CoreComponent.imageLoader, CoreComponent.threader,
-      onNewsItemClicked, onReadyToLoadNextPage, onRetryItemClicked)
+    return NewsAdapter(fragment, CoreComponent.imageLoader, onNewsItemClicked,
+      onReadyToLoadNextPage, onRetryItemClicked)
   }
   
   fun provideViewModel(fragment: NewsFragment): NewsViewModel {

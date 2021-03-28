@@ -3,6 +3,8 @@ package base.views
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_CANCEL
@@ -25,6 +27,7 @@ import com.arsvechkarev.viewdsl.isOrientationPortrait
 import config.AnimationsConfigurator
 import kotlin.math.abs
 import kotlin.math.hypot
+
 
 class DrawerLayout @JvmOverloads constructor(
   context: Context,
@@ -57,6 +60,10 @@ class DrawerLayout @JvmOverloads constructor(
   
   var respondToTouches = true
   
+  init {
+    isSaveEnabled = true
+  }
+  
   fun addOpenCloseListener(listener: DrawerOpenCloseListener) {
     openCloseListeners.add(listener)
   }
@@ -71,21 +78,19 @@ class DrawerLayout @JvmOverloads constructor(
       drawerViewAnimator.duration = AnimationsConfigurator.DurationDefault
       drawerViewAnimator.setIntValues(drawerView.left, 0)
       drawerViewAnimator.doOnEnd {
-        openCloseListeners.forEach { it.onDrawerOpened() }
+        openCloseListeners.forEach(DrawerOpenCloseListener::onDrawerOpened)
       }
       drawerViewAnimator.start()
     }
   }
   
-  fun close(notifyListeners: Boolean = true, andThen: () -> Unit = {}) {
+  fun close(andThen: () -> Unit = {}) {
     currentState = CLOSED
     post {
       drawerViewAnimator.duration = AnimationsConfigurator.DurationDefault
       drawerViewAnimator.setIntValues(drawerView.left, -slideRange)
       drawerViewAnimator.doOnEnd {
-        if (notifyListeners) {
-          openCloseListeners.forEach { it.onDrawerClosed() }
-        }
+        openCloseListeners.forEach(DrawerOpenCloseListener::onDrawerClosed)
         andThen()
       }
       drawerViewAnimator.start()
@@ -211,6 +216,31 @@ class DrawerLayout @JvmOverloads constructor(
     return true
   }
   
+  override fun onSaveInstanceState(): Parcelable {
+    val savedState = SavedState(super.onSaveInstanceState())
+    savedState.isOpened = if (state == OPENED) 1 else 0
+    return savedState
+  }
+  
+  override fun onRestoreInstanceState(state: Parcelable?) {
+    val savedState = state as SavedState
+    super.onRestoreInstanceState(savedState.superState)
+    if (savedState.isOpened == 1) {
+      open()
+    } else {
+      close()
+    }
+  }
+  
+  private fun setStateWithoutAnimation(drawerState: DrawerState) {
+    when (drawerState) {
+      OPENED -> {
+        drawerView.left = 0
+      }
+      CLOSED -> drawerView.left = -slideRange
+    }
+  }
+  
   private fun onPointerUp(event: MotionEvent) {
     val actionIndex = event.actionIndex
     if (event.getPointerId(actionIndex) == activePointerId) {
@@ -331,14 +361,46 @@ class DrawerLayout @JvmOverloads constructor(
     OPENED, CLOSED;
   }
   
-  private companion object {
+  class SavedState : BaseSavedState {
+    
+    // 0 -> closed, 1 -> opened
+    var isOpened: Int = 0
+    
+    constructor(superState: Parcelable?) : super(superState)
+    
+    private constructor(parcel: Parcel) : super(parcel) {
+      isOpened = parcel.readInt()
+    }
+    
+    override fun writeToParcel(out: Parcel, flags: Int) {
+      super.writeToParcel(out, flags)
+      out.writeInt(isOpened)
+    }
+    
+    companion object {
+      
+      @JvmField
+      val CREATOR: Parcelable.Creator<SavedState?> = object : Parcelable.Creator<SavedState?> {
+        
+        override fun createFromParcel(parcel: Parcel): SavedState {
+          return SavedState(parcel)
+        }
+        
+        override fun newArray(size: Int): Array<SavedState?> {
+          return arrayOfNulls(size)
+        }
+      }
+    }
+  }
   
+  companion object {
+    
     const val PARALLAX_COEFFICIENT = 0.3f
     const val SHADOW_ALPHA_COEFFICIENT = 0.7f
     const val PORTRAIT_SLIDE_RANGE_COEFFICIENT = 0.85f
     const val LANDSCAPE_SLIDE_RANGE_COEFFICIENT = 0.6f
     const val FLING_VELOCITY_THRESHOLD = 0.18f
-  
+    
     const val TOUCH_SLOP_MULTIPLIER = 2
     const val INVALID_POINTER = -1
   }

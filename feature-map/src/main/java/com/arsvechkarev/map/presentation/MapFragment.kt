@@ -4,6 +4,7 @@ import android.view.ViewGroup.MarginLayoutParams
 import androidx.lifecycle.Observer
 import base.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import base.extensions.getMessageRes
+import base.extensions.subscribeToChannel
 import base.hostActivity
 import com.arsvechkarev.map.R
 import com.arsvechkarev.map.di.MapComponent
@@ -22,7 +23,8 @@ import core.FailureReason.NO_CONNECTION
 import core.FailureReason.TIMEOUT
 import core.FailureReason.UNKNOWN
 import core.Loading
-import core.di.CoreComponent.threader
+import core.di.CoreComponent.drawerStateReceivingChannel
+import core.di.CoreComponent.schedulers
 import core.model.ui.CountryOnMapMetaInfo
 import kotlinx.android.synthetic.main.fragment_map.mapEarthView
 import kotlinx.android.synthetic.main.fragment_map.mapIconDrawer
@@ -44,7 +46,7 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   private lateinit var viewModel: MapViewModel
   
   override fun onInit() {
-    mapHelper = MapHelper(requireContext(), mapView, ::onCountrySelected, threader)
+    mapHelper = MapHelper(requireContext(), mapView, ::onCountrySelected, schedulers)
     viewModel = MapComponent.provideViewModel(this).also { model ->
       model.state.observe(this, Observer(this::handleStateChanged))
       model.startLoadingData()
@@ -53,10 +55,20 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
     val statusBarHeight = requireContext().statusBarHeight
     (mapIconDrawer.layoutParams as MarginLayoutParams).topMargin += statusBarHeight
     hostActivity.disableTouchesOnDrawer()
+    subscribeToChannel(drawerStateReceivingChannel) { drawerState ->
+      if (drawerState.isClosed) hostActivity.disableTouchesOnDrawer()
+    }
+  }
+  
+  override fun onDestroyView() {
+    super.onDestroyView()
+    hostActivity.enableTouchesOnDrawer()
   }
   
   override fun onHiddenChanged(hidden: Boolean) {
-    if (!hidden) {
+    if (hidden) {
+      hostActivity.enableTouchesOnDrawer()
+    } else {
       hostActivity.disableTouchesOnDrawer()
     }
   }
@@ -69,10 +81,6 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   override fun onOrientationBecamePortrait() {
     mapEarthView.visible()
     mapImageFailure.visible()
-  }
-  
-  override fun onDrawerClosed() {
-    hostActivity.disableTouchesOnDrawer()
   }
   
   private fun handleStateChanged(state: BaseScreenState) {

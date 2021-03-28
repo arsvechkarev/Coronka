@@ -4,7 +4,6 @@ import api.recycler.DifferentiableItem
 import base.extensions.f
 import com.arsvechkarev.featurescommon.domain.CountriesDataSource
 import core.ResultHolder
-import core.Schedulers
 import core.fold
 import core.model.OptionType
 import core.model.WorldRegion
@@ -13,6 +12,7 @@ import core.model.domain.Country
 import core.model.mappers.CountryEntitiesToCountriesMapper
 import core.model.ui.CountryFullInfo
 import core.model.ui.DisplayableCountry
+import core.rx.Schedulers
 import io.reactivex.Observable
 import io.reactivex.Single
 

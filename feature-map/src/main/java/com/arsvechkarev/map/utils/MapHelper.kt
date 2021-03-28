@@ -1,19 +1,19 @@
 package com.arsvechkarev.map.utils
 
 import android.content.Context
-import api.threading.Threader
 import com.arsvechkarev.map.R
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import core.model.ui.CountryOnMapMetaInfo
+import core.rx.Schedulers
 
 class MapHelper(
   private val context: Context,
   mapView: MapView,
   private val onCountrySelected: (CountryOnMapMetaInfo) -> Unit,
-  private val threader: Threader
+  private val schedulers: Schedulers
 ) {
   
   private val mapHolder = MapHolder()
@@ -49,9 +49,9 @@ class MapHelper(
   
   private fun initMap(map: GoogleMap) {
     mapHolder.init(map)
-    threader.onIoThread {
+    schedulers.io().scheduleDirect {
       val loadRawResourceStyle = MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style)
-      threader.onMainThread {
+      schedulers.mainThread().scheduleDirect {
         map.setMapStyle(loadRawResourceStyle)
         map.uiSettings.isMapToolbarEnabled = false
         map.uiSettings.isRotateGesturesEnabled = false

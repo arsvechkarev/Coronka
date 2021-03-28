@@ -2,7 +2,6 @@ rootProject.name = "Coronka"
 include ':config'
 include ':api-core'
 include ':api-recycler'
-include ':api-threading'
 include ':base'
 include ':viewdsl'
 include ':recycler'

@@ -11,6 +11,7 @@ import base.BaseFragment
 import base.behaviors.BottomSheetBehavior
 import base.behaviors.BottomSheetBehavior.Companion.asBottomSheet
 import base.drawables.GradientHeaderDrawable
+import base.extensions.subscribeToChannel
 import base.hostActivity
 import base.resources.Colors
 import base.resources.Dimens.GradientHeaderHeight
@@ -59,6 +60,7 @@ import com.arsvechkarev.viewdsl.tag
 import com.arsvechkarev.viewdsl.text
 import com.arsvechkarev.viewdsl.textSize
 import com.arsvechkarev.viewdsl.withViewBuilder
+import core.di.CoreComponent
 
 class TipsFragment : BaseFragment() {
   
@@ -115,18 +117,13 @@ class TipsFragment : BaseFragment() {
       this.adapter = adapter
     }
     hostActivity.enableTouchesOnDrawer()
+    subscribeToChannel(CoreComponent.drawerStateReceivingChannel) { drawerState ->
+      view(RecyclerView).isEnabled = drawerState.isClosed
+    }
   }
   
   override fun onHiddenChanged(hidden: Boolean) {
     if (hidden) hostActivity.enableTouchesOnDrawer()
-  }
-  
-  override fun onDrawerOpened() {
-    view(RecyclerView).isEnabled = false
-  }
-  
-  override fun onDrawerClosed() {
-    view(RecyclerView).isEnabled = true
   }
   
   private fun mainHeaderLayout(): StaticDelegateBuilder<MainItem>.() -> Unit = {

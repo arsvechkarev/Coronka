@@ -39,7 +39,7 @@ class FakeNewsUseCase(
   
   override val maxPagesCount: Int = 4
   
-  override fun requestLatestNews(page: Int) = Maybe.create<List<NewsDifferentiableItem>> { emitter ->
+  override fun requestNews(page: Int) = Maybe.create<List<NewsDifferentiableItem>> { emitter ->
     if (nextThrowable != null) {
       emitter.onError(nextThrowable!!)
       nextThrowable = null

@@ -39,6 +39,20 @@ fun Animator.doOnEnd(block: () -> Unit) {
   })
 }
 
+fun View.animateVisibleIfNeeded() {
+  if (visibility == View.VISIBLE) {
+    return
+  }
+  animateVisible()
+}
+
+fun View.animateInvisibleIfNeeded() {
+  if (visibility == View.INVISIBLE) {
+    return
+  }
+  animateInvisible()
+}
+
 fun View.animateVisible(andThen: () -> Unit = {}) {
   alpha = 0f
   visible()

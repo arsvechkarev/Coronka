@@ -9,7 +9,6 @@ android {
 }
 
 dependencies {
-  implementation project(":api-threading")
   implementation project(":api-recycler")
 
   def dependencies = rootProject.ext.applicationDependencies
