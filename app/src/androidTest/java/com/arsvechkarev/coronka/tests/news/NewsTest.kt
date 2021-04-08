@@ -14,6 +14,7 @@ import com.arsvechkarev.coronka.screens.DrawerScreen
 import com.arsvechkarev.coronka.screens.NewsScreen
 import com.arsvechkarev.coronka.screens.StatsScreen
 import com.arsvechkarev.news.di.NewsModule
+import com.arsvechkarev.test.FakeNetworkAvailabilityModule
 import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import core.di.CoreComponent
 import core.di.ModuleInterceptorManager.addInterceptorForModule
@@ -38,12 +39,11 @@ class NewsTest {
     @JvmStatic
     fun setup() {
       configureDurationsAndDelaysForTests()
-      val coreModule = object : FakeCoreModule() {
-        override val networkAvailabilityNotifier = fakeNetworkAvailabilityNotifier
-      }
-      CoreComponent.initialize(coreModule, DefaultDrawerStateModule)
+      val networkAvailabilityModule = FakeNetworkAvailabilityModule(fakeNetworkAvailabilityNotifier)
+      CoreComponent.initialize(FakeCoreModule(), DefaultDrawerStateModule,
+        networkAvailabilityModule)
       addInterceptorForModule<NewsModule> lb@{
-        val context = InstrumentationRegistry.getInstrumentation().context
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
         val dateTimeFormatter = EnglishDateTimeFormatter(context, ThreeTenAbpDateTimeCreator)
         return@lb FakeNewsModule(NewsItemsMapper(dateTimeFormatter))
       }

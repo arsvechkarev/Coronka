@@ -24,6 +24,7 @@ import core.FailureReason.TIMEOUT
 import core.FailureReason.UNKNOWN
 import core.Loading
 import core.di.CoreComponent.drawerStateReceivingChannel
+import core.di.CoreComponent.networkAvailabilityChannel
 import core.di.CoreComponent.schedulers
 import core.model.ui.CountryOnMapMetaInfo
 import kotlinx.android.synthetic.main.fragment_map.mapEarthView
@@ -47,7 +48,7 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
   
   override fun onInit() {
     mapHelper = MapHelper(requireContext(), mapView, ::onCountrySelected, schedulers)
-    viewModel = MapComponent.provideViewModel(this).also { model ->
+    viewModel = MapComponent.getViewModel(this).also { model ->
       model.state.observe(this, Observer(this::handleStateChanged))
       model.startLoadingData()
     }
@@ -58,6 +59,7 @@ class MapFragment : BaseMapFragment(R.layout.fragment_map) {
     subscribeToChannel(drawerStateReceivingChannel) { drawerState ->
       if (drawerState.isClosed) hostActivity.disableTouchesOnDrawer()
     }
+    subscribeToChannel(networkAvailabilityChannel) { viewModel.onNetworkAvailable() }
   }
   
   override fun onDestroyView() {

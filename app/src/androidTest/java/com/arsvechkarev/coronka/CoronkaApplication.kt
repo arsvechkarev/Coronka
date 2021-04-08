@@ -5,6 +5,7 @@ import com.arsvechkarev.featurescommon.di.CommonFeaturesComponent
 import com.arsvechkarev.featurescommon.di.CommonFeaturesModuleImpl
 import core.di.CoreComponent
 import coreimpl.DefaultDrawerStateModule
+import coreimpl.DefaultNetworkAvailabilityModule
 import timber.log.Timber
 
 class CoronkaApplication : CoronkaBaseApplication() {
@@ -17,7 +18,8 @@ class CoronkaApplication : CoronkaBaseApplication() {
   override fun initializeDiComponents() {
     val fakeCoreModule = FakeCoreModule()
     val commonFeaturesModule = CommonFeaturesModuleImpl(fakeCoreModule)
-    CoreComponent.initialize(fakeCoreModule, DefaultDrawerStateModule)
+    val networkAvailabilityModule = DefaultNetworkAvailabilityModule(this)
+    CoreComponent.initialize(fakeCoreModule, DefaultDrawerStateModule, networkAvailabilityModule)
     CommonFeaturesComponent.initialize(commonFeaturesModule)
   }
 }

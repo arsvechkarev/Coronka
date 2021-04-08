@@ -21,6 +21,7 @@ import base.drawables.GradientHeaderDrawable
 import base.drawables.NewsListLoadingStub
 import base.extensions.getMessageRes
 import base.extensions.ifTrue
+import base.extensions.subscribeToChannel
 import base.hostActivity
 import base.resources.Dimens.ErrorLayoutImageSize
 import base.resources.Dimens.ErrorLayoutTextPadding
@@ -59,6 +60,7 @@ import core.FailureReason.NO_CONNECTION
 import core.FailureReason.TIMEOUT
 import core.FailureReason.UNKNOWN
 import core.Loading
+import core.di.CoreComponent.networkAvailabilityChannel
 import timber.log.Timber
 
 class NewsFragment : BaseFragment() {
@@ -145,6 +147,7 @@ class NewsFragment : BaseFragment() {
       model.startLoadingData()
     }
     hostActivity.enableTouchesOnDrawer()
+    subscribeToChannel(networkAvailabilityChannel) { viewModel.onNetworkAvailable() }
   }
   
   override fun onHiddenChanged(hidden: Boolean) {

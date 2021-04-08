@@ -12,29 +12,14 @@ import com.arsvechkarev.news.presentation.AdditionalItem.Mode.LOADING
 import core.BaseScreenState
 import core.Failure
 import core.Loading
-import core.NetworkAvailabilityNotifier
-import core.NetworkListener
 import core.rx.Schedulers
 
 class NewsViewModel(
   private val newsUseCase: NewsUseCase,
-  private val networkAvailabilityNotifier: NetworkAvailabilityNotifier,
   private val schedulers: Schedulers
-) : RxViewModel(), NetworkListener {
+) : RxViewModel() {
   
   private var currentPage = 0
-  
-  init {
-    networkAvailabilityNotifier.registerListener(this)
-  }
-  
-  override fun onNetworkAvailable() {
-    if (_state.value is FailureLoadingNextPage) {
-      schedulers.mainThread().scheduleDirect(::retryLoadingNextPage)
-    } else if (_state.value is Failure) {
-      schedulers.mainThread().scheduleDirect(::retryLoadingData)
-    }
-  }
   
   override fun isItemLoading(item: Any?): Boolean {
     return item is Loading || item is LoadingNextPage
@@ -61,6 +46,14 @@ class NewsViewModel(
   fun retryLoadingNextPage() {
     when (val value = state.value) {
       is FailureLoadingNextPage -> performLoadingNextPage(value.list)
+    }
+  }
+  
+  fun onNetworkAvailable() {
+    if (_state.value is FailureLoadingNextPage) {
+      retryLoadingNextPage()
+    } else if (_state.value is Failure) {
+      retryLoadingData()
     }
   }
   
@@ -119,9 +112,5 @@ class NewsViewModel(
     } else {
       return this + AdditionalItem(mode)
     }
-  }
-  
-  override fun onCleared() {
-    networkAvailabilityNotifier.unregisterListener(this)
   }
 }

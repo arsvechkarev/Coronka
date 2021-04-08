@@ -10,7 +10,6 @@ import com.arsvechkarev.rankings.presentation.RankingsViewModel.Companion.Defaul
 import com.arsvechkarev.rankings.presentation.Success
 import com.arsvechkarev.test.FakeCountries
 import com.arsvechkarev.test.FakeCountriesDataSource
-import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.test.FakeSchedulers
 import com.arsvechkarev.test.FakeScreenStateObserver
 import com.arsvechkarev.test.currentState
@@ -145,11 +144,9 @@ class RankingsViewModelTest {
   @Test
   fun `Testing network availability callback`() {
     val countriesFilterer = CountriesFilterer()
-    val notifier = FakeNetworkAvailabilityNotifier()
     val viewModel = createViewModel(
       totalRetryCount = maxRetryCount + 1,
       error = UnknownHostException(),
-      notifier = notifier
     )
     val observer = createObserver()
   
@@ -158,7 +155,7 @@ class RankingsViewModelTest {
     )
     viewModel.state.observeForever(observer)
     viewModel.startLoadingData()
-    notifier.notifyNetworkAvailable()
+    viewModel.onNetworkAvailable()
     
     with(observer) {
       hasStatesCount(4)
@@ -228,7 +225,6 @@ class RankingsViewModelTest {
     totalRetryCount: Int = 0,
     error: Throwable = Throwable(),
     countriesFilterer: CountriesFilterer = CountriesFilterer(),
-    notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
   ): RankingsViewModel {
     val fakeCountriesDataSource = FakeCountriesDataSource(totalRetryCount, errorFactory = { error })
     val fakeCountriesMetaInfoDataSource = FakeCountriesMetaInfoDataSource()
@@ -237,7 +233,6 @@ class RankingsViewModelTest {
         fakeCountriesDataSource, fakeCountriesMetaInfoDataSource, countriesFilterer,
         CountryEntitiesToCountriesMapper(), FakeSchedulers
       ),
-      notifier,
       FakeSchedulers
     )
   }

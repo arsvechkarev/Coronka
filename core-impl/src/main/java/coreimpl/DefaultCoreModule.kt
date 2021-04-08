@@ -1,7 +1,6 @@
 package coreimpl
 
 import android.content.Context
-import android.net.ConnectivityManager
 import core.di.CoreModule
 import okhttp3.OkHttpClient
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -13,9 +12,6 @@ class DefaultCoreModule(applicationContext: Context) : CoreModule {
   override val schedulers = AndroidSchedulers
   
   override val databaseCreator = AssetsDatabaseCreator(applicationContext)
-  
-  override val networkAvailabilityNotifier = AndroidNetworkAvailabilityNotifier(
-    applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
   
   override val okHttpClient: OkHttpClient = OkHttpClient.Builder()
       .callTimeout(20, TimeUnit.SECONDS)

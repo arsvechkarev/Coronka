@@ -7,10 +7,15 @@ object CoreComponent {
   
   private lateinit var _coreModule: CoreModule
   private lateinit var _drawerStateModule: DrawerStateModule
+  private lateinit var _networkAvailabilityModule: NetworkAvailabilityModule
   
   val schedulers get() = _coreModule.schedulers
   
-  val networkAvailabilityNotifier get() = _coreModule.networkAvailabilityNotifier
+  val networkAvailabilityChannel get() = _networkAvailabilityModule.networkAvailabilityChannel
+  
+  val networkAvailabilitySendingChannel get() = _networkAvailabilityModule.networkAvailabilitySendingChannel
+  
+  val networkAvailabilityNotifier get() = _networkAvailabilityModule.networkAvailabilityNotifier
   
   val okHttpClient get() = _coreModule.okHttpClient
   
@@ -28,9 +33,11 @@ object CoreComponent {
   
   fun initialize(
     coreModule: CoreModule,
-    drawerStateModule: DrawerStateModule
+    drawerStateModule: DrawerStateModule,
+    networkAvailabilityModule: NetworkAvailabilityModule
   ) {
     _coreModule = coreModule
     _drawerStateModule = drawerStateModule
+    _networkAvailabilityModule = networkAvailabilityModule
   }
 }

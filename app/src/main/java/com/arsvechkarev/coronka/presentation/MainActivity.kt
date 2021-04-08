@@ -16,7 +16,7 @@ import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.stats.presentation.StatsFragment
 import com.arsvechkarev.tips.presentation.TipsFragment
 import com.arsvechkarev.viewdsl.Densities
-import core.di.CoreComponent.drawerStateSendingChannel
+import core.di.CoreComponent.networkAvailabilityNotifier
 
 class MainActivity : BaseActivity(), HostActivity {
   
@@ -32,6 +32,7 @@ class MainActivity : BaseActivity(), HostActivity {
     Colors.init(this)
     setupViews()
     initListeners()
+    initObservers()
     navigator.initializeWithState(savedInstanceState)
   }
   
@@ -67,8 +68,6 @@ class MainActivity : BaseActivity(), HostActivity {
     window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
     setContentView(buildMainActivityLayout())
-    val listener = DrawerLayoutStateListener(drawerStateSendingChannel)
-    viewAs<DrawerLayout>(DrawerLayoutTag).addOpenCloseListener(listener)
   }
   
   private fun initListeners() {
@@ -82,6 +81,11 @@ class MainActivity : BaseActivity(), HostActivity {
     view(TextMap).setOnClickListener(onDrawerItemClick)
     view(TextRankings).setOnClickListener(onDrawerItemClick)
     view(TextTips).setOnClickListener(onDrawerItemClick)
+  }
+  
+  private fun initObservers() {
+    lifecycle.addObserver(DrawerLayoutStateObserver(viewAs(DrawerLayoutTag)))
+    lifecycle.addObserver(NetworkAvailabilityObserver(networkAvailabilityNotifier))
   }
   
   private fun setSelectedMenuItem(fragment: Fragment) {

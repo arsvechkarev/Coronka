@@ -24,6 +24,7 @@ ext {
       threeTenAbp          : "com.jakewharton.threetenabp:threetenabp:1.2.4",
       googleServicesAuth   : "com.google.android.gms:play-services-auth:18.1.0",
       flexboxLayout        : "com.google.android:flexbox:2.0.1",
+      leakcanary           : "com.squareup.leakcanary:leakcanary-android:2.7",
   ]
 
 

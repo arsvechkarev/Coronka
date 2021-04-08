@@ -5,25 +5,12 @@ import com.arsvechkarev.map.domain.MapInteractor
 import core.BaseScreenState
 import core.Failure
 import core.Loading
-import core.NetworkAvailabilityNotifier
-import core.NetworkListener
 import core.rx.Schedulers
 
 class MapViewModel(
   private val mapInteractor: MapInteractor,
-  private val networkAvailabilityNotifier: NetworkAvailabilityNotifier,
   private val schedulers: Schedulers
-) : RxViewModel(), NetworkListener {
-  
-  init {
-    networkAvailabilityNotifier.registerListener(this)
-  }
-  
-  override fun onNetworkAvailable() {
-    if (_state.value is Failure) {
-      schedulers.mainThread().scheduleDirect(::retryLoadingData)
-    }
-  }
+) : RxViewModel() {
   
   fun startLoadingData() {
     if (state.value != null) return
@@ -33,6 +20,10 @@ class MapViewModel(
   fun retryLoadingData() {
     if (state.value !is Failure) return
     performLoadingData()
+  }
+  
+  fun onNetworkAvailable() {
+    if (_state.value is Failure) retryLoadingData()
   }
   
   private fun performLoadingData() {
@@ -52,9 +43,5 @@ class MapViewModel(
       is LoadedCountries -> _state.value = FoundCountry(state.iso2ToCountryMapMetaInfo, country)
       is FoundCountry -> _state.value = FoundCountry(state.iso2ToCountryMapMetaInfo, country)
     }
-  }
-  
-  override fun onCleared() {
-    networkAvailabilityNotifier.unregisterListener(this)
   }
 }

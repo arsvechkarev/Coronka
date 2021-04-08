@@ -49,6 +49,7 @@ import core.FailureReason.TIMEOUT
 import core.FailureReason.UNKNOWN
 import core.Loading
 import core.di.CoreComponent.drawerStateReceivingChannel
+import core.di.CoreComponent.networkAvailabilityChannel
 import core.model.OptionType
 import core.model.WorldRegion
 import core.model.ui.CountryFullInfo
@@ -126,6 +127,7 @@ class RankingsFragment : BaseFragment(R.layout.fragment_rankings) {
     subscribeToChannel(drawerStateReceivingChannel) { drawerState ->
       toggleClickableItems(enable = drawerState.isClosed)
     }
+    subscribeToChannel(networkAvailabilityChannel) { viewModel.onNetworkAvailable() }
   }
   
   override fun onHiddenChanged(hidden: Boolean) {

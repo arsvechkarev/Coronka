@@ -5,25 +5,12 @@ import com.arsvechkarev.stats.domain.StatsUseCase
 import core.BaseScreenState
 import core.Failure
 import core.Loading
-import core.NetworkAvailabilityNotifier
-import core.NetworkListener
 import core.rx.Schedulers
 
 class StatsViewModel(
   private val statsUseCase: StatsUseCase,
-  private val networkAvailabilityNotifier: NetworkAvailabilityNotifier,
   private val schedulers: Schedulers
-) : RxViewModel(), NetworkListener {
-  
-  init {
-    networkAvailabilityNotifier.registerListener(this)
-  }
-  
-  override fun onNetworkAvailable() {
-    if (_state.value is Failure) {
-      schedulers.mainThread().scheduleDirect(::retryLoadingData)
-    }
-  }
+) : RxViewModel() {
   
   fun startLoadingData() {
     if (state.value != null) return
@@ -33,6 +20,10 @@ class StatsViewModel(
   fun retryLoadingData() {
     if (state.value !is Failure) return
     performLoadingData()
+  }
+  
+  fun onNetworkAvailable() {
+    if (_state.value is Failure) retryLoadingData()
   }
   
   private fun performLoadingData() {
@@ -45,9 +36,5 @@ class StatsViewModel(
           .observeOn(schedulers.mainThread())
           .smartSubscribe(_state::setValue)
     }
-  }
-  
-  override fun onCleared() {
-    networkAvailabilityNotifier.unregisterListener(this)
   }
 }

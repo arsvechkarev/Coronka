@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.arsvechkarev.stats.domain.StatsUseCase
 import com.arsvechkarev.stats.presentation.LoadedMainStatistics
 import com.arsvechkarev.stats.presentation.StatsViewModel
-import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.test.FakeNewDailyCases
 import com.arsvechkarev.test.FakeSchedulers
 import com.arsvechkarev.test.FakeScreenStateObserver
@@ -107,17 +106,15 @@ class StatsViewModelTest {
   
   @Test
   fun `Testing network availability callback`() {
-    val notifier = FakeNetworkAvailabilityNotifier()
     val viewModel = createViewModel(
       totalRetryCount = maxRetryCount + 1,
       error = UnknownHostException(),
-      notifier
     )
     val observer = createObserver()
     
     viewModel.state.observeForever(observer)
     viewModel.startLoadingData()
-    notifier.notifyNetworkAvailable()
+    viewModel.onNetworkAvailable()
     
     with(observer) {
       hasStatesCount(4)
@@ -136,12 +133,11 @@ class StatsViewModelTest {
   private fun createViewModel(
     totalRetryCount: Int = 0,
     error: Throwable = Throwable(),
-    notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier()
   ): StatsViewModel {
     val generalInfoDataSource = FakeGeneralInfoDataSource(totalRetryCount, errorFactory = { error })
     val fakeStatsUseCase = StatsUseCase(generalInfoDataSource,
       FakeWorldCasesInfoDataSource(), FakeSchedulers)
-    return StatsViewModel(fakeStatsUseCase, notifier, FakeSchedulers)
+    return StatsViewModel(fakeStatsUseCase, FakeSchedulers)
   }
   
   private fun createObserver(): FakeScreenStateObserver {

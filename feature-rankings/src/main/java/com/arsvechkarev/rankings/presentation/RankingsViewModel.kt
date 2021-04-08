@@ -9,8 +9,6 @@ import com.arsvechkarev.rankings.domain.RankingsInteractor
 import core.BaseScreenState
 import core.Failure
 import core.Loading
-import core.NetworkAvailabilityNotifier
-import core.NetworkListener
 import core.markAsOld
 import core.model.OptionType
 import core.model.WorldRegion
@@ -20,19 +18,8 @@ import core.rx.Schedulers
 
 class RankingsViewModel(
   private val rankingsInteractor: RankingsInteractor,
-  private val networkAvailabilityNotifier: NetworkAvailabilityNotifier,
   private val schedulers: Schedulers
-) : RxViewModel(), NetworkListener {
-  
-  init {
-    networkAvailabilityNotifier.registerListener(this)
-  }
-  
-  override fun onNetworkAvailable() {
-    if (_state.value is Failure) {
-      schedulers.mainThread().scheduleDirect(::retryLoadingData)
-    }
-  }
+) : RxViewModel() {
   
   fun startLoadingData() {
     if (state.value != null) return
@@ -78,6 +65,10 @@ class RankingsViewModel(
   
   fun onNewWorldRegionSelected(worldRegion: WorldRegion) {
     filter(worldRegion, currentSuccessState().optionType)
+  }
+  
+  fun onNetworkAvailable() {
+    if (_state.value is Failure) retryLoadingData()
   }
   
   fun onDestroy() {
@@ -150,10 +141,6 @@ class RankingsViewModel(
   }
   
   private fun currentSuccessState() = state.value as Success
-  
-  override fun onCleared() {
-    networkAvailabilityNotifier.unregisterListener(this)
-  }
   
   companion object {
     

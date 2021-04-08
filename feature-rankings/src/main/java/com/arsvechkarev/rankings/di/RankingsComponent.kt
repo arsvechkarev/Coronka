@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.arsvechkarev.rankings.presentation.RankingsAdapter
 import com.arsvechkarev.rankings.presentation.RankingsFragment
 import com.arsvechkarev.rankings.presentation.RankingsViewModel
-import core.di.CoreComponent.networkAvailabilityNotifier
 import core.di.CoreComponent.schedulers
 import core.di.ModuleInterceptorManager.interceptModuleOrDefault
 import core.model.ui.DisplayableCountry
@@ -24,9 +23,7 @@ object RankingsComponent {
   private val rankingsViewModelFactory = object : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
       val rankingsModule = interceptModuleOrDefault<RankingsModule> { DefaultRankingsModule }
-      return RankingsViewModel(
-        rankingsModule.rankingsInteractor, networkAvailabilityNotifier, schedulers
-      ) as T
+      return RankingsViewModel(rankingsModule.rankingsInteractor, schedulers) as T
     }
   }
 }

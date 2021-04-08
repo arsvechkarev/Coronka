@@ -2,20 +2,28 @@ package com.arsvechkarev.test
 
 import core.NetworkAvailabilityNotifier
 import core.NetworkListener
+import core.di.NetworkAvailabilityModule
+import core.rx.RxSubjectChannel
+import io.reactivex.subjects.PublishSubject
 
 class FakeNetworkAvailabilityNotifier : NetworkAvailabilityNotifier {
   
-  private val listeners = ArrayList<NetworkListener>()
+  val channel = RxSubjectChannel<Unit>(PublishSubject.create())
   
   fun notifyNetworkAvailable() {
-    listeners.forEach(NetworkListener::onNetworkAvailable)
+    channel.send(Unit)
   }
   
-  override fun registerListener(listener: NetworkListener) {
-    listeners.add(listener)
-  }
+  override fun registerListener(listener: NetworkListener) = Unit
   
-  override fun unregisterListener(listener: NetworkListener) {
-    listeners.remove(listener)
-  }
+  override fun unregisterListener(listener: NetworkListener) = Unit
+}
+
+class FakeNetworkAvailabilityModule(
+  notifier: FakeNetworkAvailabilityNotifier
+) : NetworkAvailabilityModule {
+  
+  override val networkAvailabilitySendingChannel = notifier.channel
+  override val networkAvailabilityChannel = notifier.channel
+  override val networkAvailabilityNotifier = notifier
 }

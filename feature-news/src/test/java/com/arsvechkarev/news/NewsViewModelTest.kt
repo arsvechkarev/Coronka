@@ -6,7 +6,6 @@ import com.arsvechkarev.news.presentation.LoadedNewNews
 import com.arsvechkarev.news.presentation.LoadedNews
 import com.arsvechkarev.news.presentation.LoadingNextPage
 import com.arsvechkarev.news.presentation.NewsViewModel
-import com.arsvechkarev.test.FakeNetworkAvailabilityNotifier
 import com.arsvechkarev.test.FakeSchedulers
 import com.arsvechkarev.test.FakeScreenStateObserver
 import com.arsvechkarev.test.currentState
@@ -102,17 +101,15 @@ class NewsViewModelTest {
   
   @Test
   fun `Testing network availability callback`() {
-    val notifier = FakeNetworkAvailabilityNotifier()
     val viewModel = createViewModel(
       totalRetryCount = maxRetryCount + 1,
       error = UnknownHostException(),
-      notifier
     )
     val observer = createObserver()
     
     viewModel.state.observeForever(observer)
     viewModel.startLoadingData()
-    notifier.notifyNetworkAvailable()
+    viewModel.onNetworkAvailable()
     
     with(observer) {
       hasStatesCount(4)
@@ -152,8 +149,7 @@ class NewsViewModelTest {
   @Test
   fun `Testing paging errors`() {
     val fakeNewYorkTimesUseCase = FakeNewsUseCase()
-    val viewModel = NewsViewModel(fakeNewYorkTimesUseCase,
-      FakeNetworkAvailabilityNotifier(), FakeSchedulers)
+    val viewModel = NewsViewModel(fakeNewYorkTimesUseCase, FakeSchedulers)
     val observer = createObserver()
   
     viewModel.state.observeForever(observer)
@@ -177,7 +173,6 @@ class NewsViewModelTest {
   private fun createViewModel(
     totalRetryCount: Int = 0,
     error: Throwable = Throwable(),
-    notifier: FakeNetworkAvailabilityNotifier = FakeNetworkAvailabilityNotifier(),
     newsDataSource: FakeNewsUseCase = FakeNewsUseCase(
       totalRetryCount = totalRetryCount,
       errorFactory = { error }
@@ -185,7 +180,6 @@ class NewsViewModelTest {
   ): NewsViewModel {
     return NewsViewModel(
       newsDataSource,
-      notifier,
       FakeSchedulers
     )
   }

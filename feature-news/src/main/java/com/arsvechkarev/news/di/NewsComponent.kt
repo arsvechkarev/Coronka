@@ -6,7 +6,6 @@ import com.arsvechkarev.news.presentation.NewsFragment
 import com.arsvechkarev.news.presentation.NewsViewModel
 import com.arsvechkarev.news.presentation.list.NewsAdapter
 import core.di.CoreComponent
-import core.di.CoreComponent.networkAvailabilityNotifier
 import core.di.CoreComponent.schedulers
 import core.di.ModuleInterceptorManager.interceptModuleOrDefault
 import core.model.ui.NewsDifferentiableItem
@@ -31,7 +30,7 @@ object NewsComponent {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
       val module = interceptModuleOrDefault<NewsModule> { DefaultNewsModule }
       @Suppress("UNCHECKED_CAST")
-      return NewsViewModel(module.newsUseCase, networkAvailabilityNotifier, schedulers) as T
+      return NewsViewModel(module.newsUseCase, schedulers) as T
     }
   }
 }

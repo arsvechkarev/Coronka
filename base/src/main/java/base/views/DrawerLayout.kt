@@ -28,7 +28,6 @@ import config.AnimationsConfigurator
 import kotlin.math.abs
 import kotlin.math.hypot
 
-
 class DrawerLayout @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,

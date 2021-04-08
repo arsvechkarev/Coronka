@@ -10,6 +10,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import core.di.CoreComponent
 import coreimpl.DefaultCoreModule
 import coreimpl.DefaultDrawerStateModule
+import coreimpl.DefaultNetworkAvailabilityModule
 
 open class CoronkaBaseApplication : Application() {
   
@@ -25,7 +26,8 @@ open class CoronkaBaseApplication : Application() {
   open fun initializeDiComponents() {
     val coreModule = DefaultCoreModule(applicationContext)
     val commonFeaturesModule = CommonFeaturesModuleImpl(coreModule)
-    CoreComponent.initialize(coreModule, DefaultDrawerStateModule)
+    val networkAvailabilityModule = DefaultNetworkAvailabilityModule(this)
+    CoreComponent.initialize(coreModule, DefaultDrawerStateModule, networkAvailabilityModule)
     CommonFeaturesComponent.initialize(commonFeaturesModule)
   }
 }

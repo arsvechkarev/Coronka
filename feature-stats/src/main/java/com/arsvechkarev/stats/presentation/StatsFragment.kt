@@ -32,6 +32,7 @@ import core.FailureReason.TIMEOUT
 import core.FailureReason.UNKNOWN
 import core.Loading
 import core.di.CoreComponent.drawerStateReceivingChannel
+import core.di.CoreComponent.networkAvailabilityChannel
 import core.model.data.GeneralInfo
 import core.model.data.MainStatistics
 import kotlinx.android.synthetic.main.fragment_stats.statsContentView
@@ -57,7 +58,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
   private lateinit var viewModel: StatsViewModel
   
   override fun onInit() {
-    viewModel = StatsComponent.provideViewModel(this).also { model ->
+    viewModel = StatsComponent.getViewModel(this).also { model ->
       model.state.observe(this, Observer(::handleState))
       model.startLoadingData()
     }
@@ -68,6 +69,7 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     subscribeToChannel(drawerStateReceivingChannel) { drawerState ->
       if (drawerState.isOpened) onDrawerOpened() else onDrawerClosed()
     }
+    subscribeToChannel(networkAvailabilityChannel) { viewModel.onNetworkAvailable() }
   }
   
   override fun onHiddenChanged(hidden: Boolean) {

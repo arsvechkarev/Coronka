@@ -3,18 +3,18 @@ package com.arsvechkarev.coronka.screens
 import com.agoda.kakao.common.views.KView
 import com.agoda.kakao.screen.Screen
 import com.arsvechkarev.coronka.customviews.KMyRecyclerView
-import com.arsvechkarev.coronka.withStringId
+import com.arsvechkarev.rankings.R
 
 class RankingsScreen : Screen<RankingsScreen>() {
   
-  val recyclerCountries = KMyRecyclerView { withStringId("rankingsRecyclerView") }
-  val fabFilter = KView { withStringId("rankingsFabFilter") }
-  val bottomSheet = KView { withStringId("rankingsBottomSheet") }
-  val bottomSheetCross = KView { withStringId("rankingsBottomSheetCross") }
+  val recyclerCountries = KMyRecyclerView { withId(R.id.rankingsRecyclerView) }
+  val fabFilter = KView { withId(R.id.rankingsFabFilter) }
+  val bottomSheet = KView { withId(R.id.rankingsFilterDialog) }
+  val bottomSheetCross = KView { withId(R.id.rankingsFilterDialogCross) }
   
-  val chipWorldwide = KView { withStringId("chipWorldwide") }
-  val chipEurope = KView { withStringId("chipEurope") }
+  val chipWorldwide = KView { withId(R.id.chipWorldwide) }
+  val chipEurope = KView { withId(R.id.chipEurope) }
   
-  val chipConfirmed = KView { withStringId("chipConfirmed") }
-  val chipRecovered = KView { withStringId("chipRecovered") }
+  val chipConfirmed = KView { withId(R.id.chipConfirmed) }
+  val chipRecovered = KView { withId(R.id.chipRecovered) }
 }

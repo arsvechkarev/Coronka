@@ -5,13 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.arsvechkarev.map.presentation.MapFragment
 import com.arsvechkarev.map.presentation.MapViewModel
-import core.di.CoreComponent.networkAvailabilityNotifier
 import core.di.CoreComponent.schedulers
 import core.di.ModuleInterceptorManager.interceptModuleOrDefault
 
 object MapComponent {
   
-  fun provideViewModel(fragment: MapFragment): MapViewModel {
+  fun getViewModel(fragment: MapFragment): MapViewModel {
     return ViewModelProviders.of(fragment, mapViewModelFactory).get(MapViewModel::class.java)
   }
   
@@ -19,7 +18,7 @@ object MapComponent {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
       val module = interceptModuleOrDefault<MapModule> { DefaultMapModule }
       @Suppress("UNCHECKED_CAST")
-      return MapViewModel(module.mapInteractor, networkAvailabilityNotifier, schedulers) as T
+      return MapViewModel(module.mapInteractor, schedulers) as T
     }
   }
 }
