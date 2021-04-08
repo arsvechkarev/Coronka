@@ -2,6 +2,8 @@
 
 ### Coronavirus statistics app
 
+#### [Download apk](/apk/app-release.apk)
+
 #### Screenshots
 
 <p float="left">
@@ -18,6 +20,8 @@
 - Google maps
 - RxJava 2
 - New York Times Api
+- Junit 4
+- Kakao
 
 #### Main features:
 - [x] Daily statistics
@@ -26,7 +30,3 @@
 - [x] Statistics by country
 - [x] Advanced countries filtering
 - [x] Countries on map
-
-#### Additional features:
-- [ ] Light theme
-- [ ] UI tests
