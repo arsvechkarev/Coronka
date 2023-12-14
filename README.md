@@ -1,3 +1,5 @@
+# ARCHIVED: This once was my pet project, it is no longer maintained and probably does not work ;)
+
 # Coronka
 
 ### Coronavirus statistics app
